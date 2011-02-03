@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- this si an ill formed xml file. closing tag for coordinateOrigin is missing -->
+<plane>
+	<name>Junkers JU 52</name>
+	<wings>
+		<wing position='left'>
+			<centerOfGravity referenceSystem='relative'>
+				<x unit="m">30.0</x>
+				<y unit="m">10.0</y>
+				<z unit="m">5.0</z>
+			</centerOfGravity>
+		</wing>
+		<wing position='right'>
+			<centerOfGravity referenceSystem='relative'>
+				<x unit="m">30.0</x>
+				<y unit="m">-10.0</y>
+				<z unit="m">5.0</z>
+			</centerOfGravity>
+		</wing>
+	</wings>
+	<coordinateOrigin>
+		<x unit="m">0.0</x>
+		<y unit="m">0.0</y>
+		<z unit="m">0.0</z>
+	
+</plane>

@@ -1,0 +1,56 @@
+
+\chapter{Using TIXI}\label{usingTixi}
+
+\section{Usage Example}\label{Usage Example}
+
+The following example assume the XML example from section XPath Examples to be stored in a file named \textit{ju.xml}.
+
+\subsection{Retrieve the position of the first wing}
+
+\begin{verbatim}
+ #include "tixi.h"
+
+ char* xmlFilename = "ju.xml";
+ TixiDocumentHandle handle = -1;
+ char * elementPath = "/plane/wings/wing[1]";
+ char* attributeName = "position";
+
+ char* attributeValue;
+
+ tixiOpenDocument( xmlFilename, &handle );
+ tixiGetTextAttribute( handle, elementPath, attributeName, &attributeValue );
+ tixiCloseDocument( handle );
+\end{verbatim}
+
+
+
+
+\subsection{Retrieve x value of the coordinate origin}
+
+\begin{verbatim}
+ #include "tixi.h"
+
+ char* xmlFilename = "ju.xml";
+ TixiDocumentHandle handle = -1;
+ char * elementPath = "/plane/coordinateOrigin/x";
+ double x = 0.;
+
+ tixiOpenDocument( xmlFilename, &handle );
+ tixiGetDoubleElement( handle, elementPath, &x );
+ tixiCloseDocument( handle );
+\end{verbatim}
+
+
+
+\section{Notes for Fortran programming}
+
+The Fortran interface is implemented by calls to subroutines.
+It assumes the follwing mapping for the basic types:
+real is \textsl{real*8} corresponds double
+integer is \textsl{integer*4} corresponds to int
+character corresponds char
+Character strings are to be passed as variables of type \textsl{character*N}. If a string is returned by a subroutine call the variable holding the result must be large enough to hold the result. Otherwise the result is truncated and the return code is set to \textsl{STRING\_TRUNCATED}.
+
+\textbf{NOTE:} In view of these restrictions an implementation using character arrays should be considered.
+The return codes returned in the last argument corresponds to their position in ReturnCode starting with 0. A routine will be supplied to directly access the meaning of a return code as a string.
+When the C interface requires to pass a NULL-pointer, e.g. to choose the default format \textsl{"\%g"} when writing floating point elements, the respective argument in the Fortran interfaces is the empty string constant "". This is the only way to represent a string of length zero. Passing a variable with all characters set to "" will, via the interface transformed into an emtpy C-string "\\0", which is of length 1, and not to a NULL-pointer. 

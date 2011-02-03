@@ -1,0 +1,24 @@
+The lib directory contains the TIXI library and the library for the fortran interface.
+
+The include directoriy contains the include file for the TIXI C-interface.
+
+The Demo directory contains examples how to use the TIXI library
+together with a makefile showing how to compile and link programs
+equipped with calls to the TIXI library. To build the demo programms
+change to the Demo directory and type make. If all goes well two
+executables are build tixiC and,if an appropriate fortran compiler is
+available, tixi77.
+
+tixiC expects a filename as command line parameter. The file demo.xml
+is supplied, derived from an IBUCK input file for this purpose. 
+When executing
+
+tixiC demo.xml
+
+on the command line some content of the demo.xml file is listet to the
+screen and a file eigenstat.xml holding example output of IBUCK is
+written.
+
+tixi77 takes no command line arguments. It just reads the tool name
+from demo.xml echos it to the screen and writes some example output to
+the file blub.xml.

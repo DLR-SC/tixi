@@ -1,0 +1,11 @@
+<a>
+	<aeroPerformanceMap>
+		<machNumber mapType="vector">1</machNumber>
+		<reynoldsNumber mapType="vector">1;2</reynoldsNumber>
+		<angleOfYaw mapType="vector">0;5;10</angleOfYaw>
+		<angleOfAttack mapType="vector">1;2;3;4;5;6;7;8</angleOfAttack>
+		<cfx mapType="vector">1;2;3;4;5;6;7;8;11;12;13;14;15;16;17;18;101;102;103;104;105;106;107;108;111;112;113;114;115;116;117;118</cfx>
+		<cfy mapType="vecttr">1;2;3;4;5;6;7;8;11;12;13;14;15;16;17;18;101;102;103;104;105;106;107;108;111;112;113;114;115;116;117;118</cfy>
+		<cfz mapType="VecTor">1;2</cfz>
+	</aeroPerformanceMap>
+</a>

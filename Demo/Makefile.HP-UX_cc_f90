@@ -1,0 +1,23 @@
+LD = cc
+FC = f90
+CC = cc
+CCFLAGS = -g
+FCFLAGS = -g
+CPPFLAGS = -I../include
+RM = rm
+
+LIBS = -L../lib -lTIXI -lxml2  -lm
+
+.c.o:
+	$(CC) $(CCFLAGS) $(CPPFLAGS) -c -o $*.o $<
+.f.o:
+	$(FC) $(FCFLAGS) $(CPPFLAGS) -c -o $*.o  $<
+
+all: tixiC tixi77
+
+tixiC:	 tixiDemo.o
+	$(LD) -o tixiC tixiDemo.o $(LDFLAGS) $(LIBS) 
+tixi77:  testf77.o 
+	$(FC) -o tixi77  testf77.o $(LDFLAGS) -L../lib -lTIXIf $(LIBS) 
+clean:
+	$(RM) *.o

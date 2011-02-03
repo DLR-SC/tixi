@@ -1,0 +1,13 @@
+﻿<root>
+  <a uID="test">
+    <b uID="a">Bla</b>
+    <b uID="b">Blupp</b>
+  </a>
+  <a uID="schlumpf">
+    <b>No UID</b>
+    <b uID="empty_element"/>
+  </a>
+  <b>
+	<c uID="a">Element C</c>
+  </b>
+</root>

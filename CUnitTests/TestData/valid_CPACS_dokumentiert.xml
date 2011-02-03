@@ -1,0 +1,6198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cpacs xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/1999/xhtml cpacs_schema.xsd">
+	<header>
+		<name>Dataset with VFW-614 - ATTAS data</name>
+		<description>This dataset contains an example of the new CPACS XML structure</description>
+		<creator>Martin Hepperle, DLR-AS</creator>
+		<timestamp>2005-10-01T09:30:47</timestamp>
+		<version>1</version>
+		<updates>
+			<update>
+				<modification>Added horizontal tailplane</modification>
+				<creator>Martin Hepperle, DLR-AS</creator>
+				<timestamp>2005-11-15T18:00:00</timestamp>
+				<version>1.1</version>
+			</update>
+			<update>
+				<modification>Revised to CPACS V2</modification>
+				<creator>Carsten Liersch, DLR-AS</creator>
+				<timestamp>2009-01-28T10:05:00</timestamp>
+				<version>1.2</version>
+			</update>
+		</updates>
+	</header>
+	<aircraft>
+		<configurations>
+			<configuration uID="VFW-614">
+				<name>VFW-614 - ATTAS</name>
+				<description>This is the VFW-614 - ATTAS configuration (D-ADAM)</description>
+				<reference>
+					<area>64.</area>
+					<length>3.159</length>
+					<point>
+						<x>0.</x>
+						<y>0.</y>
+						<z>0.</z>
+					</point>
+				</reference>
+				<fuselages>
+					<fuselage uID="VFW-614 fuselage">
+						<name>VFW-614 fuselage</name>
+						<description>This is the fuselage of the VFW-614 aircraft</description>
+						<transformation>
+							<translation>
+								<point>
+									<x>0.</x>
+									<y>0.</y>
+									<z>0.</z>
+								</point>
+							</translation>
+							<scaling>
+								<point>
+									<x>0.001</x>
+									<y>0.001</y>
+									<z>0.001</z>
+								</point>
+							</scaling>
+							<rotation>
+								<point>
+									<x>0.</x>
+									<y>0.</y>
+									<z>0.</z>
+								</point>
+							</rotation>
+						</transformation>
+						<fuselageSections>
+							<fuselageSection uID="SFX0.0174">
+								<name>Section x = 0.0174</name>
+								<description>Fuselage section 1</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>0.1</x>
+											<y>0.1</y>
+											<z>0.1</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX0.0174">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 1</description>
+										<profileUID>VFW614_F_Y0.0174</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX0.4207">
+								<name>Section x = 0.4207</name>
+								<description>Fuselage section 2</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX0.4207">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 2</description>
+										<profileUID>VFW614_F_Y0.4207</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX0.8241">
+								<name>Section x = 0.8241</name>
+								<description>Fuselage section 3</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX0.8241">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 3</description>
+										<profileUID>VFW614_F_Y0.8241</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX1.2274">
+								<name>Section x = 1.2274</name>
+								<description>Fuselage section 4</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX1.2274">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 4</description>
+										<profileUID>VFW614_F_Y1.2274</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX1.6308">
+								<name>Section x = 1.6308</name>
+								<description>Fuselage section 5</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX1.6308">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 5</description>
+										<profileUID>VFW614_F_Y1.6308</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX2.0342">
+								<name>Section x = 2.0342</name>
+								<description>Fuselage section 6</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX2.0342">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 6</description>
+										<profileUID>VFW614_F_Y2.0342</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX2.4375">
+								<name>Section x = 2.4375</name>
+								<description>Fuselage section 7</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX2.4375">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 7</description>
+										<profileUID>VFW614_F_Y2.4375</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX2.8409">
+								<name>Section x = 2.8409</name>
+								<description>Fuselage section 8</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX2.8409">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 8</description>
+										<profileUID>VFW614_F_Y2.8409</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX3.2442">
+								<name>Section x = 3.2442</name>
+								<description>Fuselage section 9</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX3.2442">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 9</description>
+										<profileUID>VFW614_F_Y3.2442</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX3.6476">
+								<name>Section x = 3.6476</name>
+								<description>Fuselage section 10</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX3.6476">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 10</description>
+										<profileUID>VFW614_F_Y3.6476</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX4.0510">
+								<name>Section x = 4.0510</name>
+								<description>Fuselage section 11</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX4.0510">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 11</description>
+										<profileUID>VFW614_F_Y4.0510</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX4.4543">
+								<name>Section x = 4.4543</name>
+								<description>Fuselage section 12</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX4.4543">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 12</description>
+										<profileUID>VFW614_F_Y4.4543</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX4.8577">
+								<name>Section x = 4.8577</name>
+								<description>Fuselage section 13</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX4.8577">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 13</description>
+										<profileUID>VFW614_F_Y4.8577</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX5.2610">
+								<name>Section x = 5.2610</name>
+								<description>Fuselage section 14</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX5.2610">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 14</description>
+										<profileUID>VFW614_F_Y5.2610</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX5.6644">
+								<name>Section x = 5.6644</name>
+								<description>Fuselage section 15</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX5.6644">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 15</description>
+										<profileUID>VFW614_F_Y5.6644</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX6.0678">
+								<name>Section x = 6.0678</name>
+								<description>Fuselage section 16</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX6.0678">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 16</description>
+										<profileUID>VFW614_F_Y6.0678</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX6.4711">
+								<name>Section x = 6.4711</name>
+								<description>Fuselage section 17</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX6.4711">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 17</description>
+										<profileUID>VFW614_F_Y6.4711</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX6.8745">
+								<name>Section x = 6.8745</name>
+								<description>Fuselage section 18</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX6.8745">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 18</description>
+										<profileUID>VFW614_F_Y6.8745</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX7.2779">
+								<name>Section x = 7.2779</name>
+								<description>Fuselage section 19</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX7.2779">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 19</description>
+										<profileUID>VFW614_F_Y7.2779</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX7.6812">
+								<name>Section x = 7.6812</name>
+								<description>Fuselage section 20</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX7.6812">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 20</description>
+										<profileUID>VFW614_F_Y7.6812</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX8.0846">
+								<name>Section x = 8.0846</name>
+								<description>Fuselage section 21</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX8.0846">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 21</description>
+										<profileUID>VFW614_F_Y8.0846</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX8.4879">
+								<name>Section x = 8.4879</name>
+								<description>Fuselage section 22</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX8.4879">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 22</description>
+										<profileUID>VFW614_F_Y8.4879</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX8.8913">
+								<name>Section x = 8.8913</name>
+								<description>Fuselage section 23</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX8.8913">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 23</description>
+										<profileUID>VFW614_F_Y8.8913</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX9.2947">
+								<name>Section x = 9.2947</name>
+								<description>Fuselage section 24</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX9.2947">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 24</description>
+										<profileUID>VFW614_F_Y9.2947</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX9.6980">
+								<name>Section x = 9.6980</name>
+								<description>Fuselage section 25</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX9.6980">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 25</description>
+										<profileUID>VFW614_F_Y9.6980</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX10.1014">
+								<name>Section x = 10.1014</name>
+								<description>Fuselage section 26</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX10.1014">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 26</description>
+										<profileUID>VFW614_F_Y10.1014</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX10.5047">
+								<name>Section x = 10.5047</name>
+								<description>Fuselage section 27</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX10.5047">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 27</description>
+										<profileUID>VFW614_F_Y10.5047</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX10.9081">
+								<name>Section x = 10.9081</name>
+								<description>Fuselage section 28</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX10.9081">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 28</description>
+										<profileUID>VFW614_F_Y10.9081</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX11.3115">
+								<name>Section x = 11.3115</name>
+								<description>Fuselage section 29</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX11.3115">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 29</description>
+										<profileUID>VFW614_F_Y11.3115</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX11.7148">
+								<name>Section x = 11.7148</name>
+								<description>Fuselage section 30</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX11.7148">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 30</description>
+										<profileUID>VFW614_F_Y11.7148</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX12.1182">
+								<name>Section x = 12.1182</name>
+								<description>Fuselage section 31</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX12.1182">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 31</description>
+										<profileUID>VFW614_F_Y12.1182</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX12.5216">
+								<name>Section x = 12.5216</name>
+								<description>Fuselage section 32</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX12.5216">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 32</description>
+										<profileUID>VFW614_F_Y12.5216</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX10.0174">
+								<name>Section x = 10.0174</name>
+								<description>Fuselage section 33</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX12.9242">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 32</description>
+										<profileUID>VFW614_F_Y12.9242</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX13.3283">
+								<name>Section x = 13.3283</name>
+								<description>Fuselage section 34</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX13.3283">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 34</description>
+										<profileUID>VFW614_F_Y13.3283</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX13.7316">
+								<name>Section x = 13.7316</name>
+								<description>Fuselage section 35</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX13.7316">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 35</description>
+										<profileUID>VFW614_F_Y13.7316</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX14.1350">
+								<name>Section x = 14.1350</name>
+								<description>Fuselage section 36</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX14.1350">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 36</description>
+										<profileUID>VFW614_F_Y14.1350</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX14.5384">
+								<name>Section x = 14.5384</name>
+								<description>Fuselage section 37</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX14.5384">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 37</description>
+										<profileUID>VFW614_F_Y14.5384</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX14.9417">
+								<name>Section x = 14.9417</name>
+								<description>Fuselage section 38</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX14.9417">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 38</description>
+										<profileUID>VFW614_F_Y14.9417</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX15.3451">
+								<name>Section x = 15.3451</name>
+								<description>Fuselage section 39</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX15.3451">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 39</description>
+										<profileUID>VFW614_F_Y15.3451</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX15.7484">
+								<name>Section x = 15.7484</name>
+								<description>Fuselage section 40</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX15.7484">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 40</description>
+										<profileUID>VFW614_F_Y15.7484</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX16.1518">
+								<name>Section x = 16.1518</name>
+								<description>Fuselage section 41</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX16.1518">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 41</description>
+										<profileUID>VFW614_F_Y16.1518</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX16.5552">
+								<name>Section x = 16.5552</name>
+								<description>Fuselage section 42</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX16.5552">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 42</description>
+										<profileUID>VFW614_F_Y16.5552</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX16.9585">
+								<name>Section x = 16.9585</name>
+								<description>Fuselage section 43</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX16.9585">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 43</description>
+										<profileUID>VFW614_F_Y16.9585</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX17.3619">
+								<name>Section x = 17.3619</name>
+								<description>Fuselage section 44</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX17.3619">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 44</description>
+										<profileUID>VFW614_F_Y17.3619</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX17.7652">
+								<name>Section x = 17.7652</name>
+								<description>Fuselage section 45</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX17.7654">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 45</description>
+										<profileUID>VFW614_F_Y17.7652</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX18.1686">
+								<name>Section x = 18.1686</name>
+								<description>Fuselage section 46</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX18.1686">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 46</description>
+										<profileUID>VFW614_F_Y18.1686</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX18.5720">
+								<name>Section x = 18.5720</name>
+								<description>Fuselage section 47</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX18.5720">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 47</description>
+										<profileUID>VFW614_F_Y18.5720</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX18.9753">
+								<name>Section x = 18.9753</name>
+								<description>Fuselage section 48</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX18.9753">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 48</description>
+										<profileUID>VFW614_F_Y18.9753</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX19.3787">
+								<name>Section x = 19.3787</name>
+								<description>Fuselage section 49</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX19.3787">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 49</description>
+										<profileUID>VFW614_F_Y19.3787</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX19.7821">
+								<name>Section x = 19.7821</name>
+								<description>Fuselage section 50</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX19.7821">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 50</description>
+										<profileUID>VFW614_F_Y19.7821</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+							<fuselageSection uID="SFX20.1845">
+								<name>Section x = 20.1845</name>
+								<description>Fuselage section 51</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>0.00</x>
+											<y>0.00</y>
+											<z>0.00</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.</x>
+											<y>1.</y>
+											<z>1.</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0</x>
+											<y>0</y>
+											<z>90</z>
+										</point>
+									</rotation>
+								</transformation>
+								<fuselageElements>
+									<fuselageElement uID="ME_SMX20.1845">
+										<name>main Element</name>
+										<description>Main Fuselage Cross Section 51</description>
+										<profileUID>VFW614_F_Y20.1845</profileUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+									</fuselageElement>
+								</fuselageElements>
+							</fuselageSection>
+						</fuselageSections>
+						<positionings>
+							<positioning>
+								<name>P1</name>
+								<description>Positioning of wing section 1</description>
+								<length>0.0174</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX0.0174</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P2</name>
+								<description>Positioning of wing section 2</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX0.0174</sectionUID>
+								<sectionUID>SFX0.4207</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P3</name>
+								<description>Positioning of wing section 3</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX0.4207</sectionUID>
+								<sectionUID>SFX0.8241</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P4</name>
+								<description>Positioning of wing section 4</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX0.8241</sectionUID>
+								<sectionUID>SFX1.2274</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P5</name>
+								<description>Positioning of wing section 5</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX1.2274</sectionUID>
+								<sectionUID>SFX1.6308</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P6</name>
+								<description>Positioning of wing section 6</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX1.6308</sectionUID>
+								<sectionUID>SFX2.0342</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P7</name>
+								<description>Positioning of wing section 7</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX2.0342</sectionUID>
+								<sectionUID>SFX2.4375</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P8</name>
+								<description>Positioning of wing section 8</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX2.4375</sectionUID>
+								<sectionUID>SFX2.8409</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P9</name>
+								<description>Positioning of wing section 9</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX2.8409</sectionUID>
+								<sectionUID>SFX3.2442</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P10</name>
+								<description>Positioning of wing section 10</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX3.2442</sectionUID>
+								<sectionUID>SFX3.6476</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P11</name>
+								<description>Positioning of wing section 11</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX3.6476</sectionUID>
+								<sectionUID>SFX4.0510</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P12</name>
+								<description>Positioning of wing section 12</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX4.0510</sectionUID>
+								<sectionUID>SFX4.4543</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P13</name>
+								<description>Positioning of wing section 13</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX4.4543</sectionUID>
+								<sectionUID>SFX4.8577</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P14</name>
+								<description>Positioning of wing section 14</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX4.8577</sectionUID>
+								<sectionUID>SFX5.2610</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P15</name>
+								<description>Positioning of wing section 15</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX5.2610</sectionUID>
+								<sectionUID>SFX5.6644</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P16</name>
+								<description>Positioning of wing section 16</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX5.6644</sectionUID>
+								<sectionUID>SFX6.0678</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P17</name>
+								<description>Positioning of wing section 17</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX6.0678</sectionUID>
+								<sectionUID>SFX6.4711</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P18</name>
+								<description>Positioning of wing section 18</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX6.4711</sectionUID>
+								<sectionUID>SFX6.8745</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P19</name>
+								<description>Positioning of wing section 19</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX6.8745</sectionUID>
+								<sectionUID>SFX7.2779</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P20</name>
+								<description>Positioning of wing section 20</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX7.2779</sectionUID>
+								<sectionUID>SFX7.6812</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P21</name>
+								<description>Positioning of wing section 21</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX7.6812</sectionUID>
+								<sectionUID>SFX8.0846</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P22</name>
+								<description>Positioning of wing section 22</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX8.0846</sectionUID>
+								<sectionUID>SFX8.4879</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P23</name>
+								<description>Positioning of wing section 23</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX8.4879</sectionUID>
+								<sectionUID>SFX8.8913</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P24</name>
+								<description>Positioning of wing section 24</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX8.8913</sectionUID>
+								<sectionUID>SFX9.2947</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P25</name>
+								<description>Positioning of wing section 25</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX9.2947</sectionUID>
+								<sectionUID>SFX9.6980</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P26</name>
+								<description>Positioning of wing section 26</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX9.6980</sectionUID>
+								<sectionUID>SFX10.1014</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P27</name>
+								<description>Positioning of wing section 27</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX10.1014</sectionUID>
+								<sectionUID>SFX10.5047</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P28</name>
+								<description>Positioning of wing section 28</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX10.5047</sectionUID>
+								<sectionUID>SFX10.9081</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P29</name>
+								<description>Positioning of wing section 29</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX10.9081</sectionUID>
+								<sectionUID>SFX11.3115</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P30</name>
+								<description>Positioning of wing section 30</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX11.3115</sectionUID>
+								<sectionUID>SFX11.7148</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P31</name>
+								<description>Positioning of wing section 31</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX11.7148</sectionUID>
+								<sectionUID>SFX12.1182</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P32</name>
+								<description>Positioning of wing section 32</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX12.1182</sectionUID>
+								<sectionUID>SFX12.5216</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P33</name>
+								<description>Positioning of wing section 33</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX12.5216</sectionUID>
+								<sectionUID>SFX12.9249</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P34</name>
+								<description>Positioning of wing section 34</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX12.9249</sectionUID>
+								<sectionUID>SFX13.3283</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P35</name>
+								<description>Positioning of wing section 35</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX13.3283</sectionUID>
+								<sectionUID>SFX13.7316</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P36</name>
+								<description>Positioning of wing section 36</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX13.7316</sectionUID>
+								<sectionUID>SFX14.1350</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P37</name>
+								<description>Positioning of wing section 37</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX14.1350</sectionUID>
+								<sectionUID>SFX14.5384</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P38</name>
+								<description>Positioning of wing section 38</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX14.5384</sectionUID>
+								<sectionUID>SFX14.9417</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P39</name>
+								<description>Positioning of wing section 39</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX14.9417</sectionUID>
+								<sectionUID>SFX15.3451</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P40</name>
+								<description>Positioning of wing section 40</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX15.3451</sectionUID>
+								<sectionUID>SFX15.7484</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P41</name>
+								<description>Positioning of wing section 41</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX15.7484</sectionUID>
+								<sectionUID>SFX16.1518</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P42</name>
+								<description>Positioning of wing section 42</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX16.1518</sectionUID>
+								<sectionUID>SFX16.5552</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P43</name>
+								<description>Positioning of wing section 43</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX16.5552</sectionUID>
+								<sectionUID>SFX16.9585</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P44</name>
+								<description>Positioning of wing section 44</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX16.9585</sectionUID>
+								<sectionUID>SFX17.3619</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P45</name>
+								<description>Positioning of wing section 45</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX17.3619</sectionUID>
+								<sectionUID>SFX17.7652</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P46</name>
+								<description>Positioning of wing section 46</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX17.7652</sectionUID>
+								<sectionUID>SFX18.1686</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P47</name>
+								<description>Positioning of wing section 47</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX18.1686</sectionUID>
+								<sectionUID>SFX18.5720</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P48</name>
+								<description>Positioning of wing section 48</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX18.5720</sectionUID>
+								<sectionUID>SFX18.9753</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P49</name>
+								<description>Positioning of wing section 49</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX18.9753</sectionUID>
+								<sectionUID>SFX19.3787</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P50</name>
+								<description>Positioning of wing section 50</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX19.3787</sectionUID>
+								<sectionUID>SFX19.7821</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P51</name>
+								<description>Positioning of wing section 51</description>
+								<length>0.40336</length>
+								<sweepangle>90.0</sweepangle>
+								<dihedralangle>0.0</dihedralangle>
+								<sectionUID>SFX19.7821</sectionUID>
+								<sectionUID>SFX20.1854</sectionUID>
+							</positioning>
+						</positionings>
+						<fuselageSegments>
+							<fuselageSegment>
+								<name>From 1 to 2</name>
+								<description>Segment between main elements from Section 1 and 2</description>
+								<elementUID>ME_SMX0.0174</elementUID>
+								<elementUID>ME_SMX0.4207</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 2 to 3</name>
+								<description>Segment between main elements from Section 2 and 3</description>
+								<elementUID>ME_SMX0.4207</elementUID>
+								<elementUID>ME_SMX0.8241</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 3 to 4</name>
+								<description>Segment between main elements from Section 3 and 4</description>
+								<elementUID>ME_SMX0.8241</elementUID>
+								<elementUID>ME_SMX1.2274</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 4 to 5</name>
+								<description>Segment between main elements from Section 4 and 5</description>
+								<elementUID>ME_SMX1.2274</elementUID>
+								<elementUID>ME_SMX1.6308</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 5 to 6</name>
+								<description>Segment between main elements from Section 5 and 6</description>
+								<elementUID>ME_SMX1.6308</elementUID>
+								<elementUID>ME_SMX2.0342</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 6 to 7</name>
+								<description>Segment between main elements from Section 6 and 7</description>
+								<elementUID>ME_SMX2.0342</elementUID>
+								<elementUID>ME_SMX2.4375</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 7 to 8</name>
+								<description>Segment between main elements from Section 7 and 8</description>
+								<elementUID>ME_SMX2.4375</elementUID>
+								<elementUID>ME_SMX2.8409</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 8 to 9</name>
+								<description>Segment between main elements from Section 8 and 9</description>
+								<elementUID>ME_SMX2.8409</elementUID>
+								<elementUID>ME_SMX3.2442</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 9 to 10</name>
+								<description>Segment between main elements from Section 9 and 10</description>
+								<elementUID>ME_SMX3.2442</elementUID>
+								<elementUID>ME_SMX3.6476</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 10 to 11</name>
+								<description>Segment between main elements from Section 10 and 11</description>
+								<elementUID>ME_SMX3.6476</elementUID>
+								<elementUID>ME_SMX4.0510</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 11 to 12</name>
+								<description>Segment between main elements from Section 11 and 12</description>
+								<elementUID>ME_SMX4.0510</elementUID>
+								<elementUID>ME_SMX4.4543</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 12 to 13</name>
+								<description>Segment between main elements from Section 12 and 13</description>
+								<elementUID>ME_SMX4.4543</elementUID>
+								<elementUID>ME_SMX4.8577</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 13 to 14</name>
+								<description>Segment between main elements from Section 13 and 14</description>
+								<elementUID>ME_SMX4.8577</elementUID>
+								<elementUID>ME_SMX5.2610</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 14 to 15</name>
+								<description>Segment between main elements from Section 14 and 15</description>
+								<elementUID>ME_SMX5.2610</elementUID>
+								<elementUID>ME_SMX5.6644</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 15 to 16</name>
+								<description>Segment between main elements from Section 15 and 16</description>
+								<elementUID>ME_SMX5.6644</elementUID>
+								<elementUID>ME_SMX6.0678</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 16 to 17</name>
+								<description>Segment between main elements from Section 16 and 17</description>
+								<elementUID>ME_SMX6.0678</elementUID>
+								<elementUID>ME_SMX6.4711</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 17 to 18</name>
+								<description>Segment between main elements from Section 17 and 18</description>
+								<elementUID>ME_SMX6.4711</elementUID>
+								<elementUID>ME_SMX6.8745</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 18 to 19</name>
+								<description>Segment between main elements from Section 18 and 19</description>
+								<elementUID>ME_SMX6.8745</elementUID>
+								<elementUID>ME_SMX7.2779</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 19 to 20</name>
+								<description>Segment between main elements from Section 19 and 20</description>
+								<elementUID>ME_SMX7.2779</elementUID>
+								<elementUID>ME_SMX7.6812</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 20 to 21</name>
+								<description>Segment between main elements from Section 20 and 21</description>
+								<elementUID>ME_SMX7.6812</elementUID>
+								<elementUID>ME_SMX8.0846</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 21 to 22</name>
+								<description>Segment between main elements from Section 21 and 22</description>
+								<elementUID>ME_SMX8.0846</elementUID>
+								<elementUID>ME_SMX8.4879</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 22 to 23</name>
+								<description>Segment between main elements from Section 22 and 23</description>
+								<elementUID>ME_SMX8.4879</elementUID>
+								<elementUID>ME_SMX8.8913</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 23 to 24</name>
+								<description>Segment between main elements from Section 23 and 24</description>
+								<elementUID>ME_SMX8.8913</elementUID>
+								<elementUID>ME_SMX9.2947</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 24 to 25</name>
+								<description>Segment between main elements from Section 24 and 25</description>
+								<elementUID>ME_SMX9.2947</elementUID>
+								<elementUID>ME_SMX9.6980</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 25 to 26</name>
+								<description>Segment between main elements from Section 25 and 26</description>
+								<elementUID>ME_SMX9.6980</elementUID>
+								<elementUID>ME_SMX10.1014</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 26 to 27</name>
+								<description>Segment between main elements from Section 26 and 27</description>
+								<elementUID>ME_SMX10.1014</elementUID>
+								<elementUID>ME_SMX10.5047</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 27 to 28</name>
+								<description>Segment between main elements from Section 27 and 28</description>
+								<elementUID>ME_SMX10.5047</elementUID>
+								<elementUID>ME_SMX10.9081</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 28 to 29</name>
+								<description>Segment between main elements from Section 28 and 29</description>
+								<elementUID>ME_SMX10.9081</elementUID>
+								<elementUID>ME_SMX11.3115</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 29 to 30</name>
+								<description>Segment between main elements from Section 29 and 30</description>
+								<elementUID>ME_SMX11.3115</elementUID>
+								<elementUID>ME_SMX11.7148</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 30 to 31</name>
+								<description>Segment between main elements from Section 30 and 31</description>
+								<elementUID>ME_SMX11.7148</elementUID>
+								<elementUID>ME_SMX12.1182</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 31 to 32</name>
+								<description>Segment between main elements from Section 31 and 32</description>
+								<elementUID>ME_SMX12.1182</elementUID>
+								<elementUID>ME_SMX12.5216</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 32 to 33</name>
+								<description>Segment between main elements from Section 32 and 33</description>
+								<elementUID>ME_SMX12.5216</elementUID>
+								<elementUID>ME_SMX12.9249</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 33 to 34</name>
+								<description>Segment between main elements from Section 33 and 34</description>
+								<elementUID>ME_SMX15.9249</elementUID>
+								<elementUID>ME_SMX13.3283</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 34 to 35</name>
+								<description>Segment between main elements from Section 34 and 35</description>
+								<elementUID>ME_SMX13.3283</elementUID>
+								<elementUID>ME_SMX13.7316</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 35 to 36</name>
+								<description>Segment between main elements from Section 35 and 36</description>
+								<elementUID>ME_SMX13.7316</elementUID>
+								<elementUID>ME_SMX14.1350</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 36 to 37</name>
+								<description>Segment between main elements from Section 36 and 37</description>
+								<elementUID>ME_SMX14.1350</elementUID>
+								<elementUID>ME_SMX14.5384</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 37 to 38</name>
+								<description>Segment between main elements from Section 37 and 38</description>
+								<elementUID>ME_SMX14.5384</elementUID>
+								<elementUID>ME_SMX14.9417</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 38 to 39</name>
+								<description>Segment between main elements from Section 38 and 39</description>
+								<elementUID>ME_SMX14.9417</elementUID>
+								<elementUID>ME_SMX15.3451</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 39 to 40</name>
+								<description>Segment between main elements from Section 39 and 40</description>
+								<elementUID>ME_SMX15.3451</elementUID>
+								<elementUID>ME_SMX15.7484</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 40 to 41</name>
+								<description>Segment between main elements from Section 40 and 41</description>
+								<elementUID>ME_SMX15.7484</elementUID>
+								<elementUID>ME_SMX16.1518</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 41 to 42</name>
+								<description>Segment between main elements from Section 41 and 42</description>
+								<elementUID>ME_SMX16.1518</elementUID>
+								<elementUID>ME_SMX16.5552</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 42 to 43</name>
+								<description>Segment between main elements from Section 42 and 43</description>
+								<elementUID>ME_SMX16.5552</elementUID>
+								<elementUID>ME_SMX16.9585</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 43 to 44</name>
+								<description>Segment between main elements from Section 43 and 44</description>
+								<elementUID>ME_SMX16.9585</elementUID>
+								<elementUID>ME_SMX17.3619</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 44 to 45</name>
+								<description>Segment between main elements from Section 44 and 45</description>
+								<elementUID>ME_SMX17.3619</elementUID>
+								<elementUID>ME_SMX17.7652</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 45 to 46</name>
+								<description>Segment between main elements from Section 45 and 46</description>
+								<elementUID>ME_SMX17.7652</elementUID>
+								<elementUID>ME_SMX18.1686</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 46 to 47</name>
+								<description>Segment between main elements from Section 46 and 47</description>
+								<elementUID>ME_SMX18.1686</elementUID>
+								<elementUID>ME_SMX18.5720</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 47 to 48</name>
+								<description>Segment between main elements from Section 47 and 48</description>
+								<elementUID>ME_SMX18.5720</elementUID>
+								<elementUID>ME_SMX18.9753</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 48 to 49</name>
+								<description>Segment between main elements from Section 48 and 49</description>
+								<elementUID>ME_SMX18.9753</elementUID>
+								<elementUID>ME_SMX19.3787</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 49 to 50</name>
+								<description>Segment between main elements from Section 49 and 50</description>
+								<elementUID>ME_SMX19.3787</elementUID>
+								<elementUID>ME_SMX19.7821</elementUID>
+							</fuselageSegment>
+							<fuselageSegment>
+								<name>From 50 to 51</name>
+								<description>Segment between main elements from Section 50 and 51</description>
+								<elementUID>ME_SMX19.7821</elementUID>
+								<elementUID>ME_SMX20.1854</elementUID>
+							</fuselageSegment>
+						</fuselageSegments>
+					</fuselage>
+				</fuselages>
+				<wings>
+					<wing>
+						<name>VFW-614 main wing</name>
+						<description>This is the main wing of the aircraft</description>
+						<parentUID>VFW-614 fuselage</parentUID>
+						<transformation>
+							<translation>
+								<point>
+									<x>7.8082</x>
+									<y>0.</y>
+									<z>-0.892</z>
+								</point>
+							</translation>
+							<scaling>
+								<point>
+									<x>1.0</x>
+									<y>1.0</y>
+									<z>1.0</z>
+								</point>
+							</scaling>
+							<rotation>
+								<point>
+									<x>0.</x>
+									<y>0.</y>
+									<z>0.</z>
+								</point>
+							</rotation>
+						</transformation>
+						<wingSections>
+							<wingSection uID="SMY0.">
+								<name>SMY0.</name>
+								<description>This is the root section</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>-0.25</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>4.2397</x>
+											<y>4.2397</y>
+											<z>4.2397</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0.</x>
+											<y>4.37</y>
+											<z>0.</z>
+										</point>
+									</rotation>
+								</transformation>
+								<wingElements>
+									<wingElement uID="ME_SMY0.">
+										<name>Main element, y=0.</name>
+										<description>Main airfoil, Symmmetry plane</description>
+										<airfoilUID>VFW614_W_Y0.</airfoilUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+										<wingElementStructure>
+											<sparCrossSections>
+												<sparCrossSection uID="SCS1_ME_SMY0.">
+													<pos>0.16</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS2_ME_SMY0.">
+													<pos>0.345</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_5</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS3_ME_SMY0.">
+													<pos>0.55</pos>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>5</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+											</sparCrossSections>
+											<cells>
+												<cell>
+													<sparUID>SCS1_ME_SMY0.</sparUID>
+													<sparUID>SCS2_ME_SMY0.</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+												<cell>
+													<sparUID>SCS2_ME_SMY0.</sparUID>
+													<sparUID>SCS3_ME_SMY0.</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+											</cells>
+										</wingElementStructure>
+									</wingElement>
+								</wingElements>
+							</wingSection>
+							<wingSection uID="SMY3.087">
+								<name>SMY3.087</name>
+								<description>This is the engine pylon section</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>-0.25</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>3.496</x>
+											<y>3.496</y>
+											<z>3.496</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0.0</x>
+											<y>0.5</y>
+											<z>3.17</z>
+										</point>
+									</rotation>
+								</transformation>
+								<wingElements>
+									<wingElement uID="ME_SMY3.087">
+										<name>Main element, y=3.087</name>
+										<description>Main airfoil, engine pylon section</description>
+										<airfoilUID>VFW614_W_Y3.087</airfoilUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+										<wingElementStructure>
+											<sparCrossSections>
+												<sparCrossSection uID="SCS1_ME_SMY3.087">
+													<pos>0.16</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS2_ME_SMY3.087">
+													<pos>0.345</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS3_ME_SMY3.087">
+													<pos>0.55</pos>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+											</sparCrossSections>
+											<cells>
+												<cell>
+													<sparUID>SCS1_ME_SMY3.087</sparUID>
+													<sparUID>SCS2_ME_SMY3.087</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+												<cell>
+													<sparUID>SCS2_ME_SMY3.087</sparUID>
+													<sparUID>SCS3_ME_SMY3.087</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+											</cells>
+										</wingElementStructure>
+									</wingElement>
+								</wingElements>
+							</wingSection>
+							<wingSection uID="SMY7.453">
+								<name>SMY7.453</name>
+								<description>This is the inboard aileron section</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>-0.25</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>2.47</x>
+											<y>2.47</y>
+											<z>2.47</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0.0</x>
+											<y>-1.5</y>
+											<z>-1.48</z>
+										</point>
+									</rotation>
+								</transformation>
+								<wingElements>
+									<wingElement uID="ME_SMY7.453">
+										<name>Main element, y=7.453</name>
+										<description>Main airfoil, inboard aileron section</description>
+										<airfoilUID>VFW614_W_Y7.453</airfoilUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+										<wingElementStructure>
+											<sparCrossSections>
+												<sparCrossSection uID="SCS1_ME_SMY7.453">
+													<pos>0.16</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS2_ME_SMY7.453">
+													<pos>0.345</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS3_ME_SMY7.453">
+													<pos>0.55</pos>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+											</sparCrossSections>
+											<cells>
+												<cell>
+													<sparUID>SCS1_ME_SMY7.453</sparUID>
+													<sparUID>SCS2_ME_SMY7.453</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+												<cell>
+													<sparUID>SCS2_ME_SMY7.453</sparUID>
+													<sparUID>SCS3_ME_SMY7.453</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+											</cells>
+										</wingElementStructure>
+									</wingElement>
+								</wingElements>
+							</wingSection>
+							<wingSection uID="SMY10.724">
+								<name>SMY10.724</name>
+								<description>This is the tip</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>-0.25</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.697</x>
+											<y>1.697</y>
+											<z>1.697</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0.0</x>
+											<y>-1.5</y>
+											<z>-1.35</z>
+										</point>
+									</rotation>
+								</transformation>
+								<wingElements>
+									<wingElement uID="ME_SMY10.724">
+										<name>Main element, y=10.724</name>
+										<description>Main airfoil, tip</description>
+										<airfoilUID>VFW614_W_Y10.724</airfoilUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+										<wingElementStructure>
+											<sparCrossSections>
+												<sparCrossSection uID="SCS1_ME_SMY10.724">
+													<pos>0.16</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS2_ME_SMY10.724">
+													<pos>0.345</pos>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>Material_1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>Material_4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS3_ME_SMY10.724">
+													<pos>0.55</pos>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<cap>
+														<materialUID>1</materialUID>
+														<area>500.0e-6</area>
+													</cap>
+													<web>
+														<materialUID>4</materialUID>
+														<thickness>5.0e-3</thickness>
+													</web>
+												</sparCrossSection>
+											</sparCrossSections>
+											<cells>
+												<cell>
+													<sparUID>SCS1_ME_SMY10.724</sparUID>
+													<sparUID>SCS2_ME_SMY10.724</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+												<cell>
+													<sparUID>SCS2_ME_SMY10.724</sparUID>
+													<sparUID>SCS3_ME_SMY10.724</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+											</cells>
+										</wingElementStructure>
+									</wingElement>
+								</wingElements>
+							</wingSection>
+						</wingSections>
+						<positionings>
+							<positioning>
+								<name>P_SMY0.</name>
+								<description>Positioning of section y=0.</description>
+								<length>0.</length>
+								<sweepangle>0.</sweepangle>
+								<dihedralangle>0.</dihedralangle>
+								<sectionUID>SMY0.</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P_SMY3.087</name>
+								<description>Positioning of section y=3.087</description>
+								<length>3.194</length>
+								<sweepangle>14.85</sweepangle>
+								<dihedralangle>4.39</dihedralangle>
+								<sectionUID>SMY0.</sectionUID>
+								<sectionUID>SMY3.087</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P_SMY7.453</name>
+								<description>Positioning of section y=7.453</description>
+								<length>4.520</length>
+								<sweepangle>14.85</sweepangle>
+								<dihedralangle>3.29</dihedralangle>
+								<sectionUID>SMY3.087</sectionUID>
+								<sectionUID>SMY7.453</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P_SMY10.724</name>
+								<description>Positioning of section y=10.724</description>
+								<length>3.385</length>
+								<sweepangle>14.85</sweepangle>
+								<dihedralangle>2.89</dihedralangle>
+								<sectionUID>SMY7.453</sectionUID>
+								<sectionUID>SMY10.724</sectionUID>
+							</positioning>
+						</positionings>
+						<wingSegments>
+							<wingSegment>
+								<name>inner wing</name>
+								<description>Inner wing segment (root to pylon)</description>
+								<elementUID>ME_SMY0.</elementUID>
+								<elementUID>ME_SMY3.087</elementUID>
+								<wingSegmentStructure>
+									<spars>
+										<spar>
+											<sparCrossSectionUID>SCS1_ME_SMY0.</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS1_ME_SMY3.087</sparCrossSectionUID>
+										</spar>
+										<spar>
+											<sparCrossSectionUID>SCS2_ME_SMY0.</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS2_ME_SMY3.087</sparCrossSectionUID>
+										</spar>
+										<spar>
+											<sparCrossSectionUID>SCS3_ME_SMY0.</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS3_ME_SMY3.087</sparCrossSectionUID>
+										</spar>
+									</spars>
+									<ribDefinitions>
+										<ribDefinition>
+											<eta>0.5</eta>
+											<spacing>0.5</spacing>
+											<thickness>0.01</thickness>
+										</ribDefinition>
+									</ribDefinitions>
+								</wingSegmentStructure>
+							</wingSegment>
+							<wingSegment>
+								<name>pylon to ailerons</name>
+								<description>Middle wing segment (pylon to inner aileron border)</description>
+								<elementUID>ME_SMY3.087</elementUID>
+								<elementUID>ME_SMY7.453</elementUID>
+								<wingSegmentStructure>
+									<spars>
+										<spar>
+											<sparCrossSectionUID>SCS1_ME_SMY3.087</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS1_ME_SMY7.453</sparCrossSectionUID>
+										</spar>
+										<spar>
+											<sparCrossSectionUID>SCS2_ME_SMY3.087</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS2_ME_SMY7.453</sparCrossSectionUID>
+										</spar>
+										<spar>
+											<sparCrossSectionUID>SCS3_ME_SMY3.087</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS3_ME_SMY7.453</sparCrossSectionUID>
+										</spar>
+									</spars>
+									<ribDefinitions>
+										<ribDefinition>
+											<eta>0.5</eta>
+											<spacing>0.5</spacing>
+											<thickness>0.01</thickness>
+										</ribDefinition>
+									</ribDefinitions>
+								</wingSegmentStructure>
+							</wingSegment>
+							<wingSegment>
+								<name>aileron to tip</name>
+								<description>Outer wing segment (inner aileron border to tip)</description>
+								<elementUID>ME_SMY7.453</elementUID>
+								<elementUID>ME_SMY10.724</elementUID>
+								<wingSegmentStructure>
+									<spars>
+										<spar>
+											<sparCrossSectionUID>SCS1_ME_SMY7.453.</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS1_ME_SMY10.724</sparCrossSectionUID>
+										</spar>
+										<spar>
+											<sparCrossSectionUID>SCS2_ME_SMY7.453</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS2_ME_SMY10.724</sparCrossSectionUID>
+										</spar>
+										<spar>
+											<sparCrossSectionUID>SCS3_ME_SMY7.453</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS3_ME_SMY10.724</sparCrossSectionUID>
+										</spar>
+									</spars>
+									<ribDefinitions>
+										<ribDefinition>
+											<eta>0.5</eta>
+											<spacing>0.5</spacing>
+											<thickness>0.01</thickness>
+										</ribDefinition>
+									</ribDefinitions>
+								</wingSegmentStructure>
+							</wingSegment>
+						</wingSegments>
+					</wing>
+					<wing>
+						<name>VFW-614 horizontal tailplane</name>
+						<description>This is the horizontal tailplane</description>
+						<transformation>
+							<translation>
+								<point>
+									<x>17.8285</x>
+									<y>0.</y>
+									<z>1.22175</z>
+								</point>
+							</translation>
+							<scaling>
+								<point>
+									<x>1.</x>
+									<y>1.</y>
+									<z>1.</z>
+								</point>
+							</scaling>
+							<rotation>
+								<point>
+									<x>0.</x>
+									<y>0.</y>
+									<z>0.</z>
+								</point>
+							</rotation>
+						</transformation>
+						<wingSections>
+							<wingSection uID="SHY0.">
+								<name>SHY0.</name>
+								<description>This is the root section</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>-0.25</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>2.86</x>
+											<y>2.86</y>
+											<z>2.86</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0.</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</rotation>
+								</transformation>
+								<wingElements>
+									<wingElement uID="ME_SHY0.">
+										<name>Main element, y=0.</name>
+										<description>Main airfoil, Symmmetry plane</description>
+										<airfoilUID>VFW614_H</airfoilUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+										<wingElementStructure>
+											<sparCrossSections>
+												<sparCrossSection uID="SCS1_ME_SHY0.">
+													<pos>0.175</pos>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<web>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_4</materialUID>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS2_ME_SHY0.">
+													<pos>0.4875</pos>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<web>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_5</materialUID>
+													</web>
+												</sparCrossSection>
+											</sparCrossSections>
+											<cells>
+												<cell>
+													<sparUID>SCS1_ME_SHY0.</sparUID>
+													<sparUID>SCS2_ME_SHY0.</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+											</cells>
+										</wingElementStructure>
+									</wingElement>
+								</wingElements>
+							</wingSection>
+							<wingSection uID="SHY4.5">
+								<name>SHY4.5</name>
+								<description>Tip section</description>
+								<transformation>
+									<translation>
+										<point>
+											<x>-0.25</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</translation>
+									<scaling>
+										<point>
+											<x>1.143</x>
+											<y>1.143</y>
+											<z>1.143</z>
+										</point>
+									</scaling>
+									<rotation>
+										<point>
+											<x>0.</x>
+											<y>0.</y>
+											<z>0.</z>
+										</point>
+									</rotation>
+								</transformation>
+								<wingElements>
+									<wingElement uID="ME_SHY4.5">
+										<name>Main element, y=4.5</name>
+										<description>Main airfoil, tip</description>
+										<airfoilUID>VFW614_H</airfoilUID>
+										<transformation>
+											<translation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</translation>
+											<scaling>
+												<point>
+													<x>1.</x>
+													<y>1.</y>
+													<z>1.</z>
+												</point>
+											</scaling>
+											<rotation>
+												<point>
+													<x>0.</x>
+													<y>0.</y>
+													<z>0.</z>
+												</point>
+											</rotation>
+										</transformation>
+										<wingElementStructure>
+											<sparCrossSections>
+												<sparCrossSection uID="SCS1_ME_SHY4.5">
+													<pos>0.2</pos>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<web>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_4</materialUID>
+													</web>
+												</sparCrossSection>
+												<sparCrossSection uID="SCS2_ME_SHY4.5">
+													<pos>0.511</pos>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<cap>
+														<area>500.0e-6</area>
+														<materialUID>Material_1</materialUID>
+													</cap>
+													<web>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_5</materialUID>
+													</web>
+												</sparCrossSection>
+											</sparCrossSections>
+											<cells>
+												<cell>
+													<sparUID>SCS1_ME_SHY4.5</sparUID>
+													<sparUID>SCS2_ME_SHY4.5</sparUID>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+													<shell>
+														<thickness>5.0e-3</thickness>
+														<materialUID>Material_3</materialUID>
+														<stringers>
+															<pitch>0.1</pitch>
+															<area>0.0</area>
+															<materialUID>Material_1</materialUID>
+														</stringers>
+													</shell>
+												</cell>
+											</cells>
+										</wingElementStructure>
+									</wingElement>
+								</wingElements>
+							</wingSection>
+						</wingSections>
+						<positionings>
+							<positioning>
+								<name>P_SHY0.</name>
+								<description>Positioning of section y=0.</description>
+								<length>0.</length>
+								<sweepangle>0.</sweepangle>
+								<dihedralangle>0.</dihedralangle>
+								<sectionUID>SHY0.</sectionUID>
+							</positioning>
+							<positioning>
+								<name>P_SHY4.5</name>
+								<description>Positioning of section y=4.5</description>
+								<length>4.847</length>
+								<sweepangle>21.8</sweepangle>
+								<dihedralangle>10.1</dihedralangle>
+								<sectionUID>SHY4.5</sectionUID>
+							</positioning>
+						</positionings>
+						<wingSegments>
+							<wingSegment>
+								<name>HTP</name>
+								<description>Complete HTP</description>
+								<elementUID>ME_SHY0.</elementUID>
+								<elementUID>ME_SHY4.5</elementUID>
+								<wingSegmentStructure>
+									<spars>
+										<spar>
+											<sparCrossSectionUID>SCS1_ME_SHY0.</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS1_ME_SH4Y4.5</sparCrossSectionUID>
+										</spar>
+										<spar>
+											<sparCrossSectionUID>SCS2_ME_SHY0.</sparCrossSectionUID>
+											<sparCrossSectionUID>SCS3_ME_SH4Y4.5</sparCrossSectionUID>
+										</spar>
+									</spars>
+									<ribDefinitions>
+										<ribDefinition>
+											<eta>0.5</eta>
+											<spacing>0.5</spacing>
+											<thickness>0.01</thickness>
+										</ribDefinition>
+									</ribDefinitions>
+								</wingSegmentStructure>
+							</wingSegment>
+						</wingSegments>
+					</wing>
+				</wings>
+				<enginePositions>
+					<enginePosition>
+						<name>Starbord engine</name>
+						<description>This engine can be described further here</description>
+						<engineUID>3PW066</engineUID>
+						<parentUID>VFW-614 fuselage</parentUID>
+						<transformation>
+							<translation>
+								<point>
+									<x>11.446</x>
+									<y>3.0</y>
+									<z>3.333</z>
+								</point>
+							</translation>
+							<scaling>
+								<point>
+									<x>1.0</x>
+									<y>1.0</y>
+									<z>1.0</z>
+								</point>
+							</scaling>
+							<rotation>
+								<point>
+									<x>0.0</x>
+									<y>1.0</y>
+									<z>0.0</z>
+								</point>
+							</rotation>
+						</transformation>
+					</enginePosition>
+				</enginePositions>
+			</configuration>
+		</configurations>
+		<profiles>
+			<fuselageProfiles>
+				<fuselageProfile>
+					<name>VFW614 x = 0.0174</name>
+					<description>First section</description>
+					<pointList>
+						<point>
+						   <x>0.0</x>
+						   <y>126.643066140918</y>
+						   <z>0.0</z>
+						</point>
+						<point>
+						   <x>-18.5851866219273</x>
+						   <y>125.228754948539</y>
+						   <z>-3.7304220474002E-09</z>
+						</point>
+						<point>
+						   <x>-36.7502982446313</x>
+						   <y>121.055621623605</y>
+						   <z>-1.60640671894686E-08</z>
+						</point>
+						<point>
+						   <x>-52.7562347898052</x>
+						   <y>112.332127178467</y>
+						   <z>3.15962238937721E-10</z>
+						</point>
+						<point>
+						   <x>-65.7227158512196</x>
+						   <y>98.9202963942829</y>
+						   <z>2.52120704769844E-10</z>
+						</point>
+						<point>
+						   <x>-78.6891969126341</x>
+						   <y>85.5084656100991</y>
+						   <z>1.88279170601967E-10</z>
+						</point>
+						<point>
+						   <x>-91.6556779740486</x>
+						   <y>72.0966348259152</y>
+						   <z>1.24437636434089E-10</z>
+						</point>
+						<point>
+						   <x>-104.622159035463</x>
+						   <y>58.6848040417315</y>
+						   <z>6.05961022662121E-11</z>
+						</point>
+						<point>
+						   <x>-117.250899903824</x>
+						   <y>45.0625665729522</y>
+						   <z>-1.21366190479722E-15</z>
+						</point>
+						<point>
+						   <x>-122.455455609738</x>
+						   <y>27.1683556956794</y>
+						   <z>1.82106140776311E-14</z>
+						</point>
+						<point>
+						   <x>-125.108659931356</x>
+						   <y>8.72775131328253</y>
+						   <z>9.30853628082426E-14</z>
+						</point>
+						<point>
+						   <x>-125.000085779121</x>
+						   <y>-9.90688860795661</y>
+						   <z>2.32742319854718E-13</z>
+						</point>
+						<point>
+						   <x>-122.188892291876</x>
+						   <y>-28.3289737741607</y>
+						   <z>-1.60317089013242E-14</z>
+						</point>
+						<point>
+						   <x>-116.730287023071</x>
+						   <y>-46.148506010489</y>
+						   <z>4.40955840230801E-14</z>
+						</point>
+						<point>
+						   <x>-103.893720732907</x>
+						   <y>-59.6191265988556</y>
+						   <z>-1.0567890991682E-09</z>
+						</point>
+						<point>
+						   <x>-90.8587020966442</x>
+						   <y>-72.9643551563542</y>
+						   <z>-2.14649437407186E-09</z>
+						</point>
+						<point>
+						   <x>-77.8236834603812</x>
+						   <y>-86.3095837138527</y>
+						   <z>-3.23619964897552E-09</z>
+						</point>
+						<point>
+						   <x>-64.7886648241182</x>
+						   <y>-99.6548122713513</y>
+						   <z>-4.32590492387917E-09</z>
+						</point>
+						<point>
+						   <x>-51.7536461878552</x>
+						   <y>-113.00004082885</y>
+						   <z>-5.41561019878283E-09</z>
+						</point>
+						<point>
+						   <x>-35.4591003478048</x>
+						   <y>-121.239869933908</y>
+						   <z>-8.23641371867109E-10</z>
+						</point>
+						<point>
+						   <x>-17.2476851527708</x>
+						   <y>-125.196055886609</y>
+						   <z>-9.27516136198405E-08</z>
+						</point>
+						<point>
+						   <x>0.0</x>
+						   <y>-125.102813159693</y>
+						   <z>0.0</z>
+						</point>
+					</pointList>
+				</fuselageProfile>
+			</fuselageProfiles>
+			<wingAirfoils>
+				<wingAirfoil uID="VFW614_W_Y0.">
+					<name>VFW614 wing airfoil Y=0.</name>
+					<description>Wing airfoil 1</description>
+					<pointList>
+						<point>
+						<x>0.999989</x>
+						<y>0.000140</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.949503</x>
+						<y>0.006694</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.899018</x>
+						<y>0.013252</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.798046</x>
+						<y>0.026363</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.697076</x>
+						<y>0.039447</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.596193</x>
+						<y>0.051408</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.495521</x>
+						<y>0.060621</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.395151</x>
+						<y>0.065895</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.295179</x>
+						<y>0.065993</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.245368</x>
+						<y>0.063751</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.195676</x>
+						<y>0.059961</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.146119</x>
+						<y>0.054440</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.096747</x>
+						<y>0.046474</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.072159</x>
+						<y>0.041230</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.047669</x>
+						<y>0.034696</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.023393</x>
+						<y>0.025379</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.011407</x>
+						<y>0.018744</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.000024</x>
+						<y>-0.000778</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.014362</x>
+						<y>-0.019734</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.027475</x>
+						<y>-0.027773</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.053380</x>
+						<y>-0.039686</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.079043</x>
+						<y>-0.048429</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.104589</x>
+						<y>-0.055655</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.155424</x>
+						<y>-0.066756</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.206023</x>
+						<y>-0.074793</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.256438</x>
+						<y>-0.080418</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.306692</x>
+						<y>-0.083955</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.406717</x>
+						<y>-0.084746</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.506170</x>
+						<y>-0.078081</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.605221</x>
+						<y>-0.066162</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.704002</x>
+						<y>-0.050746</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.802682</x>
+						<y>-0.034020</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.901362</x>
+						<y>-0.017281</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.950701</x>
+						<y>-0.008909</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>1.000011</x>
+						<y>-0.000140</y>
+						<z> 0 </z>
+						</point>
+					</pointList>
+				</wingAirfoil>
+				<wingAirfoil uID="VFW614_W_Y3.087">
+					<name>VFW614 wing airfoil Y=3.087</name>
+					<description>Wing airfoil 2</description>
+					<pointList>
+						<point>
+						<x>0.999998</x>
+						<y>0.000141</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.949907</x>
+						<y>0.008867</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.899824</x>
+						<y>0.016903</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.799656</x>
+						<y>0.032963</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.699490</x>
+						<y>0.048929</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.599339</x>
+						<y>0.063528</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.499225</x>
+						<y>0.074622</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.399167</x>
+						<y>0.080547</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.299187</x>
+						<y>0.079359</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.249228</x>
+						<y>0.075872</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.199291</x>
+						<y>0.070386</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.149377</x>
+						<y>0.062700</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.099495</x>
+						<y>0.052134</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.074570</x>
+						<y>0.045331</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.049662</x>
+						<y>0.037065</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.024786</x>
+						<y>0.025750</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.012371</x>
+						<y>0.017960</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.000001</x>
+						<y>-0.000141</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.012758</x>
+						<y>-0.017742</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.025331</x>
+						<y>-0.024644</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.050432</x>
+						<y>-0.034033</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.075502</x>
+						<y>-0.040701</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.100558</x>
+						<y>-0.046009</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.150642</x>
+						<y>-0.054027</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.200699</x>
+						<y>-0.059634</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.250737</x>
+						<y>-0.063434</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.300758</x>
+						<y>-0.065712</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.400750</x>
+						<y>-0.065557</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.500685</x>
+						<y>-0.060171</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.600578</x>
+						<y>-0.050885</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.700442</x>
+						<y>-0.038947</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.800294</x>
+						<y>-0.025912</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.900146</x>
+						<y>-0.012886</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.950072</x>
+						<y>-0.006373</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>1.000001</x>
+						<y>-0.000141</y>
+						<z> 0 </z>
+						</point>
+					</pointList>
+				</wingAirfoil>
+				<wingAirfoil uID="FW614_W_Y7.453">
+					<name>VFW614 wing airfoil Y=7.453</name>
+					<description>Wing airfoil 3</description>
+					<pointList>
+						<point>
+						<x>1.000022</x>
+						<y>0.000999</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.950209</x>
+						<y>0.009259</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.900396</x>
+						<y>0.017538</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.800771</x>
+						<y>0.034085</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.701129</x>
+						<y>0.049997</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.601428</x>
+						<y>0.063163</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.501626</x>
+						<y>0.071858</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.401680</x>
+						<y>0.074172</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.301609</x>
+						<y>0.070866</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.251529</x>
+						<y>0.067240</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.201419</x>
+						<y>0.062232</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.151271</x>
+						<y>0.055563</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.101072</x>
+						<y>0.046689</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.075948</x>
+						<y>0.041094</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.050798</x>
+						<y>0.034398</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.025617</x>
+						<y>0.026246</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.012964</x>
+						<y>0.019425</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.000004</x>
+						<y>-0.000329</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.012127</x>
+						<y>-0.017915</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.024528</x>
+						<y>-0.022300</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.049438</x>
+						<y>-0.026283</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.074401</x>
+						<y>-0.027891</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.099377</x>
+						<y>-0.028935</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.149314</x>
+						<y>-0.031684</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.199217</x>
+						<y>-0.035967</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.249132</x>
+						<y>-0.039701</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.299070</x>
+						<y>-0.042390</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.399002</x>
+						<y>-0.045255</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.499020</x>
+						<y>-0.044372</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.599126</x>
+						<y>-0.039500</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.699298</x>
+						<y>-0.031694</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.799517</x>
+						<y>-0.021842</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.899750</x>
+						<y>-0.011288</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.949867</x>
+						<y>-0.006020</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.999978</x>
+						<y>-0.000999</y>
+						<z> 0 </z>
+						</point>
+					</pointList>
+				</wingAirfoil>
+				<wingAirfoil uID="VFW614_W_Y10.724">
+					<name>VFW614 wing airfoil Y=10.724</name>
+					<description>Wing airfoil 4</description>
+					<pointList>
+						<point>
+						<x>1.000022</x>
+						<y>0.000999</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.950209</x>
+						<y>0.009259</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.900396</x>
+						<y>0.017538</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.800771</x>
+						<y>0.034085</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.701129</x>
+						<y>0.049997</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.601428</x>
+						<y>0.063163</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.501626</x>
+						<y>0.071858</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.401680</x>
+						<y>0.074172</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.301609</x>
+						<y>0.070866</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.251529</x>
+						<y>0.067240</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.201419</x>
+						<y>0.062232</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.151271</x>
+						<y>0.055563</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.101072</x>
+						<y>0.046689</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.075948</x>
+						<y>0.041094</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.050798</x>
+						<y>0.034398</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.025617</x>
+						<y>0.026246</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.012964</x>
+						<y>0.019425</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.000004</x>
+						<y>-0.000329</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.012127</x>
+						<y>-0.017915</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.024528</x>
+						<y>-0.022300</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.049438</x>
+						<y>-0.026283</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.074401</x>
+						<y>-0.027891</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.099377</x>
+						<y>-0.028935</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.149314</x>
+						<y>-0.031684</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.199217</x>
+						<y>-0.035967</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.249132</x>
+						<y>-0.039701</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.299070</x>
+						<y>-0.042390</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.399002</x>
+						<y>-0.045255</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.499020</x>
+						<y>-0.044372</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.599126</x>
+						<y>-0.039500</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.699298</x>
+						<y>-0.031694</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.799517</x>
+						<y>-0.021842</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.899750</x>
+						<y>-0.011288</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.949867</x>
+						<y>-0.006020</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.999978</x>
+						<y>-0.000999</y>
+						<z> 0 </z>
+						</point>
+					</pointList>
+				</wingAirfoil>
+				<wingAirfoil uID="VFW614_H">
+					<name>VFW614 HTP airfoil</name>
+					<description>HTP airfoil</description>
+					<pointList>
+						<point>
+						<x>1.000000</x>
+						<y>0.000000</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.979586</x>
+						<y>0.002463</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.959171</x>
+						<y>0.004916</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.938747</x>
+						<y>0.007309</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.918322</x>
+						<y>0.009624</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.897877</x>
+						<y>0.011867</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.877442</x>
+						<y>0.014050</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.856986</x>
+						<y>0.016174</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.836530</x>
+						<y>0.018247</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.816064</x>
+						<y>0.020261</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.795598</x>
+						<y>0.022214</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.775121</x>
+						<y>0.024108</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.754643</x>
+						<y>0.025951</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.734166</x>
+						<y>0.027736</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.713679</x>
+						<y>0.029470</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.693182</x>
+						<y>0.031153</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.672683</x>
+						<y>0.032767</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.652185</x>
+						<y>0.034321</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.631676</x>
+						<y>0.035815</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.611168</x>
+						<y>0.037239</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.590648</x>
+						<y>0.038593</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.570128</x>
+						<y>0.039867</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.549598</x>
+						<y>0.041061</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.529068</x>
+						<y>0.042185</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.508538</x>
+						<y>0.043220</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.487996</x>
+						<y>0.044164</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.467455</x>
+						<y>0.045018</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.446903</x>
+						<y>0.045762</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.426351</x>
+						<y>0.046407</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.405797</x>
+						<y>0.046921</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.385243</x>
+						<y>0.047315</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.364679</x>
+						<y>0.047570</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.344125</x>
+						<y>0.047674</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.323558</x>
+						<y>0.047609</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.302992</x>
+						<y>0.047373</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.282305</x>
+						<y>0.046938</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.261567</x>
+						<y>0.046294</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.240936</x>
+						<y>0.045409</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.220406</x>
+						<y>0.044273</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.199934</x>
+						<y>0.042877</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.179811</x>
+						<y>0.041240</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.159407</x>
+						<y>0.039344</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.138952</x>
+						<y>0.037279</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.114766</x>
+						<y>0.034731</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.094330</x>
+						<y>0.032476</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.073913</x>
+						<y>0.030029</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.053535</x>
+						<y>0.027273</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.033312</x>
+						<y>0.023587</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.013788</x>
+						<y>0.017329</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.000294</x>
+						<y>0.002824</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.006605</x>
+						<y>-0.016121</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.021609</x>
+						<y>-0.029977</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.039195</x>
+						<y>-0.040735</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.058003</x>
+						<y>-0.049200</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.077508</x>
+						<y>-0.055888</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.097449</x>
+						<y>-0.061158</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.117676</x>
+						<y>-0.065210</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.138087</x>
+						<y>-0.068213</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.158593</x>
+						<y>-0.070408</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.179171</x>
+						<y>-0.071942</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.199772</x>
+						<y>-0.072976</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.220394</x>
+						<y>-0.073631</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.241017</x>
+						<y>-0.073996</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.261643</x>
+						<y>-0.074111</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.282279</x>
+						<y>-0.073985</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.302906</x>
+						<y>-0.073660</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.323523</x>
+						<y>-0.073135</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.344143</x>
+						<y>-0.072420</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.364752</x>
+						<y>-0.071555</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.385362</x>
+						<y>-0.070539</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.405962</x>
+						<y>-0.069374</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.426544</x>
+						<y>-0.068089</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.447136</x>
+						<y>-0.066674</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.467708</x>
+						<y>-0.065159</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.488271</x>
+						<y>-0.063534</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.508835</x>
+						<y>-0.061809</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.529379</x>
+						<y>-0.060004</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.549923</x>
+						<y>-0.058119</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.570457</x>
+						<y>-0.056144</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.590991</x>
+						<y>-0.054098</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.611507</x>
+						<y>-0.051973</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.632023</x>
+						<y>-0.049768</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.652528</x>
+						<y>-0.047503</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.673024</x>
+						<y>-0.045177</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.693522</x>
+						<y>-0.042782</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.713998</x>
+						<y>-0.040327</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.734475</x>
+						<y>-0.037821</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.754952</x>
+						<y>-0.035256</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.775409</x>
+						<y>-0.032641</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.795868</x>
+						<y>-0.029965</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.816316</x>
+						<y>-0.027240</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.836764</x>
+						<y>-0.024455</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.857192</x>
+						<y>-0.021609</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.877621</x>
+						<y>-0.018703</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.898040</x>
+						<y>-0.015748</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.918449</x>
+						<y>-0.012723</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.938849</x>
+						<y>-0.009647</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.959239</x>
+						<y>-0.006501</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>0.979620</x>
+						<y>-0.003315</y>
+						<z> 0 </z>
+						</point>
+						<point>
+						<x>1.000000</x>
+						<y>0.000000</y>
+						<z> 0 </z>
+						</point>
+					</pointList>
+				</wingAirfoil>
+			</wingAirfoils>
+		</profiles>
+	</aircraft>
+	<missions></missions>
+	<airports></airports>
+	<fleets></fleets>
+	<toolspecific></toolspecific>
+</cpacs>

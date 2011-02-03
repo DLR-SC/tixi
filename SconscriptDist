@@ -1,0 +1,212 @@
+# $Id: SconscriptDist 2918 2010-03-08 00:34:47Z litz_ma $
+# scons scipt to build tixi library on unix
+import os
+import os.path
+import shutil
+import sys
+from time import strftime, localtime
+import zipfile
+
+def getCCompilerName(dict):
+	return  os.path.split(dict['CC'])[1] 
+	 
+def getFortranCompilerName(dict):
+	return  os.path.split(dict['FORTRAN'])[1] 
+
+def getPlatform():
+	try:
+		platform =  os.uname()[0] 
+	except:
+		platform = 'win32'
+
+	return platform
+
+def getDirSeparator( env ):
+
+	dict = env.Dictionary()
+
+	dirSep = os.sep
+	print 'cccc', os.path.split(dict['CC'])[1]
+	platform = getPlatform() + '_' + getCCompilerName(dict)
+	
+	if platform == 'win32_gcc':
+		dirSep = '/'
+
+	return dirSep
+
+def removeOldTarFiles():
+	files = os.listdir('.')
+	for file in files:
+		l = len(file)
+		if file[l-3:l] == 'tar' or file[l-2:l] == 'gz' :
+			os.remove(file)
+
+def stringPackIt( target, source, env=None ):
+	print "Building ", target[0] 
+
+def packIt( target = None , source = None, env = None ):
+
+	dict = env.Dictionary()
+	
+	date=strftime("%Y/%m/%d", localtime())
+
+	dateFile = open( 'Version','w')
+	dateFile.write(date)
+	dateFile.close()
+
+	try:
+		os.mkdir('lib' )
+	except:
+		pass
+	try:
+		os.mkdir('include' )
+	except:
+		pass
+	
+	if dict['CC'] == 'cl':
+		platform = getPlatform() + '_' + 'msvc' + env.Dictionary()['MSVS']['VERSION']
+	else:
+		platform = getPlatform() + '_' + getCCompilerName(dict)
+	
+	dirSep = os.sep
+	if platform == 'win32_gcc':
+		dirSep = '/'
+	
+	if getFortranCompilerName( dict) != '':
+		platform = platform + '_' + getFortranCompilerName( dict )
+		if dict['CC'] == 'cl':
+			shutil.copy( 'Src' + dirSep + 'TIXIf.lib', 'lib')
+		else:
+			shutil.copy( 'Src' + dirSep + 'libTIXIf.a', 'lib')
+		shutil.copy( 'Src' + dirSep + 'testf77.f', 'Demo')
+		shutil.copy( 'Src' + dirSep + 'tixif.h', 'include')
+		
+	shutil.copy( 'Src' + dirSep + 'tixiDemo.c', 'Demo')
+	shutil.copy( 'Src' + dirSep + 'tixi.h', 'include')
+	shutil.copy( 'Demo' + dirSep + 'IBUCK' + dirSep + 'myInput.xml', 'Demo' + dirSep + 'demo.xml')
+
+	if dict['CC'] == 'cl' and getPlatform()[:6] == 'win32' :
+
+		shutil.copy( libxml2Home + dirSep + 'bin' + dirSep + 'libxml2.dll', 'lib')
+		shutil.copy( libxml2Home + dirSep + 'bin' + dirSep + 'iconv.dll', 'lib')
+		shutil.copy( libxml2Home + dirSep + 'bin' + dirSep + 'zlib1.dll', 'lib')
+		shutil.copy( libxml2Home + dirSep + 'lib' + dirSep + 'libxml2.lib', 'lib')
+		shutil.copy( libxml2Home + dirSep + 'lib' + dirSep + 'iconv.lib', 'lib')
+		shutil.copy( libxml2Home + dirSep + 'lib' + dirSep + 'zlib.lib', 'lib')
+		shutil.copy( 'Src' + dirSep + 'TIXI.lib', 'lib')
+
+		os.chdir('..')
+		archive = zipfile.ZipFile( 'TIXI' + dirSep + 'tixi.zip', 'w' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'libxml2.dll' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'iconv.dll' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'zlib1.dll' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'libxml2.lib' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'iconv.lib' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'zlib.lib' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'TIXI.lib' )
+		archive.write( 'TIXI' + dirSep + 'lib' + dirSep + 'TIXIf.lib' )
+		archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemo.c' )
+		archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'demo.xml' )
+		archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'rundemo.bat' )
+		archive.write( 'TIXI' + dirSep + 'include' + dirSep + 'tixi.h' )
+		archive.write( 'TIXI' + dirSep + 'Version' )
+
+		if dict["FORTRAN"] != "":
+			archive.write( 'TIXI' + dirSep + 'include' + dirSep + 'tixif.h' )
+			archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'testf77.f' )
+			archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'rundemoF.bat' )
+					
+			if  float(env.Dictionary()['MSVS']['VERSION']) < 7.0:
+				archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemoF.dsp')
+				archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemoF.dsw')
+			else:
+				archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemoF.vfproj')
+				archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemoF.sln')
+	
+			
+
+
+		if  float(env.Dictionary()['MSVS']['VERSION']) < 7.0:
+			archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemo.dsp')
+			archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemo.dsw')
+			archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemo.opt')
+		else:
+			archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemo.vcproj')
+			archive.write( 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemo.sln')
+	
+		archive.close()
+			
+		os.chdir('TIXI')
+	
+		distFileName = 'tixi_' + platform + '.zip'
+		try:
+			os.unlink( distFileName )
+		except:
+			pass
+		
+		os.rename( 'tixi.zip', distFileName )
+		print 'Build distribution ', distFileName	
+
+	else:
+
+		shutil.copy( libxml2Home + os.sep + 'lib' + os.sep + 'libxml2.a', 'lib')
+		print "Copied " +   libxml2Home + dirSep + 'lib' + dirSep + 'libxml2.a' + ' to lib' 
+		shutil.copy( 'Src' + os.sep + 'libTIXI.a', 'lib')
+		print "Copied " +  'Src' + dirSep + 'libTIXI.a'  + ' to lib' 
+		shutil.copy( 'Demo' + os.sep + 'Makefile.' + platform, 'Demo' + os.sep + 'Makefile' )
+		print "Copied " + 'Demo' + os.sep + 'Makefile.' + platform, 'Demo' + os.sep + 'Makefile'
+		
+		tarExec =  env.Detect('gtar') or 'tar' 
+		tarCommand = tarExec + ' -C.. -c -v -f tixi.tar '
+		
+		os.system( tarCommand + 'TIXI' + dirSep + 'lib' + dirSep + 'libTIXI.a' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'lib' + dirSep + 'libTIXI.so' )
+
+		tarCommand = tarExec + ' -C.. -v --append -f tixi.tar '
+
+		os.system( tarCommand + 'TIXI' + dirSep + 'include' + dirSep + 'tixi.h' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'include' + dirSep + 'tixif.h' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'lib' + dirSep + 'libxml2.a' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'Demo' + dirSep + 'Makefile' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'Doc' + dirSep + 'html' )
+
+		if dict["FORTRAN"] != "":
+			os.system( tarCommand + 'TIXI' + dirSep + 'Demo' + dirSep + 'testf77.f' )
+			os.system( tarCommand + 'TIXI' + dirSep + 'lib' + dirSep + 'libTIXIf.a' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'Demo' + dirSep + 'tixiDemo.c' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'Demo' + dirSep + 'demo.xml' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'Readme' )
+		os.system( tarCommand + 'TIXI' + dirSep + 'Version' )
+		
+		# There are two version of gcc-2.95.2 ( at least) one
+		# using the crtdll.dll runtime library the other uses
+		# msvcrt.dll. if the latter is used __MSCVRT is
+		# defined otherwise not.
+
+	
+		if runtimeLib != '':
+			distFileName = 'tixi_'  + platform + '_' + runtimeLib + '.tar'
+		else:
+			distFileName = 'tixi_'  + platform + '.tar'
+			
+		print "Distribution Name:", distFileName
+		if os.access( distFileName, os.F_OK):
+			os.unlink( distFileName )
+		os.rename( 'tixi.tar', distFileName )
+		os.system( 'gzip -f ' + distFileName )
+		
+
+Import( [ 'env', 'libxml2Home', 'runtimeLib' ] )
+
+dirSep = getDirSeparator( env )
+	
+packAction = Action( packIt, stringPackIt )
+
+packBuilder = Builder( action = packAction )
+
+env.Append( BUILDERS = {'Pack':packBuilder} )
+
+if env.Dictionary()['CC']=='cl':
+	env.Pack( target= "tixidemo", source= 'Src' + dirSep + 'TIXI.lib')
+else:
+	env.Pack( target= "tixidemo", source= 'Src' + dirSep + 'libTIXI.a')

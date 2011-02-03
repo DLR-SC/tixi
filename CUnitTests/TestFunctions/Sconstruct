@@ -1,0 +1,38 @@
+# $Id: Sconstruct 2247 2009-06-30 13:22:50Z litz_ma $
+# scons script to build the library of test functions for the unit test suite
+
+Import( ['cunitEnv'] )
+
+sources = 'openDocument.c               \
+           closeDocument.c		\
+           getElement.c			\
+           getAttribute.c		\
+           other.c			\
+           removeElement.c		\
+           createDocument.c		\
+           addElement.c			\
+           addComplexElements.c		\
+           internal.c                   \
+           externaldataOpenMode.c       \
+           removeAttributes.c           \
+           validation.c                 \
+	   xpaths.c			\
+	   xslt.c			\
+	   arrays.c			\
+	   vectors.c			\
+           addAttribute.c'
+
+if cunitEnv.Dictionary()['FORTRAN'] != '':
+	sources = sources +      \
+		  ' fortranInterface.c \
+		  openDocument_f.f \
+		  addElement_f.f   \
+		  other_f.f        \
+                  removeElement_f.f \
+		  getElement_f.f '
+	
+
+if cunitEnv.Dictionary()['FORTRAN'] == 'ifort':
+	cunitEnv.Dictionary()['FORTRANCOM'] = ' ifort /include:Src /c /Fo$TARGET $SOURCE '
+
+cunitEnv.StaticLibrary(target = 'testfunctions', source = Split(sources))

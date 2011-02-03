@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<toolInput>
+	<header>
+		<tool>
+			<name>IBUCK</name>
+                        <v mapType="vector">11;22;33;9.4;3.5</v>
+			<version>1.0</version>
+		</tool>
+		<author>Markus Litz, DLR-SC</author>
+		<timestamp>2009-03-10-21:13:02</timestamp>
+	</header>
+</toolInput>

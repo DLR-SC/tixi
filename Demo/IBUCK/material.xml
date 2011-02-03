@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IBUCK_Input time="13:09" date="2005/03/17" >
+	<material>
+		<shell>
+			<youngsModulus>64935.</youngsModulus>
+			<thickness unit="mm">2.7</thickness>
+		</shell>
+		<stringer>
+			<youngsModulus>64935.</youngsModulus>
+			<steg>
+				<hight unit="mm">60.</hight>
+				<thickness unit="mm">3.5</thickness>
+			</steg>
+			<flange>
+				<hight unit="mm">20.</hight>
+				<thickness unit="mm">3.5</thickness>
+			</flange>
+			<doppler>
+				<width unit="mm">40.</width>
+				<thickness unit="mm">2.4</thickness>
+			</doppler>
+		</stringer>
+		<frame>
+			<youngsModulus>64935.</youngsModulus>
+			<steg>
+				<hight unit="mm">160.</hight>
+				<thickness unit="mm">2.5</thickness>
+			</steg>
+			<flange>
+				<hight unit="mm">35.</hight>
+				<thickness unit="mm">2.5</thickness>
+			</flange>
+			<doppler>
+				<width unit="mm">40.</width>
+			</doppler>
+		</frame>
+		<cl>
+			<youngsModulus>64935.</youngsModulus>
+			<thickness unit="mm">0.</thickness>
+		</cl>
+		<possionNumber>0.34</possionNumber>
+		<panel>
+			<length unit="mm">600.</length>
+			<width unit="mm">200.</width>
+		</panel>
+		<fuselage>
+			<radius unit="mm">2000.</radius>
+		</fuselage>
+		<b1 unit="xxx">0.</b1>
+		<b2 unit="xxx">0.</b2>
+		<sigf unit="xxx">435.</sigf>
+		<nro unit="xxx">35.04</nro>
+	</material>
+</IBUCK_Input>

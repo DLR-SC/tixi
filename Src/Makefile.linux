@@ -1,0 +1,38 @@
+CXXFLAGS=-O2 -g -Wall -fmessage-length=0 -DDEBUG 
+
+CC=gcc $(CXXFLAGS)
+FC=g77
+
+LOCAL_INCLUDES=-I"../local-include" -I"/develop/local/include" -I"." -I"/sc/include"
+LOCAL_LIBS=-L"/develop/local/lib" -L"/sc/lib" -L"/usr/lib64"
+
+LIBS = -lm -lxml2 -lxslt -lcurl
+
+TARGET = ../lib/libTIXI.so
+
+dynamic: 
+	$(CC) -fPIC -c tixiInternal.c -o tixiInternal.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -fPIC -c tixiUtils.c -o tixiUtils.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -fPIC -c uidHelper.c -o uidHelper.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -fPIC -c xpathFunctions.c -o xpathFunctions.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -fPIC -c webMethods.c -o webMethods.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -fPIC -c xslTransformation.c -o xslTransformation.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)    
+	$(CC) -fPIC -c tixiImpl.c -o tixiImpl.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) $(LOCAL_INCLUDES) $(LOCAL_LIBS) tixiImpl.o tixiInternal.o tixiUtils.o uidHelper.o xpathFunctions.o webMethods.o xslTransformation.o -o $(TARGET) -shared $(LIBS) 
+
+static:
+	$(CC) -c tixiInternal.c -o tixiInternal.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -c tixiUtils.c -o tixiUtils.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -c uidHelper.c -o uidHelper.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -c xpathFunctions.c -o xpathFunctions.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -c webMethods.c -o webMethods.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	$(CC) -c xslTransformation.c -o xslTransformation.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)  
+	$(CC) -c tixiImpl.c -o tixiImpl.o $(LOCAL_INCLUDES) $(LOCAL_LIBS)
+	ar rc ../lib/libTIXI.a tixiImpl.o tixiInternal.o tixiUtils.o uidHelper.o xpathFunctions.o webMethods.o xslTransformation.o
+	ranlib ../lib/libTIXI.a
+
+all: clean dynamic static
+
+clean:
+	rm -f *.o
+	rm -f ../lib/libTIXI.*
