@@ -440,7 +440,7 @@ def createMethodStubs(defs):
                 if len(outarray) == 0:
                     outarray = []
         else: # is a list
-            print methodName
+#            print methodName
             if len(params) > 0 and params[0].type.name == ParamType.HANDLE:
                 outs = [params[outs[o] + 1] for o in range(0, len(outs))] # + 1 to ignore handle param as in other argument list
             else:
@@ -580,3 +580,33 @@ if __name__ == '__main__':
     fd = open("tixiwrapper.py", "w")
     print >> fd, stub % (createEnums(), createMethodStubs(defs))
     fd.close()
+
+    # Create distributions
+    import os
+    import functools
+    from distutils.core import setup
+    
+    s = functools.partial(setup,
+            name = 'tixiwrapper',
+            version = '2011-01',
+            py_modules = ['tixiwrapper'],
+            url = 'http://code.google.com/p/tixi/',
+            author = 'Arne Bachmann',
+            author_email = 'arne.bachmann.dlr@googlemail.com',
+            maintainer = 'DLR/SC',
+            license = 'http://www.apache.org/licenses/LICENSE-2.0',
+            description = 'Generated Python wrapper for the TIXI C library'
+        )
+    
+    # Source distribution
+    print "\nBuilding source distribution"
+    sys.argv = ['setup.py', 'sdist']
+    s()
+    
+    # Windows distribution
+    if 'win' in sys.platform:
+        print "\nBuilding windows binary distribution"
+        sys.argv = ['setup.py', 'bdist_wininst']
+        s()
+
+    os.remove("MANIFEST")
