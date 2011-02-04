@@ -600,13 +600,13 @@ if __name__ == '__main__':
     
     # Source distribution
     print "\nBuilding source distribution"
-    sys.argv = ['setup.py', 'sdist']
+    sys.argv = ['tixiwrapper.py', 'sdist'] # need an existing argv[0] here for some stupid reason
     s()
     
     # Windows distribution
     if 'win' in sys.platform:
         print "\nBuilding windows binary distribution"
-        sys.argv = ['setup.py', 'bdist_wininst']
+        sys.argv = ['tixiwrapper.py', 'bdist_wininst']
         s()
 
     os.remove("MANIFEST")
