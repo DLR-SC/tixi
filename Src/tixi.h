@@ -2,9 +2,9 @@
 * Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id: tixi.h 4394 2011-02-03 12:30:00Z bach_ar $ 
+* Changed: $Id$ 
 *
-* Version: $Revision: 4394 $
+* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.

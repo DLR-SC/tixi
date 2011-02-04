@@ -2,9 +2,9 @@
 * Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Arne Bachmann <Arne.Bachmann@dlr.de>
-* Changed: $Id: closeDocument.c 4392 2011-02-03 08:52:55Z litz_ma $ 
+* Changed: $Id$ 
 *
-* Version: $Revision: 4392 $
+* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 #include "tixi.h"
 
 /** 
-    $Id: closeDocument.c 4392 2011-02-03 08:52:55Z litz_ma $
+    $Id$
     @test tixiCloseDocument
     A name of an XML-file and a test case number is passed  to the routine. 
     The following test cases can be run:

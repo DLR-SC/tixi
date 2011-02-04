@@ -2,9 +2,9 @@
 * Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id: dbms.h 4577 20xx-xx-xx 09:27:39Z litz_ma $ 
+* Changed: $Id$ 
 *
-* Version: $Revision: 3978 $
+* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
