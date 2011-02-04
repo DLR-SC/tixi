@@ -44,8 +44,16 @@ copy /Y lib\lib* Install\MinGW-Version
 xcopy /E /Y doc\html Install\doc
 copy Src\wrapper.py Install\tixiwrapper.py
 
-REM - zip it 
+rem - zip it 
 7za a tixi-0.X_win32_vc7_static_shared.zip Install
+
+
+rem - Build Source Distribution
+rm -rf tixi-src
+svn export http://tixi.googlecode.com/svn/trunk/ tixi-src
+7za a tixi-0.X_src.zip tixi-src 
+
 
 #scons build
 pack\pack_xp.bat
+
