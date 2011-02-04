@@ -53,7 +53,6 @@ rm -rf tixi-src
 svn export http://tixi.googlecode.com/svn/trunk/ tixi-src
 7za a tixi-0.X_src.zip tixi-src 
 
-
 #scons build
 pack\pack_xp.bat
 
