@@ -458,9 +458,10 @@ def createMethodStubs(defs):
         for o in outs:
             if o in onlyInputs:
                 onlyInputs.remove(o) # keep only input variables in onlyInputs
-        if len(onlyInputs) > 0 or (useHandle != "" and len(outs) > 0):
-            useHandle += ", "
+        if len(onlyInputs) > 0:
             hasParams = ", "
+        if (len(onlyInputs)+len(outs)) > 1 or (useHandle != "" and len(outs) > 0):
+            useHandle += ", "
             
         # Create stub header. python method header, c-call, array output names
         pString, cString, outnames = createParams(params, outs, outarray)
