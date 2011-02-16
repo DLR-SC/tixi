@@ -101,7 +101,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(t.getDoubleElement("/plane/wings/wing[1]/cog"), 123.456)
         self.assertFalse(t.getBooleanElement("/plane/bool/aBool2"))
         self.assertTrue(t.getBooleanElement("/plane/bool/aBool1b"))
-        self.assertRaises(TixiException, t.checkElement, "/plane/xx") #ELEMENT_NOT_FOUND
+        self.assertFalse(t.checkElement("/plane/xx")) #ELEMENT_NOT_FOUND
         t.createElement("/plane", "xx")
         t.checkElement("/plane/xx")
         self.assertEquals(t.getTextElement("/plane/xx"), "")
@@ -120,7 +120,7 @@ class Tests(unittest.TestCase):
         self.assertEquals(t.getIntegerAttribute("/plane", "intattr"), 324)
         t.removeAttribute("/plane", "intattr")
         self.assertEquals(t.getDoubleAttribute("/plane/coordinateOrigin", "scaling"), 1.3456)
-        self.assertRaises(TixiException, t.checkAttribute, "/plane", "doubleattr") # ATTRIBUTE_NOT_FOUND
+        self.assertFalse(t.checkAttribute("/plane", "doubleattr")) # ATTRIBUTE_NOT_FOUND
         t.addDoubleAttribute("/plane", "doubleattr", 123.456, None)
         t.checkAttribute("/plane", "doubleattr")
         self.assertEquals(t.getDoubleAttribute("/plane", "doubleattr"), 123.456)

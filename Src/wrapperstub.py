@@ -26,12 +26,20 @@ from ctypes import *
 %s# generated enums are placed before this text
 
 class TixiException(Exception):
-    ''' The exception encapsulates error return codes '''
-    def __init__(self, error = "UNKNOWN"):
+    ''' The exception encapsulates the error return code of the library and arguments that were provided for the function. '''
+    def __init__(self, code, *args, **kwargs):
         Exception.__init__(self)
-        self.error = error
+        self.code = code
+        if "error" in kwargs:
+            self.error = str(kwargs["error"])
+        elif code in ReturnCode._names:
+            self.error = ReturnCode._names[code]
+        else:
+            self.error = "UNDEFINED"
+        self.args = tuple(*args)
+        self.kwargs = dict(**kwargs)
     def __str__(self):
-        return str(ReturnCode._names[self.error])
+        return self.error + " (" + str(self.code) + ") " + str(list(self.args)) + " " + str(self.kwargs)
 
 class Tixi(object):
     def __init__(self):
@@ -42,7 +50,9 @@ class Tixi(object):
             self.TIXI = cdll.TIXI
         else:
             self.TIXI = CDLL("libTIXI.so")
-        self.version = self.TIXI.tixiGetVersion()
+        self.version = c_char_p()
+        self.version.value = self.TIXI.tixiGetVersion()
+        self.version = self.version.value
             
     def __del__(self):
         ''' The destructor cleans up the library '''
@@ -51,10 +61,10 @@ class Tixi(object):
                 self.close()
                 self.TIXI = None
 
-    def _validateReturnValue(self, tixiReturn):
+    def _validateReturnValue(self, tixiReturn, *args, **kwargs):
         ''' Helper function to raise an exception if return value is not SUCCESS '''
         if tixiReturn != ReturnCode.SUCCESS:
-            raise TixiException(tixiReturn)
+            raise TixiException(tixiReturn, args, kwargs)
 
     def open(self, xmlInputFilename, recursive = False):
         ''' Open a document from a file. '''
@@ -64,28 +74,28 @@ class Tixi(object):
             tixiReturn = self.TIXI.tixiOpenDocument(xmlInputFilename, byref(self._handle))
         if tixiReturn != ReturnCode.SUCCESS:
             self._handle.value = -1
-        self._validateReturnValue(tixiReturn)
+        self._validateReturnValue(tixiReturn, xmlInputFilename, recursive)
     
     def openHttp(self, url):
         ''' Open a document from an URL. '''
         tixiReturn = self.TIXI.tixiOpenDocumentFromHTTP(url, byref(self._handle))
         if tixiReturn != ReturnCode.SUCCESS:
             self._handle.value = -1
-        self._validateReturnValue(tixiReturn)
+        self._validateReturnValue(tixiReturn, url)
 
     def openString(self, string):
         ''' Open a document from a string. '''
         tixiReturn = self.TIXI.tixiImportFromString(string, byref(self._handle))
         if tixiReturn != ReturnCode.SUCCESS:
             self._handle.value = -1
-        self._validateReturnValue(tixiReturn)
+        self._validateReturnValue(tixiReturn, string)
 
     def create(self, root):
         ''' Create a new tixi document in memory. '''
         tixiReturn = self.TIXI.tixiCreateDocument(root, byref(self._handle))
         if tixiReturn != ReturnCode.SUCCESS:
             self._handle.value = -1
-        self._validateReturnValue(tixiReturn)
+        self._validateReturnValue(tixiReturn, root)
 
     def save(self, fileName, recursive = False, remove = False):
         ''' Save the main tixi document.
@@ -100,7 +110,7 @@ class Tixi(object):
             tixiReturn = self.TIXI.tixiSaveCompleteDocument(self._handle, fileName)
         else:
             tixiReturn = self.TIXI.tixiSaveDocument(self._handle, fileName)
-        self._validateReturnValue(tixiReturn)
+        self._validateReturnValue(tixiReturn, fileName, recursive, remove)
         
     def close(self):
         ''' Closes the current document.
@@ -112,20 +122,21 @@ class Tixi(object):
             self._validateReturnValue(tixiReturn)
     
     def getBooleanElement(self, elementPath):
-        ''' From generated code. '''
+        ''' Manually edited from generated code. '''
         _c_elementPath = c_char_p()
         _c_elementPath.value = elementPath
         _c_boolean = c_int(0)
         tixiReturn = self.TIXI.tixiGetBooleanElement(self._handle, _c_elementPath, byref(_c_boolean))
-        self._validateReturnValue(tixiReturn)
+        self._validateReturnValue(tixiReturn, elementPath)
         if _c_boolean.value == 1:
             _c_boolean = True
         else:
             _c_boolean = False
         return _c_boolean
+        
     def addBooleanElement(self, parentPath, elementName, boolean):
-        ''' From generated code. '''
-        if boolean in [True, 1, "1", "yes"] or str(boolean).lower() == "true":
+        ''' Manually edited from generated code. '''
+        if boolean in [True, 1, "1"] or str(boolean).lower() in ["true", "yes", "on"]:
             boolean = 1
         else:
             boolean = 0
@@ -135,6 +146,30 @@ class Tixi(object):
         _c_elementName.value = elementName
         _c_boolean = c_int(boolean)
         tixiReturn = self.TIXI.tixiAddBooleanElement(self._handle, _c_parentPath, _c_elementName, _c_boolean)
-        self._validateReturnValue(tixiReturn)
+        self._validateReturnValue(tixiReturn, parentPath, elementName, boolean)
    
+    def checkElement(self, elementPath):
+        ''' boolean return values from special return code is coded manually here '''
+        _c_elementPath = c_char_p()
+        _c_elementPath.value = elementPath
+        tixiReturn = self.TIXI.tixiCheckElement(self._handle, _c_elementPath)
+        if tixiReturn == ReturnCode.SUCCESS:
+            return True
+        if tixiReturn == ReturnCode.ELEMENT_NOT_FOUND:
+            return False
+        self._validateReturnValue(tixiReturn, elementPath)
+
+    def checkAttribute(self, elementPath, attributeName):
+        ''' boolean return values from special return code is coded manually here '''
+        _c_elementPath = c_char_p()
+        _c_elementPath.value = elementPath
+        _c_attributeName = c_char_p()
+        _c_attributeName.value = attributeName
+        tixiReturn = self.TIXI.tixiCheckAttribute(self._handle, _c_elementPath, _c_attributeName)
+        if tixiReturn == ReturnCode.SUCCESS:
+            return True
+        if tixiReturn == ReturnCode.ATTRIBUTE_NOT_FOUND:
+            return False
+        self._validateReturnValue(tixiReturn, elementPath, attributeName)
+
 %s# the method definitions are placed above
