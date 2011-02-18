@@ -2936,7 +2936,7 @@ DLL_EXPORT ReturnCode tixiUIDGetXPath(TixiDocumentHandle handle, char *uID, char
 
 	error = tixiUIDCheckDuplicates(handle);
 	if (error != SUCCESS) {
-		return error;
+		fprintf(stderr, "Warning: There are duplicated UID's in the data set!");
 	}
 
     textPtr = (char *) uid_getXpath(document, uID);
