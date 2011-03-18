@@ -36,8 +36,8 @@ class TixiException(Exception):
             self.error = ReturnCode._names[code]
         else:
             self.error = "UNDEFINED"
-        self.args = tuple(*args)
-        self.kwargs = dict(**kwargs)
+        self.args = tuple(args)
+        self.kwargs = dict(kwargs)
     def __str__(self):
         return self.error + " (" + str(self.code) + ") " + str(list(self.args)) + " " + str(self.kwargs)
 
