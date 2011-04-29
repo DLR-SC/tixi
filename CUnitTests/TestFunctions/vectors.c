@@ -64,7 +64,7 @@ void tixiVectorGetTests( void ){
     // check values returned
     count = 10;
     CU_ASSERT ( tixiGetFloatVector(documentHandleGet, "/a/aeroPerformanceMap/cfx", &allPoints, count) == SUCCESS );
-    CU_ASSERT ( allPoints[0] == 1.0 );
+    CU_ASSERT ( allPoints[0] == 1.0 ); printf("\n\n==>%f\n\n", allPoints[0]);
     CU_ASSERT ( allPoints[7] == 8.0 );
 }
 

@@ -1,7 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TIXI", "TIXI.vcproj", "{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TixiDemo", "TixiDemo.vcproj", "{CDC80270-AAED-4AD2-BE6E-15FAE216E650}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -14,143 +13,56 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CUnitTests", "..\CUnitTests
 	EndProjectSection
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "ftestlib", "..\CUnitTests\TestFunctions\ftestlib\ftestlib.vfproj", "{2D5F9C85-87C7-4975-9F6A-728D4758E313}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HowTo", "..\HowTo\HowTo.vcproj", "{877F7AAB-6350-421E-9AC6-1124148650EF}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CUnitTestsNoFortran", "..\CUnitTests\CUnitTestsNoFortran.vcproj", "{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CUnitTestsNoFortran", "..\CUnitTests\CUnitTestsNoFortran.vcproj", "{ED8960AF-E699-4F9E-B893-02AD9164BC49}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA} = {A4284B5C-7361-4C5E-A87D-FADD8D4742FA}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90AE2E5C-A123-4E1E-9652-81FB0042953B}"
+EndProject
 Global
-	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Debug_DLL = Debug_DLL
-		Release = Release
-		Release_DLL = Release_DLL
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_DLL|Win32 = Debug_DLL|Win32
+		Debug|Win32 = Debug|Win32
+		Release_DLL|Win32 = Release_DLL|Win32
+		Release|Win32 = Release|Win32
 	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug.ActiveCfg = Debug|Win32
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug.Build.0 = Debug|Win32
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug_DLL.ActiveCfg = Debug_DLL|Win32
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug_DLL.Build.0 = Debug_DLL|Win32
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release.ActiveCfg = Release|Win32
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release.Build.0 = Release|Win32
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release_DLL.ActiveCfg = Release_DLL|Win32
-		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release_DLL.Build.0 = Release_DLL|Win32
-		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Debug.ActiveCfg = Debug|Win32
-		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Debug.Build.0 = Debug|Win32
-		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Debug_DLL.ActiveCfg = Debug_DLL|Win32
-		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Release.ActiveCfg = Release|Win32
-		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Release.Build.0 = Release|Win32
-		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Release_DLL.ActiveCfg = Release_DLL|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug.ActiveCfg = Debug|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug.Build.0 = Debug|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug_DLL.ActiveCfg = Debug_DLL|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release.ActiveCfg = Release|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release.Build.0 = Release|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release_DLL.ActiveCfg = Release_DLL|Win32
-		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Debug.ActiveCfg = Debug|Win32
-		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Debug_DLL.ActiveCfg = Debug|Win32
-		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Release.ActiveCfg = Release|Win32
-		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Release_DLL.ActiveCfg = Release|Win32
-		{877F7AAB-6350-421E-9AC6-1124148650EF}.Debug.ActiveCfg = Debug|Win32
-		{877F7AAB-6350-421E-9AC6-1124148650EF}.Debug_DLL.ActiveCfg = Debug|Win32
-		{877F7AAB-6350-421E-9AC6-1124148650EF}.Release.ActiveCfg = Release|Win32
-		{877F7AAB-6350-421E-9AC6-1124148650EF}.Release_DLL.ActiveCfg = Release|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug.ActiveCfg = Debug|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug.Build.0 = Debug|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug_DLL.ActiveCfg = Debug_DLL|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug_DLL.Build.0 = Debug_DLL|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release.ActiveCfg = Release|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release.Build.0 = Release|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release_DLL.ActiveCfg = Release_DLL|Win32
-		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release_DLL.Build.0 = Release_DLL|Win32
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug_DLL|Win32.ActiveCfg = Debug_DLL|Win32
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug_DLL|Win32.Build.0 = Debug_DLL|Win32
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Debug|Win32.Build.0 = Debug|Win32
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release_DLL|Win32.ActiveCfg = Release_DLL|Win32
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release_DLL|Win32.Build.0 = Release_DLL|Win32
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release|Win32.ActiveCfg = Release|Win32
+		{A4284B5C-7361-4C5E-A87D-FADD8D4742FA}.Release|Win32.Build.0 = Release|Win32
+		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Debug_DLL|Win32.ActiveCfg = Debug_DLL|Win32
+		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Debug|Win32.Build.0 = Debug|Win32
+		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Release_DLL|Win32.ActiveCfg = Release_DLL|Win32
+		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Release|Win32.ActiveCfg = Release|Win32
+		{CDC80270-AAED-4AD2-BE6E-15FAE216E650}.Release|Win32.Build.0 = Release|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug_DLL|Win32.ActiveCfg = Debug_DLL|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug_DLL|Win32.Build.0 = Debug_DLL|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Debug|Win32.Build.0 = Debug|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release_DLL|Win32.ActiveCfg = Release_DLL|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release_DLL|Win32.Build.0 = Release_DLL|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release|Win32.ActiveCfg = Release|Win32
+		{0512DF88-1F7C-45B7-959B-7873FE2A3DCD}.Release|Win32.Build.0 = Release|Win32
+		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Debug_DLL|Win32.ActiveCfg = Debug|Win32
+		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Release_DLL|Win32.ActiveCfg = Release|Win32
+		{2D5F9C85-87C7-4975-9F6A-728D4758E313}.Release|Win32.ActiveCfg = Release|Win32
+		{877F7AAB-6350-421E-9AC6-1124148650EF}.Debug_DLL|Win32.ActiveCfg = Debug|Win32
+		{877F7AAB-6350-421E-9AC6-1124148650EF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{877F7AAB-6350-421E-9AC6-1124148650EF}.Release_DLL|Win32.ActiveCfg = Release|Win32
+		{877F7AAB-6350-421E-9AC6-1124148650EF}.Release|Win32.ActiveCfg = Release|Win32
 	EndGlobalSection
-	GlobalSection(SolutionItems) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
