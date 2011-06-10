@@ -2,9 +2,9 @@
 * Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id: TIXIInterface.java 3 2011-02-09 14:50:00Z markus.litz $ 
+* Changed: $Id$ 
 *
-* Version: $Revision: 3 $
+* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import com.sun.jna.ptr.PointerByReference;
 /**
  * This class is a JNA-Wrapper around the TIXI library.
  *
- * @version $LastChangedRevision: 4526 $
+ * @version $LastChangedRevision$
  * @author Markus Litz
  * @author Arne Bachmann
  */
