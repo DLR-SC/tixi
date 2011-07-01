@@ -45,7 +45,7 @@ xcopy /E /Y doc\html Install\doc
 copy Src\wrapper.py Install\tixiwrapper.py
 
 rem - zip it 
-7za a tixi-0.X_win32_vc7_static_shared.zip Install
+7za a tixi-1.X_win32_vc7_static_shared.zip Install
 
 
 rem - Build Source Distribution
