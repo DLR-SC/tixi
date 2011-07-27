@@ -392,6 +392,31 @@ public class TIXIInterface {
         return retVal;
     }
     
+    
+    /**
+     * Create an XML-document and initializes a data structure to hold an XML-document.
+     * 
+     * @param rootElementName name of the root element of the XML-document
+     * @return true if success
+     */
+    public boolean tixiCreateDocument(final String rootElementName) {
+        boolean retVal = true;
+        // exit if this instance has already a tixi handle
+        if (tixiHandle != null) {
+            LOGGER.error("tixiCreateDocument failed in TIXIInterface -- there is already a document loaded.");
+            retVal = false;
+        }
+        
+        tixiHandle = new IntByReference();
+        errorCode = TIXI.INSTANCE.tixiCreateDocument(rootElementName, tixiHandle);        
+        if (errorCode != 0) {
+            LOGGER.error("tixiCreateDocument failed in TIXIInterface");
+            retVal = false;
+        }
+        return retVal;
+    }
+    
+    
     /**
      * Save a CPACS document.
      * @param xmlFilename The filename to save under
@@ -541,14 +566,15 @@ public class TIXIInterface {
         int tixiImportFromString(final String xmlImportString, final IntByReference tixiHandle);
         int tixiOpenDocument(final String fileName, final IntByReference tixiHandle);
         int tixiOpenDocumentRecursive(final String fileName, final IntByReference tixiHandle, final int openMode);
+        int tixiCreateDocument(final String rootElementName, final IntByReference tixiHandle);
         int tixiRemoveElement(final int tixiHandle, final String elementPath);
         int tixiSaveDocument(final int tixiHandle, final String xmlFilename);
         int tixiSaveCompleteDocument(final int tixiHandle, final String xmlFilename);
         int tixiSaveAndRemoveDocument(final int tixiHandle, final String xmlFilename);
         int tixiSchemaValidate(final int tixiHandle, final String xmlFilename);
         int tixiSchemaValidateFromString(final int tixiHandle, final String xsdFileContents);
-        int tixiXPathExpressionGetTextByIndex(final int tixiHandle, final String xPathExpression, final int elementNumber, final PointerByReference text);
         int tixiSchemaValidateFromFile(final int tixiHandle, final String schemaFileName);
+        int tixiXPathExpressionGetTextByIndex(final int tixiHandle, final String xPathExpression, final int elementNumber, final PointerByReference text);
         String tixiGetVersion(); 
     }
 
