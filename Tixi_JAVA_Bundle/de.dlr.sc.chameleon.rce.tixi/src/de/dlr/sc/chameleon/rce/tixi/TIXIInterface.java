@@ -149,7 +149,6 @@ public class TIXIInterface {
     
     
     /**
-     * 
      * Returns the value of an attribute specified by attributeName of the
      * element, specified by elementPath, in the document specified by
      * handle. On successful return the memory used for value is allocated
@@ -173,6 +172,27 @@ public class TIXIInterface {
         return pointer.getString(0);
     }
     
+    
+    /**
+     * Returns the XPath to given uid. On successful return the memory used for 
+     * text is allocated internally and must not be released by the user. 
+     * The deallocation is handle when the document referred to by handle is closed.
+     * 
+     * @param uID - The uid of which the xpath should be returned
+     * @return The XPath of the element with the right uid. Empty string if uid does not exist.
+     */
+    public String tixiUIDGetXPath(final String uID) {
+        PointerByReference pRef = new PointerByReference();
+        errorCode = TIXI.INSTANCE.tixiUIDGetXPath(tixiHandle.getValue(), uID, pRef);
+        
+        if (errorCode != 0) {
+            LOGGER.error("tixiUIDGetXPath failed in TIXIInterface");
+            return "";
+        }
+        
+        Pointer pointer = pRef.getValue();
+        return pointer.getString(0);
+    }
     
     
     /**
@@ -294,7 +314,6 @@ public class TIXIInterface {
     
     
     /**
-     * 
      * Removes an element specified by XPath.
      * 
      * @param elementPath The path to the element to remove 
@@ -312,7 +331,30 @@ public class TIXIInterface {
         }
         return true;
     }
-    
+
+
+    /**
+     * Removes an attribute specified by XPath and Name.
+     * It is not an error to remove an non existing attribute.
+     * 
+     * @param elementPath - an XPath complaint path to an element in the document specified by handle
+     * @param attributeName - name of the attribute to be added to the element 
+     * @return True if success.
+     */
+    public boolean tixiRemoveAttribute(final String elementPath, final String attributeName) {
+        if (elementPath.isEmpty() || attributeName.isEmpty()) {
+            LOGGER.error("Error: elementPath or attributeName empty in tixiRemoveAttribute");
+            return false;
+        }
+
+        errorCode = TIXI.INSTANCE.tixiRemoveAttribute(tixiHandle.getValue(), elementPath, attributeName);
+        if (errorCode != 0) {
+            LOGGER.error("tixiRemoveAttribute failed in TIXIInterface.");
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * 
@@ -561,6 +603,7 @@ public class TIXIInterface {
         int tixiGetDoubleElement(final int tixiHandle, final String elementPath, final DoubleByReference doubleElement);
         int tixiGetTextElement(final int tixiHandle, final String elementPath, final PointerByReference text);
         int tixiGetTextAttribute(final int tixiHandle, final String elementPath, final String attributeName, final PointerByReference text);
+        int tixiUIDGetXPath(final int tixiHandle, final String uID, final PointerByReference xPath);
         int tixiGetNamedChildrenCount(final int tixiHandle, final String elementPath, final String childName, final IntByReference count);
         int tixiUpdateTextElement (final int tixiHandle, final String elementPath, final String newTextValue);
         int tixiImportFromString(final String xmlImportString, final IntByReference tixiHandle);
@@ -568,6 +611,7 @@ public class TIXIInterface {
         int tixiOpenDocumentRecursive(final String fileName, final IntByReference tixiHandle, final int openMode);
         int tixiCreateDocument(final String rootElementName, final IntByReference tixiHandle);
         int tixiRemoveElement(final int tixiHandle, final String elementPath);
+        int tixiRemoveAttribute(final int tixiHandle, final String elementPath, final String attributeName);
         int tixiSaveDocument(final int tixiHandle, final String xmlFilename);
         int tixiSaveCompleteDocument(final int tixiHandle, final String xmlFilename);
         int tixiSaveAndRemoveDocument(final int tixiHandle, final String xmlFilename);
