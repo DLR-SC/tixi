@@ -47,12 +47,6 @@ public class TIXIInterface {
     protected static final Log LOGGER = LogFactory.getLog(TIXIInterface.class);
 
     static {
-    	// determine internal string representation for JNA communication: doesn't work
-//    	if (ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN) {
-//    		System.setProperty("jna.encoding", "UTF-16BE");
-//    	} else {
-//    		System.setProperty("jna.encoding", "UTF-16LE");
-//    	}
         String operatingSystem = System.getProperty("os.name");
         if (operatingSystem.startsWith("Windows")) {
         	// don't change import order, works just fine now
@@ -197,7 +191,7 @@ public class TIXIInterface {
     }
     
     /**
-     * Returns a String with the XML content of the tixi-document.
+     * Returns a String with the XML content of the TIXI-document.
      * @return A String with the full XML content.
      */
     public String tixiExportDocumentAsString() {
@@ -478,6 +472,26 @@ public class TIXIInterface {
     /**
      * Validate the given file.
      * 
+     * @param schemaFileName - the name of the file containing the schema to validate against.
+     * @return True if valid
+     */
+    public boolean tixiSchemaValidateFromFile(final String schemaFileName) {
+        if (tixiHandle != null) {
+            final int code = TIXI.INSTANCE.tixiSchemaValidateFromFile(tixiHandle.getValue(), schemaFileName);
+            if (code == TIXIInterfaceStatusCodes.SUCCESS.getCode()) {
+                return true;
+            }
+            LOGGER.error("Error in CPACS validation: TIXI returns " + code);
+            return false;
+        }
+        LOGGER.error("TIXI handle is null, could not validate");
+        return false;
+    }
+    
+    
+    /**
+     * Validate the document against a schema file.
+     * 
      * @param xsdFileContents - a String containing the schema to validate against.
      * @return True if valid
      */
@@ -534,6 +548,7 @@ public class TIXIInterface {
         int tixiSchemaValidate(final int tixiHandle, final String xmlFilename);
         int tixiSchemaValidateFromString(final int tixiHandle, final String xsdFileContents);
         int tixiXPathExpressionGetTextByIndex(final int tixiHandle, final String xPathExpression, final int elementNumber, final PointerByReference text);
+        int tixiSchemaValidateFromFile(final int tixiHandle, final String schemaFileName);
         String tixiGetVersion(); 
     }
 
