@@ -233,7 +233,6 @@ public class TIXIInterface {
     }
     
     /**
-     * 
      * Returns a double Element selected by XPath.
      * 
      * @param elementPath The XPath to the XML-Element to read.
@@ -290,6 +289,29 @@ public class TIXIInterface {
         return pointer.getString(0);
     }
     
+    
+    
+    /**
+     * Creates an empty element. Creates an empty element specified by the 
+     * elementPath expression. Elements with the same name can be added multiple times.
+     * 
+     * @param parentPath - an XPath complaint path to an element in the document specified by handle
+     * @param elementName - name of the element to be inserted into the parent element
+     * @return True if success.
+     */
+    public boolean tixiCreateElement(final String parentPath, final String elementName) {
+        if (parentPath.isEmpty() || elementName.isEmpty()) {
+            LOGGER.error("Error: parentPath or elementName empty in tixiCreateElement");
+            return false;
+        }
+
+        errorCode = TIXI.INSTANCE.tixiCreateElement(tixiHandle.getValue(), parentPath, elementName);
+        if (errorCode != 0) {
+            LOGGER.error("tixiCreateElement failed in TIXIInterface.");
+            return false;
+        }
+        return true;
+    }
     
     
     /**
@@ -610,6 +632,7 @@ public class TIXIInterface {
         int tixiOpenDocument(final String fileName, final IntByReference tixiHandle);
         int tixiOpenDocumentRecursive(final String fileName, final IntByReference tixiHandle, final int openMode);
         int tixiCreateDocument(final String rootElementName, final IntByReference tixiHandle);
+        int tixiCreateElement(final int tixiHandle, final String parentPath, final String attributeName);
         int tixiRemoveElement(final int tixiHandle, final String elementPath);
         int tixiRemoveAttribute(final int tixiHandle, final String elementPath, final String attributeName);
         int tixiSaveDocument(final int tixiHandle, final String xmlFilename);
