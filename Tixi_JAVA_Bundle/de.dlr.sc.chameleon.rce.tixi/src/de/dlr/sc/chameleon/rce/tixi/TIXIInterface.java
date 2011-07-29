@@ -101,7 +101,7 @@ public class TIXIInterface {
      * Elements with the same name can be added multiple times.
      * 
      * @param parentPath
-     *            an XPath complaint path to an element in the loaded document into which the new
+     *            an XPath compliant path to an element in the loaded document into which the new
      *            element is to be inserted. The parent element has to exist already.
      * @param elementName
      *            name of the element to be inserted into the parent element
@@ -132,7 +132,7 @@ public class TIXIInterface {
      * previous value is replaced by text.
      * 
      * @param elementPath
-     *            an XPath complaint path to an element in the document specified by handle
+     *            an XPath compliant path to an element in the document specified by handle
      * @param attributeName
      *            name of the attribute to be added to the element
      * @param attributeValue
@@ -163,7 +163,7 @@ public class TIXIInterface {
      * Elements with the same name can be added multiple times.
      * 
      * @param parentPath
-     *            an XPath complaint path to an element in the document specified by handle
+     *            an XPath compliant path to an element in the document specified by handle
      * @param elementName
      *            name of the element to be inserted into the parent element
      * @param number
@@ -220,7 +220,7 @@ public class TIXIInterface {
      * internally and must not be released by the user. The memory is
      * deallocated when the document referred to by handle is closed.
      * 
-     * @param elementPath - an XPath complaint path to an element in the document
+     * @param elementPath - an XPath compliant path to an element in the document
      * @param attributeName - name of the attribute to be get from the element
      * @return value of the specified attribute as a string
      */
@@ -360,7 +360,7 @@ public class TIXIInterface {
      * Creates an empty element. Creates an empty element specified by the 
      * elementPath expression. Elements with the same name can be added multiple times.
      * 
-     * @param parentPath - an XPath complaint path to an element in the document specified by handle
+     * @param parentPath - an XPath compliant path to an element in the document specified by handle
      * @param elementName - name of the element to be inserted into the parent element
      * @return True if success.
      */
@@ -424,7 +424,7 @@ public class TIXIInterface {
      * Removes an attribute specified by XPath and Name.
      * It is not an error to remove an non existing attribute.
      * 
-     * @param elementPath - an XPath complaint path to an element in the document specified by handle
+     * @param elementPath - an XPath compliant path to an element in the document specified by handle
      * @param attributeName - name of the attribute to be added to the element 
      * @return True if success.
      */
