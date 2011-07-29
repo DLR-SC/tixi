@@ -241,13 +241,13 @@ typedef int TixiDocumentHandle;
 
     FAILED,                     /*!< 1: Unspecified error                         */
 
-    INVALID_XML_NAME,           /*!< 2: Non XML standard complaint name specified */
+    INVALID_XML_NAME,           /*!< 2: Non XML standard compliant name specified */
 
     NOT_WELL_FORMED,            /*!< 3: Document is not well formed               */
 
-    NOT_SCHEMA_COMPLIANT,       /*!< 4: Document is not schema complaint          */
+    NOT_SCHEMA_COMPLIANT,       /*!< 4: Document is not schema compliant          */
 
-    NOT_DTD_COMPLIANT,          /*!< 5: Document is not DTD complaint             */
+    NOT_DTD_COMPLIANT,          /*!< 5: Document is not DTD compliant             */
 
     INVALID_HANDLE,             /*!< 6: Document handle is not valid              */
 
