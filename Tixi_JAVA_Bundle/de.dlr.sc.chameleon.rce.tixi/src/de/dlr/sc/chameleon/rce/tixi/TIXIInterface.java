@@ -124,6 +124,71 @@ public class TIXIInterface {
         return true;
     }
     
+    
+    /**
+     * Adds an attribute with a string value to an element. 
+     * Adds an attribute with name attributeName and value attributeValue to an element 
+     * specified by the elementPath expression. If the attribute already exists its 
+     * previous value is replaced by text.
+     * 
+     * @param elementPath
+     *            an XPath complaint path to an element in the document specified by handle
+     * @param attributeName
+     *            name of the attribute to be added to the element
+     * @param attributeValue
+     *            text to assigned to the attribute. 
+     *              If attributeValue is NULL the empty string will be assigned to the attribute.
+     * @return true if success.
+     */
+    public boolean tixiAddTextAttribute(final int handle, final String elementPath, final String attributeName, final String attributeValue) {
+        if ((elementPath.isEmpty()) || (attributeName.isEmpty())) {
+            LOGGER.error("elementPath or attributeName empty in tixiAddTextAttribute::TIXIInterface");
+            return false;
+        }
+
+        errorCode = TIXI.INSTANCE.tixiAddTextAttribute(tixiHandle.getValue(), elementPath, attributeName, attributeValue);
+        if (errorCode != 0) {
+            LOGGER.error("tixiAddTextAttribute failed in TIXIInterface");
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+    /**
+     * Creates an element which holds a floating point number.
+     * 
+     * Creates an element specified by the elementPath expression. 
+     * Elements with the same name can be added multiple times.
+     * 
+     * @param parentPath
+     *            an XPath complaint path to an element in the document specified by handle
+     * @param elementName
+     *            name of the element to be inserted into the parent element
+     * @param number
+     *            floating point number to be placed inside the element pointed to by 
+     *            elementPath. If number is NULL an empty element will be created.
+     * @param format
+     *            format used to convert number into a string. If format is 
+     *            NULL "%g" will be used to format the string.
+     * @return true if success.
+     */
+    public boolean tixiAddDoubleElement(final int handle, final String parentPath, final String elementName, final double number, final String format) {
+        if ((parentPath.isEmpty()) || (elementName.isEmpty())) {
+            LOGGER.error("parentPath or elementName empty in tixiAddDoubleElement::TIXIInterface");
+            return false;
+        }
+
+        errorCode = TIXI.INSTANCE.tixiAddDoubleElement(tixiHandle.getValue(), parentPath, elementName, number, format);
+        if (errorCode != 0) {
+            LOGGER.error("tixiAddDoubleElement failed in TIXIInterface");
+            return false;
+        }
+        return true;
+    }
+    
+    
     /**
      * 
      * More user convenience function of tixiAddTextElement. 
@@ -619,7 +684,9 @@ public class TIXIInterface {
      */
     public interface TIXI extends Library {
         TIXI INSTANCE = (TIXI) Native.loadLibrary("TIXI", TIXI.class);
-        int tixiAddTextElement(final int handle, String parentPath, String elementName, String text);
+        int tixiAddTextElement(final int handle, final String parentPath, final String elementName, final String text);
+        int tixiAddTextAttribute(final int handle, final String elementPath, final String attributeName, final String attributeValue);
+        int tixiAddDoubleElement(final int handle, final String parentPath, final String elementName, final double number, final String format);
         int tixiCloseDocument(final int tixiHandle);
         int tixiExportDocumentAsString(final int tixiHandle, final PointerByReference text);
         int tixiGetDoubleElement(final int tixiHandle, final String elementPath, final DoubleByReference doubleElement);
