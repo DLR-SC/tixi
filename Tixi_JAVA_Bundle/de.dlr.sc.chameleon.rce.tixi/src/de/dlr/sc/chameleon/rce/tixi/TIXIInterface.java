@@ -140,7 +140,7 @@ public class TIXIInterface {
      *              If attributeValue is NULL the empty string will be assigned to the attribute.
      * @return true if success.
      */
-    public boolean tixiAddTextAttribute(final int handle, final String elementPath, final String attributeName, final String attributeValue) {
+    public boolean tixiAddTextAttribute(final String elementPath, final String attributeName, final String attributeValue) {
         if ((elementPath.isEmpty()) || (attributeName.isEmpty())) {
             LOGGER.error("elementPath or attributeName empty in tixiAddTextAttribute::TIXIInterface");
             return false;
@@ -174,7 +174,7 @@ public class TIXIInterface {
      *            NULL "%g" will be used to format the string.
      * @return true if success.
      */
-    public boolean tixiAddDoubleElement(final int handle, final String parentPath, final String elementName, final double number, final String format) {
+    public boolean tixiAddDoubleElement(final String parentPath, final String elementName, final double number, final String format) {
         if ((parentPath.isEmpty()) || (elementName.isEmpty())) {
             LOGGER.error("parentPath or elementName empty in tixiAddDoubleElement::TIXIInterface");
             return false;
