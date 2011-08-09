@@ -1,6 +1,6 @@
 #!/bin/csh -f
-setenv LIBXML2_HOME /sc 
-setenv PATH /usr/bin:/DLR/TIVA/local/bin:/sc/bin":"$PATH
+setenv LIBXML2_HOME /usr/include/libxml2 
+setenv PATH /usr/bin:/DLR/TIVA/local/bin:/sc/bin:/usr/include:/usr/include/libxml2":"$PATH
 rehash
 cd Src
 make -f Makefile.linux dynamic

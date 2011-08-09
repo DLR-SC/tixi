@@ -3,7 +3,7 @@ CXXFLAGS=-O2 -g -Wall -fmessage-length=0 -DDEBUG
 CC=gcc $(CXXFLAGS)
 FC=g77
 
-LOCAL_INCLUDES=-I"../local-include" -I"/develop/local/include" -I"." -I"/sc/include"
+LOCAL_INCLUDES=-I"../local-include" -I"/develop/local/include" -I"." -I"/sc/include" -I"/usr/include/libxml2"
 LOCAL_LIBS=-L"/develop/local/lib" -L"/sc/lib" -L"/usr/lib64"
 
 LIBS = -lm -lxml2 -lxslt -lcurl
