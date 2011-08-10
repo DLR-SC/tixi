@@ -79,6 +79,7 @@
 #define tixiAddIntegerElement_f TIXI_ADD_INTEGER_ELEMENT
 #define tixiAddBooleanElement_f TIXI_ADD_BOOLEAN_ELEMENT
 #define tixiUpdateTextElement_f TIXI_UPDATE_TEXT_ELEMENT
+#define tixiUpdateDoubleElement_f TIXI_UPDATE_DOUBLE_ELEMENT
 #define tixiRemoveElement_f TIXI_REMOVE_ELEMENT
 #define tixiGetTextAttribute_f TIXI_GET_TEXT_ATTRIBUTE
 #define tixiGetIntegerAttribute_f TIXI_GET_INTEGER_ATTRIBUTE
@@ -147,6 +148,7 @@
 #define tixiAddIntegerElement_f FORTRAN_NAME(tixi_add_integer_element)
 #define tixiAddBooleanElement_f FORTRAN_NAME(tixi_add_boolean_element)
 #define tixiUpdateTextElement_f FORTRAN_NAME(tixi_update_text_element)
+#define tixiUpdateDoubleElement_f FORTRAN_NAME(tixi_update_double_element)
 #define tixiRemoveElement_f FORTRAN_NAME(tixi_remove_element)
 #define tixiGetTextAttribute_f FORTRAN_NAME(tixi_get_text_attribute)
 #define tixiGetIntegerAttribute_f FORTRAN_NAME(tixi_get_integer_attribute)
@@ -327,6 +329,14 @@ void tixiAddBooleanElement_f(const TixiDocumentHandle* handle,
 void tixiUpdateTextElement_f(const TixiDocumentHandle* handle,
 							  char* parentPath,
 							  char* text,
+							  ReturnCode* error,
+							  int lengthString1,
+							  int lengthString2);
+
+void tixiUpdateDoubleElement_f(const TixiDocumentHandle* handle,
+							  char* parentPath,
+							  double number,
+							  char* format,
 							  ReturnCode* error,
 							  int lengthString1,
 							  int lengthString2,

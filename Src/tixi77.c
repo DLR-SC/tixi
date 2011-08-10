@@ -425,7 +425,7 @@ void tixiUpdateTextElement_f(const TixiDocumentHandle *handle,
 							  char *parentPath,
 							  char *text,
 							  ReturnCode *error,
-							  int parentPathLength, int elementNameLength, int textLength)
+							  int parentPathLength, int textLength)
 {
   char *cParentPath = NULL;
   char *cText = NULL;
@@ -442,7 +442,29 @@ void tixiUpdateTextElement_f(const TixiDocumentHandle *handle,
   if (cText) {
     free(cText);
   }
+}
 
+void tixiUpdateDoubleElement_f(const TixiDocumentHandle *handle,
+							  char *parentPath,
+							  double number,
+							  char *format,
+							  ReturnCode *error,
+							  int parentPathLength, int formatLength, int textLength)
+{
+  char *cParentPath = NULL;
+  char *cFormat = NULL;
+  char *cText = NULL;
+
+  cParentPath = makeCString(parentPath, parentPathLength);
+  cFormat = makeCString(format, formatLength);
+
+  *error = tixiUpdateDoubleElement(*handle, cParentPath, number, cFormat);
+
+  free(cParentPath);
+  free(cFormat);
+  if (cText) {
+    free(cText);
+  }
 }
 
 void tixiRemoveElement_f(const TixiDocumentHandle *handle,
