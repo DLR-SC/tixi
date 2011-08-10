@@ -421,6 +421,30 @@ void tixiAddBooleanElement_f(const TixiDocumentHandle *handle,
 }
 
 
+void tixiUpdateTextElement_f(const TixiDocumentHandle *handle,
+							  char *parentPath,
+							  char *text,
+							  ReturnCode *error,
+							  int parentPathLength, int elementNameLength, int textLength)
+{
+  char *cParentPath = NULL;
+  char *cText = NULL;
+
+  cParentPath = makeCString(parentPath, parentPathLength);
+
+  if (textLength != 0) {
+    cText = makeCString(text, textLength);
+  }
+
+  *error = tixiUpdateTextElement(*handle, cParentPath, cText);
+
+  free(cParentPath);
+  if (cText) {
+    free(cText);
+  }
+
+}
+
 void tixiRemoveElement_f(const TixiDocumentHandle *handle,
                          char *elementPath, ReturnCode *error, int lengthString1)
 {
