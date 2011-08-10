@@ -931,7 +931,7 @@ typedef int TixiDocumentHandle;
       @param elementPath (in) an XPath compliant path to an element in the document
                         specified by handle (see section \ref XPathExamples above).
 
-      @param text (out) text content of the element to update the element specified by elementPath
+      @param text (in) text content of the element to update the element specified by elementPath
 
       @return
 
@@ -944,6 +944,40 @@ typedef int TixiDocumentHandle;
    */
 
     DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, char *elementPath, char *text);
+
+
+    /**
+        @brief Updates the double content of an element.
+
+        Update the double content of the element specified by elementPath in the
+        document specified by handle. elementPath must refer to exactly one
+        element which has only a text node and zero or more attributes but
+        no further children with text nodes.
+
+        <b>Fortran syntax:</b>
+
+        tixi_update_double_element( integer handle, character*n element_path,  real number, character*n format, integer error )
+        #PY:# no output
+
+        @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+
+        @param elementPath (in) an XPath compliant path to an element in the document
+                          specified by handle (see section \ref XPathExamples above).
+
+        @param number (in) double content of the element to update the element specified by elementPath
+        @param format (in) format used to convert number into a string. If format is NULL "%g" will be used to format the string.
+
+        @return
+         - SUCCESS if successfully retrieve the text content of a single element
+         - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+         - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+         - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+         - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+         - FAILED if node is no textNode
+     */
+
+      DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, char *elementPath, double number, char *format);
+
 
 /**
 

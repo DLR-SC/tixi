@@ -823,6 +823,44 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, ch
 }
 
 
+DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, char *elementPath, double number, char *format)
+{
+    TixiDocument *document = getDocument(handle);
+    xmlDocPtr xmlDocument = NULL;
+    xmlXPathObjectPtr xpathObject = NULL;
+    xmlNodePtr element = NULL;
+    xmlNodePtr newElement = NULL;
+    ReturnCode error = SUCCESS;
+    char *textBuffer = NULL;
+
+    if (!document) {
+        fprintf(stderr, "Error: Invalid document handle.\n");
+        return INVALID_HANDLE;
+    }
+
+    if (document->status == SAVED) {
+        fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+        return ALREADY_SAVED;
+    }
+
+    xmlDocument = document->docPtr;
+
+    if (!format) {
+    	format = "%g";
+    };
+
+    textBuffer = buildString(format, number);
+
+    error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+    if (!error) {
+        newElement = xmlNewText((xmlChar*) textBuffer);
+        xmlReplaceNode(element->children, newElement);
+        return SUCCESS;
+    }
+    return FAILED;
+}
+
+
 DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, const char *elementPath,
                                            char *attributeName, char **text)
 {
@@ -1222,6 +1260,8 @@ DLL_EXPORT ReturnCode tixiRemoveElement(const TixiDocumentHandle handle, char *e
   ReturnCode retVal;
 
   retVal = getNodePtrFromElementPath(handle, elementPath, &parent);
+
+  printf("retVal = %d", retVal);
 
   if(parent != NULL) {
     xmlUnlinkNode(parent);
