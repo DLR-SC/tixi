@@ -19,7 +19,7 @@
 * limitations under the License.
 */
 /**
- * @brief  Declaration of the internal datastructures used by tixi.
+ * @brief  Declaration of the internal data structures used by tixi.
  */
 
 #ifndef TIXIDATA_H
@@ -99,7 +99,7 @@ typedef  enum DocumentStatusType
                 tixiOpenDocument and has been neither saved nor closed
                 so far.*/
    SAVED,   /**< The document has been saved by tixiSaveDocument      */
-   CLOSED   /**< The document has been cosed by tixiCloseDocument     */
+   CLOSED   /**< The document has been closed by tixiCloseDocument     */
 } DocumentStatus;
 
 
@@ -133,9 +133,9 @@ typedef struct
 {
       char* xmlFilename;            /**< Full Name of the file associated with the document */
 	  char* dirname;				/**< The name of the directory in which this master-cpacs-file is */
-	  char* filename;				/**< The filename with(!) fileextention */
-      xmlDocPtr docPtr;             /**< libxml pointer to document */
-      xmlNodePtr currentNode;       /**< libxml pointer to the current node */
+	  char* filename;				/**< The filename with(!) file extension */
+      xmlDocPtr docPtr;             /**< libxml-pointer to document */
+      xmlNodePtr currentNode;       /**< libxml-pointer to the current node */
       ValidationStatus isValid;     /**< Holds informations if and how the document has been validated */
       char* validationFilename;     /**< Name of the file the document is validate against */
       DocumentStatus status;        /**< Status of the document: opened/saved/closed */
