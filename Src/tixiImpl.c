@@ -25,6 +25,7 @@
  * @brief  Implementation of the TIXI-C-API
  * @todo add not an Element to tixiGetTextAttribute
  */
+#define _CRT_SECURE_NO_WARNINGS
 #include <assert.h>
 #include <stdio.h>
 #include <time.h>

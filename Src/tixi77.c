@@ -21,7 +21,7 @@
 /**
    @brief Implementation of wrappers of tixi public interface functions to be called from Fortran77/90 code.
 */
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>

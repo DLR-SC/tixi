@@ -21,6 +21,7 @@
 /**
    @file Utility functions used to implement the interface.
 */
+#define _CRT_SECURE_NO_WARNINGS
 #include "tixiUtils.h"
 #include "tixiInternal.h"
 

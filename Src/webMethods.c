@@ -22,6 +22,7 @@
    @file Utility functions used to fetch files from a url.
 */
 
+#define _CRT_SECURE_NO_WARNINGS
 #include "webMethods.h"
 
 #include <curl/curl.h>
