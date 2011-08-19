@@ -892,7 +892,7 @@ typedef int TixiDocumentHandle;
      <b>Fortran syntax:</b>
 
      tixi_get_boolean_element( integer  handle, character*n element_path, integer boolean, integer error )
-    #PY:2# no output params (explicit mark necessary, otherwise assuming last = output)
+    #PY:2#
 
      @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
 
@@ -1711,7 +1711,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
       <b>Fortran syntax:</b>
 
       tixi_use_pretty_print( integer  handle, integer use_pretty_print, integer error )
-      #PY:# pretty_print
+      #PY:#
       @param handle  (in) handle as returned by ::tixiOpenDocument
       @param usePrettyPrint (in) flag if output should be pretty printed
 
@@ -1954,7 +1954,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
    ::tixiGetMatrixSize. Row and column numbers in error messages refer
    to a numbering starting at one.
    
-   #PY:6:3;4# # use row * col output array
+   #PY:6:3;4# # use row * col output array (row = index 3, col = index 4)
 
   @param handle (in) as returned by ::tixiCreateDocument
   @param matrixPath (in) an XPath compliant path to an element holding the matrix in
@@ -2051,7 +2051,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
        could be read via a call to "tixiGetVectorSize".
 
        tixi_get_float_vector( integer handle, character*n vectorPath, real array, integer eNumber)
-       #PY:1:-1# unconventional position of output parameter, manual size argument
+       #PY:1:-1# unconventional position of output parameter, manual size argument ("-1" means "manual")
 
       @param handle (in) as returned by ::tixiCreateDocument
       @param vectorPath (in) an XPath compliant path to an element holding the vector in
@@ -2124,7 +2124,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
     For an array use example, please check tixiGetArrayDimensions()
 
     tixi_get_array_dimension_sizes ( integer handle, character*n arrayPath, int*n sizes, int* arraySizes )
-    #PY:1,2:-1,0# unconventional position of output parameter
+    #PY:1,2:-1,0# unconventional position of output parameter (first is -1: manual, second is 0: no array)
 
     @param handle (in) as returned by ::tixiCreateDocument
     @param arrayPath (in) an XPath-compliant path to the top XML element holding the sub-tags of the array definition in
