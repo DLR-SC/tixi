@@ -446,7 +446,7 @@ def createMethodStubs(defs):
             else:
                 outs = [params[outs[o]] for o in range(0, len(outs))] # list of params used as output params
             while len(outarray) < len(outs):
-                outarray += [[0]]
+                outarray += [[0]] # normal return value, not an array
             
         # Determine if we use a handle in the method
         useHandle = ""
@@ -473,7 +473,7 @@ def createMethodStubs(defs):
             if len(outarr) > 0:
                 for oa in outarr:
                     if oa < 0: # use user-provided size (was added to signature above)
-                        t += " * %s" % outnames[-int(oa) - 1] # -1, -2, -3 -> 0, 1, 2
+                        t += " * %s" % outnames[-int(oa) - 1] # -1, -2, -3 -> index 0, 1, 2
                     elif oa == 0: # is no array
                         pass
                     else: # > 0
