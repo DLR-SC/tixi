@@ -40,6 +40,11 @@
 */
 
 
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
+
 InternalReturnCode clearMemoryList(TixiDocument *document)
 {
 
@@ -902,14 +907,7 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, char *elementPat
     return INVALID_HANDLE;
   }
 
-  if (document->status == SAVED) {
-    fprintf(stderr, "Error:  Can not change document. Document already saved.\n");
-    return ALREADY_SAVED;
-  }
-
   xmlDocument = document->docPtr;
-
-  /* Check parent element */
 
   xpathContext = xmlXPathNewContext(xmlDocument);
 
@@ -1139,7 +1137,6 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
 {
     xmlNodePtr nodePtr = aNodePtr;
     TixiDocument *document = getDocument(handle);
-    xmlDocPtr xmlDocument = NULL;
     char *generatedXPath = NULL;
     char *textPtr = NULL;
     char *tmpText = NULL;
@@ -1152,8 +1149,6 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
         fprintf(stderr, "Error: Invalid document handle.\n");
         return NULL;
     }
-
-    xmlDocument = document->docPtr;
 
     while ((nodePtr != NULL) && (nodePtr->parent != NULL)) {
         if (nodePtr->type == XML_ELEMENT_NODE) {
@@ -1186,3 +1181,80 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
     addToMemoryList(document, (void *) generatedXPath);
     return generatedXPath;
 }
+
+
+ReturnCode reorderXmlElements(TixiDocumentHandle handle, char *elementPath,int fromIndex, int toIndex)
+{
+	int i = 0;
+	xmlNodePtr node;
+	xmlDocPtr xmlDocument = NULL;
+	xmlXPathContextPtr xpathContext = NULL;
+	xmlXPathObjectPtr xpathObject = NULL;
+	xmlNodeSetPtr nodes = NULL;
+	TixiDocument *document = getDocument(handle);
+
+	xmlDocument = document->docPtr;
+	xpathContext = xmlXPathNewContext(xmlDocument);
+	if (!xpathContext) {
+		fprintf(stderr, "Error: unable to create new XPath context\n");
+		xmlXPathFreeContext(xpathContext);
+		return FAILED;
+	}
+
+	xpathObject = xmlXPathEvalExpression((xmlChar *) elementPath, xpathContext);
+
+	if (!xpathObject) {
+		fprintf(stderr, "Error: unable to evaluate XPath expression \"%s\"\n",
+				elementPath);
+		xmlXPathFreeContext(xpathContext);
+		return INVALID_XPATH;
+	}
+
+	if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
+		fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n",
+				elementPath);
+		xmlXPathFreeContext(xpathContext);
+		xmlXPathFreeObject(xpathObject);
+		return ELEMENT_NOT_FOUND;
+	}
+
+	nodes = xpathObject->nodesetval;
+
+	if ((fromIndex == -1) && (toIndex == -1)) {
+		fprintf(stderr, "Error: index error. Either from or toIndex must be set!\n");
+		return FAILED;
+	}
+
+	if (toIndex == -1) {
+		toIndex = nodes->nodeNr;
+	}
+	if (fromIndex == -1) {
+		fromIndex = nodes->nodeNr;
+	}
+
+	if (nodes->nodeNr > max(fromIndex, toIndex)) {
+		fprintf(stderr, "Error: index out of range.\n");
+		return FAILED;
+	}
+
+	if (max(fromIndex, toIndex) == fromIndex){
+		for(i = fromIndex; i > toIndex; i--) {
+			node = nodes->nodeTab[i];
+			nodes->nodeTab[i] = nodes->nodeTab[i-1];
+			nodes->nodeTab[i-1] = node;
+		}
+	} else {
+		for(i = fromIndex; i > toIndex; i++) {
+			node = nodes->nodeTab[i];
+			nodes->nodeTab[i] = nodes->nodeTab[i+1];
+			nodes->nodeTab[i+1] = node;
+		}
+	}
+
+	xmlXPathFreeContext(xpathContext);
+	xmlXPathFreeObject(xpathObject);
+	printf("\n\n-----\n\n");
+	return SUCCESS;
+}
+
+

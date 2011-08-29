@@ -280,7 +280,7 @@ ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, char *elementPath,
 /**
   @brief Returns a pointer to a node from a given XPath.
 
- @param TixiDocument hanlde (in) a handle to a TIXI document.
+ @param TixiDocument handle (in) a handle to a TIXI document.
  @param elementPath (in) a xpath to a xml element.
  @param xmlNodePtr (out) xmlNodePtr of the parent node
  @return ReturnCode
@@ -350,3 +350,17 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr *schema_doc
      - NULL 					If an error occurred
  */
 char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePrt);
+
+
+/**
+	@brief Reorders nodes of a nodeSet. The node at the position fromIndex will be put in the position toIndex.
+		   All nodes between that two nodes will be reordered.
+
+	@param xmlNodeSetPtr nodes (in) a nodeSet
+	@param int fromIndex (in) Position of the starting node that should reordered. If -1, that last node will be assumed.
+	@param int toIndex (in) New position of the node that should reordered. If -1, that last node will be assumed.
+	@return ReturnCode
+     - SUCCESS 					If the reordering went well
+     - FAILED 					If fromIndex or toIndex is out of range.
+ */
+ReturnCode reorderXmlElements(TixiDocumentHandle handle, char *elementPath, int fromIndex, int toIndex);
