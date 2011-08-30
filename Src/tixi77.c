@@ -334,7 +334,34 @@ void tixiAddTextElement_f(const TixiDocumentHandle *handle,
   if (cText) {
     free(cText);
   }
+}
 
+void tixiAddTextElementAtIndex_f(const TixiDocumentHandle *handle,
+								  char *parentPath,
+								  char *elementName,
+								  char *text,
+								  int index,
+								  ReturnCode *error,
+								  int parentPathLength, int elementNameLength, int textLength)
+{
+  char *cParentPath = NULL;
+  char *cElementName = NULL;
+  char *cText = NULL;
+
+  cParentPath = makeCString(parentPath, parentPathLength);
+  cElementName = makeCString(elementName, elementNameLength);
+
+  if (textLength != 0) {
+    cText = makeCString(text, textLength);
+  }
+
+  *error = tixiAddTextElementAtIndex(*handle, cParentPath, cElementName, cText, index);
+
+  free(cParentPath);
+  free(cElementName);
+  if (cText) {
+    free(cText);
+  }
 }
 
 void tixiAddDoubleElement_f(const TixiDocumentHandle *handle,
@@ -1154,6 +1181,26 @@ void tixiCreateElement_f(const TixiDocumentHandle *handle,
     free(cParentPath);
 }
 
+
+void tixiCreateElementAtIndex_f(const TixiDocumentHandle *handle,
+								 char *parentPath,
+								 char *elementName,
+								 int index,
+								 int *error,
+								 int parentPathLength,
+								 int elementNameLength)
+{
+    char *cParentPath = NULL;
+    char *cElementName = NULL;
+
+    cParentPath = makeCString(parentPath, parentPathLength);
+    cElementName = makeCString(elementName, elementNameLength);
+
+    *error = tixiCreateElementAtIndex(*handle, cParentPath, cElementName, index);
+
+    free(cElementName);
+    free(cParentPath);
+}
 
 void tixiCheckAttribute_f(const TixiDocumentHandle *handle,
 						  char *elementPath,

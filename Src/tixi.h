@@ -1026,7 +1026,7 @@ added multiple times.
 
       <b>Fortran syntax:</b>
 
-      tixi_add_text_element( integer  handle, character*n parent_path, character*n element_name, character*n text, integer error )
+      tixi_add_text_element_at_index( integer  handle, character*n parent_path, character*n element_name, character*n text, integer index, integer error )
       #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
 
   @param handle (in) file handle as returned by ::tixiCreateDocument

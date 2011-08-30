@@ -75,6 +75,7 @@
 #define tixiGetIntegerElement_f TIXI_GET_INTEGER_ELEMENT
 #define tixiGetDoubleElement_f TIXI_GET_DOUBLE_ELEMENT
 #define tixiAddTextElement_f TIXI_ADD_TEXT_ELEMENT
+#define tixiAddTextElementAtIndex_f TIXI_ADD_TEXT_ELEMENT_AT_INDEX
 #define tixiAddDoubleElement_f TIXI_ADD_DOUBLE_ELEMENT
 #define tixiAddIntegerElement_f TIXI_ADD_INTEGER_ELEMENT
 #define tixiAddBooleanElement_f TIXI_ADD_BOOLEAN_ELEMENT
@@ -112,6 +113,7 @@
 #define tixiGetArray_f TIXI_GET_ARRAY
 #define tixiGetArrayValue_f TIXI_GET_ARRAY_VALUE
 #define tixiCreateElement_f TIXI_CREATE_ELEMENT
+#define tixiCreateElementAtIndex_f TIXI_CREATE_ELEMENT_AT_INDEX
 #define tixiCheckAttribute_f TIXI_CHECK_ATTRIBUTE
 #define tixiXSLTransformationToFile_f TIXI_XSL_TRANSFORMATION_TO_FILE
 #define tixiUsePrettyPrint_f TIXI_USE_PRETTY_PRINT
@@ -144,6 +146,7 @@
 #define tixiGetIntegerElement_f FORTRAN_NAME(tixi_get_integer_element)
 #define tixiGetDoubleElement_f FORTRAN_NAME(tixi_get_double_element)
 #define tixiAddTextElement_f FORTRAN_NAME(tixi_add_text_element)
+#define tixiAddTextElementAtIndex_f FORTRAN_NAME(tixi_add_text_element_at_index)
 #define tixiAddDoubleElement_f FORTRAN_NAME(tixi_add_double_element)
 #define tixiAddIntegerElement_f FORTRAN_NAME(tixi_add_integer_element)
 #define tixiAddBooleanElement_f FORTRAN_NAME(tixi_add_boolean_element)
@@ -181,6 +184,7 @@
 #define tixiGetArray_f FORTRAN_NAME(tixi_get_array)
 #define tixiGetArrayValue_f FORTRAN_NAME(tixi_get_array_value)
 #define tixiCreateElement_f FORTRAN_NAME(tixi_create_element)
+#define tixiCreateElementAtIndex_f FORTRAN_NAME(tixi_create_element_at_index)
 #define tixiCheckAttribute_f FORTRAN_NAME(tixi_check_attribute)
 #define tixiXSLTransformationToFile_f FORTRAN_NAME(tixi_xsl_transformation_to_file)
 #define tixiUsePrettyPrint_f FORTRAN_NAME(tixi_use_pretty_print)
@@ -295,6 +299,16 @@ void tixiAddTextElement_f(const TixiDocumentHandle* handle,
                           int lengthString1,
                           int lengthString2,
                           int lengthString3 );
+
+void tixiAddTextElementAtIndex_f(const TixiDocumentHandle* handle,
+								  char* parentPath,
+								  char* elementName,
+								  char* text,
+								  int index,
+								  ReturnCode* error,
+								  int lengthString1,
+								  int lengthString2,
+								  int lengthString3 );
 
 void tixiAddDoubleElement_f(const TixiDocumentHandle* handle,
                             char* parentPath,
@@ -628,6 +642,14 @@ void tixiCreateElement_f (const TixiDocumentHandle *handle,
                           int *error,
                           int parentPathLength,
                           int elementNameLength);
+
+void tixiCreateElementAtIndex_f (const TixiDocumentHandle *handle,
+								  char *parentPath,
+								  char *elementName,
+								  int index,
+								  int *error,
+								  int parentPathLength,
+								  int elementNameLength);
 
 void tixiCheckAttribute_f(const TixiDocumentHandle *handle,
 						  char *elementPath,
