@@ -333,11 +333,13 @@ void outputIBUCKResult(char *outputFilename)
 int main(int argc, char **argv)
 {
 
-	char *xmlInputFilename = "c:\\tmp\\VFW-614_scal.xml";
+	char *xmlInputFilename = "C:\\Users\\MarkusLitz\\tmp\\TIXITests\\tixiAddTextAttribute\\xml_input.xml";
   TixiDocumentHandle handle;
 
 
   assert(tixiOpenDocument(xmlInputFilename, &handle) == SUCCESS);
+  tixiCreateElementAtIndex(handle, "/plane", "numberOfPassengers", 2);
+  tixiSaveDocument( handle, "C:\\Users\\MarkusLitz\\tmp\\TIXITests\\tixiAddTextAttribute\\out2.xml" );
   tixiCloseDocument(handle);
 
   return (0);

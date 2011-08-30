@@ -356,7 +356,9 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePrt);
 	@brief Reorders nodes of a nodeSet. The node at the position fromIndex will be put in the position toIndex.
 		   All nodes between that two nodes will be reordered.
 
-	@param xmlNodeSetPtr nodes (in) a nodeSet
+
+	@param handle (in) a valid tixi handle
+	@param elementPath (in) path to the element to be reordered
 	@param int fromIndex (in) Position of the starting node that should reordered. If -1, that last node will be assumed.
 	@param int toIndex (in) New position of the node that should reordered. If -1, that last node will be assumed.
 	@return ReturnCode

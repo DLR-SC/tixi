@@ -946,9 +946,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute(const TixiDocumentHandle handle,
   return SUCCESS;
 }
 
-/*
-  CHECK if document has been saved already!!!!
-*/
+
 DLL_EXPORT ReturnCode tixiAddTextElement(const TixiDocumentHandle handle, const char *parentPath,
                               const char *elementName, const char *text)
 {
@@ -959,7 +957,6 @@ DLL_EXPORT ReturnCode tixiAddTextElement(const TixiDocumentHandle handle, const 
   xmlNodeSetPtr nodes = NULL;
   xmlNodePtr parent = NULL;
   xmlNodePtr child = NULL;
-
 
 
   if (!document) {
@@ -1033,6 +1030,28 @@ DLL_EXPORT ReturnCode tixiAddTextElement(const TixiDocumentHandle handle, const 
   return SUCCESS;
 }
 
+
+DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle, const char *parentPath,
+                              const char *elementName, const char *text, int index)
+{
+    ReturnCode error;
+    char path[1024];
+
+    if (!getDocument(handle)) {
+		fprintf(stderr, "Error: Invalid document handle.\n");
+		return INVALID_HANDLE;
+	}
+
+    error = tixiAddTextElement(handle, parentPath, elementName, text);
+    if (error != SUCCESS) {
+    	return error;
+    }
+
+    strcpy(path, parentPath);
+	strcat(path, "/");
+    strcat(path, elementName);
+    return reorderXmlElements(handle, path, -1, index);
+}
 
 
 DLL_EXPORT ReturnCode tixiAddBooleanElement(const TixiDocumentHandle handle, char *parentPath,
@@ -2837,8 +2856,29 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
 DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, char *parentPath, char *elementName)
 {
     char *text = NULL;
-
     return tixiAddTextElement(handle, parentPath, elementName, text);
+}
+
+DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle, char *parentPath, char *elementName, int index)
+{
+    char *text = NULL;
+    ReturnCode error;
+    char path[1024];
+
+    if (!getDocument(handle)) {
+		fprintf(stderr, "Error: Invalid document handle.\n");
+		return INVALID_HANDLE;
+	}
+
+    error = tixiAddTextElement(handle, parentPath, elementName, text);
+    if (error != SUCCESS) {
+    	return error;
+    }
+
+    strcpy(path, parentPath);
+	strcat(path, "/");
+    strcat(path, elementName);
+    return reorderXmlElements(handle, path, -1, index);
 }
 
 

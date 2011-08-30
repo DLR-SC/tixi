@@ -1232,25 +1232,28 @@ ReturnCode reorderXmlElements(TixiDocumentHandle handle, char *elementPath,int f
 		fromIndex = nodes->nodeNr;
 	}
 
-	if (nodes->nodeNr > max(fromIndex, toIndex)) {
+	// decrease fromIndex and toIndex for array indices
+	fromIndex--;
+	toIndex--;
+
+	if (nodes->nodeNr < max(fromIndex, toIndex)) {
 		fprintf(stderr, "Error: index out of range.\n");
 		return FAILED;
 	}
 
 	if (max(fromIndex, toIndex) == fromIndex){
-		for(i = fromIndex; i > toIndex; i--) {
-			node = nodes->nodeTab[i];
-			nodes->nodeTab[i] = nodes->nodeTab[i-1];
-			nodes->nodeTab[i-1] = node;
+		node = xmlCopyNode(nodes->nodeTab[fromIndex], 1);
+		node = xmlReplaceNode(nodes->nodeTab[toIndex], node);
+		for(i = toIndex + 1; i <= fromIndex; i++) {
+			node = xmlReplaceNode(nodes->nodeTab[i], node);
 		}
 	} else {
-		for(i = fromIndex; i > toIndex; i++) {
-			node = nodes->nodeTab[i];
-			nodes->nodeTab[i] = nodes->nodeTab[i+1];
-			nodes->nodeTab[i+1] = node;
+		node = xmlCopyNode(nodes->nodeTab[fromIndex], 1);
+		node = xmlReplaceNode(nodes->nodeTab[toIndex], node);
+		for(i = toIndex - 1; i >= fromIndex; i--) {
+			node = xmlReplaceNode(nodes->nodeTab[i], node);
 		}
 	}
-
 	xmlXPathFreeContext(xpathContext);
 	xmlXPathFreeObject(xpathObject);
 	printf("\n\n-----\n\n");

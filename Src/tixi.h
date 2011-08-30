@@ -980,7 +980,6 @@ typedef int TixiDocumentHandle;
 
 
 /**
-
 @brief Creates an element holding text.
 
 Creates an element specified by the elementPath expression and
@@ -1014,8 +1013,48 @@ added multiple times.
     - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
     - ALREADY_SAVED if element should be added to an already saved document
 */
-
   DLL_EXPORT ReturnCode tixiAddTextElement (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const char *text);
+
+
+  /**
+  @brief Creates an element holding text at a given index.
+
+  Creates an element specified by the elementPath expression and
+  insert text into the element. Elements with the same name can be
+  added multiple times, so in this version of the function an index could be
+  provides to specifiy a exact position.
+
+      <b>Fortran syntax:</b>
+
+      tixi_add_text_element( integer  handle, character*n parent_path, character*n element_name, character*n text, integer error )
+      #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+
+  @param handle (in) file handle as returned by ::tixiCreateDocument
+
+  @param parentPath (in) an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above)
+                         into which the new element is to be inserted. The parent
+                         element has to exist already.
+
+  @param elementName (in) name of the element to be inserted into the parent element
+
+  @param text (in) text to be placed inside the element pointed to by elementPath. If
+                   text is NULL an empty element will be created.
+
+	@param index (in) the position index where the new node should be created.
+
+  @return
+
+      - SUCCESS if successfully added the text element
+      - INVALID_XML_NAME if elementName is not a valid XML-element name
+      - INVALID_HANDLE if the handle is not valid
+      - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+      - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+      - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+      - ALREADY_SAVED if element should be added to an already saved document
+  */
+
+    DLL_EXPORT ReturnCode tixiAddTextElementAtIndex (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const char *text, int index);
 
 
   /**
@@ -1178,7 +1217,6 @@ an integer number. Elements with the same name can be added multiple times.
 
 
     /**
-
     @brief Creates an empty element.
 
     Creates an empty element specified by the elementPath expression
@@ -1208,8 +1246,43 @@ an integer number. Elements with the same name can be added multiple times.
         - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
         - ALREADY_SAVED if element should be added to an already saved document
     */
-
       DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, char *parentPath, char *elementName);
+
+
+      /**
+	  @brief Creates an empty element at a given index.
+
+	  Creates an empty element specified by the elementPath expression. In this function you need to provide an index > 0
+	  	  on which position the new element should be created.
+	  Elements with the same name can be added multiple times.
+
+		  <b>Fortran syntax:</b>
+
+		  tixi_create_element_at_index( integer  handle, character*n parent_path, character*n element_name, integer index, integer error )
+		  #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+
+	  @param handle (in) file handle as returned by ::tixiCreateDocument
+
+	  @param parentPath (in) an XPath compliant path to an element in the document
+							 specified by handle (see section \ref XPathExamples above)
+							 into which the new element is to be inserted. The parent
+							 element has to exist already.
+
+	  @param elementName (in) name of the element to be inserted into the parent element
+
+	  @param index		 (in) position of the new created element
+
+	  @return
+		  - SUCCESS if successfully added the text element
+		  - INVALID_XML_NAME if elementName is not a valid XML-element name
+		  - INVALID_HANDLE if the handle is not valid
+		  - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+		  - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+		  - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+		  - ALREADY_SAVED if element should be added to an already saved document
+	  */
+		DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle, char *parentPath, char *elementName, int index);
+
 
 /**
     @brief Removes an element.
