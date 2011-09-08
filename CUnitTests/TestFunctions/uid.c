@@ -31,6 +31,8 @@ static TixiDocumentHandle documentHandle = -1;
 const char* filename_uid_correct = "TestData/uid_correct.xml";
 const char* filename_uid_duplicated = "TestData/uid_duplicated.xml";
 const char* filename_without_uids = "TestData/uid_no_uids.xml";
+const char* filename_links_broken = "TestData/uid_broken_link.xml";
+const char* filename_links = "TestData/uid_link.xml";
 
 
 void tixiUIDCheck_ok( void )
@@ -129,6 +131,23 @@ void tixiUIDCheck_setToXpath( void )
 	/* finish */
     CU_ASSERT( tixiCloseDocument( documentHandle ) == SUCCESS );
 }
+
+
+void tixiUIDCheck_checkLink( void )
+{
+	TixiDocumentHandle documentHandle = -1;
+	char *text = NULL;
+
+	CU_ASSERT( tixiOpenDocument( filename_links_broken, &documentHandle ) == SUCCESS );
+	CU_ASSERT( tixiUIDCheckLinks(documentHandle) == UID_LINK_BROKEN );
+	CU_ASSERT( tixiCloseDocument( documentHandle ) == SUCCESS );
+
+	CU_ASSERT( tixiOpenDocument( filename_links, &documentHandle ) == SUCCESS );
+	CU_ASSERT( tixiUIDCheckLinks(documentHandle) == SUCCESS );
+	CU_ASSERT( tixiCloseDocument( documentHandle ) == SUCCESS );
+
+}
+
 
 
 

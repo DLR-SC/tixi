@@ -873,7 +873,6 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
   ReturnCode error = SUCCESS;
 
 
-
   if (!document) {
     fprintf(stderr, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;

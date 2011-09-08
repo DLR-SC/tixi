@@ -180,7 +180,7 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 	// iterate through all links
 	for (i = 0; i < size; ++i) {
 		cur = nodes->nodeTab[i];
-		linkName = xmlNodeListGetString(doc, cur->parent->xmlChildrenNode, 1);
+		linkName = xmlGetProp(cur->parent, CPACS_UID_LINK_ATTRIBUTE_STRING);
 
 		// now check if a corresponding uid exists
 		currentEntry = document->uidListHead;

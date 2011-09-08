@@ -399,7 +399,10 @@ void addTests(void)
   if (!(CU_add_test(pSuite, "tixiUIDCheck_setToXpath", tixiUIDCheck_setToXpath)))
     PRINT_ERROR;
 
-  	//################################################
+  if (!(CU_add_test(pSuite, "tixiUIDCheck_checkLink", tixiUIDCheck_checkLink)))
+    PRINT_ERROR;
+
+  //################################################
 
 
 

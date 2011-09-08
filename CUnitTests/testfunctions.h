@@ -113,6 +113,7 @@ void tixiUIDCheck_getXPath( void );
 void tixiUIDCheck_getXPathFailed( void );
 void tixiUIDCheck_checkExists( void );
 void tixiUIDCheck_setToXpath( void );
+void tixiUIDCheck_checkLink( void );
 
 int preCreateDocument( void );
 void createDocument_noElementName ( void );
