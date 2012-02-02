@@ -4,7 +4,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Chameleon RCE TIXI Base Library
 Bundle-SymbolicName: de.dlr.sc.chameleon.rce.tixi;singleton:=true
 Bundle-Version: 1.2011.2.qualifier
-Import-Package: org.apache.commons.logging;version="1.1.1"
+Import-Package: org.apache.commons.logging
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0"
 Export-Package: com.sun.jna,
  com.sun.jna.ptr,
