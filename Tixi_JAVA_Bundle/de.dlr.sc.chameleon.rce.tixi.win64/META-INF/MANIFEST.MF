@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Chameleon RCE TIXI Win64 bundle
 Bundle-SymbolicName: de.dlr.sc.chameleon.rce.tixi.win64;singleton:=true
 Bundle-Version: 1.2011.2.qualifier
-Fragment-Host: de.dlr.sc.chameleon.rce.tixi;bundle-version="1.2011.2"
+Fragment-Host: de.dlr.sc.chameleon.rce.tixi
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-PlatformFilter: (& (osgi.ws=win64) (osgi.os=win64) (| (osgi.arch=x86_64) (osgi.arch=x86) ) )
 Bundle-NativeCode: 
