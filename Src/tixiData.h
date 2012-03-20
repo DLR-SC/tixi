@@ -30,7 +30,7 @@
 
 #include "libxml/xmlreader.h"
 
-#define TIXI_VERSION  "1.0"
+#define TIXI_VERSION  "2.0"
 
 #define CPACS_UID_ATTRIBUTE_STRING 		"uID"
 #define CPACS_UID_XPATH 				"//@uID"
