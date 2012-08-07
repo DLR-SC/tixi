@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS=-g3
-CPPFLAGS = -I. -I$(HOME)/include/ -I$(HOME)/include/libxml2/ -I../../Src -I/sc -I/sc/include -ITestFunctions
+CPPFLAGS = -I. -I$(HOME)/include/ -I$(HOME)/include/libxml2/ -I../../Src -I/sc -I/sc/include -ITestFunctions -DG77_LINUX
 
 SOURCES =  		  openDocument.c            \
                           closeDocument.c           \
@@ -21,7 +21,8 @@ SOURCES =  		  openDocument.c            \
 			  vectors.c			\
 		   	  arrays.c			\
 		   	  fortranInterface.c		\
-			  removeAttributes.c
+			  removeAttributes.c \
+			  uid.c
 
 LIB = ../libtestfunctions.a
 

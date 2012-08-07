@@ -5,7 +5,7 @@ C	  Version: $Revision: 4392 $
 C
       programm tixif77test
 
-      include "tixif.h"
+      include "tixi77.h"
 
       character*100 xml_file_name
       integer handle

@@ -1,8 +1,8 @@
-C
-C	  Created: 2010-08-13 Hans-Peter Kersken <Hans-Peter.Kersken@dlr.de>
-C     $Id: testf90.f90 4392 2011-02-03 08:52:55Z litz_ma $
-C	  Version: $Revision: 4392 $
-C
+!C
+!C	  Created: 2010-08-13 Hans-Peter Kersken <Hans-Peter.Kersken@dlr.de>
+!C     $Id: testf90.f90 4392 2011-02-03 08:52:55Z litz_ma $
+!C	  Version: $Revision: 4392 $
+!C
 program tixif90test
 
 implicit none
