@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -71,6 +71,7 @@ ReturnCode strip_dirname(char *xmlFilename, char **dname, char **fname)
         char* dirBuffer = NULL;
         char* fileBuffer = NULL;
         char* tmpString = NULL;
+        int   length    = 0;
 
 #if WIN32
 /* use windows code to determine dirname and filename */
@@ -106,17 +107,19 @@ ReturnCode strip_dirname(char *xmlFilename, char **dname, char **fname)
 /* use posix functions */
 
         /* copy string */
-        tmpString = (char*) malloc(sizeof(char) * strlen(xmlFilename) +1);
-        strcpy(tmpString, xmlFilename);
-
-        /* build full directory path */
-        dirBuffer = (char *) malloc(sizeof(char) * strlen(dirname(tmpString)) + 2);
-        strcpy(dirBuffer, dirname(tmpString));
-        strcat(dirBuffer, "/");
+        length = strlen(xmlFilename);
+        tmpString = (char*) malloc(sizeof(char)   * (length + 4));
+        sprintf(tmpString, "%s", xmlFilename);
 
         /* build full file name */
-        fileBuffer = (char *) malloc(sizeof(char) * strlen(basename(tmpString)) + 1);
-        strcpy(fileBuffer, basename(tmpString));
+        length = strlen(basename(tmpString));
+        fileBuffer = (char *) malloc(sizeof(char) * (length + 4));
+        sprintf(fileBuffer,"%s",basename(tmpString));
+
+        /* build full directory path */
+        length = strlen(dirname(tmpString));
+        dirBuffer = (char *) malloc(sizeof(char)  * (length + 4));
+        sprintf(dirBuffer,"%s/",dirname(tmpString));
 
         free(tmpString);
 
@@ -126,6 +129,8 @@ ReturnCode strip_dirname(char *xmlFilename, char **dname, char **fname)
         *dname = (char *) malloc((strlen(dirBuffer) + 1) * sizeof(char));
         strcpy(*dname, dirBuffer);
         strcpy(*fname, fileBuffer);
+        free(dirBuffer);
+        free(fileBuffer);
 
         return SUCCESS;
 }

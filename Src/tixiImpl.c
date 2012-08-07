@@ -1,4 +1,4 @@
-/* 
+/*
 * Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -385,6 +385,12 @@ DLL_EXPORT ReturnCode tixiCloseDocument(TixiDocumentHandle handle)
   return SUCCESS;
 }
 
+DLL_EXPORT ReturnCode tixiCleanup()
+{
+    // cleanup libxml, removes valgrind leaks
+    xmlCleanupParser();
+    return SUCCESS;
+}
 
 
 DLL_EXPORT ReturnCode tixiExportDocumentAsString(const TixiDocumentHandle handle, char **text)
@@ -949,107 +955,99 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute(const TixiDocumentHandle handle,
 DLL_EXPORT ReturnCode tixiAddTextElement(const TixiDocumentHandle handle, const char *parentPath,
                               const char *elementName, const char *text)
 {
-  TixiDocument *document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
-  xmlXPathContextPtr xpathContext = NULL;
-  xmlXPathObjectPtr xpathObject = NULL;
-  xmlNodeSetPtr nodes = NULL;
-  xmlNodePtr parent = NULL;
-  xmlNodePtr child = NULL;
-
-
-  if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
-    return INVALID_HANDLE;
-  }
-
-  if (document->status == SAVED) {
-    fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
-    return ALREADY_SAVED;
-  }
-
-  if (!xmlValidateNameValue((xmlChar *) elementName)) {
-    fprintf(stderr, "Error: Invalid element name \"%s\"\n", elementName);
-    return INVALID_XML_NAME;
-  }
-
-  xmlDocument = document->docPtr;
-
-  /* Check parent element */
-
-  xpathContext = xmlXPathNewContext(xmlDocument);
-
-  if (!xpathContext) {
-    fprintf(stderr, "Error: unable to create new XPath context\n");
-    xmlXPathFreeContext(xpathContext);
-    return FAILED;
-  }
-
-  xpathObject = xmlXPathEvalExpression((xmlChar *) parentPath, xpathContext);
-
-  if (!xpathObject) {
-    fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", parentPath);
-    xmlXPathFreeContext(xpathContext);
-    return INVALID_XPATH;
-  }
-
-  if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-    fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", parentPath);
-    xmlXPathFreeContext(xpathContext);
-    xmlXPathFreeObject(xpathObject);
-    return ELEMENT_NOT_FOUND;
-  }
-
-  nodes = xpathObject->nodesetval;
-
-  assert(nodes);
-
-  if (nodes->nodeNr > 1) {
-    fprintf(stderr,
-            "Error: Element chosen by XPath \"%s\" expression is not unique. \n", parentPath);
-    xmlXPathFreeContext(xpathContext);
-    xmlXPathFreeObject(xpathObject);
-    return ELEMENT_PATH_NOT_UNIQUE;
-  }
-
-  parent = nodes->nodeTab[0];
-
-  child = xmlNewTextChild(parent, NULL, (xmlChar *) elementName, (xmlChar *) text);
-
-  if (!child) {
-    fprintf(stderr, "Error: Failed to add child \"%s\" to parent \"%s\".\n",
-            elementName, parentPath);
-    xmlXPathFreeContext(xpathContext);
-    xmlXPathFreeObject(xpathObject);
-    return FAILED;
-  }
-
-  xmlXPathFreeContext(xpathContext);
-  xmlXPathFreeObject(xpathObject);
-  return SUCCESS;
+    return tixiAddTextElementAtIndex(handle, parentPath, elementName, text, -1);
 }
 
 
 DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle, const char *parentPath,
                               const char *elementName, const char *text, int index)
 {
-    ReturnCode error;
-    char path[1024];
+    TixiDocument *document = getDocument(handle);
+    xmlDocPtr xmlDocument = NULL;
+    xmlXPathContextPtr xpathContext = NULL;
+    xmlXPathObjectPtr xpathObject = NULL;
+    xmlNodeSetPtr nodes = NULL;
+    xmlNodePtr parent = NULL;
+    xmlNodePtr child = NULL;
+    xmlNodePtr targetNode = NULL;
+    int i = 1;
 
-    if (!getDocument(handle)) {
-		fprintf(stderr, "Error: Invalid document handle.\n");
-		return INVALID_HANDLE;
-	}
 
-    error = tixiAddTextElement(handle, parentPath, elementName, text);
-    if (error != SUCCESS) {
-    	return error;
+    if (!document) {
+      fprintf(stderr, "Error: Invalid document handle.\n");
+      return INVALID_HANDLE;
     }
 
-    strcpy(path, parentPath);
-	strcat(path, "/");
-    strcat(path, elementName);
-    return reorderXmlElements(handle, path, -1, index);
+    if (document->status == SAVED) {
+      fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+      return ALREADY_SAVED;
+    }
+
+    if (!xmlValidateNameValue((xmlChar *) elementName)) {
+      fprintf(stderr, "Error: Invalid element name \"%s\"\n", elementName);
+      return INVALID_XML_NAME;
+    }
+
+    xmlDocument = document->docPtr;
+
+    /* Check parent element */
+
+    xpathContext = xmlXPathNewContext(xmlDocument);
+
+    if (!xpathContext) {
+      fprintf(stderr, "Error: unable to create new XPath context\n");
+      xmlXPathFreeContext(xpathContext);
+      return FAILED;
+    }
+
+    xpathObject = xmlXPathEvalExpression((xmlChar *) parentPath, xpathContext);
+
+    if (!xpathObject) {
+      fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", parentPath);
+      xmlXPathFreeContext(xpathContext);
+      return INVALID_XPATH;
+    }
+
+    if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
+      fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", parentPath);
+      xmlXPathFreeContext(xpathContext);
+      xmlXPathFreeObject(xpathObject);
+      return ELEMENT_NOT_FOUND;
+    }
+
+    nodes = xpathObject->nodesetval;
+
+    assert(nodes);
+
+    if (nodes->nodeNr > 1) {
+      fprintf(stderr,
+              "Error: Element chosen by XPath \"%s\" expression is not unique. \n", parentPath);
+      xmlXPathFreeContext(xpathContext);
+      xmlXPathFreeObject(xpathObject);
+      return ELEMENT_PATH_NOT_UNIQUE;
+    }
+
+    /* find node were new node should be inserted before */
+    parent = nodes->nodeTab[0];
+    targetNode =  parent->children;
+    while(targetNode != NULL && i++ < index)
+        targetNode = targetNode->next;
+
+    if(targetNode != NULL && index > 0){
+        /* insert at position index */
+        xmlNodePtr headingChildNode = xmlNewText( BAD_CAST text );
+        child = xmlNewNode(NULL, elementName);
+        xmlAddChild( child, headingChildNode );
+        xmlAddPrevSibling(targetNode, child);
+    }
+    else {
+        /* insert at the end of the list */
+        xmlNewTextChild(parent, NULL, (xmlChar *) elementName, (xmlChar *) text);
+    }
+
+    xmlXPathFreeContext(xpathContext);
+    xmlXPathFreeObject(xpathObject);
+    return SUCCESS;
 }
 
 
@@ -2861,23 +2859,7 @@ DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, char *
 DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle, char *parentPath, char *elementName, int index)
 {
     char *text = NULL;
-    ReturnCode error;
-    char path[1024];
-
-    if (!getDocument(handle)) {
-		fprintf(stderr, "Error: Invalid document handle.\n");
-		return INVALID_HANDLE;
-	}
-
-    error = tixiAddTextElement(handle, parentPath, elementName, text);
-    if (error != SUCCESS) {
-    	return error;
-    }
-
-    strcpy(path, parentPath);
-	strcat(path, "/");
-    strcat(path, elementName);
-    return reorderXmlElements(handle, path, -1, index);
+    return tixiAddTextElementAtIndex(handle, parentPath, elementName, text,index);
 }
 
 
