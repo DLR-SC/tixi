@@ -2460,7 +2460,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
     xmlNodeSetPtr nodes = NULL;
     xmlNodePtr node = NULL;
     const char *suffix = "/*[@mapType=\"vector\"]";
-    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(suffix)) * sizeof(char) + 1);
+    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(suffix)) * sizeof(char) + 4);
     char *tmpContent = NULL;    /* reference copy */
     char *tmpContCpy = NULL;    /* tokenizer */
     char *token = NULL;
@@ -2667,6 +2667,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
     /* clean up */
     free(xpathSubElementsName);
+    xmlFree(attributeName);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return SUCCESS;
@@ -2675,24 +2676,23 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
 DLL_EXPORT double tixiGetArrayValue(const double *array, const int *dimSize, const int *dimPos, const int dims)
 {
-	int *mulArray = (int *) malloc(dims * sizeof(int));	/* fetch memory for temporary multipliers */
-	int i = 0;
-	int index = 0;
+    int i = 0;
+    int index = 0;
 
+    assert(dims > 0);
 
+    /*
+       calculate position in array according to
+       index = k + j*nk * i*nk*nj
+             = k + nk*(j + nj*i)
+    */
+    for(i = 0; i < dims-1; ++i){
+        index += dimPos [i];
+        index *= dimSize[i+1];
+    }
+    index += dimPos[dims-1];
 
-	/* calculate multipliers for position indexes */
-	mulArray[dims - 1] = 1;
-	for (i = dims - 1; i > 0; i --) {
-		mulArray[i - 1] = mulArray[i] * dimSize[i];
-	}
-
-	/* calculate position in array */
-	for (i = 0; i < dims; i ++) {
-		index += dimPos[i] * mulArray[i];
-	}
-	free(mulArray);
-	return array[index];
+    return array[index];
 }
 
 
@@ -2704,7 +2704,7 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
     xmlXPathObjectPtr xpathObject = NULL;
     xmlNodeSetPtr nodes = NULL;
     char *infix = "/*[@mapType=\"";
-    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1) * sizeof(char));
+    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1 + 4) * sizeof(char));
 
 
 
