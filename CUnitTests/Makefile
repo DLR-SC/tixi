@@ -1,6 +1,6 @@
 LD = gcc
 CFLAGS=-g3
-CPPFLAGS = -I. -I$(HOME)/include/ -I$(HOME)/include/libxml2/ -I../Src -I/sc -I/sc/include
+CPPFLAGS = -I. -I$(HOME)/include/ -I$(HOME)/include/libxml2/ -I../Src -I/sc -I/sc/include -I/usr/include/libxml2/
 SOURCES =  CUMain.c addTest.c 
 LIBS = -L. -ltestfunctions -L../lib -lTIXI -L$(HOME)/lib -lcunit -lxml2
 

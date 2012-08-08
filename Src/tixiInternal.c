@@ -1018,7 +1018,7 @@ int copyDocument(TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHandle *n
     dstDocument->uidListHead = NULL;
     dstDocument->hasIncludedExternalFiles = srcDocument->hasIncludedExternalFiles;
 
-    if (addDocumentToList(dstDocument, &(dstDocument->handle)) != SUCCESS) {
+    if (addDocumentToList(dstDocument, &(dstDocument->handle)) != SUCESS) {
         fprintf(stderr, "Error in TIXI::copyDocument => Failed  adding document to document list.");
         return FAILED;
     }
@@ -1159,14 +1159,14 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
             textPtr = (char *) xmlGetProp(nodePtr, (xmlChar *) "uID");
             if (textPtr) {
                 // do something with the attribute...
-                size = strlen(nodePtr->name) + strlen(textPtr) + strlen("[@uID=\"\"]") + 1;
+                size = strlen((char*) nodePtr->name) + strlen(textPtr) + strlen("[@uID=\"\"]") + 1;
                 nodeName = (char *) malloc(size * sizeof(char));
                 sprintf(nodeName, "%s[@uID=\"%s\"]", nodePtr->name, textPtr);
                 xmlFree(textPtr);
 
             } else {
-                nodeName = (char *) malloc((strlen(nodePtr->name) + 1) * sizeof(char));
-                strcpy(nodeName, nodePtr->name);
+                nodeName = (char *) malloc((strlen((char*) nodePtr->name) + 1) * sizeof(char));
+                strcpy(nodeName, (char*) nodePtr->name);
             }
 
           tmpText = (char *) malloc((strlen(generatedXPath) + 1) * sizeof(char));

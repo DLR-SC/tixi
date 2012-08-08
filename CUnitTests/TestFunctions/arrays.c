@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -124,8 +124,7 @@ void tixiArrayTestsPositive( void ){
     free(names);
 
     // read one array
-    values = (double *) malloc(arraySize * sizeof(double));    // get values temporary array
-    CU_ASSERT ( tixiGetArray(documentHandle, xPath, "cmz", values) == SUCCESS );    // get array of subkey
+    CU_ASSERT ( tixiGetArray(documentHandle, xPath, "cmz", arraySize, &values) == SUCCESS );    // get array of subkey
     CU_ASSERT ( values[0] == 1.0 );    // [0][0][0][0]
     CU_ASSERT ( values[1] == 2.0 );    // [0][0][0][1]
     CU_ASSERT ( values[16] == 101.0 );    // [0][0][2][1]
@@ -148,9 +147,6 @@ void tixiArrayTestsPositive( void ){
     pos[0] = 0; pos[1] = 0; pos[2] = 0; pos[3] = 1; CU_ASSERT ( tixiGetArrayValue(values, sizes, pos, dims) == 2.0 );   // [0][0][0][1]
     pos[0] = 0; pos[1] = 0; pos[2] = 1; pos[3] = 1; CU_ASSERT ( tixiGetArrayValue(values, sizes, pos, dims) == 12. );   // [0][0][1][1]
     pos[0] = 0; pos[1] = 1; pos[2] = 1; pos[3] = 0; CU_ASSERT ( tixiGetArrayValue(values, sizes, pos, dims) == 201 );   // [0][1][1][0]
-
-    // clean up
-    free(values);
 
 }
 
@@ -178,18 +174,15 @@ void tixiArrayTestsNegative( void ){
     CU_ASSERT ( tixiGetArrayDimensionNames(documentHandle, invalidXPath, names) == INVALID_XPATH );
     CU_ASSERT ( tixiGetArrayDimensionNames(documentHandle, wrongXPath, names) == ELEMENT_NOT_FOUND );
 
-    values = (double *) malloc(sizes[4] * sizeof(double));    // get values temporary array
     CU_ASSERT (tixiGetArrayDimensionValues(123, xPath, dim, values) == INVALID_HANDLE );
     CU_ASSERT (tixiGetArrayDimensionValues(documentHandle, invalidXPath, dim, values) == INVALID_XPATH );
     CU_ASSERT (tixiGetArrayDimensionValues(documentHandle, wrongXPath, dim, values) == ELEMENT_NOT_FOUND );
     CU_ASSERT (tixiGetArrayDimensionValues(documentHandle, xPath, 5, values) == ELEMENT_NOT_FOUND );
 
-    CU_ASSERT ( tixiGetArray(123, xPath, "cmz", values) == INVALID_HANDLE );
-    CU_ASSERT ( tixiGetArray(documentHandle, invalidXPath, "cmz", values) == INVALID_XPATH );
-    CU_ASSERT ( tixiGetArray(documentHandle, wrongXPath, "cmz", values) == ELEMENT_NOT_FOUND );
-    CU_ASSERT ( tixiGetArray(documentHandle, xPath, "abc", values) == ATTRIBUTE_NOT_FOUND );
-    CU_ASSERT ( tixiGetArray(documentHandle, xPath, "def", values) == ATTRIBUTE_NOT_FOUND );
-
-    free(values);
+    CU_ASSERT ( tixiGetArray(123, xPath, "cmz", arraySize, &values) == INVALID_HANDLE );
+    CU_ASSERT ( tixiGetArray(documentHandle, invalidXPath, "cmz", arraySize, &values) == INVALID_XPATH );
+    CU_ASSERT ( tixiGetArray(documentHandle, wrongXPath, "cmz", arraySize, &values) == ELEMENT_NOT_FOUND );
+    CU_ASSERT ( tixiGetArray(documentHandle, xPath, "abc", arraySize, &values) == ATTRIBUTE_NOT_FOUND );
+    CU_ASSERT ( tixiGetArray(documentHandle, xPath, "def", arraySize, &values) == ATTRIBUTE_NOT_FOUND );
 
 }

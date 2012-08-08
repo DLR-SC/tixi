@@ -1,10 +1,10 @@
 LD = gcc
 CC = gcc
 CCFLAGS = -g
-CPPFLAGS = -I../include
-LDFLAGS = -static 
+CPPFLAGS = -I../Src -I/usr/include/libxml2
+LDFLAGS =  
 
-LIBS = -L../lib -lTIXI -lxml2 -lz -lpthread -lm
+LIBS = -L../lib -lTIXI -lxslt -lxml2 -lz -lpthread -lm -ldl 
 
 
 

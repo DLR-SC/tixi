@@ -329,7 +329,7 @@ DLL_EXPORT ReturnCode tixiCreateDocument(char *rootElementName, TixiDocumentHand
   document->usePrettyPrint = 1;
   document->uidListHead = NULL;
 
-  if (addDocumentToList(document, &(document->handle)) != SUCCESS) {
+  if (addDocumentToList(document, &(document->handle)) != SUCESS) {
     fprintf(stderr, "Error: Failed  adding document to document list.");
     return FAILED;
   }
@@ -1035,8 +1035,8 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
 
     if(targetNode != NULL && index > 0){
         /* insert at position index */
-        xmlNodePtr headingChildNode = xmlNewText( BAD_CAST text );
-        child = xmlNewNode(NULL, elementName);
+        xmlNodePtr headingChildNode = xmlNewText( (xmlChar *) text );
+        child = xmlNewNode(NULL, (xmlChar *) elementName);
         xmlAddChild( child, headingChildNode );
         xmlAddPrevSibling(targetNode, child);
     }
@@ -1720,7 +1720,7 @@ DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrett
     }
 
     document->usePrettyPrint = usePrettyPrint;
-    return SUCESS;
+    return SUCCESS;
 }
 
 
@@ -2559,7 +2559,7 @@ DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handl
 
 
 DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char *arrayPath,
-                                    const char *elementName, double *values)
+                                    const char *elementName, int arraySize, double **pValues)
 {
     TixiDocument *document = getDocument(handle);
     xmlXPathContextPtr xpathContext = NULL;
@@ -2571,6 +2571,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
     char *tmpContent = NULL;    /* reference copy */
     char *tmpContCpy = NULL;    /* tokenizer */
     char *token = NULL;
+    double * tmpArray = NULL;
     int count = 0;
 
 
@@ -2657,13 +2658,19 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
         tmpContCpy = (char *) malloc(sizeof(char));
         tmpContCpy[0] = '\0';
     }
+
+    /* allocate memory for array */
+    tmpArray = (double *) malloc(sizeof(double) * arraySize);
+    addToMemoryList(document, tmpArray);
+
     /* tokenize string into distinct elements to separate values */
     token = strtok(tmpContCpy, VECTOR_SEPARATOR);
     while (token != NULL) {
-        values[count ++] = atof(token);
+        tmpArray[count ++] = atof(token);
         token = strtok(0, VECTOR_SEPARATOR);
     }
     free(tmpContCpy);
+    *pValues = tmpArray;
 
     /* clean up */
     free(xpathSubElementsName);
@@ -3027,7 +3034,7 @@ DLL_EXPORT ReturnCode tixiUIDCheckExists(TixiDocumentHandle handle, char *uID)
 	}
 
     if (uid_checkExists(document, uID) == 0) {
-    	error = SUCESS;
+    	error = SUCCESS;
     } else {
     	error = UID_DONT_EXISTS;
     }

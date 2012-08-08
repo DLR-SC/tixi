@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,7 +42,7 @@ int uid_readDocumentUIDs(TixiDocument* tixiDocument)
 	}
 
 	/* Evaluate xpath expression */
-	xpathObj = xmlXPathEvalExpression(CPACS_UID_XPATH, xpathCtx);
+	xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_XPATH, xpathCtx);
 	if(xpathObj == NULL) {
 		fprintf(stderr,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_XPATH);
 		xmlXPathFreeContext(xpathCtx);
@@ -161,7 +161,7 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 	}
 
 	/* Evaluate xpath expression */
-	xpathObj = xmlXPathEvalExpression(CPACS_UID_LINK_XPATH, xpathCtx);
+	xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_LINK_XPATH, xpathCtx);
 	if(xpathObj == NULL) {
 		fprintf(stderr,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_LINK_XPATH);
 		xmlXPathFreeContext(xpathCtx);
@@ -180,15 +180,13 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 	// iterate through all links
 	for (i = 0; i < size; ++i) {
 		cur = nodes->nodeTab[i];
-		linkName = xmlGetProp(cur->parent, CPACS_UID_LINK_ATTRIBUTE_STRING);
+		linkName = (char*) xmlGetProp(cur->parent, (xmlChar*) CPACS_UID_LINK_ATTRIBUTE_STRING);
 
 		// now check if a corresponding uid exists
 		currentEntry = document->uidListHead;
 		foundUID = FAILED;
 		while(currentEntry) {
 			if (!strcmp(linkName, currentEntry->uIDName)) {
-				xmlXPathFreeObject(xpathObj);
-				xmlXPathFreeContext(xpathCtx);
 				foundUID = SUCCESS;
 				break;
 			}
@@ -235,7 +233,7 @@ char* uid_getXpath(TixiDocument *document, char *uID)
 
 	while (current) {
 		if (!strcmp(current->uIDName, uID)) {
-			return xmlGetNodePath(current->nodePtr);
+			return (char*) xmlGetNodePath(current->nodePtr);
 		}
 		current = (TixiUIDListEntry *) current->next;
 	}

@@ -2338,8 +2338,10 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
         @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
                                the document specified by handle (see section \ref XPathExamples).
         @param element (in) name of the sub tag that contains the array
-        @param values (out) all values for this dimension. Size must be determined by call to tixiGetArrayDimensionSizes and must equal
+        @param arraySize(in) Total size of the array. Size must be determined by call to tixiGetArrayDimensionSizes and must equal
                            the cross product of all dimensions' sizes
+        @param values (out) Pointer to a double array, containg all values for this dimension. The array is allocated and freed
+                           by tixi. The size of the array corresponds to the parameter arraySize
 
         @return
           - SUCCESS if successfully read the matrix element
@@ -2351,7 +2353,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
           - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
       */
       DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char *arrayPath,
-                                          const char *elementName, double *values);
+                                          const char *elementName, int arraySize, double **values);
 
 
       /**

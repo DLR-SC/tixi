@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS=-g3
-CPPFLAGS = -I. -I$(HOME)/include/ -I$(HOME)/include/libxml2/ -I../../Src -I/sc -I/sc/include -ITestFunctions -DG77_LINUX
+CPPFLAGS = -I. -I$(HOME)/include/ -I$(HOME)/include/libxml2/ -I../../Src -I/sc -I/sc/include -I/usr/include/libxml2/ -ITestFunctions -DG77_LINUX
 
 SOURCES =  		  openDocument.c            \
                           closeDocument.c           \
