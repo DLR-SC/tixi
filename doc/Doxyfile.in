@@ -5,8 +5,8 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = TIXI
-PROJECT_NUMBER         = 
-OUTPUT_DIRECTORY       = Doc
+PROJECT_NUMBER         = @TIXI_VERSION@ 
+OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
@@ -90,7 +90,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = Src
+INPUT                  = @PROJECT_SOURCE_DIR@/src
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = tixi.h
 RECURSIVE              = YES
@@ -130,7 +130,7 @@ GENERATE_HTML          = YES
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = 
-HTML_FOOTER            = Doc/footer.html
+HTML_FOOTER            = doc/footer.html
 HTML_STYLESHEET        = 
 HTML_ALIGN_MEMBERS     = YES
 HTML_DYNAMIC_SECTIONS  = YES

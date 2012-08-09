@@ -35,13 +35,12 @@
     ifort/cvf
     All names are upper-case
 */
-
-#include "tixi.h"
-
 #ifndef TIXI77_H
 #define TIXI77_H
 
-#if defined G77_LINUX || defined G77_IRIX || defined G77_MINGW
+#include "tixi.h"
+
+#if defined G77_LINUX || defined G77_IRIX || defined G77_MINGW || defined G77
 	#define FORTRAN_NAME(a) a##__
 #elif defined F90_HPUX
 	#define FORTRAN_NAME(a) a
