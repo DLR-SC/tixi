@@ -36,7 +36,7 @@ foreach(FILE ${TEST_FUNCTS_SRC})
 	set(TEST_SUITE_SRC ${TEST_SUITE_SRC} TestFunctions/${FILE})
 endforeach()
 
-include_directories(${PROJECT_SOURCE_DIR}/src ${CUNIT_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/src ${CUNIT_INCLUDE_DIRS} ${XML_INCLUDE_DIRS})
 
 add_executable(runtests ${TEST_SUITE_SRC})
 target_link_libraries(runtests ${CUNIT_LIBRARIES} TIXI)

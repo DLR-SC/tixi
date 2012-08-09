@@ -4,7 +4,7 @@ set(TIXI_SRC tixiImpl.c tixiUtils.c uidHelper.c tixiInternal.c webMethods.c
 set(TIXI_HDR tixi.h tixiData.h tixiInternal.h tixiUtils.h)
 
 
-include_directories("${CURL_INCLUDE_DIRS} ${XML_INCLUDE_DIRS} ${XSLT_INCLUDE_DIRS}")
+include_directories(${CURL_INCLUDE_DIRS} ${XML_INCLUDE_DIRS} ${XSLT_INCLUDE_DIRS})
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_definitions(-DDEBUG) 
