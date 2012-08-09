@@ -623,6 +623,7 @@ void tixiGetArrayParameterNames_f(const TixiDocumentHandle *handle,
 void tixiGetArray_f(const TixiDocumentHandle *handle,
                     const char *arrayPath,
                     const char *elementName,
+                    const int numElements,
                     double *values,
                     int *error, /* out */
                     const int arrayPathLength,

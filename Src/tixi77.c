@@ -1137,6 +1137,7 @@ void tixiGetArrayParameterNames_f(const TixiDocumentHandle *handle,
 void tixiGetArray_f(const TixiDocumentHandle *handle,
                     const char *arrayPath,
                     const char *elementName,
+                    const int numElements, /* in */
                     double *values, /* out */
                     int *error, /* out */
                     const int arrayPathLength,
@@ -1144,8 +1145,14 @@ void tixiGetArray_f(const TixiDocumentHandle *handle,
 {
     char *cArrayPath = makeCString(arrayPath, arrayPathLength);
     char *cElementName = makeCString(elementName, elementNameLength);
+    int i = 0;
 
-    *error = tixiGetArray(*handle, cArrayPath, cElementName, values);
+    double * tmpValues = NULL;
+    *error = tixiGetArray(*handle, cArrayPath, cElementName, numElements, &tmpValues);
+
+    /* copy to preallocated fortran array, don't free tmpValues as tixi does it automatically */
+    for(i = 0; i < numElements; ++i)
+        values[i] = tmpValues[i];
 
     free(cElementName);
     free(cArrayPath);
