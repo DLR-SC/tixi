@@ -18,9 +18,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#include <stdlib.h>
-#include <assert.h>
-#include "CUnit/CUnit.h"
+#include <stdlib.h>#include "CUnit/CUnit.h"
 #include "tixi.h"
 #include "fortrantests.h"
 #include "../testfunctions.h"

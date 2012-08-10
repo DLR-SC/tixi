@@ -18,7 +18,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#include <assert.h>
 #include <stdio.h>
 #include "CUnit/CUnit.h"
 #include "tixi.h"
@@ -35,16 +34,16 @@ int preVectorTests( void ) {
 	char* xmlFilenameGet = "TestData/vectorcount.xml";
 	char* xmlFilenameAdd = "TestData/vectoradd.xml";
 
-	assert( tixiOpenDocument( xmlFilenameGet, &documentHandleGet ) == SUCCESS );
-	assert( tixiOpenDocument( xmlFilenameAdd, &documentHandleAdd ) == SUCCESS );
+	CU_ASSERT ( tixiOpenDocument( xmlFilenameGet, &documentHandleGet ) == SUCCESS );
+	CU_ASSERT ( tixiOpenDocument( xmlFilenameAdd, &documentHandleAdd ) == SUCCESS );
 
 	return 0;
 }
 
 int postVectorTests( void ) {
 
-	assert( tixiCloseDocument( documentHandleGet ) == SUCCESS );
-	assert( tixiCloseDocument( documentHandleAdd ) == SUCCESS );
+	CU_ASSERT ( tixiCloseDocument( documentHandleGet ) == SUCCESS );
+	CU_ASSERT ( tixiCloseDocument( documentHandleAdd ) == SUCCESS );
 
 	return 0;
 }

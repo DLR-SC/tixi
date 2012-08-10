@@ -18,7 +18,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#include <assert.h>
 #include <stdio.h>
 #include "CUnit/CUnit.h"
 #include "tixi.h"
@@ -32,14 +31,14 @@ int preOpenExternalData( void ) {
 	
 	char* xmlFilename = "TestData/externaldata-main.xml";
 	
-	assert( tixiOpenDocumentRecursive( xmlFilename, &documentHandle, OPENMODE_RECURSIVE ) == SUCCESS );
+	CU_ASSERT( tixiOpenDocumentRecursive( xmlFilename, &documentHandle, OPENMODE_RECURSIVE ) == SUCCESS );
 	
 	return 0;
 }
 
 int postOpenExternalData( void ) {
 
-	assert( tixiCloseDocument( documentHandle ) == SUCCESS );
+	CU_ASSERT( tixiCloseDocument( documentHandle ) == SUCCESS );
 
 	return 0;
 }

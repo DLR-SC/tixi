@@ -30,8 +30,6 @@ set(TEST_FUNCTS_SRC
 
 set(TEST_SUITE_SRC CUMain.c addTest.c)
 
-set(CMAKE_C_FLAGS_RELEASE "-O3")
-
 foreach(FILE ${TEST_FUNCTS_SRC})
 	set(TEST_SUITE_SRC ${TEST_SUITE_SRC} TestFunctions/${FILE})
 endforeach()

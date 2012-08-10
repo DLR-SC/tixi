@@ -18,7 +18,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#include <assert.h>
 #include <stdio.h>
 #include "CUnit/CUnit.h"
 #include "tixi.h"
@@ -31,14 +30,14 @@ int preValidateSchema( void ) {
 	
 	char* xmlFilename = "TestData/valid_CPACS_dokumentiert.xml";
 
-	assert( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
+	CU_ASSERT( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
 
 	return 0;
 }
 
 int postValidateSchema( void ) {
 
-	assert( tixiCloseDocument( documentHandle ) == SUCCESS );
+	CU_ASSERT( tixiCloseDocument( documentHandle ) == SUCCESS );
 
 	return 0;
 }

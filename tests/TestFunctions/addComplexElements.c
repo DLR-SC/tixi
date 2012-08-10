@@ -19,7 +19,6 @@
 * limitations under the License.
 */   
 
-#include <assert.h>
 #include <stdio.h>
 #include "CUnit/CUnit.h"
 #include "tixi.h"

@@ -18,7 +18,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#include <assert.h>
 #include "CUnit/CUnit.h"
 #include "tixi.h"
 
@@ -34,16 +33,16 @@ static char* outRootElementName = "root";
 int preOtherFunctions( void ) {
 	
 	
-  assert( tixiOpenDocument( xmlInputFilename, &inDocumentHandle ) == SUCCESS );
-  assert( tixiCreateDocument( outRootElementName, &outDocumentHandle ) == SUCCESS );
+  CU_ASSERT( tixiOpenDocument( xmlInputFilename, &inDocumentHandle ) == SUCCESS );
+  CU_ASSERT( tixiCreateDocument( outRootElementName, &outDocumentHandle ) == SUCCESS );
   return 0;
 }
 
 int postOtherFunctions( void ) {
 
-  assert( tixiCloseDocument( inDocumentHandle ) == SUCCESS );
-  assert( tixiSaveDocument( outDocumentHandle, xmlOutputFilename) == SUCCESS );
-  assert( tixiCloseDocument( outDocumentHandle  ) == SUCCESS );
+  CU_ASSERT( tixiCloseDocument( inDocumentHandle ) == SUCCESS );
+  CU_ASSERT( tixiSaveDocument( outDocumentHandle, xmlOutputFilename) == SUCCESS );
+  CU_ASSERT( tixiCloseDocument( outDocumentHandle  ) == SUCCESS );
   return 0;
 }
 

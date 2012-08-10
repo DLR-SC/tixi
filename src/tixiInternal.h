@@ -62,7 +62,7 @@ ReturnCode removeDocumentFromList(TixiDocumentHandle handle);
  *
  * @return handle to the document or NULL if handle not in the list
  */
-TixiDocument *getDocument(TixiDocumentHandle handle);
+DLL_EXPORT TixiDocument *getDocument(TixiDocumentHandle handle);
 
 /**
  @brief Adds pointer to memory allcoated by libxml to list of managed memory.
@@ -102,7 +102,7 @@ void freeTixiDocument(TixiDocument *document);
     - ELEMENT_NOT_FOUND
     - NOT_AN_ELEMENT
  */
-ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPath, xmlNodePtr *element,
+DLL_EXPORT ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPath, xmlNodePtr *element,
                         xmlXPathObjectPtr *xpathObject);
 
 
@@ -189,7 +189,7 @@ void checkLibxml2Version();
  * builds a string using snprintf to avoid buffer overflows. The resulting buffer
  * has to be freed by the caller.
  */
-char *buildString(char *format, ...);
+DLL_EXPORT char *buildString(char *format, ...);
 
 
 
@@ -349,7 +349,7 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr *schema_doc
      - char* 					The string with the generated XPath
      - NULL 					If an error occurred
  */
-char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePrt);
+DLL_EXPORT char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePrt);
 
 
 /**

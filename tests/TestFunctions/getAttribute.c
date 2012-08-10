@@ -18,7 +18,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-#include <assert.h>
 #include "CUnit/CUnit.h"
 #include "tixi.h"
 /** 
@@ -32,14 +31,14 @@ int preGetAttribute( void ) {
 	
 	char* xmlFilename = "TestData/in.xml";
 
-	assert( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
+	CU_ASSERT( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
 
 	return 0;
 }
 
 int postGetAttribute( void ) {
 
-	assert( tixiCloseDocument( documentHandle ) == SUCCESS );
+	CU_ASSERT( tixiCloseDocument( documentHandle ) == SUCCESS );
 
 	return 0;
 }
