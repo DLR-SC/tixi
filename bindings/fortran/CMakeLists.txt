@@ -1,4 +1,5 @@
-
+# TIXI Fortran interface
+# @author: Martin Siggel
 
 set(TIXI_F_SRC tixi77.c)
 set(TIXI_F_HDR tixi77.h)
@@ -28,7 +29,7 @@ else()
 		add_definitions(-DIFORT_WIN32)
 	endif()
 
-	add_library(TIXIf SHARED ${TIXI_F_SRC} ${TIXI_F_HDR})
+	add_library(TIXIf STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
 	set_target_properties(TIXIf PROPERTIES VERSION ${TIXI_VERSION})
 	
 endif()

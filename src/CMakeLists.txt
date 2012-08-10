@@ -1,3 +1,6 @@
+# TIXI Library
+# @author Martin Siggel
+
 set(TIXI_SRC tixiImpl.c tixiUtils.c uidHelper.c tixiInternal.c webMethods.c 
 	xpathFunctions.c xslTransformation.c)
 
@@ -18,6 +21,10 @@ endif()
 if(MSVC)
 	set(TIXI_SRC ${TIXI_SRC} ${TIXI_HDR})
 endif(MSVC)
+
+if(WIN32)
+	add_definitions(-DWIN32_DLL)
+endif(WIN32)
 
 
 add_library(TIXI SHARED ${TIXI_SRC})
