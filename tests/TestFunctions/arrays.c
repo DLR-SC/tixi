@@ -36,14 +36,12 @@ int preArrayTests( void ) {
     
     char* xmlFilename = "TestData/arraytests.xml";
 
-    CU_ASSERT( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
-    return 0;
+    return tixiOpenDocument( xmlFilename, &documentHandle ) != SUCCESS;
 }
 
 int postArrayTests( void ) {
 
-    CU_ASSERT( tixiCloseDocument( documentHandle ) == SUCCESS );
-    return 0;
+    return tixiCloseDocument( documentHandle ) != SUCCESS;
 }
 
 /****

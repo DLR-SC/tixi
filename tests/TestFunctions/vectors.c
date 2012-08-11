@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,18 +34,14 @@ int preVectorTests( void ) {
 	char* xmlFilenameGet = "TestData/vectorcount.xml";
 	char* xmlFilenameAdd = "TestData/vectoradd.xml";
 
-	CU_ASSERT ( tixiOpenDocument( xmlFilenameGet, &documentHandleGet ) == SUCCESS );
-	CU_ASSERT ( tixiOpenDocument( xmlFilenameAdd, &documentHandleAdd ) == SUCCESS );
-
-	return 0;
+    return ( tixiOpenDocument( xmlFilenameGet, &documentHandleGet ) != SUCCESS )
+       ||  ( tixiOpenDocument( xmlFilenameAdd, &documentHandleAdd ) != SUCCESS );
 }
 
 int postVectorTests( void ) {
 
-	CU_ASSERT ( tixiCloseDocument( documentHandleGet ) == SUCCESS );
-	CU_ASSERT ( tixiCloseDocument( documentHandleAdd ) == SUCCESS );
-
-	return 0;
+    return ( tixiCloseDocument( documentHandleGet ) != SUCCESS )
+       ||  ( tixiCloseDocument( documentHandleAdd ) != SUCCESS );
 }
 
 void tixiVectorGetTests( void ){
