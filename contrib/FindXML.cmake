@@ -21,7 +21,7 @@
 #  License text for the above reference.)
 
 # Look for the header file.
-FIND_PATH(XML_INCLUDE_DIR NAMES libxml/xmlversion.h)
+FIND_PATH(XML_INCLUDE_DIR NAMES libxml/xmlversion.h libxml2/libxml/xmlversion.h)
 MARK_AS_ADVANCED(XML_INCLUDE_DIR)
 
 # Look for the library.

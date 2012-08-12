@@ -17,11 +17,6 @@ if(CMAKE_COMPILER_IS_GNUCC)
 	set(CMAKE_C_FLAGS "-Wall -fmessage-length=0")
 endif()
 
-# add header files to VC solution/projects
-if(MSVC)
-	set(TIXI_SRC ${TIXI_SRC} ${TIXI_HDR})
-endif(MSVC)
-
-add_library(TIXI SHARED ${TIXI_SRC})
+add_library(TIXI SHARED ${TIXI_SRC} ${TIXI_HDR})
 target_link_libraries (TIXI  ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES})
 set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})
