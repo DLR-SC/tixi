@@ -27,11 +27,11 @@
 
 static TixiDocumentHandle documentHandle = -1;
 
-const char* filename_uid_correct = "TestData/uid_correct.xml";
-const char* filename_uid_duplicated = "TestData/uid_duplicated.xml";
-const char* filename_without_uids = "TestData/uid_no_uids.xml";
-const char* filename_links_broken = "TestData/uid_broken_link.xml";
-const char* filename_links = "TestData/uid_link.xml";
+char* filename_uid_correct = "TestData/uid_correct.xml";
+char* filename_uid_duplicated = "TestData/uid_duplicated.xml";
+char* filename_without_uids = "TestData/uid_no_uids.xml";
+char* filename_links_broken = "TestData/uid_broken_link.xml";
+char* filename_links = "TestData/uid_link.xml";
 
 
 void tixiUIDCheck_ok( void )

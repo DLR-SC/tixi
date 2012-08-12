@@ -27,9 +27,9 @@
     @test generateXpathFromNode test
 */
 
-static const char* xmlFilename = "TestData/xpaths.xml";
-static const char *elementPathExists = "/root/a[@uID=\"test\"]/b[@uID=\"b\"]";
-static const char *elementPathDoesnt = "/root/a[@uID=\"schlumpf\"]/b[@uID=\"empty_element\"]";
+static char* xmlFilename = "TestData/xpaths.xml";
+static char *elementPathExists = "/root/a[@uID=\"test\"]/b[@uID=\"b\"]";
+static char *elementPathDoesnt = "/root/a[@uID=\"schlumpf\"]/b[@uID=\"empty_element\"]";
 
 
 void xPathGeneration(void)
@@ -44,7 +44,7 @@ void xPathGeneration(void)
     /* init */
 	CU_ASSERT( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
     document = getDocument(documentHandle);
-    CU_ASSERT( document );
+    CU_ASSERT( document != NULL );
     xmlDocument = document->docPtr;
 
     /* test the xPath creation: get xmlNodePtr by replicating code from tixiImpl.c */

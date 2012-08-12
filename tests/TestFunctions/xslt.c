@@ -27,9 +27,9 @@
     @test tixiXSLTransformationToFile test
 */
 
-static const char *xmlFilename = "TestData/valid_CPACS_dokumentiert.xml";
-static const char *stylesheetFilename = "TestData/mappingInputRaw.xsl";
-static const char *resultFileName = "TestData/result.xml";
+static char *xmlFilename = "TestData/valid_CPACS_dokumentiert.xml";
+static char *stylesheetFilename = "TestData/mappingInputRaw.xsl";
+static char *resultFileName = "TestData/result.xml";
 
 
 void xslTransformationToFile(void)

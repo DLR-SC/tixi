@@ -135,17 +135,17 @@ void getBooleanElement( void ) {
 	CU_ASSERT( number == 1);
 	CU_ASSERT( tixiGetBooleanElement( documentHandle, elementPathFalse, &number ) == SUCCESS );
 	CU_ASSERT( number == 0);
-	number = NULL;
+	number = 0;
 	CU_ASSERT( tixiGetBooleanElement( documentHandle, elementPathInvalid, &number ) == FAILED );
-	CU_ASSERT( number == NULL);
+	CU_ASSERT( number == 0);
 
 	CU_ASSERT( tixiGetBooleanElement( documentHandle, elementPathTrueB, &number ) == SUCCESS );
 	CU_ASSERT( number == 1);
 	CU_ASSERT( tixiGetBooleanElement( documentHandle, elementPathFalseB, &number ) == SUCCESS );
 	CU_ASSERT( number == 0);
-	number = NULL;
+	number = 0;
 	CU_ASSERT( tixiGetBooleanElement( documentHandle, elementPathInvalidB, &number ) == FAILED );
-	CU_ASSERT( number == NULL);
+	CU_ASSERT( number == 0);
 }
 
 void getPointElement( void ) {

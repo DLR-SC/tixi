@@ -138,7 +138,6 @@ int uid_checkForDuplicates(TixiDocument *document)
 int uid_checkForBrokenLinks(TixiDocument *document)
 {
 	TixiUIDListEntry* currentEntry;
-	TixiUIDListEntry* compareElement;
 	xmlDocPtr doc;
 	xmlXPathContextPtr xpathCtx;
 	xmlXPathObjectPtr xpathObj;

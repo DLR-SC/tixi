@@ -130,7 +130,7 @@ void addElement_addBoolean( void ) {
 	int val_false = 0;
 	CU_ASSERT( tixiAddBooleanElement( documentHandle, parentPath, "boolean_t", val_true ) == SUCCESS );
 	CU_ASSERT( tixiAddBooleanElement( documentHandle, parentPath, "boolean_f", val_false ) == SUCCESS );	
-	CU_ASSERT( tixiAddBooleanElement( documentHandle, parentPath, "boolean_x", "2" ) == FAILED );
+	CU_ASSERT( tixiAddBooleanElement( documentHandle, parentPath, "boolean_x", '2' ) == FAILED );
 }
 
 void addElement_addPoint( void ){

@@ -25,6 +25,14 @@
 #include "tixiUtils.h"
 #include "tixiInternal.h"
 
+#include <ctype.h>
+#ifdef WIN32
+  #include <direct.h>
+  #define mkdir(dir, attr) _mkdir((dir))
+#else
+  #include <sys/stat.h>
+#endif
+
 
 int my_strncasecmp (const char *a, const char *b, size_t len)
 {
@@ -44,7 +52,7 @@ int my_strncasecmp (const char *a, const char *b, size_t len)
 
 
 int create_local_directory(const char *dirname) {
-	if ((mkdir(dirname)) != -1) {
+	if ((mkdir(dirname, 0777)) != -1) {
 		return SUCCESS;
 	}
 	else {
