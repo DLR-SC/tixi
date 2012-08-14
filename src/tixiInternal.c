@@ -952,7 +952,7 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, char *elementPat
 }
 
 
-int copyDocument(TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHandle *newTixiDocumentHandle)
+int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHandle *newTixiDocumentHandle)
 {
 	TixiDocument *srcDocument = getDocument(oldTixiDocumentHandle);
     TixiDocument *dstDocument = NULL;

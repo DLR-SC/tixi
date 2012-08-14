@@ -333,13 +333,16 @@ void outputIBUCKResult(char *outputFilename)
 int main(int argc, char **argv)
 {
 
-	char *xmlInputFilename = "C:\\Users\\MarkusLitz\\tmp\\TIXITests\\tixiAddTextAttribute\\xml_input.xml";
+  char *xmlInputFilename = "howtoin.xml";
   TixiDocumentHandle handle;
 
 
-  assert(tixiOpenDocument(xmlInputFilename, &handle) == SUCCESS);
+  if(tixiOpenDocument(xmlInputFilename, &handle) != SUCCESS){
+      printf("File could not be opened!\n");
+      return 1;
+  }
   tixiCreateElementAtIndex(handle, "/plane", "numberOfPassengers", 2);
-  tixiSaveDocument( handle, "C:\\Users\\MarkusLitz\\tmp\\TIXITests\\tixiAddTextAttribute\\out2.xml" );
+  tixiSaveDocument( handle, "out.xml" );
   tixiCloseDocument(handle);
 
   return (0);
