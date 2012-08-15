@@ -8,11 +8,11 @@ function tixiAddTextElement(handle, xpath, name, text)
     end
     
     if not(ischar(name))
-        error('Invalid xpath');
+        error('Invalid tag name');
     end
     
     if not(ischar(text))
-        error('Invalid xpath');
+        error('Invalid text');
     end
     
     try 

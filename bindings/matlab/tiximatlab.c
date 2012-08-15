@@ -960,6 +960,225 @@ void mex_tixiAddPoint(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
     handleTixiError(tixiAddPoint(handle, xpath, x, y, z, format));
 }
 
+void mex_tixiGetPoint(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    double x = 0., y = 0., z = 0.;
+    int handle = -1;
+    double * point = NULL;
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiGetPoint(handle, path): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+
+    handleTixiError(tixiGetPoint(handle, xpath, &x, &y, &z));
+
+    plhs[0] = mxCreateDoubleMatrix(1,3, mxREAL);
+    
+    point = mxGetPr(plhs[0]);
+    point[0] = x; point[1] = y; point[2] = z;
+}
+
+void mex_tixiAddTextAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    char * val   = NULL;
+    int handle   = -1;
+
+    if(nrhs != 5){
+        mexErrMsgTxt("tixiAddTextAttribute(handle, path, attribName, attribValue): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name.\n");
+
+    if(!mxIsChar(prhs[4]))
+        mexErrMsgTxt("Invalid text value.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name );
+    mxToString(prhs[4],&val);
+    handleTixiError(tixiAddTextAttribute(handle, xpath, name, val));
+}
+
+void mex_tixiAddDoubleAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    char * format= NULL;
+    double val   = 0.;
+    int handle   = -1;
+
+    if(nrhs != 6){
+        mexErrMsgTxt("tixiAddDoubleAttribute(handle, path, attribName, value, formatstring): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name.\n");
+
+    if(!isscalar(prhs[4]))
+        mexErrMsgTxt("Invalid value.\n");
+
+    if(!mxIsChar(prhs[5]))
+        mexErrMsgTxt("Invalid format string.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name );
+    val = *mxGetPr(prhs[4]);
+    mxToString(prhs[5],&format);
+    handleTixiError(tixiAddDoubleAttribute(handle, xpath, name, val, format));
+}
+
+void mex_tixiAddIntegerAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    char * format= NULL;
+    int val   = 0;
+    int handle   = -1;
+
+    if(nrhs != 6){
+        mexErrMsgTxt("tixiAddIntegerAttribute(handle, path, attribName, value, formatstring): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name.\n");
+
+    if(!isscalar(prhs[4]))
+        mexErrMsgTxt("Invalid value.\n");
+
+    if(!mxIsChar(prhs[5]))
+        mexErrMsgTxt("Invalid format string.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name );
+    val = (int) *mxGetPr(prhs[4]);
+    mxToString(prhs[5],&format);
+    handleTixiError(tixiAddIntegerAttribute(handle, xpath, name, val, format));
+}
+
+void mex_tixiGetTextAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    char * val   = NULL;
+    int handle   = -1;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiGetTextAttribute(handle, path, attribName): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name );
+    handleTixiError(tixiGetTextAttribute(handle, xpath, name, &val));
+
+    plhs[0] = mxCreateString(val);
+}
+
+void mex_tixiGetIntegerAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    int val      = 0;
+    int handle   = -1;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiGetIntegerAttribute(handle, path, attribName): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name );
+    handleTixiError(tixiGetIntegerAttribute(handle, xpath, name, &val));
+
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    *mxGetPr(plhs[0]) = (double) val;
+}
+
+void mex_tixiGetDoubleAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    double val   = 0.;
+    int handle   = -1;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiGetDoubleAttribute(handle, path, attribName): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name );
+    handleTixiError(tixiGetDoubleAttribute(handle, xpath, name, &val));
+
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    *mxGetPr(plhs[0]) =  val;
+}
+
 /*
  * main entry point for MATLAB
  * deals as a dispatcher here
@@ -1097,6 +1316,34 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   }
   else if(strcmp(functionName,"tixiAddPoint")==0){
       mex_tixiAddPoint(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiGetPoint")==0){
+      mex_tixiGetPoint(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiAddTextAttribute")==0){
+      mex_tixiAddTextAttribute(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiAddDoubleAttribute")==0){
+      mex_tixiAddDoubleAttribute(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiAddIntegerAttribute")==0){
+      mex_tixiAddIntegerAttribute(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiGetTextAttribute")==0){
+      mex_tixiGetTextAttribute(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiGetIntegerAttribute")==0){
+      mex_tixiGetIntegerAttribute(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiGetDoubleAttribute")==0){
+      mex_tixiGetDoubleAttribute(nlhs, plhs, nrhs, prhs);
       return;
   }
   else {
