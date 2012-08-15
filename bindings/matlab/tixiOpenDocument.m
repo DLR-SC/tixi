@@ -6,5 +6,9 @@ function handle = tixiOpenDocument(filename)
     if not(ischar(filename))
         error('Invalid filename argument');
     end
-    handle = tixi_matlab('tixiOpenDocument',filename);
+    try
+        handle = tixi_matlab('tixiOpenDocument',filename);
+    catch err
+        error(err.message);
+    end
 end
