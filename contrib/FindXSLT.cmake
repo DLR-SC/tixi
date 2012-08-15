@@ -46,7 +46,7 @@ ENDIF()
 
 # handle the QUIETLY and REQUIRED arguments and set XSLT_FOUND to TRUE if 
 # all listed variables are TRUE
-#INCLUDE(${CMAKE_MODULE_PATH}/FindPackageHandleStandardArgs.cmake)
+INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(XSLT
                                   REQUIRED_VARS XSLT_LIBRARY XSLT_INCLUDE_DIR
                                   VERSION_VAR XSLT_VERSION_STRING)

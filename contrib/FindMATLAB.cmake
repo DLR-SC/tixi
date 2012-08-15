@@ -118,7 +118,8 @@ else()
 	message(SEND_ERROR "Platform could not be detected")
 endif()
 
- IF(UNIX)
+IF(UNIX)
+    # MAC
     IF("${CMAKE_SYSTEM_NAME}" MATCHES "Darwin")
         IF( ${CMAKE_OSX_ARCHITECTURES} MATCHES "i386" )
             SET( MATLAB_ARCH maci )
@@ -127,10 +128,11 @@ endif()
                     "${CMAKE_CXX_FLAGS} -flat_namespace -undefined suppress" CACHE INTERNAL 
                     "extra CFLAGS to suppress linker errors in Mac OS X" )
         ELSE()
-            SET( MATLAB_ARCH mac )
-            SET( MATLAB_MEX_SUFFIX .mexmac CACHE STRING "Mex shared library file suffix" )
+            SET( MATLAB_ARCH maci64 )
+            SET( MATLAB_MEX_SUFFIX .mexmaci64)
         ENDIF()
     ENDIF()
+    # LINUX
     IF("${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
         SET( MATLAB_ARCH glnx86 )
 	IF(BITS EQUAL 64)
@@ -139,7 +141,7 @@ endif()
 	        SET( MATLAB_MEX_SUFFIX .mexglx )
 	ENDIF()
     ENDIF()
- ELSEIF(WIN32)
+ELSEIF(WIN32)
 	if(BITS EQUAL 64)
 		SET( MATLAB_MEX_SUFFIX .mexw64 )
 		SET( MATLAB_ARCH win64 )
@@ -147,7 +149,7 @@ endif()
 		SET( MATLAB_MEX_SUFFIX .mexw32 )
 		SET( MATLAB_ARCH win32 )
 	endif()
- ENDIF()
+ENDIF()
 
  if (NOT MATLAB_PATH_SUFFIXES)
    if (WIN32)
@@ -198,11 +200,11 @@ set (_MATLAB_LIBRARY_NAMES    mex mx mat)
        find_library (
          MATLAB_${_MATLAB_LIB}_LIBRARY
            NAMES         "${_MATLAB_LIB}" "lib${_MATLAB_LIB}"
-           HINTS         "${MATLAB_DIR}/extern/lib/win${BITS}/microsoft"
-		   HINT 		 "${MATLAB_LIB_DIR}"
-           PATH_SUFFIXES ${MATLAB_PATH_SUFFIXES}
+           PATHS         "${MATLAB_LIB_DIR}" "${MATLAB_DIR}"
+           PATH_SUFFIXES  ${MATLAB_PATH_SUFFIXES} "bin/${MATLAB_ARCH}/" "extern/lib/${MATLAB_ARCH}/microsoft"	 "bin/${MATLAB_ARCH}"
            DOC           "MATLAB ${_MATLAB_LIB} link library."
            NO_DEFAULT_PATH
+           NO_CMAKE_SYSTEM_PATH
        )
      endforeach ()
  
@@ -219,8 +221,10 @@ set (_MATLAB_LIBRARY_NAMES    mex mx mat)
        find_library (
          MATLAB_${_MATLAB_LIB}_LIBRARY
            NAMES "${_MATLAB_LIB}"
+           PATHS "${MATLAB_LIB_DIR}"g
            HINTS ENV LD_LIBRARY_PATH
            DOC   "MATLAB ${_MATLAB_LIB} link library."
+           NO_CMAKE_SYSTEM_PATH
        )
      endforeach ()
  

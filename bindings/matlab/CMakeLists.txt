@@ -58,6 +58,6 @@ include_directories(${PROJECT_SOURCE_DIR}/src ${MATLAB_INCLUDE_DIR})
 
 add_library(tixi_matlab SHARED ${TMAT_SRC})
 target_link_libraries(tixi_matlab ${MATLAB_mat_LIBRARY} ${MATLAB_mx_LIBRARY} ${MATLAB_mex_LIBRARY} TIXI)
-set_target_properties(tixi_matlab PROPERTIES SUFFIX ${MATLAB_MEX_SUFFIX})
+set_target_properties(tixi_matlab PROPERTIES SUFFIX ${MATLAB_MEX_SUFFIX} PREFIX "")
 
 endif()

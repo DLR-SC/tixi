@@ -153,6 +153,7 @@ mwSize nonzerocount(const mxArray* arr) {
 		return c;
 	} else if (mxIsStruct(arr)) {
 		mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Structure arrays are not supported.");
+		return 0;
 	} else if (mxIsSparse(arr)) {
 		mwIndex* jc = mxGetJc(arr);
 		mwSize n = mxGetN(arr);  /* number of columns */
@@ -202,6 +203,7 @@ bool isanycomplex(const mxArray* arr) {
 		return false;
 	} else if (mxIsStruct(arr)) {
 		mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Structure arrays are not supported.");
+		return false;
 	} else {
 		return mxIsComplex(arr);
 	}
@@ -213,10 +215,13 @@ bool isanycomplex(const mxArray* arr) {
 bool isallinteger(const mxArray* arr) {
 	if (mxIsCell(arr)) {
 		mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Cell arrays are not supported.");
+		return false;
 	} else if (mxIsStruct(arr)) {
 		mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Structure arrays are not supported.");
+        return false;
 	} else if (mxIsSparse(arr)) {
 		mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Sparse integer arrays are not supported.");
+		return false;
 	} else {
 		mwSize n = mxGetNumberOfElements(arr);
 		const double* pr = mxGetPr(arr);
@@ -225,6 +230,7 @@ bool isallinteger(const mxArray* arr) {
 
 		if (pr == NULL) {
 			mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Operation supported only on numeric arrays.");
+			return false;
 		}
 
 		if (pi != NULL) {  /* real and imaginary part */

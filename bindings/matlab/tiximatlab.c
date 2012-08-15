@@ -61,7 +61,7 @@ int mxToString(const mxArray * mxStr, char ** cstr){
   }
     
   /* Get the length of the input string. */
-  strLen = (mxGetM(mxStr) * mxGetN(mxStr)) + 1;
+  strLen = mxGetNumberOfElements(mxStr) + 1;
 
   /* Allocate memory for input and output strings. */
   *cstr = (char*) mxCalloc(strLen, sizeof(char));
@@ -343,7 +343,7 @@ void mex_tixiCloseDocument(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
         mexErrMsgTxt("tixiCloseDocument(handle): Wrong number of arguments\n");
     }
 
-    if(mxGetM(mxHandle)!= 1 || mxGetN(mxHandle) != 1){
+    if(!isscalar(mxHandle)){
         mexErrMsgTxt("Wrong handle format\n");
     }
 
@@ -772,7 +772,6 @@ void mex_tixiCreateElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
 void mex_tixiCreateElementAtIndex(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     char * xpath = NULL;
     char * name = NULL;
-    char * text = NULL;
     int index = 0;
     int handle = -1;
     if(nrhs != 5){
@@ -882,10 +881,10 @@ void mex_tixiAddFloatVector(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
     mxToString(prhs[3],&name);
 
     mVec = prhs[4];
-    if(mxGetN(mVec) != 1 && mxGetM(mVec)!=1)
+    if(!isvector(mVec))
         mexErrMsgTxt("Dimension mismatch of input vector");
 
-    size = mxGetN(mVec)*mxGetM(mVec);
+    size = mxGetNumberOfElements(mVec);
 
     if(size < 1)
         mexErrMsgTxt("Invalid number of elements\n");
@@ -942,8 +941,8 @@ void mex_tixiAddPoint(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 
     //check dimension of point (has to be 3)
     mpoint = prhs[3];
-    if(mxGetM(mpoint)*mxGetN(mpoint) !=3)
-        mexErrMsgTxt("Number of dimensions of point argument has to be 3.");
+    if(!is3d(mpoint))
+        mexErrMsgTxt("Point argument has to be 3-dimensional\n.");
 
     if(!mxIsChar(prhs[4]))
         mexErrMsgTxt("Invalid format argument\n");
@@ -1185,12 +1184,11 @@ void mex_tixiGetDoubleAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArr
  */
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
-    int status = 0;
-    char * functionName = NULL;
-    if(nrhs < 1){
-        mexErrMsgTxt("No function argument given!");
-        return;
-    }
+  char * functionName = NULL;
+  if(nrhs < 1){
+      mexErrMsgTxt("No function argument given!");
+      return;
+  }
     
   mxToString(prhs[0],&functionName);
 

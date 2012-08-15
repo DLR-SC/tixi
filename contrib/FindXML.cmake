@@ -21,7 +21,10 @@
 #  License text for the above reference.)
 
 # Look for the header file.
-FIND_PATH(XML_INCLUDE_DIR NAMES libxml/xmlversion.h libxml2/libxml/xmlversion.h)
+FIND_PATH(XML_INCLUDE_DIR
+    NAMES libxml/xmlversion.h
+    PATH_SUFFIXES "libxml2"
+)
 MARK_AS_ADVANCED(XML_INCLUDE_DIR)
 
 # Look for the library.
@@ -46,7 +49,7 @@ ENDIF()
 
 # handle the QUIETLY and REQUIRED arguments and set XML_FOUND to TRUE if 
 # all listed variables are TRUE
-#INCLUDE(${CMAKE_MODULE_PATH}/FindPackageHandleStandardArgs.cmake)
+INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(XML
                                   REQUIRED_VARS XML_LIBRARY XML_INCLUDE_DIR
                                   VERSION_VAR XML_VERSION_STRING)

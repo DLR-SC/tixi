@@ -33,7 +33,7 @@ MARK_AS_ADVANCED(CUNIT_LIBRARY)
 
 # handle the QUIETLY and REQUIRED arguments and set CUNIT_FOUND to TRUE if 
 # all listed variables are TRUE
-#INCLUDE(${CMAKE_MODULE_PATH}/FindPackageHandleStandardArgs.cmake)
+INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(CUNIT
                                   REQUIRED_VARS CUNIT_LIBRARY CUNIT_INCLUDE_DIR
                                   VERSION_VAR CUNIT_VERSION_STRING)
