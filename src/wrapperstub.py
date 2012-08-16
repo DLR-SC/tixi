@@ -48,11 +48,12 @@ class Tixi(object):
         
         if sys.platform == 'win32':
             self.TIXI = cdll.TIXI
+        elif sys.platform == 'darwin':
+            self.TIXI = CDLL("libTIXI.dylib")
         else:
             self.TIXI = CDLL("libTIXI.so")
-        self.version = c_char_p()
-        self.version.value = self.TIXI.tixiGetVersion()
-        self.version = self.version.value
+        self.TIXI.tixiGetVersion.restype = c_char_p
+        self.version = self.TIXI.tixiGetVersion()
             
     def __del__(self):
         ''' The destructor cleans up the library '''
