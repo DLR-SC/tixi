@@ -848,7 +848,7 @@ void mex_tixiGetFloatVector(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
     handleTixiError(tixiGetFloatVector(handle, path, &array, size));
 
     // return the vector
-    plhs[0] = mxCreateDoubleMatrix(size,1, mxREAL);
+    plhs[0] = mxCreateDoubleMatrix(1,size, mxREAL);
     outArray = mxGetPr(plhs[0]);
     for(i = 0; i < size; ++i)
         outArray[i] = array[i];
@@ -941,7 +941,7 @@ void mex_tixiAddPoint(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 
     //check dimension of point (has to be 3)
     mpoint = prhs[3];
-    if(!is3d(mpoint))
+    if(!isvector(mpoint) || mxGetNumberOfElements(mpoint)!=3)
         mexErrMsgTxt("Point argument has to be 3-dimensional\n.");
 
     if(!mxIsChar(prhs[4]))

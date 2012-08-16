@@ -37,7 +37,7 @@ add_subdirectory(bindings)
 add_subdirectory(tests)
 
 #demos
-add_subdirectory(examples/demo)
+add_subdirectory(examples/Demo)
 
 # create the doc
 include(createDoc)
