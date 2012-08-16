@@ -191,6 +191,10 @@ int mxToInt(const mxArray * mxArr){
     return (int)dv;
 }
 
+void mex_tixiGetVersion(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    plhs[0] = mxCreateString(tixiGetVersion());
+}
+
 void mex_tixiAddHeader(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     char * toolName = NULL;
     char * version = NULL;
@@ -1342,6 +1346,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   }
   else if(strcmp(functionName,"tixiGetDoubleAttribute")==0){
       mex_tixiGetDoubleAttribute(nlhs, plhs, nrhs, prhs);
+      return;
+  }
+  else if(strcmp(functionName,"tixiGetVersion")==0){
+      mex_tixiGetVersion(nlhs, plhs, nrhs, prhs);
       return;
   }
   else {
