@@ -50,7 +50,7 @@ foreach(FILE ${TMAT_M})
 endforeach()
 
 # add def for exports
-if(WIN32)
+if(MSVC)
   set(TMAT_SRC ${TMAT_SRC} exports.def)
 endif()
 
