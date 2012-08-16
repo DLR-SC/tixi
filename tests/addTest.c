@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -342,7 +342,7 @@ void addTests(void)
 
   if (!(CU_add_test(pSuite, "alreadySaved", addElement_alreadySaved)))
     PRINT_ERROR;
-#if __unix__ || unix
+#if __unix__ || unix || __APPLE__
   if (!(CU_add_test(pSuite, "compareResult", addElement_compareResult)))
     PRINT_ERROR;
 #endif /* __unix__ */
@@ -406,7 +406,7 @@ void addTests(void)
 
 
 
-#if __unix__ || unix
+#if __unix__ || unix || __APPLE__
   if (!(CU_add_test(pSuite, "compare", addAttribute_compareResult)))
     PRINT_ERROR;
 #endif /* __unix__ */

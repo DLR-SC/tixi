@@ -385,8 +385,25 @@ DLL_EXPORT ReturnCode tixiCloseDocument(TixiDocumentHandle handle)
   return SUCCESS;
 }
 
+DLL_EXPORT ReturnCode tixiCloseAllDocuments()
+{
+  ReturnCode returnValue = SUCCESS;
+
+  while(documentListHead && documentListHead->document) {
+    TixiDocumentHandle handle = documentListHead->document->handle;
+    returnValue = tixiCloseDocument(handle);
+    if(returnValue != SUCCESS)
+      return returnValue;
+  }
+  return SUCCESS;
+}
+
 DLL_EXPORT ReturnCode tixiCleanup()
 {
+    ReturnCode ret = tixiCloseAllDocuments();
+    if(ret != SUCCESS)
+      return ret;
+
     // cleanup libxml, removes valgrind leaks
     xmlCleanupParser();
     return SUCCESS;

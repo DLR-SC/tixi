@@ -622,6 +622,25 @@ typedef int TixiDocumentHandle;
   DLL_EXPORT ReturnCode tixiCloseDocument (TixiDocumentHandle handle);
 
 
+/**
+    @brief Close all open documents.
+
+      Closes all XML-documents. This routine could be called at the
+      of a program to free allocated memory. After calling this
+      routine all current handles are invalid and no further processing of the
+      document is possible.
+
+      <b>Fortran syntax:</b>
+
+      tixi_close_all_documents( integer error )
+
+      @return
+       - SUCCESS if successfully closed the XML-file
+       - CLOSE_FAILED if closing  the XML-files failed
+ */
+
+  DLL_EXPORT ReturnCode tixiCloseAllDocuments ();
+
   /**
     @brief Closes the xml2 library and frees its allocated variables
   */

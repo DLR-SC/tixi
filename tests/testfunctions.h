@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -138,7 +138,7 @@ void addElement_addPoint( void );
 void addElement_addMatrix( void );
 void addElement_addMatrixOfPoints( void );
 
-#if __unix__ || unix
+#if __unix__ || unix || __APPLE__
 void addElement_compareResult( void );
 #endif /* __unix__ */
 
@@ -150,7 +150,7 @@ void addAttribute_text( void );
 void addAttribute_double( void );
 void addAttribute_integer( void );
 
-#if __unix__ || unix
+#if __unix__ || unix || __APPLE__
 void addAttribute_compareResult( void );
 #endif /* __unix__ */
 

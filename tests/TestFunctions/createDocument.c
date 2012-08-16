@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -70,7 +70,7 @@ void createDocument_addHeader( void ){
         CU_ASSERT( tixiSaveDocument( handle, "documentWithHeader.xml" )== SUCCESS );
         CU_ASSERT( tixiCloseDocument( handle )== SUCCESS );
 
-#if __unix__ || unix
+#if __unix__ || unix || __APPLE__
         system( "sed  /timestamp/d documentWithHeader.xml >tmp.xml");
         CU_ASSERT( system("diff -w tmp.xml TestData/documentWithHeaderReference.xml" ) == 0 );
 
