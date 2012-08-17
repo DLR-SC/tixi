@@ -42,6 +42,14 @@ extern "C" {
 #define snprintf _snprintf
 #endif
 
+/* just a macro that saves typing */
+#define RUN_IF_FUNCTION_IS(fname)             \
+    if(strcmp(functionName, #fname) == 0) {   \
+        mex_ ## fname(nlhs, plhs, nrhs, prhs);\
+        mxFree(functionName);                 \
+        return;                               \
+    }
+
 /*
  * helping function to convert matlab array into c-string 
  */
@@ -356,6 +364,10 @@ void mex_tixiCloseDocument(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
     handleTixiError(tixiCloseDocument(handle));
 }
 
+void mex_tixiCloseAllDocuments(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    handleTixiError(tixiCloseAllDocuments());
+}
+
 void mex_tixiSchemaValidateFromFile(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     char * xsdFilename = NULL;
     int handle = -1;
@@ -491,7 +503,7 @@ void mex_tixiGetIntegerElement(int nlhs, mxArray *plhs[], int nrhs, const mxArra
 void mex_tixiGetBooleanElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     char * xpath = NULL;
     int handle = -1;
-    int b;
+    int b = 0;
     if(nrhs != 3){
         mexErrMsgTxt("tixiGetBooleanElement(handle, xpath): Wrong number of arguments\n");
     }
@@ -508,8 +520,7 @@ void mex_tixiGetBooleanElement(int nlhs, mxArray *plhs[], int nrhs, const mxArra
     mxToString(prhs[2],&xpath);
     handleTixiError(tixiGetBooleanElement(handle, xpath, &b));
 
-    plhs[0] = mxCreateDoubleMatrix(1,1, mxREAL);
-    *mxGetPr(plhs[0]) = b;
+    plhs[0] = mxCreateLogicalScalar(b);
 }
 
 void mex_tixiUpdateTextElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -597,6 +608,112 @@ void mex_tixiAddTextElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
     mxToString(prhs[3],&name);
     mxToString(prhs[4],&text);
     handleTixiError(tixiAddTextElement(handle, xpath, name, text));
+}
+
+void mex_tixiAddBooleanElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name = NULL;
+    int b = 0;
+    int handle = -1;
+    if(nrhs != 5){
+        mexErrMsgTxt("tixiAddBooleanElement(handle, parentPath, elementName, boolean): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xpath argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid name argument\n");
+
+    if(!isscalar(prhs[4]) || !mxIsLogical(prhs[4]))
+        mexErrMsgTxt("Invalid boolean argument\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name);
+    b = *mxGetLogicals(prhs[4]);
+    handleTixiError(tixiAddBooleanElement(handle, xpath, name, b));
+    mxFree(xpath);
+    mxFree(name);
+}
+
+void mex_tixiAddDoubleElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name = NULL;
+    char * format = NULL;
+    double d = 0.;
+    int handle = -1;
+    if(nrhs != 6){
+        mexErrMsgTxt("tixiAddDoubleElement(handle, parentPath, elementName, dvalue, format): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xpath argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid name argument\n");
+
+    if(!isscalar(prhs[4]) || mxIsChar(prhs[4]))
+        mexErrMsgTxt("Invalid value argument\n");
+
+    if(!mxIsChar(prhs[5]))
+        mexErrMsgTxt("Invalid format argument\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name);
+    d = *mxGetPr(prhs[4]);
+    mxToString(prhs[5],&format);
+    handleTixiError(tixiAddDoubleElement(handle, xpath, name, d, format));
+    mxFree(format);
+    mxFree(xpath);
+    mxFree(name);
+}
+
+void mex_tixiAddIntegerElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name = NULL;
+    char * format = NULL;
+    int i = 0;
+    int handle = -1;
+    if(nrhs != 6){
+        mexErrMsgTxt("tixiAddIntegerElement(handle, parentPath, elementName, ivalue, format): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xpath argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid name argument\n");
+
+    if(!isscalar(prhs[4]) || mxIsChar(prhs[4]))
+        mexErrMsgTxt("Invalid value argument\n");
+
+    if(!mxIsChar(prhs[5]))
+        mexErrMsgTxt("Invalid format argument\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name);
+    i = (int) *mxGetPr(prhs[4]);
+    mxToString(prhs[5],&format);
+    handleTixiError(tixiAddIntegerElement(handle, xpath, name, i, format));
+    mxFree(format);
+    mxFree(xpath);
+    mxFree(name);
 }
 
 void mex_tixiAddTextElementAtIndex(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -1183,6 +1300,117 @@ void mex_tixiGetDoubleAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArr
 }
 
 /*
+ We return true or false if element could be found/not found. If something else happened we
+ throw an exception.
+*/
+void mex_tixiCheckElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    int handle   = -1;
+    ReturnCode ret = SUCCESS;
+
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiCheckElement(handle, path): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid elementPath argument\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+
+    ret = tixiCheckElement (handle, xpath);
+    mxFree(xpath);
+
+    if(ret == SUCCESS){
+        plhs[0] = mxCreateLogicalScalar(1);
+    }
+    else if(ret == ELEMENT_NOT_FOUND){
+        plhs[0] = mxCreateLogicalScalar(0);
+    }
+    else {
+        handleTixiError(ret);
+    }
+}
+
+/*
+ We return true or false if attribute could be found/not found. If something else happened we
+ throw an exception.
+*/
+void mex_tixiCheckAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    int handle   = -1;
+    ReturnCode ret = SUCCESS;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiCheckAttribute(handle, path, name): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid name argument\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name);
+
+    ret = tixiCheckAttribute (handle, xpath, name);
+    mxFree(xpath);
+    mxFree(name);
+
+    if(ret == SUCCESS){
+        plhs[0] = mxCreateLogicalScalar(1);
+    }
+    else if(ret == ATTRIBUTE_NOT_FOUND){
+        plhs[0] = mxCreateLogicalScalar(0);
+    }
+    else {
+        handleTixiError(ret);
+    }
+}
+
+/*
+ We return true or false if handle is okay/ not okay. If something else happened we
+ throw an exception.
+*/
+void mex_tixiCheckDocumentHandle(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    int handle   = -1;
+    ReturnCode ret = SUCCESS;
+
+    if(nrhs != 2){
+        mexErrMsgTxt("tixiCheckDocumentHandle(handle): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    handle = mxToInt(prhs[1]);
+
+    ret = tixiCheckDocumentHandle(handle);
+
+    if(ret == SUCCESS){
+        plhs[0] = mxCreateLogicalScalar(1);
+    }
+    else if(ret == INVALID_HANDLE){
+        plhs[0] = mxCreateLogicalScalar(0);
+    }
+    else {
+        handleTixiError(ret);
+    }
+}
+
+/*
  * main entry point for MATLAB
  * deals as a dispatcher here
  */
@@ -1196,165 +1424,58 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     
   mxToString(prhs[0],&functionName);
 
-  if(strcmp(functionName,"tixiOpenDocument")==0){
-      mex_tixiOpenDocument(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiOpenDocumentRecursive")==0){
-      mex_tixiOpenDocumentRecursive(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiOpenDocumentFromHTTP")==0){
-      mex_tixiOpenDocumentFromHTTP(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiCreateDocument")==0){
-      mex_tixiCreateDocument(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiCloseDocument")==0){
-      mex_tixiCloseDocument(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiSchemaValidateFromFile")==0){
-      mex_tixiSchemaValidateFromFile(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiSchemaValidateFromString")==0){
-      mex_tixiSchemaValidateFromString(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiDTDValidate")==0){
-      mex_tixiDTDValidate(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetTextElement")==0){
-      mex_tixiGetTextElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetDoubleElement")==0){
-      mex_tixiGetDoubleElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetIntegerElement")==0){
-      mex_tixiGetIntegerElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetBooleanElement")==0){
-      mex_tixiGetBooleanElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiUpdateTextElement")==0){
-      mex_tixiUpdateTextElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiUpdateDoubleElement")==0){
-      mex_tixiUpdateDoubleElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddTextElement")==0){
-      mex_tixiAddTextElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddTextElementAtIndex")==0){
-      mex_tixiAddTextElementAtIndex(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiRemoveElement")==0){
-      mex_tixiRemoveElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiSaveDocument")==0){
-      mex_tixiSaveDocument(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiSaveCompleteDocument")==0){
-      mex_tixiSaveCompleteDocument(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiSaveAndRemoveDocument")==0){
-      mex_tixiSaveAndRemoveDocument(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiExportDocumentAsString")==0){
-      mex_tixiExportDocumentAsString(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiImportFromString")==0){
-      mex_tixiImportFromString(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetVectorSize")==0){
-      mex_tixiGetVectorSize(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetFloatVector")==0){
-      mex_tixiGetFloatVector(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddFloatVector")==0){
-      mex_tixiAddFloatVector(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiCreateElement")==0){
-      mex_tixiCreateElement(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiCreateElementAtIndex")==0){
-      mex_tixiCreateElementAtIndex(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddHeader")==0){
-      mex_tixiAddHeader(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddCpacsHeader")==0){
-      mex_tixiAddCpacsHeader(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetNamedChildrenCount")==0){
-      mex_tixiGetNamedChildrenCount(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddPoint")==0){
-      mex_tixiAddPoint(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetPoint")==0){
-      mex_tixiGetPoint(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddTextAttribute")==0){
-      mex_tixiAddTextAttribute(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddDoubleAttribute")==0){
-      mex_tixiAddDoubleAttribute(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiAddIntegerAttribute")==0){
-      mex_tixiAddIntegerAttribute(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetTextAttribute")==0){
-      mex_tixiGetTextAttribute(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetIntegerAttribute")==0){
-      mex_tixiGetIntegerAttribute(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetDoubleAttribute")==0){
-      mex_tixiGetDoubleAttribute(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else if(strcmp(functionName,"tixiGetVersion")==0){
-      mex_tixiGetVersion(nlhs, plhs, nrhs, prhs);
-      return;
-  }
-  else {
+  RUN_IF_FUNCTION_IS(tixiOpenDocument)
+  RUN_IF_FUNCTION_IS(tixiOpenDocumentRecursive)
+  RUN_IF_FUNCTION_IS(tixiOpenDocumentFromHTTP)
+  RUN_IF_FUNCTION_IS(tixiCreateDocument)
+  RUN_IF_FUNCTION_IS(tixiCloseDocument)
+  RUN_IF_FUNCTION_IS(tixiCloseAllDocuments)
+  RUN_IF_FUNCTION_IS(tixiSchemaValidateFromFile)
+  RUN_IF_FUNCTION_IS(tixiSchemaValidateFromString)
+  RUN_IF_FUNCTION_IS(tixiDTDValidate)
+  RUN_IF_FUNCTION_IS(tixiGetTextElement)
+  RUN_IF_FUNCTION_IS(tixiGetDoubleElement)
+  RUN_IF_FUNCTION_IS(tixiGetIntegerElement)
+  RUN_IF_FUNCTION_IS(tixiGetBooleanElement)
+  RUN_IF_FUNCTION_IS(tixiUpdateTextElement)
+  RUN_IF_FUNCTION_IS(tixiUpdateDoubleElement)
+  RUN_IF_FUNCTION_IS(tixiAddTextElement)
+  RUN_IF_FUNCTION_IS(tixiAddBooleanElement)
+  RUN_IF_FUNCTION_IS(tixiAddDoubleElement)
+  RUN_IF_FUNCTION_IS(tixiAddIntegerElement)
+  RUN_IF_FUNCTION_IS(tixiAddTextElementAtIndex)
+  RUN_IF_FUNCTION_IS(tixiRemoveElement)
+  RUN_IF_FUNCTION_IS(tixiSaveDocument)
+  RUN_IF_FUNCTION_IS(tixiSaveCompleteDocument)
+  RUN_IF_FUNCTION_IS(tixiSaveAndRemoveDocument)
+  RUN_IF_FUNCTION_IS(tixiExportDocumentAsString)
+  RUN_IF_FUNCTION_IS(tixiGetVectorSize)
+  RUN_IF_FUNCTION_IS(tixiGetVectorSize)
+  RUN_IF_FUNCTION_IS(tixiGetFloatVector)
+  RUN_IF_FUNCTION_IS(tixiAddFloatVector)
+  RUN_IF_FUNCTION_IS(tixiCreateElement)
+  RUN_IF_FUNCTION_IS(tixiCreateElementAtIndex)
+  RUN_IF_FUNCTION_IS(tixiAddHeader)
+  RUN_IF_FUNCTION_IS(tixiAddCpacsHeader)
+  RUN_IF_FUNCTION_IS(tixiGetNamedChildrenCount)
+  RUN_IF_FUNCTION_IS(tixiAddPoint)
+  RUN_IF_FUNCTION_IS(tixiGetPoint)
+  RUN_IF_FUNCTION_IS(tixiAddTextAttribute)
+  RUN_IF_FUNCTION_IS(tixiAddIntegerAttribute)
+  RUN_IF_FUNCTION_IS(tixiAddIntegerAttribute)
+  RUN_IF_FUNCTION_IS(tixiGetTextAttribute)
+  RUN_IF_FUNCTION_IS(tixiGetIntegerAttribute)
+  RUN_IF_FUNCTION_IS(tixiGetDoubleAttribute)
+  RUN_IF_FUNCTION_IS(tixiGetVersion)
+  RUN_IF_FUNCTION_IS(tixiCheckElement)
+  RUN_IF_FUNCTION_IS(tixiCheckAttribute)
+  RUN_IF_FUNCTION_IS(tixiCheckDocumentHandle)
+  
+  {
+      // this is only executed if the function could not be identified
       char text[255];
       snprintf(text, 250, "%s is not a valid TIXI function!\n",functionName);
+      mxFree(functionName);
       mexErrMsgTxt(text);
   }
 }

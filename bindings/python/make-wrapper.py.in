@@ -24,7 +24,7 @@ import re
 import sys
 import types
 
-fd = open('wrapperstub.py', 'r')
+fd = open('@CMAKE_CURRENT_SOURCE_DIR@/wrapperstub.py', 'r')
 stub = fd.read()
 fd.close()
 
@@ -566,7 +566,7 @@ if __name__ == '__main__':
         doctest.testmod()
         sys.exit(0)
     
-    fd = open("tixi.h", "r")
+    fd = open("@PROJECT_SOURCE_DIR@/src/tixi.h", "r")
     tixiFile = fd.read().split("\n")
     fd.close()
 
@@ -575,7 +575,7 @@ if __name__ == '__main__':
                  "tixiOpenDocument", "tixiOpenDocumentRecursive", "tixiOpenDocumentFromHTTP", "tixiImportFromString", "tixiCreateDocument",
                  "tixiSaveDocument", "tixiSaveCompleteDocument", "tixiSaveAndRemoveDocument", "tixiCloseDocument",
                  "tixiGetRawInterface", "tixiGetArrayValue", "tixiGetBooleanElement", "tixiAddBooleanElement",
-                 "tixiCheckElement", "tixiCheckAttribute"]
+                 "tixiCheckElement", "tixiCheckAttribute", "tixiCloseAllDocuments"]
     allEnums = parseEnumParts(tixiFile, ["ReturnCode", "StorageMode", "OpenMode"])
     defs = parseMethodHeaders(tixiFile) # gets a list of 5-tuples
     

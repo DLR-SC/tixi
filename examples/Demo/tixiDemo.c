@@ -343,6 +343,7 @@ int main(int argc, char **argv)
   tixiCreateElementAtIndex(handle, "/plane", "numberOfPassengers", 2);
   tixiSaveDocument( handle, "out.xml" );
   tixiCloseDocument(handle);
+  tixiCleanup();
 
   return (0);
 }
