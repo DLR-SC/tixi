@@ -6,15 +6,15 @@ if(PYTHONINTERP_FOUND)
 	
 	#run python to create the wrapper
 		add_custom_command(
-			OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/tixiwrapper.py
+			OUTPUT ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
 			DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/make-wrapper.py
-			WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+			WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 			COMMAND ${PYTHON_EXECUTABLE}
 			ARGS ${CMAKE_CURRENT_BINARY_DIR}/make-wrapper.py
 		)
 
-		add_custom_target(tixiPython
+		add_custom_target(tixiPython ALL
 			COMMENT "Create python interface for tixi" VERBATIM 
-			DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tixiwrapper.py
+			DEPENDS ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
 		)
 endif()

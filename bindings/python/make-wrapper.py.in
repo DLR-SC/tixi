@@ -590,7 +590,7 @@ if __name__ == '__main__':
     
     s = functools.partial(setup,
             name = 'tixiwrapper',
-            version = '2011-01',
+            version = '2012-08',
             py_modules = ['tixiwrapper'],
             url = 'http://code.google.com/p/tixi/',
             author = 'Arne Bachmann',
