@@ -9,7 +9,7 @@ if(DOXYGEN_FOUND)
 		ARGS ${PROJECT_BINARY_DIR}/doc/Doxyfile
 	)
 
-	add_custom_target(html EXCLUDE_FROM_ALL
+	add_custom_target(html
 		DEPENDS ${PROJECT_BINARY_DIR}/doc/html/index.html
 	)
 
@@ -24,17 +24,17 @@ if(DOXYGEN_FOUND)
 			ARGS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
 		)
 
-		add_custom_target(pdf EXCLUDE_FROM_ALL
+		add_custom_target(pdf
 			COMMENT "Generating PDF documentation with latex" VERBATIM 
 			DEPENDS ${PROJECT_BINARY_DIR}/doc/latex/refman.pdf
 		)
 
-		add_custom_target(doc EXCLUDE_FROM_ALL
+		add_custom_target(doc
 			DEPENDS html pdf
 			COMMENT "Generating API documentation with Doxygen" VERBATIM 
 		)
 	else()
-		add_custom_target(doc EXCLUDE_FROM_ALL
+		add_custom_target(doc
 			DEPENDS html
 			COMMENT "Generating API documentation with Doxygen" VERBATIM 
 		)
