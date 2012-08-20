@@ -2,9 +2,9 @@
 * Copyright (C) 2007-2012 German Aerospace Center (DLR/SC)
 *
 * Created: 2012-08-13 Martin Siggel <martin.siggel@dlr.de>
-* Changed: $Id: tiximatlab.c 122 2012-08-10 07:35:30Z martinsiggel@gmail.com $ 
+* Changed: $Id$ 
 *
-* Version: $Revision: 122 $
+* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -41,14 +41,6 @@ extern "C" {
 #ifdef _MSC_VER
 #define snprintf _snprintf
 #endif
-
-/* just a macro that saves typing */
-#define RUN_IF_FUNCTION_IS(fname)             \
-    if(strcmp(functionName, #fname) == 0) {   \
-        mex_ ## fname(nlhs, plhs, nrhs, prhs);\
-        mxFree(functionName);                 \
-        return;                               \
-    }
 
 /*
  * helping function to convert matlab array into c-string 
@@ -839,6 +831,7 @@ void mex_tixiImportFromString(int nlhs, mxArray *plhs[], int nrhs, const mxArray
     // return the handle
     plhs[0] = mxCreateDoubleMatrix(1,1, mxREAL);
     *mxGetPr(plhs[0]) = handle;
+    mxFree(string);
 }
 
 void mex_tixiGetVectorSize(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -937,6 +930,34 @@ void mex_tixiRemoveElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
     handle = mxToInt(prhs[1]);
     mxToString(prhs[2],&xpath);
     handleTixiError(tixiRemoveElement(handle, xpath));
+    mxFree(xpath);
+}
+
+void mex_tixiRemoveAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    int handle = -1;
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiRemoveAttribute(handle, xpath, name): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xpath argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name);
+    handleTixiError(tixiRemoveAttribute(handle, xpath,name));
+    mxFree(name);
+    mxFree(xpath);
 }
 
 void mex_tixiGetFloatVector(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -1410,6 +1431,298 @@ void mex_tixiCheckDocumentHandle(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     }
 }
 
+void mex_tixiAddExternalLink(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * url  = NULL;
+    char * format= NULL;
+    int handle   = -1;
+
+    if(nrhs != 5){
+        mexErrMsgTxt("tixiAddExternalLink(handle, path, url, fileFormat): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid url.\n");
+
+    if(!mxIsChar(prhs[4]))
+        mexErrMsgTxt("Invalid file format.\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&url );
+    mxToString(prhs[4],&format);
+    handleTixiError(tixiAddExternalLink(handle, xpath, url, format));
+    mxFree(url);
+    mxFree(xpath);
+    mxFree(format);
+}
+
+
+void mex_tixiUsePrettyPrint(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    int handle = -1;
+    int prettyprint = 1;
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiUsePrettyPrint(handle, boolean): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsLogicalScalar(prhs[2]))
+        mexErrMsgTxt("Invalid prettyPrint argument\n");
+
+
+    handle = mxToInt(prhs[1]);
+    prettyprint = *mxGetLogicals(prhs[2]);
+    handleTixiError(tixiUsePrettyPrint(handle, prettyprint));
+}
+
+void mex_tixiXSLTransformationToFile(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xslfile = NULL;
+    char * resultfile  = NULL;
+    int handle   = -1;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiXSLTransformationToFile(handle, xslFilename, resultFileName): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xslFilename argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid resultFileName argument\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xslfile);
+    mxToString(prhs[3],&resultfile);
+
+    handleTixiError(tixiCheckAttribute (handle, xslfile, resultfile));
+    mxFree(xslfile);
+    mxFree(resultfile);
+}
+
+void mex_tixiXPathEvaluateNodeNumber(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xPathExpression = NULL;
+    int number   = 0;
+    int handle   = -1;
+
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiXPathEvaluateNodeNumber(handle, xPathExpression): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xslFilename argument\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xPathExpression);
+
+    handleTixiError(tixiXPathEvaluateNodeNumber(handle, xPathExpression, &number));
+    mxFree(xPathExpression);
+
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    *mxGetPr(plhs[0]) = (double) number;
+}
+
+
+void mex_tixiXPathExpressionGetTextByIndex(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xPathExpression = NULL;
+    char * text            = NULL; /* out */
+    int number   = 0;
+    int handle   = -1;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiXPathExpressionGetTextByIndex(handle, xPathExpression, elementNumber): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xslFilename argument\n");
+
+    if(!isscalar(prhs[3]) || mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid number argument");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xPathExpression);
+    number = (int) *mxGetPr(prhs[3]);
+
+    handleTixiError(tixiXPathExpressionGetTextByIndex(handle, xPathExpression, number, &text));
+    mxFree(xPathExpression);
+
+    plhs[0] = mxCreateString(text);
+}
+
+
+/*
+ We return true or false if uid is not duplicated/duplicated. If something else happened we
+ throw an exception.
+*/
+void mex_tixiUIDCheckDuplicates(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    int handle   = -1;
+    ReturnCode ret = SUCCESS;
+
+    if(nrhs != 2){
+        mexErrMsgTxt("tixiUIDCheckDuplicates(handle): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    handle = mxToInt(prhs[1]);
+
+    ret = tixiUIDCheckDuplicates(handle);
+
+    if(ret == SUCCESS){
+        plhs[0] = mxCreateLogicalScalar(1);
+    }
+    else if(ret == UID_NOT_UNIQUE){
+        plhs[0] = mxCreateLogicalScalar(0);
+    }
+    else {
+        handleTixiError(ret);
+    }
+}
+
+void mex_tixiUIDCheckLinks(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    int handle   = -1;
+
+    if(nrhs != 2){
+        mexErrMsgTxt("tixiUIDCheckLinks(handle): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    handle = mxToInt(prhs[1]);
+
+    handleTixiError(tixiUIDCheckDuplicates(handle));
+}
+
+/*
+ We return true or false if uid is exists/not exists. If something else happened we
+ throw an exception.
+*/
+void mex_tixiUIDCheckExists(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    int handle   = -1;
+    char * uid    = NULL;
+    ReturnCode ret = SUCCESS;
+
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiUIDCheckExists(handle, uid): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid uid\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&uid);
+
+    ret = tixiUIDCheckExists(handle, uid);
+    mxFree(uid);
+
+    if(ret == SUCCESS){
+        plhs[0] = mxCreateLogicalScalar(1);
+    }
+    else if(ret == UID_DONT_EXISTS){
+        plhs[0] = mxCreateLogicalScalar(0);
+    }
+    else {
+        handleTixiError(ret);
+    }
+}
+
+
+/*
+ We return true or false if uid is exists/not exists. If something else happened we
+ throw an exception.
+*/
+void mex_tixiUIDGetXPath(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    int handle   = -1;
+    char * uid    = NULL;
+    char * xpath  = NULL;
+
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiUIDGetXPath(handle, uid): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid uid\n");
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&uid);
+
+    handleTixiError(tixiUIDGetXPath(handle, uid, &xpath));
+    mxFree(uid);
+
+    plhs[0] = mxCreateString(xpath);
+}
+
+/*
+ We return true or false if uid is exists/not exists. If something else happened we
+ throw an exception.
+*/
+void mex_tixiUIDSetToXPath(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    int handle   = -1;
+    char * uid    = NULL;
+    char * xpath  = NULL;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiUIDSetToXPath(handle, xpath, uid): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xpath\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid UID\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&uid);
+
+    handleTixiError(tixiUIDSetToXPath(handle, xpath, uid));
+    mxFree(uid);
+    mxFree(xpath);
+}
+
+static void mex_closeTixi(){
+    mexPrintf("Closing tixi...\n");
+    tixiCleanup();
+}
+
 /*
  * main entry point for MATLAB
  * deals as a dispatcher here
@@ -1421,8 +1734,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       mexErrMsgTxt("No function argument given!");
       return;
   }
-    
+  
+  mexAtExit(mex_closeTixi);
   mxToString(prhs[0],&functionName);
+
+  /* just a macro that saves typing */
+#define RUN_IF_FUNCTION_IS(fname)           \
+  if(strcmp(functionName, #fname) == 0) {   \
+      mex_ ## fname(nlhs, plhs, nrhs, prhs);\
+      mxFree(functionName);                 \
+      return;                               \
+  }
 
   RUN_IF_FUNCTION_IS(tixiOpenDocument)
   RUN_IF_FUNCTION_IS(tixiOpenDocumentRecursive)
@@ -1445,11 +1767,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   RUN_IF_FUNCTION_IS(tixiAddIntegerElement)
   RUN_IF_FUNCTION_IS(tixiAddTextElementAtIndex)
   RUN_IF_FUNCTION_IS(tixiRemoveElement)
+  RUN_IF_FUNCTION_IS(tixiRemoveAttribute)
   RUN_IF_FUNCTION_IS(tixiSaveDocument)
   RUN_IF_FUNCTION_IS(tixiSaveCompleteDocument)
   RUN_IF_FUNCTION_IS(tixiSaveAndRemoveDocument)
   RUN_IF_FUNCTION_IS(tixiExportDocumentAsString)
-  RUN_IF_FUNCTION_IS(tixiGetVectorSize)
+  RUN_IF_FUNCTION_IS(tixiImportFromString)
   RUN_IF_FUNCTION_IS(tixiGetVectorSize)
   RUN_IF_FUNCTION_IS(tixiGetFloatVector)
   RUN_IF_FUNCTION_IS(tixiAddFloatVector)
@@ -1462,7 +1785,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   RUN_IF_FUNCTION_IS(tixiGetPoint)
   RUN_IF_FUNCTION_IS(tixiAddTextAttribute)
   RUN_IF_FUNCTION_IS(tixiAddIntegerAttribute)
-  RUN_IF_FUNCTION_IS(tixiAddIntegerAttribute)
+  RUN_IF_FUNCTION_IS(tixiAddDoubleAttribute)
   RUN_IF_FUNCTION_IS(tixiGetTextAttribute)
   RUN_IF_FUNCTION_IS(tixiGetIntegerAttribute)
   RUN_IF_FUNCTION_IS(tixiGetDoubleAttribute)
@@ -1470,7 +1793,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   RUN_IF_FUNCTION_IS(tixiCheckElement)
   RUN_IF_FUNCTION_IS(tixiCheckAttribute)
   RUN_IF_FUNCTION_IS(tixiCheckDocumentHandle)
-  
+  RUN_IF_FUNCTION_IS(tixiAddExternalLink)
+  RUN_IF_FUNCTION_IS(tixiUsePrettyPrint)
+  RUN_IF_FUNCTION_IS(tixiXSLTransformationToFile)
+  RUN_IF_FUNCTION_IS(tixiXPathEvaluateNodeNumber)
+  RUN_IF_FUNCTION_IS(tixiXPathExpressionGetTextByIndex)
+  RUN_IF_FUNCTION_IS(tixiUIDCheckDuplicates)
+  RUN_IF_FUNCTION_IS(tixiUIDCheckLinks)
+  RUN_IF_FUNCTION_IS(tixiUIDCheckExists)
+  RUN_IF_FUNCTION_IS(tixiUIDGetXPath)
+  RUN_IF_FUNCTION_IS(tixiUIDSetToXPath)
+
   {
       // this is only executed if the function could not be identified
       char text[255];
