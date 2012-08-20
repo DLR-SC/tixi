@@ -1,0 +1,2 @@
+LIBRARY "tixi_matlab"
+EXPORTS mexFunction
