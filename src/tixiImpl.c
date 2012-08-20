@@ -2975,6 +2975,9 @@ DLL_EXPORT ReturnCode tixiUIDCheckDuplicates(TixiDocumentHandle handle)
 {
 	TixiDocument *document = getDocument(handle);
 
+	if(!document)
+		return INVALID_HANDLE;
+
 	// if the UID list is already set, delete and rebuild it.
 	if(document->uidListHead) {
 		uid_clearUIDList(document);
