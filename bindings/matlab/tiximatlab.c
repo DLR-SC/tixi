@@ -19,6 +19,12 @@
 * limitations under the License.
 */
 
+/* Visual Studio C macros */
+#ifdef _MSC_VER
+  #define _CRT_SECURE_NO_WARNINGS
+  #define snprintf _snprintf
+#endif
+
 #include <math.h>
 #include <matrix.h>
 #include <mex.h>
@@ -35,11 +41,6 @@ extern "C" {
 
 #if defined(WIN32)
 #define MEX_EXPORT __declspec(dllexport)
-#endif
-
-/* Visual Studio C macros */
-#ifdef _MSC_VER
-#define snprintf _snprintf
 #endif
 
 /*
@@ -1718,7 +1719,7 @@ void mex_tixiUIDSetToXPath(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
     mxFree(xpath);
 }
 
-static void mex_closeTixi(){
+void mex_closeTixi(void){
     mexPrintf("Closing tixi...\n");
     tixiCleanup();
 }

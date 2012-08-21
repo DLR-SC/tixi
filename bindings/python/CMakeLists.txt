@@ -17,4 +17,8 @@ if(PYTHONINTERP_FOUND)
 			COMMENT "Create python interface for tixi" VERBATIM 
 			DEPENDS ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
 		)
+		
+		install(FILES ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py 
+				DESTINATION share/tixi/python
+				COMPONENT interfaces)
 endif()

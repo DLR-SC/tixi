@@ -12,27 +12,39 @@ if(DOXYGEN_FOUND)
 	add_custom_target(html
 		DEPENDS ${PROJECT_BINARY_DIR}/doc/html/index.html
 	)
+	
+	install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/html
+			DESTINATION	share/doc/tixi
+			COMPONENT docu
+			OPTIONAL)
 
 	find_program(LATEX pdflatex)
 
 	if(LATEX)
 		add_custom_command(
-			OUTPUT ${PROJECT_BINARY_DIR}/doc/latex/refman.pdf
+			OUTPUT ${PROJECT_BINARY_DIR}/doc/tixi.pdf
 			DEPENDS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
 			WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/doc/latex/		
 			COMMAND ${LATEX}
 			ARGS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
+			COMMAND ${CMAKE_COMMAND}
+			ARGS -E copy ${PROJECT_BINARY_DIR}/doc/latex/refman.pdf ${PROJECT_BINARY_DIR}/doc/tixi.pdf
 		)
 
 		add_custom_target(pdf
 			COMMENT "Generating PDF documentation with latex" VERBATIM 
-			DEPENDS ${PROJECT_BINARY_DIR}/doc/latex/refman.pdf
+			DEPENDS ${PROJECT_BINARY_DIR}/doc/tixi.pdf
 		)
 
 		add_custom_target(doc
 			DEPENDS html pdf
 			COMMENT "Generating API documentation with Doxygen" VERBATIM 
 		)
+		
+		install(FILES ${PROJECT_BINARY_DIR}/doc/tixi.pdf 
+				DESTINATION	share/doc/tixi
+				COMPONENT docu
+				OPTIONAL)
 	else()
 		add_custom_target(doc
 			DEPENDS html

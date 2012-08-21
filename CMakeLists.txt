@@ -11,7 +11,9 @@ endif()
 
 project (TIXI)
 
-set(TIXI_VERSION "2.0")
+set(TIXI_VERSION_MAJOR 2)
+set(TIXI_VERSION_MINOR 0)
+set(TIXI_VERSION "${TIXI_VERSION_MAJOR}.${TIXI_VERSION_MINOR}")
 
 set(ADD_INCLUDE_PATH "" CACHE PATH "Additional include path for package search")
 set(ADD_LIB_PATH "" CACHE PATH     "Additional library path for package search")
@@ -42,3 +44,17 @@ add_subdirectory(examples/Demo)
 # create the doc
 include(createDoc)
 
+INCLUDE(InstallRequiredSystemLibraries)
+
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Martin Siggel") #required for debian/ubuntu
+set(CPACK_PACKAGE_VENDOR "www.dlr.de/sc")
+set(CPACK_PACKAGE_VERSION ${TIXI_VERSION})
+set(CPACK_PACKAGE_VERSION_MAJOR ${TIXI_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${TIXI_VERSION_MINOR})
+set(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/LICENSE)
+
+include(CPack)
+cpack_add_component(libraries DISPLAY_NAME "Tixi Library")
+cpack_add_component(headers DISPLAY_NAME "Headers" DEPENDS libraries)
+cpack_add_component(interfaces DISPLAY_NAME "Interfaces/Bindings" DEPENDS libraries)
+cpack_add_component(docu DISPLAY_NAME "Documentation" DEPENDS libraries)
