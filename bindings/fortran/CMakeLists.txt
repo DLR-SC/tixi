@@ -32,7 +32,7 @@ else()
 	add_library(TIXIf STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
 	set_target_properties(TIXIf PROPERTIES VERSION ${TIXI_VERSION})
 	install (TARGETS TIXIf 
-			DESTINATION lib
+			DESTINATION ${CMAKE_INSTALL_LIBDIR}
 			COMPONENT interfaces)
 	install (FILES tixi77.h 
 			DESTINATION include

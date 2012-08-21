@@ -22,7 +22,7 @@ target_link_libraries (TIXI  ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES
 set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})
 
 install (TARGETS TIXI 
-		 DESTINATION lib
+		 DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		 COMPONENT libraries)
 install (FILES tixi.h 
 		 DESTINATION include
