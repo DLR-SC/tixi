@@ -13,6 +13,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_definitions(-DDEBUG) 
 endif()
 
+add_definitions(-DTIXI_VERSION=\"${TIXI_VERSION}\")
+
 if(CMAKE_COMPILER_IS_GNUCC)
 	set(CMAKE_C_FLAGS "-Wall -fmessage-length=0")
 endif()
@@ -22,8 +24,11 @@ target_link_libraries (TIXI  ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES
 set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})
 
 install (TARGETS TIXI 
-		 DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+		 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		 COMPONENT libraries)
 install (FILES tixi.h 
 		 DESTINATION include
 		 COMPONENT headers)
+

@@ -30,7 +30,9 @@
 
 #include "libxml/xmlreader.h"
 
+#ifndef TIXI_VERSION
 #define TIXI_VERSION  "2.0"
+#endif
 
 #define CPACS_UID_ATTRIBUTE_STRING 		"uID"
 #define CPACS_UID_XPATH 				"//@uID"
@@ -173,8 +175,6 @@ typedef enum InternalSaveModeType
 #if WIN32
 /* this is the name for mingw gcc's and MSVC */
 #define VSNPRINTF _vsnprintf
-#include <direct.h>
-#define mkdir _mkdir
 #else
 /* this is the posix name */
 #define VSNPRINTF vsnprintf

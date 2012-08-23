@@ -364,7 +364,7 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPath,
 
 
 ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char *pointPath,
-                              const int pointIndex, char *name, int ignoreError, double *value)
+                              int pointIndex, char *name, int ignoreError, double *value)
 {
   xmlNodePtr coordinate = NULL;
   ReturnCode error = -1;
@@ -1143,7 +1143,7 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
     char *textPtr = NULL;
     char *tmpText = NULL;
     char *nodeName = NULL;
-    int size = 0;
+    size_t size = 0;
     generatedXPath = malloc(1 * sizeof(char));
     generatedXPath[0] = '\0';
 

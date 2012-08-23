@@ -65,7 +65,7 @@ int create_local_directory(const char *dirname) {
 
 int string_startsWith(char *string, char *subString)
 {
-    int len = strlen(subString);
+    size_t len = strlen(subString);
 
     if (my_strncasecmp(string, subString, len) == 0) {
             return (0);
@@ -183,7 +183,7 @@ char* string_stripLeft(char* string, int len)
 {
     char *resultString = NULL;
     int x = 0;
-    int stringLength = 0;
+    size_t stringLength = 0;
     int y = 0;
 
     stringLength = strlen(string);
