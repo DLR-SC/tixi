@@ -58,9 +58,14 @@ set(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/LICENSE)
 
 # set path variable for installer
 set(CPACK_NSIS_MODIFY_PATH ON)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+else()
+  set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
+endif()
 
 include(CPack)
-cpack_add_component(libraries DISPLAY_NAME "Tixi Library")
-cpack_add_component(headers DISPLAY_NAME "Headers" DEPENDS libraries)
-cpack_add_component(interfaces DISPLAY_NAME "Interfaces/Bindings" DEPENDS libraries)
-cpack_add_component(docu DISPLAY_NAME "Documentation" DEPENDS libraries)
+cpack_add_component(Runtime DISPLAY_NAME "3rd Party Libraries")
+cpack_add_component(headers DISPLAY_NAME "Headers")
+cpack_add_component(interfaces DISPLAY_NAME "Interfaces/Bindings")
+cpack_add_component(docu DISPLAY_NAME "Documentation")

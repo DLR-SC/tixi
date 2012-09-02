@@ -333,7 +333,33 @@ int main(int argc, char **argv)
 {
 
   char *xmlInputFilename = "howtoin.xml";
+  char *docString = NULL;
+  double * myFloat = NULL;
+  int i = 0;
   TixiDocumentHandle handle;
+
+  printf("TIXI Demo\n\n");
+  printf("Using TIXI %s\n", tixiGetVersion());
+
+  //create xml doc
+  tixiCreateDocument("MyRoot", &handle);
+  tixiAddHeader(handle, "tixiDemo", tixiGetVersion(), "Martin Siggel");
+  tixiAddIntegerElement(handle ,"/MyRoot", "MyInt", 1234, "%d");
+
+  //add float vector
+  myFloat = (double*) malloc(sizeof(double)*20);
+  for(i = 0; i < 20; ++i) myFloat[i] = (double)i*i;
+  tixiAddFloatVector(handle, "/MyRoot","MyFloatVector", myFloat, 20);
+
+
+  //print doc
+  tixiExportDocumentAsString(handle, &docString);
+  printf("%s", docString);
+
+  //write to file
+  tixiSaveDocument(handle, "MyFile.xml");
+  tixiCloseDocument(handle);
+  handle = 0;
 
 
   if(tixiOpenDocument(xmlInputFilename, &handle) != SUCCESS){
