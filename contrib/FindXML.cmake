@@ -36,7 +36,7 @@ FIND_LIBRARY(XML_LIBRARY NAMES
 MARK_AS_ADVANCED(XML_LIBRARY)
 
 IF(XML_INCLUDE_DIR)
-  FOREACH(_xml_version_header xmlversion)
+  FOREACH(_xml_version_header xmlversion.h)
     IF(EXISTS "${XML_INCLUDE_DIR}/libxml/${_xml_version_header}")
       FILE(STRINGS "${XML_INCLUDE_DIR}/libxml/${_xml_version_header}" xml_version_str REGEX "^#define[\t ]+LIBXML_DOTTED_VERSION[\t ]+\".*\"")
 
