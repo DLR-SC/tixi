@@ -21,10 +21,13 @@ if(DOXYGEN_FOUND)
 	find_program(LATEX pdflatex)
 
 	if(LATEX)
+	    # run latex twice to fix links
 		add_custom_command(
 			OUTPUT ${PROJECT_BINARY_DIR}/doc/tixi.pdf
 			DEPENDS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
 			WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/doc/latex/		
+			COMMAND ${LATEX}
+			ARGS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
 			COMMAND ${LATEX}
 			ARGS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
 			COMMAND ${CMAKE_COMMAND}
