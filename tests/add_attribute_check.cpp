@@ -21,7 +21,7 @@
 
 #include "test.h" // Brings in the GTest framework
 
-#include "tixiInternal.h"
+#include "tixi.h"
 
 
 /** 
