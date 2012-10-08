@@ -37,7 +37,7 @@ add_subdirectory(src)
 #create bindings to different languages (fortran, java ...)
 add_subdirectory(bindings)
 
-#create tests
+#create gtests
 SET (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
 ADD_SUBDIRECTORY (${gtest_SOURCE_DIR})
 enable_testing()
