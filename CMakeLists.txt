@@ -38,6 +38,10 @@ add_subdirectory(src)
 add_subdirectory(bindings)
 
 #create tests
+SET (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
+ADD_SUBDIRECTORY (${gtest_SOURCE_DIR})
+enable_testing()
+INCLUDE_DIRECTORIES("${gtest_SOURCE_DIR}/include" ${gtest_SOURCE_DIR})
 add_subdirectory(tests)
 
 #demos
