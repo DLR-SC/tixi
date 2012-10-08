@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.cdt.testsrunner.launch.testsRunner">
+<stringAttribute key="bad_container_name" value="/TIXI/eclipse/j"/>
+<intAttribute key="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR" value="0"/>
+<stringAttribute key="org.eclipse.cdt.launch.COREFILE_PATH" value=""/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="build/Testing/TIXI-unittests"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="TIXI"/>
+<booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="true"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="cdt.managedbuild.toolchain.gnu.base.285396906"/>
+<stringAttribute key="org.eclipse.cdt.launch.TESTS_RUNNER" value="org.eclipse.cdt.testsrunner.gtest"/>
+<stringAttribute key="org.eclipse.cdt.launch.WORKING_DIRECTORY" value="${workspace_loc:TIXI/build/tests}"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/TIXI"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+</launchConfiguration>

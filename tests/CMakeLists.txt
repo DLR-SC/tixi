@@ -8,7 +8,7 @@ IF (NOT CMAKE_CROSSCOMPILING)
     LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
     ADD_EXECUTABLE(${test_BIN} ${test_SRCS} )
     TARGET_LINK_LIBRARIES(${test_BIN} ${test_LIBS})
-    ADD_CUSTOM_TARGET(check ALL "${test_BIN}" DEPENDS ${test_BIN} COMMENT "Executing unit tests..." VERBATIM SOURCES ${test_SRCS})
+    ADD_CUSTOM_TARGET(check "${test_BIN}" DEPENDS ${test_BIN} COMMENT "Executing unit tests..." VERBATIM SOURCES ${test_SRCS})
     ADD_CUSTOM_TARGET(test "${test_BIN}" DEPENDS ${test_BIN} COMMENT "Executing unit tests..." VERBATIM SOURCES ${test_SRCS})
 ENDIF (NOT CMAKE_CROSSCOMPILING)
 
