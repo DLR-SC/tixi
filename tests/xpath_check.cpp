@@ -22,7 +22,6 @@
 #include "test.h" // Brings in the GTest framework
 
 #include "tixi.h"
-// #include "tixiInternal.h"
  
 static char* xmlFilename = "TestData/xpaths.xml";
 static char *elementPathExists = "/root/a[@uID=\"test\"]/b[@uID=\"b\"]";
