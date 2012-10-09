@@ -29,6 +29,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION share/tixi
 		PATTERN "*.h"   EXCLUDE
 		PATTERN "*.c"   EXCLUDE
 		PATTERN "*.def" EXCLUDE
+		PATTERN ".svn*" EXCLUDE
 		)
 
 endif() # matlab found

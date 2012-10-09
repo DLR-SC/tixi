@@ -5,6 +5,19 @@ SET (test_LIBS gtest TIXI)
 SET (test_BIN ${PROJECT_NAME}-unittests)
 
 IF (NOT CMAKE_CROSSCOMPILING)
+    
+    if(MSVC)
+        #We statically link to reduce dependancies
+        foreach(flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+          if(${flag_var} MATCHES "/MD")
+            string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+          endif(${flag_var} MATCHES "/MD")
+          if(${flag_var} MATCHES "/MDd")
+            string(REGEX REPLACE "/MDd" "/MTd" ${flag_var} "${${flag_var}}")
+          endif(${flag_var} MATCHES "/MDd")
+        endforeach(flag_var)
+    endif(MSVC)
+
     LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
     ADD_EXECUTABLE(${test_BIN} ${test_SRCS} )
     TARGET_LINK_LIBRARIES(${test_BIN} ${test_LIBS})
