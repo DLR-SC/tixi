@@ -26,7 +26,7 @@ extern "C" {
   #if defined (TIXI_EXPORTS)
     #define DLL_EXPORT __declspec (dllexport)
   #else
-    #define DLL_EXPORT __declspec (dllimport)
+    #define DLL_EXPORT 
   #endif
 #else
     #define DLL_EXPORT

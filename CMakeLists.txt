@@ -38,11 +38,13 @@ add_subdirectory(src)
 add_subdirectory(bindings)
 
 #create gtests
-SET (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
-ADD_SUBDIRECTORY (${gtest_SOURCE_DIR})
-enable_testing()
-INCLUDE_DIRECTORIES("${gtest_SOURCE_DIR}/include" ${gtest_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${XML_INCLUDE_DIRS})
-add_subdirectory(tests)
+IF(CMAKE_COMPILER_IS_GNUCC)
+    SET (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
+    ADD_SUBDIRECTORY (${gtest_SOURCE_DIR})
+    enable_testing()
+    INCLUDE_DIRECTORIES("${gtest_SOURCE_DIR}/include" ${gtest_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${XML_INCLUDE_DIRS})
+    add_subdirectory(tests)
+ENDIF()
 
 #demos
 add_subdirectory(examples/Demo)
