@@ -49,7 +49,7 @@ TEST_F(GetElementTests, getEmptyElement)
     char* elementPath = "/plane/empty";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == SUCCESS );
     if ( text ) {
-        ASSERT_TRUE( text == "");
+        ASSERT_TRUE( !strcmp(text, ""));
     }
 }
 
@@ -59,7 +59,7 @@ TEST_F(GetElementTests, getElementText)
     char* elementPath = "/plane/name";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == SUCCESS );
     if ( text ) {
-        ASSERT_TRUE( text == "Junkers JU 52");
+        ASSERT_TRUE( !strcmp(text, "Junkers JU 52"));
     }
 }
 
@@ -80,7 +80,7 @@ TEST_F(GetElementTests, invalidHandle)
 TEST_F(GetElementTests, invalidXPath)
 {
     char* text = NULL;
-    char* elementPath = "cc/plane/name/pp";
+    char* elementPath = "cc/plane/na|<<me/pp";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == INVALID_XPATH );
 }
 
@@ -105,7 +105,7 @@ TEST_F(GetElementTests, usedIndexedPath)
 
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == SUCCESS );
     if ( text ) {
-        ASSERT_TRUE( text == "30.0");
+        ASSERT_TRUE( !strcmp(text, "30.0"));
     }
 }
 
