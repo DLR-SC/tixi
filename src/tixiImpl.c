@@ -702,7 +702,7 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromString(const TixiDocumentHandle hand
 	xmlDocPtr schema_doc;
 
 	schema_doc = xmlReadMemory(xsdString, (int) strlen(xsdString), NULL, NULL, 0);
-	return( validateSchema(handle, &schema_doc));
+	return(validateSchema(handle, &schema_doc));
 }
 
 

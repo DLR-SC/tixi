@@ -69,3 +69,16 @@ TEST(opendocument_checks, open_http_url)
     ASSERT_TRUE( documentHandle != -1 );
     tixiCloseDocument( documentHandle );
 }
+
+TEST(opendocument_checks, open_http_url_not_valid)
+{
+    TixiDocumentHandle documentHandle = -1;
+    char* xmlUrl = "http://a/b";
+
+    ASSERT_TRUE( tixiOpenDocumentFromHTTP( xmlUrl, &documentHandle ) != SUCCESS );
+    ASSERT_TRUE( documentHandle == -1 );
+    tixiCloseDocument( documentHandle );
+}
+
+
+

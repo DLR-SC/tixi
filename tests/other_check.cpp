@@ -151,3 +151,12 @@ TEST_F(OtherTests, createMatrix)
     ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "onebyfour", "row", "column", 1, 4) == SUCCESS);
     ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourby fourCol", "row", "column", 4, 4) == INVALID_XML_NAME);
 }
+
+TEST(VersionTests, get_Version_notNull) {
+	char *version = tixiGetVersion();
+	ASSERT_TRUE(version != NULL);
+	ASSERT_GE(atof(version), 0.1);
+	ASSERT_LT(atof(version), 100.0);
+}
+
+

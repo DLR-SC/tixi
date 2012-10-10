@@ -42,8 +42,40 @@ class ValidateSchemaTests : public ::testing::Test {
   }
 };
 
-TEST_F(ValidateSchemaTests, tixiValidateSchema)
+TEST_F(ValidateSchemaTests, tixiValidateSchemaFromFile)
 {
     char* schemaFilename = "TestData/valid_cpacs_schema.xsd";
     ASSERT_TRUE( tixiSchemaValidateFromFile( documentHandle, schemaFilename ) == SUCCESS);
+}
+
+TEST_F(ValidateSchemaTests, tixiValidateSchemaFromFile_notAFile)
+{
+    char* schemaFilename = "TestData/InvaLid_ScheMa_fIleE_nAmE.xsd";
+    ASSERT_TRUE( tixiSchemaValidateFromFile( documentHandle, schemaFilename ) == OPEN_SCHEMA_FAILED);
+}
+
+TEST_F(ValidateSchemaTests, tixiValidateSchemaFromString)
+{
+    long f_size = 0;
+    char* schemaString = NULL;
+    char* schemaFilename = "TestData/valid_cpacs_schema.xsd";
+
+    // read schema file into string
+    FILE* fp = fopen(schemaFilename, "r");
+    fseek(fp, 0, SEEK_END);
+    f_size = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    schemaString = (char*)malloc(sizeof(char) * f_size);
+    fread(schemaString, 1, f_size, fp);
+
+    ASSERT_TRUE( tixiSchemaValidateFromString( documentHandle, schemaString ) == SUCCESS);
+    free(schemaString);
+}
+
+TEST_F(ValidateSchemaTests, tixiValidateSchemaFromString_not_A_Schema)
+{
+    long f_size = 0;
+    char* schemaString = "<this_is_not_a_valid_schema><<>";
+
+    ASSERT_TRUE( tixiSchemaValidateFromString( documentHandle, schemaString ) == OPEN_SCHEMA_FAILED);
 }
