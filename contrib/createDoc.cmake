@@ -1,20 +1,20 @@
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-	configure_file(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/Doxyfile @ONLY)
-	configure_file(${PROJECT_SOURCE_DIR}/doc/footer.html ${PROJECT_BINARY_DIR}/doc/footer.html @ONLY)
+	configure_file(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile @ONLY)
+	configure_file(${PROJECT_SOURCE_DIR}/doc/doxygen/footer.html ${PROJECT_BINARY_DIR}/doc/doxygen/footer.html @ONLY)
 	add_custom_command(
-		OUTPUT ${PROJECT_BINARY_DIR}/doc/html/index.html
-		OUTPUT ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
+		OUTPUT ${PROJECT_BINARY_DIR}/doc/doxygen/html/index.html
+		OUTPUT ${PROJECT_BINARY_DIR}/doc/doxygen/latex/refman.tex
 		COMMAND ${DOXYGEN_EXECUTABLE}
-		ARGS ${PROJECT_BINARY_DIR}/doc/Doxyfile
+		ARGS ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile
 	)
 
 	add_custom_target(html
-		DEPENDS ${PROJECT_BINARY_DIR}/doc/html/index.html
+		DEPENDS ${PROJECT_BINARY_DIR}/doc/doxygen/html/index.html
 	)
 	
-	install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/html
-			DESTINATION	share/doc/tixi
+	install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/doxygen/html
+			DESTINATION	share/doc/doxygen/tixi
 			COMPONENT docu
 			OPTIONAL)
 
@@ -23,20 +23,20 @@ if(DOXYGEN_FOUND)
 	if(LATEX)
 	    # run latex twice to fix links
 		add_custom_command(
-			OUTPUT ${PROJECT_BINARY_DIR}/doc/tixi.pdf
-			DEPENDS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
-			WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/doc/latex/		
+			OUTPUT ${PROJECT_BINARY_DIR}/doc/doxygen/tixi.pdf
+			DEPENDS ${PROJECT_BINARY_DIR}/doc/doxygen/latex/refman.tex
+			WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/doc/doxygen/latex/		
 			COMMAND ${LATEX}
-			ARGS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
+			ARGS ${PROJECT_BINARY_DIR}/doc/doxygen/latex/refman.tex
 			COMMAND ${LATEX}
-			ARGS ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
+			ARGS ${PROJECT_BINARY_DIR}/doc/doxygen/latex/refman.tex
 			COMMAND ${CMAKE_COMMAND}
-			ARGS -E copy ${PROJECT_BINARY_DIR}/doc/latex/refman.pdf ${PROJECT_BINARY_DIR}/doc/tixi.pdf
+			ARGS -E copy ${PROJECT_BINARY_DIR}/doc/doxygen/latex/refman.pdf ${PROJECT_BINARY_DIR}/doc/doxygen/tixi.pdf
 		)
 
 		add_custom_target(pdf
 			COMMENT "Generating PDF documentation with latex" VERBATIM 
-			DEPENDS ${PROJECT_BINARY_DIR}/doc/tixi.pdf
+			DEPENDS ${PROJECT_BINARY_DIR}/doc/doxygen/tixi.pdf
 		)
 
 		add_custom_target(doc
@@ -44,8 +44,8 @@ if(DOXYGEN_FOUND)
 			COMMENT "Generating API documentation with Doxygen" VERBATIM 
 		)
 		
-		install(FILES ${PROJECT_BINARY_DIR}/doc/tixi.pdf 
-				DESTINATION	share/doc/tixi
+		install(FILES ${PROJECT_BINARY_DIR}/doc/doxygen/tixi.pdf 
+				DESTINATION	share/doc/doxygen/tixi
 				COMPONENT docu
 				OPTIONAL)
 	else()
