@@ -266,6 +266,7 @@ DLL_EXPORT ReturnCode tixiOpenDocument(char *xmlFilename, TixiDocumentHandle *ha
 DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (char *httpURL, TixiDocumentHandle *handle)
 {
     char* xmlDocument = NULL;
+    ReturnCode returnCode = FAILED;
 
     xmlKeepBlanksDefault(0);
 	xmlIndentTreeOutput = 1;
@@ -274,7 +275,10 @@ DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (char *httpURL, TixiDocumentHandl
     if(xmlDocument == NULL) {
         return OPEN_FAILED;
     }
-    return tixiImportFromString(xmlDocument, handle);
+
+    returnCode = tixiImportFromString(xmlDocument, handle);
+    free(xmlDocument);
+    return returnCode;
 }
 
 
