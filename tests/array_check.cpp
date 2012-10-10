@@ -99,9 +99,7 @@ TEST_F(ArrayTests, array_test_positive)
 
     // check parameter names
     names = (char **) malloc(pars * sizeof(char *));
-    for (par = 0; par < pars; par ++) {
-        names[par] = (char*) malloc((3 + 1) * sizeof(char));
-    }
+
     ASSERT_TRUE ( tixiGetArrayParameterNames(documentHandle, xPath, names) == SUCCESS);
     ASSERT_TRUE ( strcmp(names[0], "cfx") == 0 );
     ASSERT_TRUE ( strcmp(names[1], "cfy") == 0 );

@@ -76,6 +76,7 @@ int uid_buildUIDNodeList(TixiDocument* tixiDocument, xmlNodeSetPtr nodes)
     currentEntry = tixiDocument->uidListHead;
 
 	if (nodes->nodeNr == 0) {
+		free(tixiDocument->uidListHead);
 		tixiDocument->uidListHead = NULL;
 		return SUCCESS;
 	}

@@ -496,6 +496,7 @@ DLL_EXPORT ReturnCode tixiImportFromString (char *xmlImportString, TixiDocumentH
     fprintf(stderr, "Error: XML-string to import is not wellformed!\n");
     returnValue = NOT_WELL_FORMED;
   }
+  free(tixiFileName);
   return returnValue;
 }
 
@@ -2733,14 +2734,15 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
     xmlXPathObjectPtr xpathObject = NULL;
     xmlNodeSetPtr nodes = NULL;
     char *infix = "/*[@mapType=\"";
-    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1 + 4) * sizeof(char));
-
 
 
     if (!document || !document->docPtr) {
         fprintf(stderr, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
+
+    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1 + 4) * sizeof(char));
+
     xpathSubElementsName[0] = '\0';
     strcpy(xpathSubElementsName, arrayPath);
     strcat(xpathSubElementsName, infix);
@@ -2785,16 +2787,14 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
     xmlNodeSetPtr nodes = NULL;
     xmlNodePtr node = NULL;
     char *infix = "/*[@mapType=\"";    /* find all arrays in subelements of the given path */
-    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1) * sizeof(char));
     int elements,elem = 0;
-
-
 
     if (!document) {
         fprintf(stderr, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
+    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1) * sizeof(char));
     xpathSubElementsName[0] = '\0';
     strcpy(xpathSubElementsName, arrayPath);
     strcat(xpathSubElementsName, infix);
