@@ -223,7 +223,7 @@ html_last_updated_fmt = '%b %d, %Y'
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'negev'
+htmlhelp_basename = 'tixi'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -273,7 +273,7 @@ latex_show_pagerefs = True
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'negev', u'NeGeV: Developer Guide and Reference Documentation',
+    ('index', 'tixi', u'TIXI: Developer Guide and Reference Documentation',
      [u'http://dx.as.dlr.de'], 1)
 ]
 
@@ -304,7 +304,7 @@ epub_copyright = u'2012, DLR - German Aerospace Center'
 # The format is a list of tuples containing the path and title.
 #epub_pre_files = []
 
-# HTML files shat should be inserted after the pages created by sphinx.
+# HTML files that should be inserted after the pages created by sphinx.
 # The format is a list of tuples containing the path and title.
 #epub_post_files = []
 
