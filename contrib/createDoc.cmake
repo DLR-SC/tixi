@@ -9,7 +9,7 @@ if(DOXYGEN_FOUND)
 		ARGS ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile
 	)
 
-	add_custom_target(html
+	add_custom_target(api-html
 		DEPENDS ${PROJECT_BINARY_DIR}/doc/doxygen/html/index.html
 	)
 	
@@ -34,12 +34,12 @@ if(DOXYGEN_FOUND)
 			ARGS -E copy ${PROJECT_BINARY_DIR}/doc/doxygen/latex/refman.pdf ${PROJECT_BINARY_DIR}/doc/doxygen/tixi.pdf
 		)
 
-		add_custom_target(pdf
+		add_custom_target(api-pdf
 			COMMENT "Generating PDF documentation with latex" VERBATIM 
 			DEPENDS ${PROJECT_BINARY_DIR}/doc/doxygen/tixi.pdf
 		)
 
-		add_custom_target(doc
+		add_custom_target(api-doc
 			DEPENDS html pdf
 			COMMENT "Generating API documentation with Doxygen" VERBATIM 
 		)
@@ -49,7 +49,7 @@ if(DOXYGEN_FOUND)
 				COMPONENT docu
 				OPTIONAL)
 	else()
-		add_custom_target(doc
+		add_custom_target(api-doc
 			DEPENDS html
 			COMMENT "Generating API documentation with Doxygen" VERBATIM 
 		)

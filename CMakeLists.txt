@@ -49,6 +49,7 @@ add_subdirectory(examples/Demo)
 
 # create the doc
 include(createDoc)
+add_subdirectory(doc/handbook)
 
 INCLUDE(InstallRequiredSystemLibraries)
 
