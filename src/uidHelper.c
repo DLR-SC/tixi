@@ -195,6 +195,7 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 			fprintf(stderr, "Error: Broken link, UID '%s' not found!", linkName);
 			xmlXPathFreeObject(xpathObj);
 			xmlXPathFreeContext(xpathCtx);
+			xmlFree(linkName);
 			return UID_LINK_BROKEN;
 		}
 		xmlFree(linkName);

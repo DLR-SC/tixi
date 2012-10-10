@@ -1263,6 +1263,7 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
         return error;
     }
     free(textBuffer);
+    free(stringVector);
 
     return SUCCESS;
 }

@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+* ï¿½ ï¿½ http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -350,7 +350,7 @@ int main(int argc, char **argv)
   myFloat = (double*) malloc(sizeof(double)*20);
   for(i = 0; i < 20; ++i) myFloat[i] = (double)i*i;
   tixiAddFloatVector(handle, "/MyRoot","MyFloatVector", myFloat, 20);
-
+  free(myFloat);
 
   //print doc
   tixiExportDocumentAsString(handle, &docString);
