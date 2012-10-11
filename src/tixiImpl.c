@@ -2734,14 +2734,14 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
     xmlXPathObjectPtr xpathObject = NULL;
     xmlNodeSetPtr nodes = NULL;
     char *infix = "/*[@mapType=\"";
-
+    char *xpathSubElementsName = NULL;
 
     if (!document || !document->docPtr) {
         fprintf(stderr, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
-    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1 + 4) * sizeof(char));
+    xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1 + 4) * sizeof(char));
 
     xpathSubElementsName[0] = '\0';
     strcpy(xpathSubElementsName, arrayPath);
@@ -2788,13 +2788,14 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
     xmlNodePtr node = NULL;
     char *infix = "/*[@mapType=\"";    /* find all arrays in subelements of the given path */
     int elements,elem = 0;
+    char *xpathSubElementsName = NULL;
 
     if (!document) {
         fprintf(stderr, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
-    char *xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1) * sizeof(char));
+    xpathSubElementsName = (char *) malloc((strlen(arrayPath) + strlen(infix) + strlen(elementType) + 2 + 1) * sizeof(char));
     xpathSubElementsName[0] = '\0';
     strcpy(xpathSubElementsName, arrayPath);
     strcat(xpathSubElementsName, infix);
