@@ -68,6 +68,7 @@ TEST_F(GetElementTests, elementNotFound)
     char* text = NULL;
     char* elementPath = "/plane/name/pp";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == ELEMENT_NOT_FOUND );
+    ASSERT_TRUE( text == NULL );
 }
 
 TEST_F(GetElementTests, invalidHandle)
