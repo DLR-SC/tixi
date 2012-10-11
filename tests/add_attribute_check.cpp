@@ -25,7 +25,7 @@
 
 
 /** 
-    @test Tests for addElement routines.
+    @test Tests for addattribute routines.
 */   
 
 static TixiDocumentHandle documentHandle = -1;
