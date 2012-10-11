@@ -37,12 +37,12 @@ add_subdirectory(src)
 #create bindings to different languages (fortran, java ...)
 add_subdirectory(bindings)
 
-#create gtests
-SET (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
-ADD_SUBDIRECTORY (${gtest_SOURCE_DIR})
-enable_testing()
-INCLUDE_DIRECTORIES("${gtest_SOURCE_DIR}/include" ${gtest_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${XML_INCLUDE_DIRS})
-add_subdirectory(tests)
+#create gtests, override gtest standard setting
+option(gtest_force_shared_crt "" ON)
+mark_as_advanced(gtest_force_shared_crt)
+set (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
+add_subdirectory (${gtest_SOURCE_DIR} EXCLUDE_FROM_ALL)
+add_subdirectory(tests EXCLUDE_FROM_ALL)
 
 #demos
 add_subdirectory(examples/Demo)
