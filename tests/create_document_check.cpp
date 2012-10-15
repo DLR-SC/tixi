@@ -7,7 +7,7 @@
 
 #include "tixi.h"
 
-TEST(createDocument, noElementName) // Declares a test named "sanity_check"
+TEST(createDocument, noElementName)
 {
     char* rootElementName = NULL;
     TixiDocumentHandle handle = -1;
@@ -15,7 +15,7 @@ TEST(createDocument, noElementName) // Declares a test named "sanity_check"
     ASSERT_TRUE( tixiCreateDocument( rootElementName, &handle ) == NO_ELEMENT_NAME );
 }
 
-TEST(createDocument, invalidRootNodeName) // Declares a test named "sanity_check"
+TEST(createDocument, invalidRootNodeName)
 {
     char* rootElementName = "1";
     TixiDocumentHandle handle = -1;
@@ -23,7 +23,7 @@ TEST(createDocument, invalidRootNodeName) // Declares a test named "sanity_check
     ASSERT_TRUE( tixiCreateDocument( rootElementName, &handle ) == INVALID_XML_NAME );
 }
 
-TEST(createDocument, createDocumentSuccess) // Declares a test named "sanity_check"
+TEST(createDocument, createDocumentSuccess)
 {
     char* rootElementName = "rootElement";
     TixiDocumentHandle handle = -1;
@@ -36,7 +36,7 @@ TEST(createDocument, createDocumentSuccess) // Declares a test named "sanity_che
     }
 }
 
-TEST(createDocument, createDocumentAddHeader) // Declares a test named "sanity_check"
+TEST(createDocument, createDocumentAddHeader)
 {
     char* rootElementName = "rootElement";
     TixiDocumentHandle handle = -1;
@@ -53,5 +53,32 @@ TEST(createDocument, createDocumentAddHeader) // Declares a test named "sanity_c
         ASSERT_TRUE( system("diff -w tmp.xml TestData/documentWithHeaderReference.xml" ) == 0 );
 #endif /* __unix__ */
     }
+}
+
+TEST(createDocument, createDocumentAddCPACSHeader)
+{
+    char* rootElementName = "rootElement";
+    char* cpacsName = "cpacsName";
+    char* cpacsCreator = "cpacsCreator";
+    char* cpacsVersion = "cpacsVersion";
+    char* cpacsDescription = "cpacsDescription";
+    TixiDocumentHandle handle = -1;
+    char *text = NULL;
+
+    ASSERT_TRUE( tixiCreateDocument( rootElementName, &handle ) == SUCCESS );
+    ASSERT_TRUE( tixiAddCpacsHeader( handle, cpacsName, cpacsCreator, cpacsVersion, cpacsDescription ) == SUCCESS );
+
+    // Now check the different header values
+    ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/name", &text ) == SUCCESS );
+    ASSERT_TRUE( !strcmp(text, cpacsName));
+
+    ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/creator", &text ) == SUCCESS );
+    ASSERT_TRUE( !strcmp(text, cpacsCreator));
+
+    ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/version", &text ) == SUCCESS );
+    ASSERT_TRUE( !strcmp(text, cpacsVersion));
+
+    ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/description", &text ) == SUCCESS );
+    ASSERT_TRUE( !strcmp(text, cpacsDescription));
 }
 

@@ -185,3 +185,38 @@ TEST_F(AddElementTests, addElement_addMatrixOfPoints)
         ASSERT_TRUE(tixiAddPoint(documentHandle, entryPath, x, y, z, NULL) == SUCCESS);
     }
 }
+
+TEST_F(AddElementTests, addElement_addTextElementAtIndex)
+{
+    char *text = NULL;
+    char *elementText = "Ganz anders";
+
+    ASSERT_TRUE( tixiAddTextElement( documentHandle, "/rootElement", "level1", "level1" ) == SUCCESS );
+    ASSERT_TRUE( tixiAddTextElement( documentHandle, "/rootElement", "level1", "level1" ) == SUCCESS );
+    ASSERT_TRUE( tixiAddTextElementAtIndex( documentHandle, "/rootElement", "level1", elementText, 1 ) == SUCCESS );
+
+    // Not check if the last added node is at position 0
+    ASSERT_TRUE( tixiGetTextElement( documentHandle, "/rootElement/level1[1]", &text ) == SUCCESS );
+    ASSERT_TRUE( !strcmp(text, elementText) );
+}
+
+
+TEST_F(AddElementTests, removeElement)
+{
+    char *text = NULL;
+    int count = 0;
+
+    ASSERT_TRUE( tixiAddTextElement( documentHandle, "/rootElement", "level1", "level1" ) == SUCCESS );
+    ASSERT_TRUE( tixiAddTextElement( documentHandle, "/rootElement", "level1", "level1" ) == SUCCESS );
+    ASSERT_TRUE( tixiAddTextElement( documentHandle, "/rootElement", "level1", "level1" ) == SUCCESS );
+
+    // count the elements
+    ASSERT_TRUE( tixiGetNamedChildrenCount(documentHandle, "/rootElement", "level1", &count ) == SUCCESS );
+    ASSERT_TRUE( count == 3 );
+
+    // remove one element and count again
+    ASSERT_TRUE( tixiRemoveElement( documentHandle, "/rootElement/level1[1]") == SUCCESS );
+    ASSERT_TRUE( tixiGetNamedChildrenCount(documentHandle, "/rootElement", "level1", &count ) == SUCCESS );
+    ASSERT_TRUE( count == 2 );
+}
+
