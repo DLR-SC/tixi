@@ -56,17 +56,20 @@ TEST_F(ValidateSchemaTests, tixiValidateSchemaFromFile_notAFile)
 
 TEST_F(ValidateSchemaTests, tixiValidateSchemaFromString)
 {
-    long f_size = 0;
+    size_t f_size = 0;
     char* schemaString = NULL;
     char* schemaFilename = "TestData/valid_cpacs_schema.xsd";
 
     // read schema file into string
     FILE* fp = fopen(schemaFilename, "r");
-    fseek(fp, 0, SEEK_END);
-    f_size = ftell(fp);
+
+    //determine file size, not nice but portable
+    while(getc(fp) != EOF) f_size++;
+    
     fseek(fp, 0, SEEK_SET);
-    schemaString = (char*)malloc(sizeof(char) * f_size);
+    schemaString = (char*)malloc(sizeof(char) * (f_size+4));
     fread(schemaString, 1, f_size, fp);
+    schemaString[f_size] = '\0';
 
     ASSERT_TRUE( tixiSchemaValidateFromString( documentHandle, schemaString ) == SUCCESS);
     free(schemaString);
