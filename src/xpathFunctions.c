@@ -22,7 +22,7 @@
 #include "tixiInternal.h"
 
 
-xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, char *xPathExpression)
+xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char *xPathExpression)
 {
 	xmlXPathContextPtr xpathContext;
 	xmlXPathObjectPtr xpathObject;
@@ -53,7 +53,7 @@ xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, char *xPathExpression)
 
 
 
-int XPathGetNodeNumber(TixiDocument *tixiDocument, char *xPathExpression)
+int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression)
 {
 	xmlDocPtr doc;
     xmlXPathObjectPtr xpathObject;
@@ -72,7 +72,7 @@ int XPathGetNodeNumber(TixiDocument *tixiDocument, char *xPathExpression)
 
 
 
-char* XPathExpressionGetText(TixiDocument *tixiDocument, char *xPathExpression, int index)
+char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpression, int index)
 {
 
 	xmlDocPtr doc;

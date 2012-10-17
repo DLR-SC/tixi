@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ static TixiDocumentHandle documentHandle = -1;
 class GetElementTests : public ::testing::Test {
  protected:
   virtual void SetUp() {
-     char* xmlFilename = "TestData/in.xml";
+     const char* xmlFilename = "TestData/in.xml";
 
      ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS);
   }
@@ -46,7 +46,7 @@ class GetElementTests : public ::testing::Test {
 TEST_F(GetElementTests, getEmptyElement)
 {
     char* text = NULL;
-    char* elementPath = "/plane/empty";
+    const char* elementPath = "/plane/empty";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == SUCCESS );
     if ( text ) {
         ASSERT_TRUE( !strcmp(text, ""));
@@ -56,7 +56,7 @@ TEST_F(GetElementTests, getEmptyElement)
 TEST_F(GetElementTests, getElementText)
 {
     char* text = NULL;
-    char* elementPath = "/plane/name";
+    const char* elementPath = "/plane/name";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == SUCCESS );
     if ( text ) {
         ASSERT_TRUE( !strcmp(text, "Junkers JU 52"));
@@ -66,7 +66,7 @@ TEST_F(GetElementTests, getElementText)
 TEST_F(GetElementTests, elementNotFound)
 {
     char* text = NULL;
-    char* elementPath = "/plane/name/pp";
+    const char* elementPath = "/plane/name/pp";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == ELEMENT_NOT_FOUND );
     ASSERT_TRUE( text == NULL );
 }
@@ -74,35 +74,35 @@ TEST_F(GetElementTests, elementNotFound)
 TEST_F(GetElementTests, invalidHandle)
 {
     char* text = NULL;
-    char* elementPath = "/plane/name/pp";
+    const char* elementPath = "/plane/name/pp";
     ASSERT_TRUE( tixiGetTextElement( -1, elementPath, &text ) == INVALID_HANDLE );
 }
 
 TEST_F(GetElementTests, invalidXPath)
 {
     char* text = NULL;
-    char* elementPath = "cc/plane/na|<<me/pp";
+    const char* elementPath = "cc/plane/na|<<me/pp";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == INVALID_XPATH );
 }
 
 TEST_F(GetElementTests, notUnique)
 {
     char* text = NULL;
-    char* elementPath = "/plane/wings/wing";
+    const char* elementPath = "/plane/wings/wing";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == ELEMENT_PATH_NOT_UNIQUE );
 }
 
 TEST_F(GetElementTests, notAnElement)
 {
     char* text = NULL;
-    char* elementPath = "/plane/wings/wing[1]/@position";
+    const char* elementPath = "/plane/wings/wing[1]/@position";
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == NOT_AN_ELEMENT );
 }
 
 TEST_F(GetElementTests, usedIndexedPath)
 {
     char* text = NULL;
-    char* elementPath = "/plane/wings/wing[1]/centerOfGravity/x";
+    const char* elementPath = "/plane/wings/wing[1]/centerOfGravity/x";
 
     ASSERT_TRUE( tixiGetTextElement( documentHandle, elementPath, &text ) == SUCCESS );
     if ( text ) {
@@ -113,7 +113,7 @@ TEST_F(GetElementTests, usedIndexedPath)
 TEST_F(GetElementTests, getDoubleElement)
 {
     double number = 0.;
-    char* elementPath = "/plane/wings/wing[1]/centerOfGravity/x";
+    const char* elementPath = "/plane/wings/wing[1]/centerOfGravity/x";
 
     ASSERT_TRUE( tixiGetDoubleElement( documentHandle, elementPath, &number ) == SUCCESS );
     ASSERT_TRUE( number == 30.0);
@@ -122,7 +122,7 @@ TEST_F(GetElementTests, getDoubleElement)
 TEST_F(GetElementTests, getIntegerElement)
 {
     int number = 0;
-    char* elementPath = "/plane/numberOfPassengers";
+    const char* elementPath = "/plane/numberOfPassengers";
 
     ASSERT_TRUE( tixiGetIntegerElement( documentHandle, elementPath, &number ) == SUCCESS );
     ASSERT_TRUE( number == 57);
@@ -132,12 +132,12 @@ TEST_F(GetElementTests, getIntegerElement)
 TEST_F(GetElementTests, getBooleanElement)
 {
     int number = 0;
-    char* elementPathTrue = "/plane/bool/aBool1";
-    char* elementPathFalse = "/plane/bool/aBool2";
-    char* elementPathInvalid = "/plane/bool/aBool3";
-    char* elementPathTrueB = "/plane/bool/aBool1b";
-    char* elementPathFalseB = "/plane/bool/aBool2b";
-    char* elementPathInvalidB = "/plane/bool/aBool3b";
+    const char* elementPathTrue = "/plane/bool/aBool1";
+    const char* elementPathFalse = "/plane/bool/aBool2";
+    const char* elementPathInvalid = "/plane/bool/aBool3";
+    const char* elementPathTrueB = "/plane/bool/aBool1b";
+    const char* elementPathFalseB = "/plane/bool/aBool2b";
+    const char* elementPathInvalidB = "/plane/bool/aBool3b";
 
     ASSERT_TRUE( tixiGetBooleanElement( documentHandle, elementPathTrue, &number ) == SUCCESS );
     ASSERT_TRUE( number == 1);
@@ -160,10 +160,10 @@ TEST_F(GetElementTests, getPointElement)
 {
     //  char* parentPath = "/plane/aPoint/point";
     //  char* noPointParentPath = "/plane";
-    char* notAPointParentPath = "/plane/notAPoint/point";
-    char* notAPoint2ParentPath = "/plane/notAPoint2/point";
-    char* pointsParentPath = "/plane/points/point[3]";
-    char* incompletePoint = "/plane/points/point[4]";
+    const char* notAPointParentPath = "/plane/notAPoint/point";
+    const char* notAPoint2ParentPath = "/plane/notAPoint2/point";
+    const char* pointsParentPath = "/plane/points/point[3]";
+    const char* incompletePoint = "/plane/points/point[4]";
     double x,y,z;
 
     ASSERT_TRUE( tixiGetPoint( documentHandle, notAPointParentPath, &x, &y, &z ) == NO_POINT_FOUND );   // internally a COORDINATE_NOT_FOUND error
@@ -177,14 +177,14 @@ TEST_F(GetElementTests, getPointElement)
 
 
 TEST_F(GetElementTests, getMatrixElement) {
-    char* matrixPath = "/plane/myMatrix";
-    char* rowName = "blub";
-    char* columnName = "bla";
+    const char* matrixPath = "/plane/myMatrix";
+    const char* rowName = "blub";
+    const char* columnName = "bla";
     int nRows = 2;
     int nColumns = 2;
     double array22[2][2];
-    char* pathInvalidMatrix1 = "/plane/invalidMatrix1";
-    char* pathInvalidMatrix2 = "/plane/invalidMatrix2";
+    const char* pathInvalidMatrix1 = "/plane/invalidMatrix1";
+    const char* pathInvalidMatrix2 = "/plane/invalidMatrix2";
 
     ASSERT_TRUE( tixiGetFloatMatrix( documentHandle, matrixPath, rowName, columnName, nRows, nColumns, ROW_WISE, (double*) array22 ) == SUCCESS);
 

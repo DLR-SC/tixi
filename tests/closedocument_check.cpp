@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,7 @@
 TEST(closedocument_checks, close_success) 
 {
     TixiDocumentHandle documentHandle = -1;
-    char* xmlFilename = "TestData/in.xml";
+    const char* xmlFilename = "TestData/in.xml";
 
     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS ); 
     ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
@@ -46,7 +46,7 @@ TEST(closedocument_checks, close_multiple)
     TixiDocumentHandle documentHandle1 = -1;
     TixiDocumentHandle documentHandle2 = -1;
     TixiDocumentHandle documentHandle3 = -1;
-    char* xmlFilename = "TestData/in.xml";
+    const char* xmlFilename = "TestData/in.xml";
 
     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle1 ) == SUCCESS );
     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle2 ) == SUCCESS );
