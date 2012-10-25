@@ -159,6 +159,16 @@ class Tixi(object):
         if tixiReturn == ReturnCode.ELEMENT_NOT_FOUND:
             return False
         self._validateReturnValue(tixiReturn, elementPath)
+        
+    def uIDCheckExists(self, uID):
+        _c_uID = c_char_p()
+        _c_uID.value = uID
+        tixiReturn = self.TIXI.tixiUIDCheckExists(self._handle, _c_uID)
+        if tixiReturn == ReturnCode.SUCCESS:
+            return True
+        else:
+            return False
+        self._validateReturnValue(tixiReturn, uID)        
 
     def checkAttribute(self, elementPath, attributeName):
         ''' boolean return values from special return code is coded manually here '''
