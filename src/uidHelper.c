@@ -228,7 +228,7 @@ int uid_clearUIDList(TixiDocument *document)
 }
 
 
-char* uid_getXpath(TixiDocument *document, const char *uID)
+char* uid_getXpath(TixiDocument *document, char *uID)
 {
 	TixiUIDListEntry *current = document->uidListHead;
 
@@ -242,7 +242,7 @@ char* uid_getXpath(TixiDocument *document, const char *uID)
 }
 
 
-int uid_checkExists(TixiDocument *document, const char *uID)
+int uid_checkExists(TixiDocument *document, char *uID)
 {
 	TixiUIDListEntry *current = document->uidListHead;
 

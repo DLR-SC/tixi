@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -178,8 +178,8 @@ ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char *pointPath,
 	- NOT_AN_ELEMENT
 
 */
-ReturnCode getPoint(const TixiDocumentHandle handle, const char *pointParentPath, const int pointIndex,
-					int ignoreMissingCoordinates, double *x, double *y, double *z);
+ReturnCode getPoint(const TixiDocumentHandle handle, char *pointParentPath, const int pointIndex,
+                    int ignoreMissingCoordinates, double *x, double *y, double *z);
 /**
 @brief Check if libxml2 version used to build TIXI.
 */
@@ -189,7 +189,7 @@ void checkLibxml2Version();
  * builds a string using snprintf to avoid buffer overflows. The resulting buffer
  * has to be freed by the caller.
  */
-DLL_EXPORT char *buildString(const char *format, ...);
+DLL_EXPORT char *buildString(char *format, ...);
 
 
 
@@ -272,8 +272,8 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath);
     - INVALID_XML_NAME
 	- SUCCESS
  */
-ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char *elementPath,
-                                const char *attributeName, const char *attributeValue);
+ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, char *elementPath,
+                                char *attributeName, char *attributeValue);
 
 
 
@@ -292,7 +292,7 @@ ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char *elementPat
     - ELEMENT_PATH_NOT_UNIQUE
     - FAILED
  */
-ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char *elementPath, xmlNodePtr *nodePtr);
+ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, char *elementPath, xmlNodePtr *nodePtr);
 
 
 /**
@@ -319,7 +319,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
 	  - INVALID_HANDLE 			 if  handle not found in list of man
 	  - FAILED        			 if writing and closing the XML-file failed
  */
-ReturnCode saveDocument (TixiDocumentHandle handle, const char *xmlFilename, InternalSaveMode saveMode);
+ReturnCode saveDocument (TixiDocumentHandle handle, char *xmlFilename, InternalSaveMode saveMode);
 
 
 /**

@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,7 +27,7 @@
 TEST(opendocument_checks, non_existing) 
 {
     TixiDocumentHandle documentHandle = -1;
-    const char* xmlFilename = "____HOPEFULLY_THIS_FILE_NAME_DOES_NOT_EXIST~~~~";
+    char* xmlFilename = "____HOPEFULLY_THIS_FILE_NAME_DOES_NOT_EXIST~~~~";
     
     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == OPEN_FAILED );
 }
@@ -35,7 +35,7 @@ TEST(opendocument_checks, non_existing)
 TEST(opendocument_checks, not_well_formed) 
 {
     TixiDocumentHandle documentHandle = -1;
-    const char* xmlFilename = "TestData/illformed.xml";
+    char* xmlFilename = "TestData/illformed.xml";
 
     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == NOT_WELL_FORMED );
 }
@@ -43,7 +43,7 @@ TEST(opendocument_checks, not_well_formed)
 TEST(opendocument_checks, is_well_formed) 
 {
     TixiDocumentHandle documentHandle = -1;
-    const char* xmlFilename = "TestData/in.xml";
+    char* xmlFilename = "TestData/in.xml";
 
     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle )  == SUCCESS );
     tixiCloseDocument( documentHandle );
@@ -53,7 +53,7 @@ TEST(opendocument_checks, is_well_formed)
 TEST(opendocument_checks, check_handle) 
 {
     TixiDocumentHandle documentHandle = -1;
-    const char* xmlFilename = "TestData/in.xml";
+    char* xmlFilename = "TestData/in.xml";
 
     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( documentHandle != -1 );
@@ -63,7 +63,7 @@ TEST(opendocument_checks, check_handle)
 TEST(opendocument_checks, open_http_url) 
 {
     TixiDocumentHandle documentHandle = -1;
-    const char* xmlUrl = "http://www.w3schools.com/XML/note.xml";
+    char* xmlUrl = "http://www.w3schools.com/XML/note.xml";
 
     ASSERT_TRUE( tixiOpenDocumentFromHTTP( xmlUrl, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( documentHandle != -1 );
@@ -73,7 +73,7 @@ TEST(opendocument_checks, open_http_url)
 TEST(opendocument_checks, open_http_url_not_valid)
 {
     TixiDocumentHandle documentHandle = -1;
-    const char* xmlUrl = "http://a/b";
+    char* xmlUrl = "http://a/b";
 
     ASSERT_TRUE( tixiOpenDocumentFromHTTP( xmlUrl, &documentHandle ) != SUCCESS );
     ASSERT_TRUE( documentHandle == -1 );

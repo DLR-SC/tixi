@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ static TixiDocumentHandle documentHandle = -1;
 class CompositeTests : public ::testing::Test {
  protected:
   virtual void SetUp() {
-        const char* rootElementName = "root";
+        char* rootElementName = "root";
         ASSERT_TRUE( tixiCreateDocument( rootElementName, &documentHandle ) == SUCCESS);
   }
   
@@ -47,11 +47,11 @@ TEST_F(CompositeTests, add_composits)
 
     double values[N_VALUES] = {0., 1., 2., 3., 4.};
     char* attributes[N_VALUES] = { "a", "b", "c", "d", "e"};
-    const char* parentPath = "/root";
-    const char* listName = "numbers";
-    const char* childName = "number";
-    const char* format = "%08.2f";
-    const char* childAttributeName = "letter";
+    char* parentPath = "/root";
+    char* listName = "numbers";
+    char* childName = "number";
+    char* format = "%08.2f";
+    char* childAttributeName = "letter";
     int nValues = N_VALUES;
 
     ASSERT_TRUE( tixiAddDoubleListWithAttributes( documentHandle, parentPath,  listName, childName, childAttributeName, 

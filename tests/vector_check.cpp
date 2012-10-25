@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,8 +35,8 @@ static TixiDocumentHandle tmpHandle = -1;
 class VectorTests : public ::testing::Test {
  protected:
   virtual void SetUp() {
-     const char* xmlFilenameGet = "TestData/vectorcount.xml";
-     const char* xmlFilenameAdd = "TestData/vectoradd.xml";
+     char* xmlFilenameGet = "TestData/vectorcount.xml";
+     char* xmlFilenameAdd = "TestData/vectoradd.xml";
      ASSERT_TRUE( tixiOpenDocument( xmlFilenameGet, &documentHandleGet ) == SUCCESS);
      ASSERT_TRUE( tixiOpenDocument( xmlFilenameAdd, &documentHandleAdd  ) == SUCCESS);
   }
@@ -71,7 +71,7 @@ TEST_F(VectorTests, tixiVectorAddTests)
     int count = 0;
     double points[10] = {1, 4, 5.8, 77.0, 5, 6, 7, 8, 9, 10};
     double *newPoints = NULL;
-    const char* xmlOutName = "x.xml";
+    char* xmlOutName = "x.xml";
     count = 3;
 
     // write parts of the array to an intermediate file

@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*   http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,8 +31,8 @@
 #include "tixiData.h"
 
 
-xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr document, const char *xPathExpression);
+xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr document, char *xPathExpression);
 
-int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression);
+int XPathGetNodeNumber(TixiDocument *tixiDocument, char *xPathExpression);
 
-char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpression, int index);
+char* XPathExpressionGetText(TixiDocument *tixiDocument, char *xPathExpression, int index);

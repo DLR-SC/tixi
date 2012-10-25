@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,9 +30,9 @@
 
 static TixiDocumentHandle inDocumentHandle = -1;
 static TixiDocumentHandle outDocumentHandle = -1;
-static const char* xmlInputFilename = "TestData/in.xml";
-static const char* xmlOutputFilename = "TestData/out.xml";
-static const char* outRootElementName = "root";
+static char* xmlInputFilename = "TestData/in.xml";
+static char* xmlOutputFilename = "TestData/out.xml";
+static char* outRootElementName = "root";
 
 class OtherTests : public ::testing::Test {
  protected:
@@ -50,8 +50,8 @@ class OtherTests : public ::testing::Test {
 
 TEST_F(OtherTests, childCount_hasNoChild)
 {
-    const char* elementPath = "/plane/name";
-    const char* childName = "this_child_does_not_exist";
+    char* elementPath = "/plane/name";
+    char* childName = "this_child_does_not_exist";
     int count;
 
     ASSERT_TRUE( tixiGetNamedChildrenCount( inDocumentHandle, elementPath, childName, &count ) == SUCCESS);
@@ -66,8 +66,8 @@ TEST_F(OtherTests, checkDocumentHandle)
 
 TEST_F(OtherTests, childCount_childDoesNotExist)
 {
-    const char* elementPath = "/plane/wings";
-    const char* childName = "this_child_does_not_exist";
+    char* elementPath = "/plane/wings";
+    char* childName = "this_child_does_not_exist";
     int count;
 
     ASSERT_TRUE( tixiGetNamedChildrenCount( inDocumentHandle, elementPath, childName, &count ) == SUCCESS);
@@ -76,24 +76,24 @@ TEST_F(OtherTests, childCount_childDoesNotExist)
 
 TEST_F(OtherTests, checkElement_success)
 {
-    const char* elementPath1 = "/plane/wings";
-    const char* elementPath2 = "/plane/wings/wing";
+    char* elementPath1 = "/plane/wings";
+    char* elementPath2 = "/plane/wings/wing";
     ASSERT_TRUE( tixiCheckElement( inDocumentHandle, elementPath1 ) == SUCCESS);
     ASSERT_TRUE( tixiCheckElement( inDocumentHandle, elementPath2 ) == SUCCESS);
 }
 
 TEST_F(OtherTests, checkElement_failed)
 {
-    const char* elementPath1 = "/plane/wingss";
-    const char* elementPath2 = "/plane/wings/wing[]";
+    char* elementPath1 = "/plane/wingss";
+    char* elementPath2 = "/plane/wings/wing[]";
     ASSERT_TRUE( tixiCheckElement( inDocumentHandle, elementPath1 ) == ELEMENT_NOT_FOUND);
     ASSERT_TRUE( tixiCheckElement( inDocumentHandle, elementPath2 ) == INVALID_XPATH);
 }
 
 TEST_F(OtherTests, childCount_oneChild)
 {
-    const char* elementPath = "/plane";
-    const char* childName = "wings";
+    char* elementPath = "/plane";
+    char* childName = "wings";
     int count;
 
     ASSERT_TRUE( tixiGetNamedChildrenCount( inDocumentHandle, elementPath, childName, &count ) == SUCCESS );
@@ -102,8 +102,8 @@ TEST_F(OtherTests, childCount_oneChild)
 
 TEST_F(OtherTests, childCount_twoChildren)
 {
-    const char* elementPath = "/plane/wings";
-    const char* childName = "wing";
+    char* elementPath = "/plane/wings";
+    char* childName = "wing";
     int count;
 
     ASSERT_TRUE( tixiGetNamedChildrenCount( inDocumentHandle, elementPath, childName, &count ) == SUCCESS );
@@ -112,25 +112,25 @@ TEST_F(OtherTests, childCount_twoChildren)
 
 TEST_F(OtherTests, addExternalLink_withAttribute)
 {
-    const char* parentPath = "/root";
+    char* parentPath = "/root";
     ASSERT_TRUE( tixiAddExternalLink( outDocumentHandle, parentPath, "TestData/externalFile1", "MyFormat" ) == SUCCESS );
 }
 
 TEST_F(OtherTests, addExternalLink_withoutAttribute)
 {
-    const char* parentPath = "/root";
+    char* parentPath = "/root";
     ASSERT_TRUE( tixiAddExternalLink( outDocumentHandle, parentPath, "TestData/externalFile2", NULL ) == SUCCESS );
 }
 
 TEST_F(OtherTests, getMatrixSize)
 {
-    const char* matrixPath = "/plane/myMatrix";
-    const char* rowName = "blub";
-    const char* columnName = "bla";
+    char* matrixPath = "/plane/myMatrix";
+    char* rowName = "blub";
+    char* columnName = "bla";
     int nRows = -1;
     int nColumns = -1;
-    const char* pathInvalidMatrix1 = "/plane/invalidMatrix1";
-    const char* pathInvalidMatrix2 = "/plane/invalidMatrix2";
+    char* pathInvalidMatrix1 = "/plane/invalidMatrix1";
+    char* pathInvalidMatrix2 = "/plane/invalidMatrix2";
 
     ASSERT_TRUE(tixiGetMatrixSize(inDocumentHandle, matrixPath, rowName, columnName, &nRows, &nColumns) == SUCCESS);
     ASSERT_TRUE(nRows == 2 && nColumns == 2);
@@ -142,7 +142,7 @@ TEST_F(OtherTests, getMatrixSize)
 
 TEST_F(OtherTests, createMatrix)
 {
-    const char* parentPath = "/root";
+    char* parentPath = "/root";
 
     ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourbyfour", "row", "column", 4, 4) == SUCCESS);
     ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourbyfour", "row", "column", 4, 0) == MATRIX_DIMENSION_ERROR);

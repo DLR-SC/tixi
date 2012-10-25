@@ -184,7 +184,7 @@ void printError(ReturnCode error, char *function)
  *  Opens the file and sets up the TixiDocument datastructure.
  */
 
-DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDocumentHandle *handle, OpenMode oMode)
+DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(char *xmlFilename, TixiDocumentHandle *handle, OpenMode oMode)
 {
   /* this opens the XML-file and checks if it is well formed */
 
@@ -255,7 +255,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
 }
 
 
-DLL_EXPORT ReturnCode tixiOpenDocument(const char *xmlFilename, TixiDocumentHandle *handle)
+DLL_EXPORT ReturnCode tixiOpenDocument(char *xmlFilename, TixiDocumentHandle *handle)
 {
 
     return tixiOpenDocumentRecursive(xmlFilename, handle, OPENMODE_PLAIN);
@@ -263,7 +263,7 @@ DLL_EXPORT ReturnCode tixiOpenDocument(const char *xmlFilename, TixiDocumentHand
 
 
 
-DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (const char *httpURL, TixiDocumentHandle *handle)
+DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (char *httpURL, TixiDocumentHandle *handle)
 {
     char* xmlDocument = NULL;
     ReturnCode returnCode = FAILED;
@@ -282,7 +282,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (const char *httpURL, TixiDocumen
 }
 
 
-DLL_EXPORT ReturnCode tixiCreateDocument(const char *rootElementName, TixiDocumentHandle *handle)
+DLL_EXPORT ReturnCode tixiCreateDocument(char *rootElementName, TixiDocumentHandle *handle)
 {
 
   TixiDocument *document = NULL;
@@ -345,20 +345,20 @@ DLL_EXPORT ReturnCode tixiCreateDocument(const char *rootElementName, TixiDocume
 /*
 Distinguish internal/user/fatal errors!!!
 */
-DLL_EXPORT ReturnCode tixiSaveDocument(TixiDocumentHandle handle, const char *xmlFilename)
+DLL_EXPORT ReturnCode tixiSaveDocument(TixiDocumentHandle handle, char *xmlFilename)
 {
 	return saveDocument(handle, xmlFilename, SPLITTED);
 }
 
 
 
-DLL_EXPORT ReturnCode tixiSaveCompleteDocument(TixiDocumentHandle handle, const char *xmlFilename)
+DLL_EXPORT ReturnCode tixiSaveCompleteDocument(TixiDocumentHandle handle, char *xmlFilename)
 {
 	return saveDocument(handle, xmlFilename, COMPLETE);
 }
 
 
-DLL_EXPORT ReturnCode tixiSaveAndRemoveDocument (TixiDocumentHandle handle, const char *xmlFilename)
+DLL_EXPORT ReturnCode tixiSaveAndRemoveDocument (TixiDocumentHandle handle, char *xmlFilename)
 {
 	return saveDocument(handle, xmlFilename, REMOVED);
 }
@@ -451,7 +451,7 @@ DLL_EXPORT ReturnCode tixiExportDocumentAsString(const TixiDocumentHandle handle
 
 
 
-DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDocumentHandle * handle)
+DLL_EXPORT ReturnCode tixiImportFromString (char *xmlImportString, TixiDocumentHandle * handle)
 {
   /* this imports a XML-string and checks if it is well formed */
   TixiDocument *document = NULL;
@@ -503,7 +503,7 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
 
 
 
-DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, const char *toolName, const char *version, const char *authorName)
+DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, char *toolName, char *version, char *authorName)
 {
 
   TixiDocument *document = getDocument(handle);
@@ -597,7 +597,7 @@ DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, const char 
 
 
 DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
-                                        const char *name, const char *creator, const char *version, const char *description)
+										char *name, char *creator, char *version, char *description)
 {
     TixiDocument *document = getDocument(handle);
 	xmlNodePtr headerElement = NULL;
@@ -689,7 +689,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 }
 
 
-DLL_EXPORT ReturnCode tixiSchemaValidateFromFile(const TixiDocumentHandle handle, const char *xsdFilename)
+DLL_EXPORT ReturnCode tixiSchemaValidateFromFile(const TixiDocumentHandle handle, char *xsdFilename)
 {
 	xmlDocPtr schema_doc;
 
@@ -697,7 +697,7 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromFile(const TixiDocumentHandle handle
 	return( validateSchema(handle, &schema_doc));
 }
 
-DLL_EXPORT ReturnCode tixiSchemaValidateFromString(const TixiDocumentHandle handle, const char *xsdString)
+DLL_EXPORT ReturnCode tixiSchemaValidateFromString(const TixiDocumentHandle handle, char *xsdString)
 {
 	xmlDocPtr schema_doc;
 
@@ -706,7 +706,7 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromString(const TixiDocumentHandle hand
 }
 
 
-DLL_EXPORT ReturnCode tixiDTDValidate(const TixiDocumentHandle handle, const char *DTDFilename)
+DLL_EXPORT ReturnCode tixiDTDValidate(const TixiDocumentHandle handle, char *DTDFilename)
 {
 
   PRINT_DEBUG2("%s %d\n", DTDFilename, handle);
@@ -756,7 +756,7 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
   return error;
 }
 
-DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, const char *elementPath, int *number)
+DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, char *elementPath, int *number)
 {
   char *text;
   ReturnCode error = 0;
@@ -775,7 +775,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, con
   return SUCCESS;
 }
 
-DLL_EXPORT ReturnCode tixiGetDoubleElement(const TixiDocumentHandle handle, const char *elementPath, double *number)
+DLL_EXPORT ReturnCode tixiGetDoubleElement(const TixiDocumentHandle handle, char *elementPath, double *number)
 {
   char *text = NULL;
   ReturnCode error = 0;
@@ -794,7 +794,7 @@ DLL_EXPORT ReturnCode tixiGetDoubleElement(const TixiDocumentHandle handle, cons
 }
 
 
-DLL_EXPORT ReturnCode tixiGetBooleanElement(const TixiDocumentHandle handle, const char *elementPath, int *boolean)
+DLL_EXPORT ReturnCode tixiGetBooleanElement(const TixiDocumentHandle handle, char *elementPath, int *boolean)
 {
   char *text = NULL;
   ReturnCode error = 0;
@@ -821,7 +821,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanElement(const TixiDocumentHandle handle, con
   return SUCCESS;
 }
 
-DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, const char *elementPath, const char *text)
+DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, char *elementPath, char *text)
 {
     TixiDocument *document = getDocument(handle);
     xmlDocPtr xmlDocument = NULL;
@@ -852,7 +852,7 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
 }
 
 
-DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, const char *elementPath, double number, const char *format)
+DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, char *elementPath, double number, char *format)
 {
     TixiDocument *document = getDocument(handle);
     xmlDocPtr xmlDocument = NULL;
@@ -891,7 +891,7 @@ DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, 
 
 
 DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, const char *elementPath,
-                                           const char *attributeName, char **text)
+                                           char *attributeName, char **text)
 {
   TixiDocument *document = getDocument(handle);
   xmlDocPtr xmlDocument = NULL;
@@ -934,7 +934,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
 }
 
 DLL_EXPORT ReturnCode tixiGetDoubleAttribute(const TixiDocumentHandle handle,
-                                  const char *elementPath, const char *attributeName, double *number)
+                                  char *elementPath, char *attributeName, double *number)
 {
   char *text;
   ReturnCode error = 0;
@@ -954,7 +954,7 @@ DLL_EXPORT ReturnCode tixiGetDoubleAttribute(const TixiDocumentHandle handle,
 }
 
 DLL_EXPORT ReturnCode tixiGetIntegerAttribute(const TixiDocumentHandle handle,
-                                   const char *elementPath, const char *attributeName, int *number)
+                                   char *elementPath, char *attributeName, int *number)
 {
   char *text;
   ReturnCode error = 0;
@@ -1073,8 +1073,8 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
 }
 
 
-DLL_EXPORT ReturnCode tixiAddBooleanElement(const TixiDocumentHandle handle, const char *parentPath,
-                              const char *elementName, int boolean)
+DLL_EXPORT ReturnCode tixiAddBooleanElement(const TixiDocumentHandle handle, char *parentPath,
+                              char *elementName, int boolean)
 {
 
 
@@ -1090,8 +1090,8 @@ DLL_EXPORT ReturnCode tixiAddBooleanElement(const TixiDocumentHandle handle, con
 }
 
 
-DLL_EXPORT ReturnCode tixiAddDoubleElement(const TixiDocumentHandle handle, const char *parentPath,
-                                const char *elementName, double number, const char *format)
+DLL_EXPORT ReturnCode tixiAddDoubleElement(const TixiDocumentHandle handle, char *parentPath,
+                                char *elementName, double number, char *format)
 {
   int error;
   char *textBuffer = NULL;
@@ -1116,8 +1116,8 @@ DLL_EXPORT ReturnCode tixiAddDoubleElement(const TixiDocumentHandle handle, cons
   return error;
 }
 
-DLL_EXPORT ReturnCode tixiAddIntegerElement(const TixiDocumentHandle handle, const char *parentPath,
-                                 const char *elementName, int number, const char *format)
+DLL_EXPORT ReturnCode tixiAddIntegerElement(const TixiDocumentHandle handle, char *parentPath,
+                                 char *elementName, int number, char *format)
 {
   int error;
   char *textBuffer = NULL;
@@ -1142,8 +1142,8 @@ DLL_EXPORT ReturnCode tixiAddIntegerElement(const TixiDocumentHandle handle, con
   return error;
 }
 
-DLL_EXPORT ReturnCode tixiAddTextAttribute(const TixiDocumentHandle handle, const char *elementPath,
-                                const char *attributeName, const char *attributeValue)
+DLL_EXPORT ReturnCode tixiAddTextAttribute(const TixiDocumentHandle handle, char *elementPath,
+                                char *attributeName, char *attributeValue)
 {
   TixiDocument *document = getDocument(handle);
   xmlDocPtr xmlDocument = NULL;
@@ -1163,8 +1163,8 @@ DLL_EXPORT ReturnCode tixiAddTextAttribute(const TixiDocumentHandle handle, cons
 }
 
 DLL_EXPORT ReturnCode tixiAddDoubleAttribute(const TixiDocumentHandle handle,
-                                  const char *elementPath, const char *attributeName,
-                                  double number, const char *format)
+                                  char *elementPath, char *attributeName,
+                                  double number, char *format)
 {
   int error;
   char *textBuffer = NULL;
@@ -1188,7 +1188,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute(const TixiDocumentHandle handle,
 }
 
 DLL_EXPORT ReturnCode tixiAddIntegerAttribute(const TixiDocumentHandle handle,
-                                   const char *elementPath, const char *attributeName, int number, const char *format)
+                                   char *elementPath, char *attributeName, int number, char *format)
 {
   /* Here the format string should be parsed to determine the length of the string to be generated. Instead,
      a very large char-array is allocated the string is printed into it. */
@@ -1274,7 +1274,7 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
 }
 
 
-DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const char *elementPath, const char *attributeName)
+DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, char *elementPath, char *attributeName)
 {
   xmlNodePtr parent;
   ReturnCode retVal;
@@ -1294,7 +1294,7 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
 }
 
 
-DLL_EXPORT ReturnCode tixiRemoveElement(const TixiDocumentHandle handle, const char *elementPath)
+DLL_EXPORT ReturnCode tixiRemoveElement(const TixiDocumentHandle handle, char *elementPath)
 {
   xmlNodePtr parent = NULL;
   ReturnCode retVal;
@@ -1315,7 +1315,7 @@ DLL_EXPORT ReturnCode tixiRemoveElement(const TixiDocumentHandle handle, const c
 
 
 DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
-                                     const char *elementPath, const char *childName, int *count)
+                                     char *elementPath, char *childName, int *count)
 {
   TixiDocument *document = getDocument(handle);
   xmlDocPtr xmlDocument = NULL;
@@ -1463,10 +1463,10 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
 }
 
 DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle handle,
-                                           const char *parentPath, const char *listName,
-                                           const char *childName,
-                                           const char *attributeName,
-                                           double *values, const char *format,
+                                           char *parentPath, char *listName,
+                                           char *childName,
+                                           char *attributeName,
+                                           double *values, char *format,
                                            char **attributes, int nValues)
 {
   ReturnCode error = -1;
@@ -1568,8 +1568,8 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
   }
 }
 
-DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *parentPath,
-                        double x, double y, double z, const char *format)
+DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, char *parentPath,
+                        double x, double y, double z, char *format)
 {
   ReturnCode error = -1;
   TixiDocument *document = getDocument(handle);
@@ -1675,7 +1675,7 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
 }
 
 
-DLL_EXPORT ReturnCode tixiGetPoint(const TixiDocumentHandle handle, const char *parentPath,
+DLL_EXPORT ReturnCode tixiGetPoint(const TixiDocumentHandle handle, char *parentPath,
                                double *x, double *y, double *z)
 {
   int ignoreMissingElement = 1;
@@ -1688,8 +1688,8 @@ DLL_EXPORT ReturnCode tixiGetPoint(const TixiDocumentHandle handle, const char *
   return error;
 }
 
-DLL_EXPORT ReturnCode tixiAddExternalLink(const TixiDocumentHandle handle, const char *parentPath,
-                               const char *url, const char *fileFormat)
+DLL_EXPORT ReturnCode tixiAddExternalLink(const TixiDocumentHandle handle, char *parentPath,
+                               char *url, char *fileFormat)
 {
   ReturnCode error = tixiAddTextElement(handle, parentPath, "externalFile", url);
   char *elementNameWithLeadingSlash = "/externalFile";
@@ -1747,8 +1747,8 @@ DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrett
 }
 
 
-DLL_EXPORT ReturnCode tixiCreateMatrix(const TixiDocumentHandle handle, const char *parentPath,
-                            const char *matrixName, const char *rowName, const char *columnName,
+DLL_EXPORT ReturnCode tixiCreateMatrix(const TixiDocumentHandle handle, char *parentPath,
+                            char *matrixName, char *rowName, char *columnName,
                             const int nRows, const int nColumns)
 {
 
@@ -1874,10 +1874,10 @@ DLL_EXPORT ReturnCode tixiCreateMatrix(const TixiDocumentHandle handle, const ch
   return error;
 }
 
-DLL_EXPORT ReturnCode tixiAddFloatMatrix(const TixiDocumentHandle handle, const char *parentPath,
-                              const char *matrixName, const char *rowName,
-                              const char *columnName, int nRows, int nColumns,
-                              StorageMode mode, double *array, const char *format)
+DLL_EXPORT ReturnCode tixiAddFloatMatrix(const TixiDocumentHandle handle, char *parentPath,
+                              char *matrixName, char *rowName,
+                              char *columnName, int nRows, int nColumns,
+                              StorageMode mode, double *array, char *format)
 {
   ReturnCode error = -1;
   TixiDocument *document = getDocument(handle);
@@ -2034,8 +2034,8 @@ DLL_EXPORT ReturnCode tixiAddFloatMatrix(const TixiDocumentHandle handle, const 
   return error;
 }
 
-DLL_EXPORT ReturnCode tixiGetFloatMatrix(const TixiDocumentHandle handle, const char *matrixPath,
-                              const char *rowName, const char *columnName,
+DLL_EXPORT ReturnCode tixiGetFloatMatrix(const TixiDocumentHandle handle, char *matrixPath,
+                              char *rowName, char *columnName,
                               const int nRows, const int nColumns, StorageMode mode, double *array)
 {
   ReturnCode error = -1;
@@ -2207,8 +2207,8 @@ DLL_EXPORT ReturnCode tixiGetFloatMatrix(const TixiDocumentHandle handle, const 
   return SUCCESS;
 }
 
-DLL_EXPORT ReturnCode tixiGetMatrixSize(const TixiDocumentHandle handle, const char *matrixPath,
-                             const char *rowName, const char *columnName, int *nRows, int *nColumns)
+DLL_EXPORT ReturnCode tixiGetMatrixSize(const TixiDocumentHandle handle, char *matrixPath,
+                             char *rowName, char *columnName, int *nRows, int *nColumns)
 {
   ReturnCode error = -1;
   TixiDocument *document = getDocument(handle);
@@ -2880,13 +2880,13 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
 }
 
 
-DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, const char *parentPath, const char *elementName)
+DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, char *parentPath, char *elementName)
 {
     char *text = NULL;
     return tixiAddTextElement(handle, parentPath, elementName, text);
 }
 
-DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, int index)
+DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle, char *parentPath, char *elementName, int index)
 {
     char *text = NULL;
     return tixiAddTextElementAtIndex(handle, parentPath, elementName, text,index);
@@ -2905,7 +2905,7 @@ DLL_EXPORT ReturnCode tixiCheckDocumentHandle(const TixiDocumentHandle handle)
   }
 }
 
-DLL_EXPORT ReturnCode tixiCheckElement(const TixiDocumentHandle handle, const char *elementPath)
+DLL_EXPORT ReturnCode tixiCheckElement(const TixiDocumentHandle handle, char *elementPath)
 {
 
   TixiDocument *document = getDocument(handle);
@@ -2929,7 +2929,7 @@ DLL_EXPORT ReturnCode tixiCheckElement(const TixiDocumentHandle handle, const ch
 
 
 
-DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *elementPath, const char *attributeName)
+DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, char *elementPath, char *attributeName)
 {
 	TixiDocument *document = getDocument(handle);
 
@@ -2964,7 +2964,7 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
     }
 }
 
-DLL_EXPORT ReturnCode tixiXSLTransformationToFile(TixiDocumentHandle handle, const char *xslFilename, const char *resultFilename)
+DLL_EXPORT ReturnCode tixiXSLTransformationToFile(TixiDocumentHandle handle, char *xslFilename, char *resultFilename)
 {
 	TixiDocument *document = getDocument(handle);
 
@@ -3023,7 +3023,7 @@ DLL_EXPORT ReturnCode tixiUIDCheckLinks(TixiDocumentHandle handle)
 }
 
 
-DLL_EXPORT ReturnCode tixiUIDGetXPath(TixiDocumentHandle handle, const char *uID, char **xPath)
+DLL_EXPORT ReturnCode tixiUIDGetXPath(TixiDocumentHandle handle, char *uID, char **xPath)
 {
 	ReturnCode error;
 	TixiDocument *document = getDocument(handle);
@@ -3049,7 +3049,7 @@ DLL_EXPORT ReturnCode tixiUIDGetXPath(TixiDocumentHandle handle, const char *uID
 }
 
 
-DLL_EXPORT ReturnCode tixiUIDCheckExists(TixiDocumentHandle handle, const char *uID)
+DLL_EXPORT ReturnCode tixiUIDCheckExists(TixiDocumentHandle handle, char *uID)
 {
 	TixiDocument *document = getDocument(handle);
     ReturnCode error = FAILED;
@@ -3069,7 +3069,7 @@ DLL_EXPORT ReturnCode tixiUIDCheckExists(TixiDocumentHandle handle, const char *
 }
 
 
-DLL_EXPORT ReturnCode tixiUIDSetToXPath(TixiDocumentHandle handle, const char *xPath, const char *uID)
+DLL_EXPORT ReturnCode tixiUIDSetToXPath(TixiDocumentHandle handle, char *xPath, char *uID)
 {
 	ReturnCode error;
 
@@ -3082,7 +3082,7 @@ DLL_EXPORT ReturnCode tixiUIDSetToXPath(TixiDocumentHandle handle, const char *x
 }
 
 
-DLL_EXPORT ReturnCode tixiXPathEvaluateNodeNumber(TixiDocumentHandle handle, const char *xPathExpression, int *number)
+DLL_EXPORT ReturnCode tixiXPathEvaluateNodeNumber(TixiDocumentHandle handle, char *xPathExpression, int *number)
 {
 	TixiDocument *document = getDocument(handle);
 	int error = SUCCESS;
@@ -3095,7 +3095,7 @@ DLL_EXPORT ReturnCode tixiXPathEvaluateNodeNumber(TixiDocumentHandle handle, con
 	return error;
 }
 
-DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handle, const char *xPathExpression, int elementNumber, char **text)
+DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handle, char *xPathExpression, int elementNumber, char **text)
 {
 	TixiDocument *document = getDocument(handle);
 	int error = SUCCESS;

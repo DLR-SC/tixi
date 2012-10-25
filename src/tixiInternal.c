@@ -418,7 +418,7 @@ ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char *pointPath,
   return error;
 }
 
-ReturnCode getPoint(const TixiDocumentHandle handle, const char *parentPath, const int pointIndex,
+ReturnCode getPoint(const TixiDocumentHandle handle, char *parentPath, const int pointIndex,
                     int ignoreMissingElements, double *x, double *y, double *z)
 {
   ReturnCode error = -1;
@@ -512,7 +512,7 @@ void checkLibxml2Version()
 }
 
 
-char *buildString(const char *format, ...)
+char *buildString(char *format, ...)
 {
 
   int bufferLength = 10;        /* initial guess for the buffer length */
@@ -855,8 +855,8 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath)
 }
 
 
-ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char *elementPath,
-                                const char *attributeName, const char *attributeValue)
+ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, char *elementPath,
+                                char *attributeName, char *attributeValue)
 {
   ReturnCode error = -1;
   xmlXPathObjectPtr xpathObject = NULL;
@@ -894,7 +894,7 @@ ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char *elementPat
 
 
 
-ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char *elementPath, xmlNodePtr *pNodePrt)
+ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, char *elementPath, xmlNodePtr *pNodePrt)
 {
   TixiDocument *document = getDocument(handle);
   xmlDocPtr xmlDocument = NULL;
@@ -1028,7 +1028,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
 }
 
 
-ReturnCode saveDocument (TixiDocumentHandle handle, const char *xmlFilename, InternalSaveMode saveMode)
+ReturnCode saveDocument (TixiDocumentHandle handle, char *xmlFilename, InternalSaveMode saveMode)
 {
 	TixiDocument *document = getDocument(handle);
     TixiDocument *cpyDoc = NULL;

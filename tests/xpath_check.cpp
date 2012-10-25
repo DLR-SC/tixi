@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,11 +28,11 @@
 */
 
 
-const char* filename_uid_correct = "TestData/uid_correct.xml";
-const char* filename_uid_duplicated = "TestData/uid_duplicated.xml";
-const char* filename_without_uids = "TestData/uid_no_uids.xml";
-const char* filename_links_broken = "TestData/uid_broken_link.xml";
-const char* filename_links = "TestData/uid_link.xml";
+char* filename_uid_correct = "TestData/uid_correct.xml";
+char* filename_uid_duplicated = "TestData/uid_duplicated.xml";
+char* filename_without_uids = "TestData/uid_no_uids.xml";
+char* filename_links_broken = "TestData/uid_broken_link.xml";
+char* filename_links = "TestData/uid_link.xml";
 
 
 TEST(uid_checks, tixiUIDCheck_ok)
@@ -92,7 +92,7 @@ TEST(uid_checks, tixiUIDCheck_setToXpath)
 {
     TixiDocumentHandle documentHandle = -1;
     char *text = NULL;
-    const char *new_uid_text = "new_uid_text";
+    char *new_uid_text = "new_uid_text";
 
     ASSERT_TRUE( tixiOpenDocument( filename_uid_correct, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( tixiUIDSetToXPath(documentHandle, "/root/a[2]/b[1]", new_uid_text) == SUCCESS );

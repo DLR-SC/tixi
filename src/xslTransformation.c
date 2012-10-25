@@ -49,7 +49,7 @@ char* xsltTransformToString(xmlDocPtr doc, char *xslFilename) {
 }
 
 
-ReturnCode xsltTransformToFile(xmlDocPtr doc, const char *xslFilename, const char *outputFilename) {
+ReturnCode xsltTransformToFile(xmlDocPtr doc, char *xslFilename, char *outputFilename) {
     xmlDocPtr res;
     xsltStylesheetPtr style;
 

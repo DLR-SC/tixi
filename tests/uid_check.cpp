@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,9 +23,9 @@
 
 #include "tixi.h"
  
-static const char* xmlFilename = "TestData/xpaths.xml";
-static const char *elementPathExists = "/root/a[@uID=\"test\"]/b[@uID=\"b\"]";
-static const char *elementPathDoesnt = "/root/a[@uID=\"schlumpf\"]/b[@uID=\"empty_element\"]";
+static char* xmlFilename = "TestData/xpaths.xml";
+static char *elementPathExists = "/root/a[@uID=\"test\"]/b[@uID=\"b\"]";
+static char *elementPathDoesnt = "/root/a[@uID=\"schlumpf\"]/b[@uID=\"empty_element\"]";
 
 
 TEST(xpath_checks, xpath_generation) 

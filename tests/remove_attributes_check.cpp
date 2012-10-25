@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ static TixiDocumentHandle documentHandle = -1;
 class RemoveAttributesTests : public ::testing::Test {
  protected:
   virtual void SetUp() {
-     const char* xmlFilename = "TestData/in.xml";
+     char* xmlFilename = "TestData/in.xml";
      ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS);
   }
 
@@ -44,9 +44,9 @@ class RemoveAttributesTests : public ::testing::Test {
 
 TEST_F(RemoveAttributesTests, removeSingleAttribute)
 {
-    const char* elementPath = "/plane/wings";
-    const char* attributeName = "numberOfWings";
-    const char* fullElementPath = "/plane/wings[@numberOfWings]";
+    char* elementPath = "/plane/wings";
+    char* attributeName = "numberOfWings";
+    char* fullElementPath = "/plane/wings[@numberOfWings]";
     char* text = NULL;
 
     ASSERT_TRUE( tixiCheckElement( documentHandle, fullElementPath ) == SUCCESS);

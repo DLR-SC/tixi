@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,7 @@ static TixiDocumentHandle documentHandle = -1;
 class GetAttributeTests : public ::testing::Test {
  protected:
   virtual void SetUp() {
-     const char* xmlFilename = "TestData/in.xml";
+     char* xmlFilename = "TestData/in.xml";
 
      ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS);
   }
@@ -46,8 +46,8 @@ class GetAttributeTests : public ::testing::Test {
 TEST_F(GetAttributeTests, invalidHandle)
 {
     char* text = NULL;
-    const char* elementPath = "/plane/name";
-    const char* attributeName = "non_existing_attribute";
+    char* elementPath = "/plane/name";
+    char* attributeName = "non_existing_attribute";
 
     ASSERT_TRUE( tixiGetTextAttribute( -1, elementPath, attributeName, &text ) == INVALID_HANDLE );
 }
@@ -55,40 +55,40 @@ TEST_F(GetAttributeTests, invalidHandle)
 TEST_F(GetAttributeTests, attributeNotFound)
 {
     char* text = NULL;
-    const char* elementPath = "/plane/wings/wing[1]";
-    const char* attributeName = "non_existing_attribute";
+    char* elementPath = "/plane/wings/wing[1]";
+    char* attributeName = "non_existing_attribute";
     ASSERT_TRUE( tixiGetTextAttribute( documentHandle, elementPath, attributeName, &text ) == ATTRIBUTE_NOT_FOUND );
 }
 
 TEST_F(GetAttributeTests, elementNotFound)
 {
     char* text = NULL;
-    const char* elementPath = "/plane/name/pp";
-    const char* attributeName = "non_existing_attribute";
+    char* elementPath = "/plane/name/pp";
+    char* attributeName = "non_existing_attribute";
     ASSERT_TRUE( tixiGetTextAttribute( documentHandle, elementPath, attributeName, &text ) == ELEMENT_NOT_FOUND );
 }
 
 TEST_F(GetAttributeTests, invalidXpath)
 {
     char* text = NULL;
-    const char* elementPath = "cc/plane/name|||/pp";
-    const char* attributeName = "position";
+    char* elementPath = "cc/plane/name|||/pp";
+    char* attributeName = "position";
     ASSERT_TRUE( tixiGetTextAttribute( documentHandle, elementPath, attributeName, &text ) == INVALID_XPATH );
 }
 
 TEST_F(GetAttributeTests, notUnique)
 {
     char* text = NULL;
-    const char* elementPath = "/plane/wings/wing";
-    const char* attributeName = "position";
+    char* elementPath = "/plane/wings/wing";
+    char* attributeName = "position";
     ASSERT_TRUE( tixiGetTextAttribute( documentHandle, elementPath, attributeName, &text ) == ELEMENT_PATH_NOT_UNIQUE );
 }
 
 TEST_F(GetAttributeTests, getDoubleAttribute)
 {
     double number = 0.;
-    const char* elementPath = "/plane/coordinateOrigin";
-    const char* attributeName = "scaling";
+    char* elementPath = "/plane/coordinateOrigin";
+    char* attributeName = "scaling";
     ASSERT_TRUE( tixiGetDoubleAttribute( documentHandle, elementPath, attributeName, &number ) == SUCCESS );
     EXPECT_EQ( number, 1.3456);
 }
@@ -96,8 +96,8 @@ TEST_F(GetAttributeTests, getDoubleAttribute)
 TEST_F(GetAttributeTests, getIntegerAttribute)
 {
     int number = 0;
-    const char* elementPath = "/plane/wings";
-    const char* attributeName = "numberOfWings";
+    char* elementPath = "/plane/wings";
+    char* attributeName = "numberOfWings";
 
     ASSERT_TRUE( tixiGetIntegerAttribute( documentHandle, elementPath, attributeName, &number ) == SUCCESS );
     EXPECT_EQ( number , 2 );
