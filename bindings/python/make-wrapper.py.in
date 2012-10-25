@@ -571,7 +571,7 @@ if __name__ == '__main__':
     fd.close()
 
 
-    blacklist = ["tixiGetVersion", "tixiCheckDocumentHandle",
+    blacklist = ["tixiGetVersion", "tixiCheckDocumentHandle", "tixiUIDCheckExists",
                  "tixiOpenDocument", "tixiOpenDocumentRecursive", "tixiOpenDocumentFromHTTP", "tixiImportFromString", "tixiCreateDocument",
                  "tixiSaveDocument", "tixiSaveCompleteDocument", "tixiSaveAndRemoveDocument", "tixiCloseDocument",
                  "tixiGetRawInterface", "tixiGetArrayValue", "tixiGetBooleanElement", "tixiAddBooleanElement",
