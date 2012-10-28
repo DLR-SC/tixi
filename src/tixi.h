@@ -1054,7 +1054,6 @@ typedef int TixiDocumentHandle;
                         specified by handle (see section \ref XPathExamples above).
 
       @param number (in) boolean content of the element to update the element specified by elementPath. The value of boolean has to be "0" or "1".
-      @param format (in) format used to convert number into a string. If format is NULL "%g" will be used to format the string.
 
       @return
        - SUCCESS if successfully retrieve the text content of a single element
@@ -1064,7 +1063,7 @@ typedef int TixiDocumentHandle;
        - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
        - FAILED if node is no textNode
    */
-    DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle, char *elementPath, int boolean, char *format);
+    DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle, char *elementPath, int boolean);
 
 
 /**

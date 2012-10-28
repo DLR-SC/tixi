@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+* ï¿½ ï¿½ http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -78,6 +78,8 @@
 #define tixiAddBooleanElement_f TIXI_ADD_BOOLEAN_ELEMENT
 #define tixiUpdateTextElement_f TIXI_UPDATE_TEXT_ELEMENT
 #define tixiUpdateDoubleElement_f TIXI_UPDATE_DOUBLE_ELEMENT
+#define tixiUpdateIntegerElement_f TIXI_UPDATE_INTEGER_ELEMENT
+#define tixiUpdateBooleanElement_f TIXI_UPDATE_BOOLEAN_ELEMENT
 #define tixiRemoveElement_f TIXI_REMOVE_ELEMENT
 #define tixiGetTextAttribute_f TIXI_GET_TEXT_ATTRIBUTE
 #define tixiGetIntegerAttribute_f TIXI_GET_INTEGER_ATTRIBUTE
@@ -149,6 +151,8 @@
 #define tixiAddBooleanElement_f FORTRAN_NAME(tixi_add_boolean_element)
 #define tixiUpdateTextElement_f FORTRAN_NAME(tixi_update_text_element)
 #define tixiUpdateDoubleElement_f FORTRAN_NAME(tixi_update_double_element)
+#define tixiUpdateIntegerElement_f FORTRAN_NAME(tixi_update_integer_element)
+#define tixiUpdateBooleanElement_f FORTRAN_NAME(tixi_update_boolean_element)
 #define tixiRemoveElement_f FORTRAN_NAME(tixi_remove_element)
 #define tixiGetTextAttribute_f FORTRAN_NAME(tixi_get_text_attribute)
 #define tixiGetIntegerAttribute_f FORTRAN_NAME(tixi_get_integer_attribute)
@@ -352,6 +356,22 @@ void tixiUpdateDoubleElement_f(const TixiDocumentHandle* handle,
 							  int lengthString1,
 							  int lengthString2,
 							  int lengthString3 );
+
+
+void tixiUpdateIntegerElement_f(const TixiDocumentHandle* handle,
+                              char* parentPath,
+                              int number,
+                              char* format,
+                              ReturnCode* error,
+                              int lengthString1,
+                              int lengthString2,
+                              int lengthString3 );
+
+void tixiUpdateIntegerElement_f(const TixiDocumentHandle* handle,
+                              char* parentPath,
+                              int number,
+                              ReturnCode* error,
+                              int lengthString1 );
 
 void tixiRemoveElement_f(const TixiDocumentHandle* handle,
                          char* elementPath,

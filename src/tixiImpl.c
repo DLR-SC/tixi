@@ -928,7 +928,7 @@ DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle,
 }
 
 
-DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle, char *elementPath, int boolean, char *format)
+DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle, char *elementPath, int boolean)
 {
     TixiDocument *document = getDocument(handle);
     xmlDocPtr xmlDocument = NULL;

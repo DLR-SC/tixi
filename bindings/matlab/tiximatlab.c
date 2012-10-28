@@ -573,6 +573,63 @@ void mex_tixiUpdateDoubleElement(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     handleTixiError(tixiUpdateDoubleElement(handle, xpath, d, format));
 }
 
+void mex_tixiUpdateIntegerElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * format = NULL;
+    int d = 0;
+    int handle = -1;
+    if(nrhs != 5){
+        mexErrMsgTxt("tixiUpdateIntegerElement(handle, xpath, value, format): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xpath argument\n");
+
+    if(!isscalar(prhs[3]))
+        mexErrMsgTxt("Invalid value argument\n");
+
+    if(!mxIsChar(prhs[4]))
+        mexErrMsgTxt("Invalid format argument\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+
+    d = *mxGetPr(prhs[3]);
+
+    mxToString(prhs[4],&format);
+    handleTixiError(tixiUpdateIntegerElement(handle, xpath, d, format));
+}
+
+void mex_tixiUpdateBooleanElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    int boolean = 0;
+    int handle = -1;
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiUpdateBooleanElement(handle, xpath, boolean): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid xpath argument\n");
+
+    if(mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid boolean argument\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    boolean = *mxGetPr(prhs[3]);
+    handleTixiError(tixiUpdateBooleanElement(handle, xpath, boolean));
+}
+
 void mex_tixiAddTextElement(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     char * xpath = NULL;
     char * name = NULL;
