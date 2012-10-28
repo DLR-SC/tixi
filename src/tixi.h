@@ -969,8 +969,7 @@ typedef int TixiDocumentHandle;
        - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
        - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
        - FAILED if node is no textNode
-   */
-
+    */
     DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, char *elementPath, char *text);
 
 
@@ -1003,8 +1002,69 @@ typedef int TixiDocumentHandle;
          - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
          - FAILED if node is no textNode
      */
-
       DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, char *elementPath, double number, char *format);
+
+      /**
+         @brief Updates the double content of an element.
+
+         Update the integer content of the element specified by elementPath in the
+         document specified by handle. elementPath must refer to exactly one
+         element which has only a text node and zero or more attributes but
+         no further children with text nodes.
+
+         <b>Fortran syntax:</b>
+
+         tixi_update_integer_element( integer handle, character*n element_path,  integer number, character*n format, integer error )
+         #PY:# no output
+
+         @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+
+         @param elementPath (in) an XPath compliant path to an element in the document
+                           specified by handle (see section \ref XPathExamples above).
+
+         @param number (in) integer content of the element to update the element specified by elementPath
+         @param format (in) format used to convert number into a string. If format is NULL "%g" will be used to format the string.
+
+         @return
+          - SUCCESS if successfully retrieve the text content of a single element
+          - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+          - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+          - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+          - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+          - FAILED if node is no textNode
+      */
+       DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle, char *elementPath, int number, char *format);
+
+   /**
+      @brief Updates the boolean content of an element.
+
+      Update the boolean content of the element specified by elementPath in the
+      document specified by handle. elementPath must refer to exactly one
+      element which has only a text node and zero or more attributes but
+      no further children with text nodes.
+
+      <b>Fortran syntax:</b>
+
+      tixi_update_boolean_element( integer handle, character*n element_path,  integer boolean, character*n format, integer error )
+      #PY:# no output
+
+      @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+
+      @param elementPath (in) an XPath compliant path to an element in the document
+                        specified by handle (see section \ref XPathExamples above).
+
+      @param number (in) boolean content of the element to update the element specified by elementPath. The value of boolean has to be "0" or "1".
+      @param format (in) format used to convert number into a string. If format is NULL "%g" will be used to format the string.
+
+      @return
+       - SUCCESS if successfully retrieve the text content of a single element
+       - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+       - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+       - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+       - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+       - FAILED if node is no textNode
+   */
+    DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle, char *elementPath, int boolean, char *format);
 
 
 /**
