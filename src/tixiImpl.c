@@ -890,6 +890,75 @@ DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, 
 }
 
 
+DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle, char *elementPath, int number, char *format)
+{
+    TixiDocument *document = getDocument(handle);
+    xmlDocPtr xmlDocument = NULL;
+    xmlXPathObjectPtr xpathObject = NULL;
+    xmlNodePtr element = NULL;
+    xmlNodePtr newElement = NULL;
+    ReturnCode error = SUCCESS;
+    char *textBuffer = NULL;
+
+    if (!document) {
+        fprintf(stderr, "Error: Invalid document handle.\n");
+        return INVALID_HANDLE;
+    }
+
+    if (document->status == SAVED) {
+        fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+        return ALREADY_SAVED;
+    }
+
+    xmlDocument = document->docPtr;
+
+    if (!format) {
+        format = "%g";
+    };
+
+    textBuffer = buildString(format, number);
+
+    error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+    if (!error) {
+        newElement = xmlNewText((xmlChar*) textBuffer);
+        xmlReplaceNode(element->children, newElement);
+        return SUCCESS;
+    }
+    return FAILED;
+}
+
+
+DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle, char *elementPath, int boolean)
+{
+    TixiDocument *document = getDocument(handle);
+    xmlDocPtr xmlDocument = NULL;
+    xmlXPathObjectPtr xpathObject = NULL;
+    xmlNodePtr element = NULL;
+    xmlNodePtr newElement = NULL;
+    ReturnCode error = SUCCESS;
+    char *textBuffer = NULL;
+
+    if (!document) {
+        fprintf(stderr, "Error: Invalid document handle.\n");
+        return INVALID_HANDLE;
+    }
+
+    if (document->status == SAVED) {
+        fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+        return ALREADY_SAVED;
+    }
+
+    if( boolean == 0 ) {
+        return tixiUpdateTextElement (handle, elementPath, "false");
+    } else if( boolean == 1 ) {
+        return tixiUpdateTextElement (handle, elementPath, "true");
+    } else {
+        fprintf(stderr, "Error: boolean is either 1 or 0 in tixiUpdateBooleanElement.\n");
+        return FAILED;
+    }
+}
+
+
 DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, const char *elementPath,
                                            char *attributeName, char **text)
 {
@@ -914,8 +983,8 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
     textPtr = (char *) xmlGetProp(element, (xmlChar *) attributeName);
 
     if (textPtr) {
-      *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
       strcpy(*text, textPtr);
+      *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
       xmlFree(textPtr);
       error = addToMemoryList(document, (void *) *text);
       xmlXPathFreeObject(xpathObject);
@@ -1076,8 +1145,6 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
 DLL_EXPORT ReturnCode tixiAddBooleanElement(const TixiDocumentHandle handle, char *parentPath,
                               char *elementName, int boolean)
 {
-
-
   if( boolean == 0 ) {
 	  tixiAddTextElement(handle, parentPath, elementName, "false");
   } else if( boolean == 1 ) {

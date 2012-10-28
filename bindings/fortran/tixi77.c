@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+* ï¿½ ï¿½ http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -485,6 +485,50 @@ void tixiUpdateDoubleElement_f(const TixiDocumentHandle *handle,
   cFormat = makeCString(format, formatLength);
 
   *error = tixiUpdateDoubleElement(*handle, cParentPath, number, cFormat);
+
+  free(cParentPath);
+  free(cFormat);
+  if (cText) {
+    free(cText);
+  }
+}
+
+void tixiUpdateIntegerElement_f(const TixiDocumentHandle *handle,
+                              char *parentPath,
+                              int number,
+                              char *format,
+                              ReturnCode *error,
+                              int parentPathLength, int formatLength, int textLength)
+{
+  char *cParentPath = NULL;
+  char *cFormat = NULL;
+  char *cText = NULL;
+
+  cParentPath = makeCString(parentPath, parentPathLength);
+  cFormat = makeCString(format, formatLength);
+
+  *error = tixiUpdateIntegerElement(*handle, cParentPath, number, cFormat);
+
+  free(cParentPath);
+  free(cFormat);
+  if (cText) {
+    free(cText);
+  }
+}
+
+void tixiUpdateBooleanElement_f(const TixiDocumentHandle *handle,
+                                  char *parentPath,
+                                  int number,
+                                  ReturnCode *error,
+                                  int parentPathLength)
+{
+  char *cParentPath = NULL;
+  char *cFormat = NULL;
+  char *cText = NULL;
+
+  cParentPath = makeCString(parentPath, parentPathLength);
+
+  *error = tixiUpdateBooleanElement(*handle, cParentPath, number);
 
   free(cParentPath);
   free(cFormat);
