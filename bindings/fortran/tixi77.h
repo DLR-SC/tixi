@@ -367,9 +367,9 @@ void tixiUpdateIntegerElement_f(const TixiDocumentHandle* handle,
                               int lengthString2,
                               int lengthString3 );
 
-void tixiUpdateIntegerElement_f(const TixiDocumentHandle* handle,
+void tixiUpdateBooleanElement_f(const TixiDocumentHandle* handle,
                               char* parentPath,
-                              int number,
+                              int boolean,
                               ReturnCode* error,
                               int lengthString1 );
 
