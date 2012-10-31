@@ -983,8 +983,8 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
     textPtr = (char *) xmlGetProp(element, (xmlChar *) attributeName);
 
     if (textPtr) {
-      strcpy(*text, textPtr);
       *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
+      strcpy(*text, textPtr);
       xmlFree(textPtr);
       error = addToMemoryList(document, (void *) *text);
       xmlXPathFreeObject(xpathObject);
