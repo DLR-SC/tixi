@@ -11,6 +11,8 @@ endif()
 
 project (TIXI)
 
+OPTION(ENABLE_COVERAGE "Enable GCov coverage analysis (defines a 'coverage' target and enforces static build of tixi)" ON)
+
 set(TIXI_VERSION_MAJOR 2)
 set(TIXI_VERSION_MINOR 0)
 set(TIXI_VERSION_PATCH 2)
@@ -31,6 +33,18 @@ find_package(XML REQUIRED)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 
+# code coverage analysis
+IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        IF(ENABLE_COVERAGE)
+                MESSAGE(STATUS "Coverage enabled")
+                INCLUDE(CodeCoverage)
+                SETUP_TARGET_FOR_COVERAGE(coverage ${PROJECT_NAME}-unittests coverageReport)
+        ELSE()
+                MESSAGE(STATUS "Coverage disabled")
+        ENDIF()
+ENDIF()
+
+
 #create tixi library
 add_subdirectory(src)
 
@@ -43,6 +57,8 @@ mark_as_advanced(gtest_force_shared_crt)
 set (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
 add_subdirectory (${gtest_SOURCE_DIR} EXCLUDE_FROM_ALL)
 add_subdirectory(tests EXCLUDE_FROM_ALL)
+
+
 
 #demos
 add_subdirectory(examples/Demo)
