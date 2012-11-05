@@ -173,4 +173,11 @@ TEST_F(ArrayTests, array_test_negative)
     ASSERT_TRUE ( tixiGetArray(documentHandle, xPath, "abc", arraySize, &values) == ATTRIBUTE_NOT_FOUND );
     ASSERT_TRUE ( tixiGetArray(documentHandle, xPath, "def", arraySize, &values) == ATTRIBUTE_NOT_FOUND );
 
+    //check getArray, cmx is too short
+    ASSERT_TRUE ( tixiGetArrayDimensionSizes(documentHandle, xPath, sizes, &arraySize) == SUCCESS );
+    ASSERT_EQ   ( NON_MATCHING_SIZE, tixiGetArray(documentHandle, xPath, "cmx", arraySize, &values));
+    ASSERT_EQ   ( NON_MATCHING_SIZE, tixiGetArray(documentHandle, xPath, "cmz", 0, &values));
+    ASSERT_EQ   ( NON_MATCHING_SIZE, tixiGetArray(documentHandle, xPath, "cmz", 1, &values));
+    ASSERT_EQ   ( NON_MATCHING_SIZE, tixiGetArray(documentHandle, xPath, "cmz", 49, &values));
+    ASSERT_EQ   ( NON_MATCHING_SIZE, tixiGetArray(documentHandle, xPath, "cmz", 47, &values));
 }

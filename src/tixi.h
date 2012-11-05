@@ -2433,6 +2433,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
           - ATTRIBUTE_NOT_FOUND if the given sub element has not mapType="array"
           - ELEMENT_PATH_NOT_UNIQUE if matrixPath resolves not to a single element but to a list of elements
           - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
+          - NON_MATCHING_SIZE if arraySize does not match number of read elements in specified array
       */
       DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char *arrayPath,
                                           const char *elementName, int arraySize, double **values);

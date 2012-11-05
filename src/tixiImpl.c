@@ -2751,22 +2751,32 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
     /* allocate memory for array */
     tmpArray = (double *) malloc(sizeof(double) * arraySize);
-    addToMemoryList(document, tmpArray);
 
     /* tokenize string into distinct elements to separate values */
     token = strtok(tmpContCpy, VECTOR_SEPARATOR);
-    while (token != NULL) {
+    while (token != NULL && count < arraySize) {
         tmpArray[count ++] = atof(token);
         token = strtok(0, VECTOR_SEPARATOR);
     }
     free(tmpContCpy);
-    *pValues = tmpArray;
 
     /* clean up */
     free(xpathSubElementsName);
     xmlFree(attributeName);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
+
+    //check if number of entries is the same as arraySize
+    if(count != arraySize || token != NULL){
+        fprintf(stderr, 
+            "Error: the number of elements of array \"%s\" does not match the specified size of %d!\n", 
+            elementName, arraySize);
+        free(tmpArray);
+        return NON_MATCHING_SIZE;
+    }
+
+    addToMemoryList(document, tmpArray);
+    *pValues = tmpArray;
     return SUCCESS;
 }
 
