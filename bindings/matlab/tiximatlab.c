@@ -232,9 +232,10 @@ void mex_tixiAddCpacsHeader(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
     char * version = NULL;
     char * creator = NULL;
     char * description = NULL;
+    char * cpacsVersion = NULL;
     TixiDocumentHandle handle = 0;
 
-    if(nrhs != 6)
+    if(nrhs != 7)
         mexErrMsgTxt("tixiAddCpacsHeader(handle, name, creator, version, description): Wrong number of arguments\n");
 
     if(!isscalar(prhs[1]))
@@ -252,6 +253,8 @@ void mex_tixiAddCpacsHeader(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
     if(!mxIsChar(prhs[5]))
         mexErrMsgTxt("Invalid description argument\n");
 
+    if(!mxIsChar(prhs[6]))
+        mexErrMsgTxt("Invalid cpacs version argument\n");
 
 
     handle = mxToInt(prhs[1]);
@@ -259,9 +262,10 @@ void mex_tixiAddCpacsHeader(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
     mxToString(prhs[3],&creator);
     mxToString(prhs[4],&version);
     mxToString(prhs[5],&description);
+    mxToString(prhs[6],&cpacsVersion);
 
 
-    handleTixiError(tixiAddCpacsHeader(handle, name, creator, version, description));
+    handleTixiError(tixiAddCpacsHeader(handle, name, creator, version, description, cpacsVersion));
 }
 
 void mex_tixiOpenDocument(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){

@@ -60,13 +60,14 @@ TEST(createDocument, createDocumentAddCPACSHeader)
     char* rootElementName = "rootElement";
     char* cpacsName = "cpacsName";
     char* cpacsCreator = "cpacsCreator";
-    char* cpacsVersion = "cpacsVersion";
+    char *     version = "cpacsVersion";
+    char* cpacsVersion = "2.0";
     char* cpacsDescription = "cpacsDescription";
     TixiDocumentHandle handle = -1;
     char *text = NULL;
 
     ASSERT_TRUE( tixiCreateDocument( rootElementName, &handle ) == SUCCESS );
-    ASSERT_TRUE( tixiAddCpacsHeader( handle, cpacsName, cpacsCreator, cpacsVersion, cpacsDescription ) == SUCCESS );
+    ASSERT_TRUE( tixiAddCpacsHeader( handle, cpacsName, cpacsCreator, version, cpacsDescription, cpacsVersion ) == SUCCESS );
 
     // Now check the different header values
     ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/name", &text ) == SUCCESS );
@@ -76,6 +77,9 @@ TEST(createDocument, createDocumentAddCPACSHeader)
     ASSERT_TRUE( !strcmp(text, cpacsCreator));
 
     ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/version", &text ) == SUCCESS );
+    ASSERT_TRUE( !strcmp(text, version));
+
+    ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/cpacsVersion", &text ) == SUCCESS );
     ASSERT_TRUE( !strcmp(text, cpacsVersion));
 
     ASSERT_TRUE( tixiGetTextElement( handle, "/rootElement/header/description", &text ) == SUCCESS );
