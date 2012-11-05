@@ -1759,6 +1759,7 @@ tixi_add_cpacs_header( integer  handle, character*n name, character*n creator, c
 @param creator (in) string to identify the creator of the file
 @param version (in) string to identify the version of the file
 @param description (in) optional string to set a description to the file
+@param cpacsVersion (in) CPACS version number
 
 @return
 
@@ -1767,7 +1768,7 @@ tixi_add_cpacs_header( integer  handle, character*n name, character*n creator, c
 - INVALID_HANDLE if the handle is not valid
 - ALREADY_SAVED if the header should be added to an already saved document */
 DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char *name, char *creator,
-									      char *version, char *description);
+									      char *version, char *description, char * cpacsVersion);
 
 
 /**

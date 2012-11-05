@@ -597,7 +597,7 @@ DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, char *toolN
 
 
 DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
-										char *name, char *creator, char *version, char *description)
+										char *name, char *creator, char *version, char *description, char * cpacsVersion)
 {
     TixiDocument *document = getDocument(handle);
 	xmlNodePtr headerElement = NULL;
@@ -627,22 +627,31 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 		xmlNodePtr newChild = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "name", (xmlChar *) name);
 
+		xmlNodePtr cpacsVersionElement = NULL;
+
 		if (!newChild) {
-			fprintf(stderr, "Error:  Failed to created \"toolName\" element.\n");
+			fprintf(stderr, "Error:  Failed to create \"toolName\" element.\n");
 			return FAILED;
 		}
 
 		newChild = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "version", (xmlChar *) version);
 		if (!newChild) {
-			fprintf(stderr, "Error:  Failed to created version\" element.\n");
+			fprintf(stderr, "Error:  Failed to create version\" element.\n");
 			return FAILED;
-			}
+		}
+
+		cpacsVersionElement = xmlNewTextChild(headerElement, nameSpace,
+				(xmlChar *) "cpacsVersion", (xmlChar *) cpacsVersion);
+		if (!cpacsVersionElement) {
+			fprintf(stderr, "Error:  Failed to create cpacs version\" element.\n");
+			return FAILED;
+		}
 
 		creatorElement = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "creator", (xmlChar *) creator);
 		if (!creatorElement) {
-			fprintf(stderr, "Error:  Failed to created \"creator\" element.\n");
+			fprintf(stderr, "Error:  Failed to create \"creator\" element.\n");
 			return FAILED;
 		}
 
@@ -650,7 +659,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 				(xmlChar *) "description", (xmlChar *) description);
 		if (!creatorElement) {
 			fprintf(stderr,
-					"Error:  Failed to created \"description\" element.\n");
+					"Error:  Failed to create \"description\" element.\n");
 			return FAILED;
 		}
 
