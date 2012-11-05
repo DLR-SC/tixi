@@ -1745,13 +1745,12 @@ an integer number. Elements with the same name can be added multiple times.
 @brief Add CPACS header to XML-file.
 
 Inserts a header containing information on the data set in this file.
-Additionally, the TIXI version is inserted. If an strings
-equals to NULL an empty element is inserted. This routine should be called right after
+If an strings equals to NULL an empty element is inserted. This routine should be called right after
 ::tixiCreateDocument. An timestamp is automaticly added to the header.
 
 <b>Fortran syntax:</b>
 
-tixi_add_cpacs_header( integer  handle, character*n name, character*n creator, character*n version, character*n descripton, integer error )
+tixi_add_cpacs_header( integer  handle, character*n name, character*n creator, character*n version, character*n descripton, character*n cpacs_version, integer error )
 #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
 
 @param handle (in) as returned by ::tixiCreateDocument
