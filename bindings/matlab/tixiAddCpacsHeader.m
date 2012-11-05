@@ -1,4 +1,4 @@
-function tixiAddCpacsHeader(handle, name, creator, version, description)
+function tixiAddCpacsHeader(handle, name, creator, version, description, cpacsVersion)
     if (ischar(handle))
         error('Invalid handle');
     end
@@ -19,8 +19,12 @@ function tixiAddCpacsHeader(handle, name, creator, version, description)
         error('Invalid description argument');
     end
     
+    if not(ischar(cpacsVersion))
+        error('Invalid cpacs version argument');
+    end
+    
     try 
-        tixi_matlab('tixiAddCpacsHeader',handle, name, creator, version, description);
+        tixi_matlab('tixiAddCpacsHeader',handle, name, creator, version, description, cpacsVersion);
     catch  err
         error(err.message);
     end
