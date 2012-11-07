@@ -392,7 +392,7 @@ typedef int TixiDocumentHandle;
 
     Opens an XML-file specified by xmlFilename for reading and checks
     if it is well formed. To validate the document against a XML-Schema
-    or DTD use ::tixiSchemaValidate or ::tixiDTDValidate.
+    or DTD use ::tixiSchemaValidateFromFile, ::tixiSchemaValidateFromString or ::tixiDTDValidate.
 
 
     <b>Fortran syntax:</b>
@@ -423,37 +423,39 @@ typedef int TixiDocumentHandle;
 	In the path node has be be a valid URI. This uri could adress a relativ or absolut file path,
 	or a http url. Example values for the path node are:
 	- absolute local directory: "file:///tmp/" or "file:///c:/windws/"
-	- relative local direcotry: "file://relativeDirectory/" or "file://../anotherRelativeDirectory/"
-    - remote http ressource: "http://www.someurl.de/"
+	- relative local directory: "file://relativeDirectory/" or "file://../anotherRelativeDirectory/"
+	- remote http ressource: "http://www.someurl.de/"
 
 	Examples for the externaldata node:
-        <wings>
+    @code{.xml}
+    <wings>
         <airfoils>
                 <externaldata>
-					<path>file://aDirectory/</path>
-					<filename>VFW614-W-1.xml</filename>
-					<filename>VFW614-W-2.xml</filename>
-					...
+                    <path>file://aDirectory/</path>
+                    <filename>VFW614-W-1.xml</filename>
+                    <filename>VFW614-W-2.xml</filename>
+                    ...
                 </externaldata>
             <airfoil>
                 <name>VFW614 Seitenleitwerksprofil</name>
                 <coordinates>
                     <point><x>1.0000000</x><y>0.0000000</y><z>0.0000000</z></point>
-                      <point><x>0.9795687</x><y>0.0023701</y><z>0.0000000</z></point>
-                      ...
+                    <point><x>0.9795687</x><y>0.0023701</y><z>0.0000000</z></point>
+                    ...
                 </coordinates>
             </airfoil>
         </airfoils>
     </wings>
+    @endcode
 
-          <b>Fortran syntax:</b>
+    <b>Fortran syntax:</b>
 
     tixi_open_document_recursive( character*n xml_filename, integer handle, integer openmode, integer error )
 
     @param xmlFilename (in) name of the XML-file to be opened
     @param handle (out) handle to the XML-document. This handle is used in
                   calls to other TIXI functions.
-    @param OpenMode (in) Enum of the mode to open (OPENMODE_PLAIN / OPENMODE_RECURSIVE).
+    @param oMode (in) Enum of the mode to open (OPENMODE_PLAIN / OPENMODE_RECURSIVE).
     @return
 
      - SUCCESS if successfully opened the XML-file
@@ -469,7 +471,7 @@ typedef int TixiDocumentHandle;
 
       Opens an XML-file specified by httpURL for reading and checks
       if it is well formed. To validate the document against a XML-Schema
-      or DTD use ::tixiSchemaValidate or ::tixiDTDValidate.
+      or DTD use ::tixiSchemaValidateFromFile, ::tixiSchemaValidateFromString or ::tixiDTDValidate.
 
 
       <b>Fortran syntax:</b>
@@ -493,8 +495,7 @@ typedef int TixiDocumentHandle;
 
     @brief Create an XML-document.
 
-    Initializes a data structure to hold an XML-document. Elements are
-    added using ::tixiAddElement and ::tixiAddElementWithAttribute functions.
+    Initializes a data structure to hold an XML-document. 
 
     <b>Fortran syntax:</b>
 
@@ -529,7 +530,7 @@ typedef int TixiDocumentHandle;
     tixi_save_document( integer  handle, character*n xml_filename, integer error )
 
 
-    @param handle (in) document handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+    @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
     @param xmlFilename (in) name of the file to be created.
 
     @return
@@ -558,7 +559,7 @@ typedef int TixiDocumentHandle;
 	  tixi_save_complete_document( integer  handle, character*n xml_filename, integer error )
 
 
-	  @param handle (in) document handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+	  @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 	  @param xmlFilename (in) name of the file to be created.
 
 	  @return
@@ -587,7 +588,7 @@ typedef int TixiDocumentHandle;
 	  tixi_save_and_remove_document( integer  handle, character*n xml_filename, integer error )
 
 
-	  @param handle (in) document handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+	  @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 	  @param xmlFilename (in) name of the file to be created.
 
 	  @return
@@ -611,7 +612,7 @@ typedef int TixiDocumentHandle;
 
     tixi_close_document( integer  handle, integer error )
 
-    @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+    @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
     @return
      - SUCCESS if successfully closed the XML-file
@@ -661,7 +662,7 @@ typedef int TixiDocumentHandle;
 
     tixi_export_document_as_string( integer handle, character*n text, integer error )
 
-    @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+    @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
     @param text (out) text content of the document
 
@@ -677,7 +678,7 @@ typedef int TixiDocumentHandle;
 
     Creates a new TIXI-document with the content of the string and checks
     if it is well formed. To validate the document against a XML-Schema
-    or DTD use ::tixiSchemaValidate or ::tixiDTDValidate.
+    or DTD use ::tixiSchemaValidateFromFile, ::tixiSchemaValidateFromString or ::tixiDTDValidate.
 
     <b>Fortran syntax:</b>
 
@@ -706,7 +707,7 @@ typedef int TixiDocumentHandle;
     @brief Validate XML-document against an XML-schema.
 
     Validates an XML-document against an XML-schema specified by
-    ::xsdFilename. This routine should be called after opening a
+    xsdFilename. This routine should be called after opening a
     document by ::tixiOpenDocument and before ::tixiSaveDocument if the
     validation against an XML-schema is desired for the input file and
     the output file, respectively.
@@ -714,7 +715,10 @@ typedef int TixiDocumentHandle;
     <b>Fortran syntax:</b>
 
     tixi_schema_validate_from_file( integer  handle, character*n xsd_filename, integer error )
+
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
     
     @param xsdFilename (in) name of the XML-schema-file to be used.
 
@@ -736,17 +740,19 @@ typedef int TixiDocumentHandle;
       @brief Validate XML-document against an XML-schema.
 
       Validates an XML-document against an XML-schema specified by
-      ::xsdStringe. This routine should be called after opening a
+      xsdString. This routine should be called after opening a
       document by ::tixiOpenDocument and before ::tixiSaveDocument if the
       validation against an XML-schema is desired for the input file and
       the output file, respectively.
-      The complete schema has to be in the string ::xsdString before running
+      The complete schema has to be in the string xsdString before running
       this function.
 
       <b>Fortran syntax:</b>
 
       tixi_schema_validate_from_string( integer  handle, character*n xsd_string, integer error )
+      @cond
       #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+      @endcond
 
       @param xsdString (in) char array witch is holding a schema.
 
@@ -769,7 +775,7 @@ typedef int TixiDocumentHandle;
     @brief Validate XML-document against a DTD.
 
     Validates an XML-document against a DTD specified by
-    ::DTDFilename. This routine is to be called after opening a
+    DTDFilename. This routine is to be called after opening a
     document by ::tixiOpenDocument and before ::tixiSaveDocument if the
     validation against a DTD is desired for the input file and the
     output file, respectively.
@@ -777,7 +783,10 @@ typedef int TixiDocumentHandle;
     <b>Fortran syntax:</b>
 
     tixi_dtd_validate( integer  handle, character*n dtd_filename, integer error )
+
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param DTDFilename (in) name of the DTD-file to be used
 
@@ -820,7 +829,7 @@ typedef int TixiDocumentHandle;
 
     tixi_get_text_element( integer handle, character*n element_path,  character*n text, integer error )
 
-    @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+    @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
     @param elementPath (in) an XPath compliant path to an element in the document
                       specified by handle (see section \ref XPathExamples above).
@@ -855,7 +864,7 @@ typedef int TixiDocumentHandle;
 
     tixi_get_integer_element( integer  handle, character*n element_path, int* number, integer error )
 
-    @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+    @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
     @param elementPath (in) an XPath compliant path to an element in the document
                       specified by handle (see section \ref XPathExamples above).
@@ -887,7 +896,7 @@ typedef int TixiDocumentHandle;
 
     tixi_get_double_element( integer  handle, character*n element_path, real number, integer error )
 
-    @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+    @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
     @param elementPath (in) an XPath compliant path to an element in the document
                       specified by handle (see section \ref XPathExamples above).
@@ -920,9 +929,12 @@ typedef int TixiDocumentHandle;
      <b>Fortran syntax:</b>
 
      tixi_get_boolean_element( integer  handle, character*n element_path, integer boolean, integer error )
-    #PY:2#
 
-     @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+     @cond
+    #PY:2#
+     @endcond
+
+     @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
      @param elementPath (in) an XPath compliant path to an element in the document
                        specified by handle (see section \ref XPathExamples above).
@@ -952,9 +964,12 @@ typedef int TixiDocumentHandle;
       <b>Fortran syntax:</b>
 
       tixi_update_text_element( integer handle, character*n element_path,  character*n text, integer error )
-      #PY:# no output
 
-      @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+      @cond
+      #PY:# no output
+      @endcond
+
+      @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
       @param elementPath (in) an XPath compliant path to an element in the document
                         specified by handle (see section \ref XPathExamples above).
@@ -984,9 +999,12 @@ typedef int TixiDocumentHandle;
         <b>Fortran syntax:</b>
 
         tixi_update_double_element( integer handle, character*n element_path,  real number, character*n format, integer error )
-        #PY:# no output
 
-        @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+        @cond
+        #PY:# no output
+        @endcond
+
+        @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
         @param elementPath (in) an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
@@ -1015,9 +1033,11 @@ typedef int TixiDocumentHandle;
          <b>Fortran syntax:</b>
 
          tixi_update_integer_element( integer handle, character*n element_path,  integer number, character*n format, integer error )
+         @cond
          #PY:# no output
+         @endcond
 
-         @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+         @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
          @param elementPath (in) an XPath compliant path to an element in the document
                            specified by handle (see section \ref XPathExamples above).
@@ -1046,14 +1066,16 @@ typedef int TixiDocumentHandle;
       <b>Fortran syntax:</b>
 
       tixi_update_boolean_element( integer handle, character*n element_path,  integer boolean, character*n format, integer error )
+      @cond
       #PY:# no output
+      @endcond
 
-      @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiOpenAndValidateDocument
+      @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
       @param elementPath (in) an XPath compliant path to an element in the document
                         specified by handle (see section \ref XPathExamples above).
 
-      @param number (in) boolean content of the element to update the element specified by elementPath. The value of boolean has to be "0" or "1".
+      @param boolean (in) boolean content of the element to update the element specified by elementPath. The value of boolean has to be "0" or "1".
 
       @return
        - SUCCESS if successfully retrieve the text content of a single element
@@ -1073,10 +1095,12 @@ Creates an element specified by the elementPath expression and
 insert text into the element. Elements with the same name can be
 added multiple times.
 
-    <b>Fortran syntax:</b>
+<b>Fortran syntax:</b>
 
-    tixi_add_text_element( integer  handle, character*n parent_path, character*n element_name, character*n text, integer error )
-    #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+tixi_add_text_element( integer  handle, character*n parent_path, character*n element_name, character*n text, integer error )
+@cond
+#PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+@endcond
 
 @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1111,10 +1135,12 @@ added multiple times.
   added multiple times, so in this version of the function an index could be
   provides to specifiy a exact position.
 
-      <b>Fortran syntax:</b>
+  <b>Fortran syntax:</b>
 
-      tixi_add_text_element_at_index( integer  handle, character*n parent_path, character*n element_name, character*n text, integer index, integer error )
-      #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+  tixi_add_text_element_at_index( integer  handle, character*n parent_path, character*n element_name, character*n text, integer index, integer error )
+  @cond
+  #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+  @endcond
 
   @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1128,7 +1154,7 @@ added multiple times.
   @param text (in) text to be placed inside the element pointed to by elementPath. If
                    text is NULL an empty element will be created.
 
-	@param index (in) the position index where the new node should be created.
+  @param index (in) the position index where the new node should be created.
 
   @return
 
@@ -1152,10 +1178,12 @@ added multiple times.
   insert one of the boolean values "true" or "false" into the element.
   Elements with the same name can be added multiple times.
 
-      <b>Fortran syntax:</b>
+  <b>Fortran syntax:</b>
 
-      tixi_add_boolean_element( integer  handle, character*n parent_path, character*n element_name, integer boolean, integer error )
-      #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+  tixi_add_boolean_element( integer  handle, character*n parent_path, character*n element_name, integer boolean, integer error )
+  @cond
+  #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+  @endcond
 
   @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1189,10 +1217,12 @@ added multiple times.
 Creates an element specified by the elementPath expression. Elements
 with the same name can be added multiple times.
 
-    <b>Fortran syntax:</b>
+<b>Fortran syntax:</b>
 
-    tixi_add_double_element( integer  handle, character*n parent_path, character*n element_name, real number, character*n format, integer error )
-    #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+tixi_add_double_element( integer  handle, character*n parent_path, character*n element_name, real number, character*n format, integer error )
+@cond
+#PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+@endcond
 
 @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
@@ -1228,10 +1258,12 @@ NULL "%g" will be used to format the string.
 Creates an element specified by the elementPath expression holding
 an integer number. Elements with the same name can be added multiple times.
 
-    <b>Fortran syntax:</b>
+<b>Fortran syntax:</b>
 
-    tixi_add_integer_element( integer  handle, character*n parent_path, character*n element_name, integer number, character*n format, integer error )
-    #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+tixi_add_integer_element( integer  handle, character*n parent_path, character*n element_name, integer number, character*n format, integer error )
+@cond
+#PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+@endcond
 
 @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
@@ -1269,11 +1301,12 @@ an integer number. Elements with the same name can be added multiple times.
   added multiple times.
 
 
+  <b>Fortran syntax:</b>
 
-      <b>Fortran syntax:</b>
-
-      tixi_add_float_vector( integer handle, character*n parent_path, character*n element_name, real array, integer numElements, integer error )
-      #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+  tixi_add_float_vector( integer handle, character*n parent_path, character*n element_name, real array, integer numElements, integer error )
+  @cond
+  #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+  @endcond
 
   @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1309,10 +1342,12 @@ an integer number. Elements with the same name can be added multiple times.
     Creates an empty element specified by the elementPath expression
     Elements with the same name can be added multiple times.
 
-        <b>Fortran syntax:</b>
+    <b>Fortran syntax:</b>
 
-        tixi_create_element( integer  handle, character*n parent_path, character*n element_name, integer error )
-        #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    tixi_create_element( integer  handle, character*n parent_path, character*n element_name, integer error )
+    @cond
+    #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1343,10 +1378,12 @@ an integer number. Elements with the same name can be added multiple times.
 	  	  on which position the new element should be created.
 	  Elements with the same name can be added multiple times.
 
-		  <b>Fortran syntax:</b>
+	  <b>Fortran syntax:</b>
 
-		  tixi_create_element_at_index( integer  handle, character*n parent_path, character*n element_name, integer index, integer error )
-		  #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+	  tixi_create_element_at_index( integer  handle, character*n parent_path, character*n element_name, integer index, integer error )
+	  @cond
+	  #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+	  @endcond
 
 	  @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1380,7 +1417,9 @@ an integer number. Elements with the same name can be added multiple times.
     <b>Fortran syntax:</b>
 
     tixi_remove_element( integer  handle, character*n element_path, integer error )
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1530,7 +1569,9 @@ an integer number. Elements with the same name can be added multiple times.
     <b>Fortran syntax:</b>
 
     tixi_add_text_attribute( integer  handle, character*n element_path, character*n attribute_name, character*n attribute_value, integer error )
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
@@ -1571,7 +1612,9 @@ an integer number. Elements with the same name can be added multiple times.
     <b>Fortran syntax:</b>
 
     tixi_add_double_attribute( integer  handle, character*n element_path, character*n attribute_name, real number, character*n format, integer error )
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
@@ -1613,7 +1656,9 @@ an integer number. Elements with the same name can be added multiple times.
     <b>Fortran syntax:</b>
 
     tixi_add_integer_attribute( integer  handle, character*n element_path, character*n attribute_name, integer number, character*n format, integer error )
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
@@ -1654,7 +1699,9 @@ an integer number. Elements with the same name can be added multiple times.
     <b>Fortran syntax:</b>
 
     tixi_remove_attribute( integer  handle, character*n element_path, character*n attribute_name, integer error )
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
@@ -1692,7 +1739,9 @@ an integer number. Elements with the same name can be added multiple times.
     <b>Fortran syntax:</b>
 
     tixi_add_external_link( integer  handle, character*n parent_path, character*n url, character*n file_format, integer error )
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) as returned by ::tixiCreateDocument
     @param parentPath (in) path to the element into which the element holding the url
@@ -1722,7 +1771,9 @@ an integer number. Elements with the same name can be added multiple times.
     <b>Fortran syntax:</b>
 
     tixi_add_header( integer  handle, character*n tool_name, character*n version, character*n author_name, integer error )
+    @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+    @endcond
 
     @param handle (in) as returned by ::tixiCreateDocument
     @param toolName (in) name of the tool used to write the file
@@ -1751,7 +1802,9 @@ If an strings equals to NULL an empty element is inserted. This routine should b
 <b>Fortran syntax:</b>
 
 tixi_add_cpacs_header( integer  handle, character*n name, character*n creator, character*n version, character*n descripton, character*n cpacs_version, integer error )
+@cond
 #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+@endcond
 
 @param handle (in) as returned by ::tixiCreateDocument
 @param name (in) name of the data set
@@ -1777,7 +1830,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
     tixi_get_named_children_count( integer  handle, character*n element_path, character*n child_name, int* count, integer error )
 
-    @param handle (in) handle as returned by ::tixiOpenElement
+    @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
     @param elementPath elementPath (in) an XPath compliant path to an element in the document
                       specified by handle (see section \ref XPathExamples above).
     @param childName (in) name of children to be counted
@@ -1803,9 +1856,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 /**
   @brief Checks if the given element exists.
 
+  @cond
   #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
+  @endcond
 
-  @param handle (in) handle as returned by ::tixiOpenElement or ::tixiCreateDocument
+  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
   @param elementPath (in) an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
@@ -1827,7 +1882,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
     tixi_check_handle( integer handle )
 
-    @param handle (in)  handle as returned by ::tixiOpenElement or tixiCreateDocument
+    @param handle (in)  handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
     @return
 
     - SUCCESS if handle is valid
@@ -1871,7 +1926,10 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
       <b>Fortran syntax:</b>
 
       tixi_use_pretty_print( integer  handle, integer use_pretty_print, integer error )
+      @cond
       #PY:#
+      @endcond
+
       @param handle  (in) handle as returned by ::tixiOpenDocument
       @param usePrettyPrint (in) flag if output should be pretty printed
 
@@ -1900,7 +1958,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
     <b>Fortran syntax:</b>
 
     tixi_add_double_list_with_attributes( integer  handle, character*n parent_path, character*n list_name, character*n child_name, character*n child_attribute_name, real values, character*n format, character*n attributes, integer n_values, integer error )
+    @cond
     #PY:#
+    @endcond
 
     @param handle (in) file handle as returned by ::tixiCreateDocument
 
@@ -1944,7 +2004,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
    An element containing an n x m matrix with empty entries is added.
 
+   @cond
    #PY:#
+   @endcond
 
   @param handle (in) as returned by ::tixiCreateDocument
   @param parentPath (in) an XPath compliant path to an element into
@@ -2048,7 +2110,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
 
 
-  <b>Fortran syntax:</b>
+   <b>Fortran syntax:</b>
+
    tixi_add_float_matrix( integer handle, character*n parentPath,
               character*n matrixName, character*n rowName,
               character*n columnName, integer nRows, integer nColumns,
@@ -2070,7 +2133,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
   position (2,1) in the matrix. Row and column numbers in error
   messages refer to a numbering starting at one.
 
+  @cond
   #PY:#  
+  @endcond
 
 
   @param handle (in) as returned by ::tixiCreateDocument
@@ -2114,7 +2179,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
    ::tixiGetMatrixSize. Row and column numbers in error messages refer
    to a numbering starting at one.
    
+   @cond
    #PY:6:3;4# # use row * col output array (row = index 3, col = index 4)
+   @endcond
 
   @param handle (in) as returned by ::tixiCreateDocument
   @param matrixPath (in) an XPath compliant path to an element holding the matrix in
@@ -2150,9 +2217,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
    tixiGetFloatMatrix. Row and column numbers in error messages refer
    to a numbering starting at one.
 
+   @cond
    #PY:3,4#
+   @endcond
 
-  @param handle (in) as returned by ::tixiCreateDocument
+  @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
   @param matrixPath (in) an XPath compliant path to an element holding the matrix in
                          the document specified by handle (see section \ref XPathExamples).
   @param rowName (in) name of the row elements
@@ -2185,7 +2254,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
     tixi_get_vector_size( integer  handle,  character*n vectorPath, integer nElements, integer error)
 
-    @param handle (in) as returned by ::tixiCreateDocument
+    @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
     @param vectorPath (in) an XPath compliant path to an element holding the vector in
                            the document specified by handle (see section \ref XPathExamples).
     @param nElements (out) number of vector elements
@@ -2211,9 +2280,12 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
        could be read via a call to "tixiGetVectorSize".
 
        tixi_get_float_vector( integer handle, character*n vectorPath, real array, integer eNumber)
-       #PY:1:-1# unconventional position of output parameter, manual size argument ("-1" means "manual")
 
-      @param handle (in) as returned by ::tixiCreateDocument
+       @cond
+       #PY:1:-1# unconventional position of output parameter, manual size argument ("-1" means "manual")
+       @endcond
+
+      @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
       @param vectorPath (in) an XPath compliant path to an element holding the vector in
                              the document specified by handle (see section \ref XPathExamples).
       @param vectorArray (out) a pointer address for an array that should hold the vector elements
@@ -2240,6 +2312,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
     Example:
 
+    @code{.xml}
     <aeroPerformanceMap>
         <machNumber mapType="vector">0.2;0.6</machNumber>
         <reynoldsNumber mapType="vector">10000000;30000000</reynoldsNumber>
@@ -2251,12 +2324,15 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
         <cmx mapType="array"/>
         <cmy mapType="array"/>
         <cmz mapType="array"/>
-	</aeroPerformanceMap>
+    </aeroPerformanceMap>
+    @endcode
 
     This is a typical array definition, to be found under, e.g., the xpath "//aeroPerformanceMap":
     - All direct child tags with the attribute 'mapType="vector"' define one dimension each, containing several ";" separated values.
     - All direct child tags with the attribute 'mapType="array"' define a list of values, the list having a size of the
         cross product of all dimensions' sizes (in this example 2*2*3*11 = 132 elements per "array" list).
+
+    <b>Fortran syntax:</b>
 
     tixi_get_array_dimensions( integer handle, character*n arrayPath, integer* dimensions )
 
@@ -2283,14 +2359,19 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
     For an array use example, please check tixiGetArrayDimensions()
 
+    <b>Fortran syntax:</b>
+
     tixi_get_array_dimension_sizes ( integer handle, character*n arrayPath, int*n sizes, int* arraySizes )
+
+    @cond
     #PY:1,2:-1,0# unconventional position of output parameter (first is -1: manual, second is 0: no array)
+    @endcond
 
     @param handle (in) as returned by ::tixiCreateDocument
     @param arrayPath (in) an XPath-compliant path to the top XML element holding the sub-tags of the array definition in
                            the document specified by the handle (see section \ref XPathExamples).
     @param sizes (out) an integer array containing the size of each dimension
-    @param arraySize (out) product over all sizes (for complete array size)
+    @param linearArraySize (out) product over all sizes (for complete array size)
 
     @return
       - SUCCESS if the dimensions have been successfully read
@@ -2302,7 +2383,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
   */
     DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handle, const char *arrayPath,
-                                                      int *sizes, int *arraySizes);
+                                                      int *sizes, int *linearArraySize);
 
 
     /**
@@ -2310,10 +2391,15 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
       For an array use example, please check tixiGetArrayDimensions()
 
-      tixi_get_array_dimension_names ( integer handle, character*n arrayPath, char*n*m dimensionNames)
-      #PY:1:-1# one user specified return array (of strings)
+      <b>Fortran syntax:</b>
 
-      @param handle (in) as returned by ::tixiCreateDocument
+      tixi_get_array_dimension_names ( integer handle, character*n arrayPath, char*n*m dimensionNames)
+
+      @cond
+      #PY:1:-1# one user specified return array (of strings)
+      @endcond
+
+      @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
       @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
                              the document specified by handle (see section \ref XPathExamples).
       @param dimensionNames (out) array of strings
@@ -2336,9 +2422,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
       For an array use example, please check tixiGetArrayDimensions()
 
+      <b>Fortran syntax:</b>
+
       tixi_get_array_dimension_values ( integer handle, character*n arrayPath, int* dimension, double *dimensionValues)
 
-      @param handle (in) as returned by ::tixiCreateDocument
+      @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
       @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
                              the document specified by handle (see section \ref XPathExamples).
       @param dimension (in) which dimension to return meaning values for
@@ -2365,6 +2453,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
         Returns the number of different parameters (cutting all dimensions) defined in sub-tags in CPACS.
         Parameters are the tags with the attribute 'mapType="array"'.
 
+        <b>Fortran syntax:</b>
+
         tixi_get_array_parameters( integer handle, character*n arrayPath, integer* parameters )
 
         @param handle (in) as returned by ::tixiCreateDocument
@@ -2389,6 +2479,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
           For an array use example, please check tixiGetArrayDimensions()
 
+          <b>Fortran syntax:</b>
+
           tixi_get_array_parameter_names ( integer handle, character*n arrayPath, character*n*m parameterNames)
 
           @param handle (in) as returned by ::tixiCreateDocument
@@ -2410,18 +2502,20 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
 
       /**
-        @brief Reads in the array, the caller should provide an n-dimensional array that will contain the values after call.
+        @brief Reads in an array. The memory management of the array is done by tixi.
 
-        For an array use example, please check tixiGetArrayDimensions()
+        For an array use example, please check ::tixiGetArrayDimensions()
+
+        <b>Fortran syntax:</b>
 
         tixi_get_array ( integer handle, character*n arrayPath, character*n element, double *values)
 
-        @param handle (in) as returned by ::tixiCreateDocument
+        @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
         @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
                                the document specified by handle (see section \ref XPathExamples).
-        @param element (in) name of the sub tag that contains the array
-        @param arraySize(in) Total size of the array. Size must be determined by call to tixiGetArrayDimensionSizes and must equal
-                           the cross product of all dimensions' sizes
+        @param elementName (in) name of the sub tag that contains the array
+        @param arraySize (in) Total size of the array. Size must be determined by calling ::tixiGetArrayDimensionSizes and must equal
+                           the product of all dimensions' sizes
         @param values (out) Pointer to a double array, containg all values for this dimension. The array is allocated and freed
                            by tixi. The size of the array corresponds to the parameter arraySize
 
@@ -2444,6 +2538,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
         For an array use example, please check tixiGetArrayDimensions()
 
+        <b>Fortran syntax:</b>
+
         tixi_get_array_value ( double*n array, integer*n dimSize, integer*n dimPos, integer *dims)
 
         @param array (in) the array as returned by ::tixiGetArray()
@@ -2461,7 +2557,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
         Returns the number of sub elements in CPACS arrays (either vector or array type).
 
-        For an array use example, please check tixiGetArrayDimensions(). The result for elementName="angleOfAttack" would be 11.
+        For an array use example, please check ::tixiGetArrayDimensions(). The result for elementName="angleOfAttack" would be 11.
+
+        <b>Fortran syntax:</b>
 
         tixi_get_array_element_count( integer handle, character*n arrayPath, character*n elementName, integer* elements )
 
@@ -2490,6 +2588,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
           Returns the tag names of sub elements of mapType given.
 
           For an array use example, please check tixiGetArrayDimensions()
+
+          <b>Fortran syntax:</b>
 
           tixi_get_array_element_names( integer handle, character*n arrayPath, character*n elementName, character*n*m elementNames)
 
@@ -2527,9 +2627,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
   tixi_add_point( integer  handle,  character*n pointParentPath,
                   real x, real y, real z, character*n format, integer error )
-  #PY:#  
+  @cond
+  #PY:#
+  @endcond
 
-  @param handle (in) as returned by ::tixiCreateDocument
+  @param handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
   @param pointParentPath (in) an XPath compliant path to an element into
                          which the point elements are to be inserted in the document
                          specified by handle (see section \ref XPathExamples).
@@ -2576,7 +2678,10 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
   tixi_get_point(  integer  handle,  character*n pointParentPath, integer index,
                    real x, real y, real z, integer error )
+
+  @cond
   #PY:1,2,3# unconventional position of output parameter
+  @endcond
 
   @param handle (in) as returned by ::tixiOpenDocument
   @param pointParentPath (in) an XPath compliant path to an element containing point elements
@@ -2587,7 +2692,6 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
   @return
      - SUCCESS if the content of the point element is retrieved successfully
-     - INDEX_OUT_OF_RANGE if index<1 or index > #point elements
      - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
      - INVALID_XPATH if pointParentPath is not a well-formed XPath-expression
      - ELEMENT_NOT_FOUND if pointParentPath does not point to a node in the XML-document
@@ -2605,9 +2709,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
       <b>Fortran syntax:</b>
 
       tixi_check_attribute( integer  handle, character*n element_path, character*n attribute_name, integer error )
-      #PY:#  
+      @cond
+      #PY:#
+      @endcond
 
-      @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+      @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
       @param elementPath (in) an XPath compliant path to an element in the document
                         specified by handle (see section \ref XPathExamples above).
@@ -2638,9 +2744,12 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
         <b>Fortran syntax:</b>
 
         tixi_xsl_transformation_to_file( integer  handle, character*n xslFilename, character*n resultFilename, integer error )
-        #PY:#  
 
-        @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+        @cond
+        #PY:#
+        @endcond
+
+        @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
         @param xslFilename (in) The name of a local file with XSL mapping informations.
         @param resultFilename (in) The name of a local file to store the resulting XML document in.
         @return
@@ -2666,7 +2775,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
           tixi_xpath_evaluate_node_number( integer handle, character*n xpathExpression, integer number, integer error )
 
-          @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+          @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
           @param xPathExpression (in) The XPath Expression to evaluate.
           @param number (out) The number of nodes matching this xpath expression.
           @return
@@ -2689,9 +2798,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
             tixi_xpath_expression_get_text_by_index( integer handle, character*n xpathERxpression, integer index, character*n text, integer error )
 
-            @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+            @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
             @param xPathExpression (in) The XPath Expression to evaluate.
-            @param elementNumber(in) The (index)-number to get. Needed if the XPath expression catches more than one node. Index must
+            @param elementNumber (in) The (index)-number to get. Needed if the XPath expression catches more than one node. Index must
              	 	 	 	 	 	 be between 1 and 'tixiXPathEvaluateNodeNumber()', inclusively.
             @param text (out) the text content of the node-value. Works for xml-elements and attributes. NULL if an error occured.
             @return
@@ -2715,9 +2824,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 	  <b>Fortran syntax:</b>
 
 	  tixi_uid_check_duplicates( integer  handle, integer error )
-      #PY:#  
+      @cond
+      #PY:#
+      @endcond
 
-	  @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+	  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 	  @return
 	   - SUCCESS if all UIDs are unique
 	   - FAILED if reading of uids does not work
@@ -2732,9 +2843,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
   	  <b>Fortran syntax:</b>
 
   	  tixi_uid_check_links( integer  handle, integer error )
+      @cond
         #PY:#
+      @endcond
 
-  	  @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+  	  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
   	  @return
   	   - SUCCESS if all links are valid
   	   - FAILED if reading of links or uids does not work
@@ -2753,7 +2866,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
   	  tixi_uid_get_xpath( integer  handle, character*n uid, character*n text, integer error )
 
-  	  @param handle (in)	handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+  	  @param handle (in)	handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 	  @param uID (in)		The uid of which the xpath should be returned
 	  @param xPath (out)	The XPath of the element with the right uid. Empty string if uid does not exist.
   	  @return
@@ -2770,9 +2883,12 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
   	  <b>Fortran syntax:</b>
 
   	  tixi_uid_check_exists( integer  handle, character*n uid, integer error )
-      #PY:#  
 
-  	  @param handle (in)	handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+      @cond
+      #PY:#  
+      @endcond
+
+  	  @param handle (in)	handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 	  @param uID (in)		The uid which should be checked
   	  @return
   	   - SUCCESS if all UIDs are unique
@@ -2789,9 +2905,11 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
   	  <b>Fortran syntax:</b>
 
   	  tixi_uid_set_to_xpath( integer  handle, character*n xpath, character*n uid, integer error )
-      #PY:#  
+      @cond
+      #PY:#
+      @endcond
 
-  	  @param handle (in)	handle as returned by ::tixiOpenDocument or ::tixiCreateDocument or ::tixiImportFromString
+  	  @param handle (in)	handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 	  @param xPath (in)		The XPath to the node which should become the uid-attribute
 	  @param uID (in)		The uid which should be checked
   	  @return
