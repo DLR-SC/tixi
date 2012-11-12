@@ -3189,10 +3189,8 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handl
 
 	textPtr = XPathExpressionGetText(document, xPathExpression, elementNumber);
     if ( textPtr ) {
-        printf("\n\n%s\n\n", textPtr);
         *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
         strcpy(*text, textPtr);
-        printf("\n\n%s\n\n", *text);
         error = addToMemoryList(document, (void *) *text);
      } else {
         *text = NULL;
