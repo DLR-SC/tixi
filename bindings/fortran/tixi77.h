@@ -722,7 +722,6 @@ void tixiXPathEvaluateNodeNumber_f(const TixiDocumentHandle* handle,
 									ReturnCode* error,
 									int lengthString1);
 
-
 void tixiXPathExpressionGetTextByIndex_F(const TixiDocumentHandle* handle,
 										char* xpathExpression,
 										int* index,
@@ -731,5 +730,12 @@ void tixiXPathExpressionGetTextByIndex_F(const TixiDocumentHandle* handle,
 										int lengthString1,
 										int lengthString2);
 
+void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
+                                        char* elementPath,
+                                        int* index,
+                                        char* text,
+                                        ReturnCode* error,
+                                        int lengthString1,
+                                        int lengthString2);
 
 #endif /* TIXI77_H */
