@@ -20,7 +20,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 
 add_library(TIXI SHARED ${TIXI_SRC} ${TIXI_HDR})
-target_link_libraries (TIXI  ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES})
+target_link_libraries (TIXI  ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES} ${VLD_LIBRARIES})
 set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})
 
 add_library(TIXI_static ${TIXI_SRC} ${TIXI_HDR})

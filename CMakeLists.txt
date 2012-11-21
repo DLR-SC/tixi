@@ -44,6 +44,15 @@ IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
         ENDIF()
 ENDIF()
 
+# visual leak detector, useful for debugging under windows
+find_package( VLD )
+if(VLD_FOUND)
+    set(USE_VLD False CACHE BOOL "Enable Visual Leak Detector.")
+	if(USE_VLD)
+        add_definitions(-DHAVE_VLD=1)
+		include_directories(${VLD_INCLUDE_DIRS})
+	endif(USE_VLD)
+endif()
 
 #create tixi library
 add_subdirectory(src)
