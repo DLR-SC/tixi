@@ -1698,7 +1698,7 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
     <b>Fortran syntax:</b>
 
-    tixi_remove_attribute( integer  handle, character*n element_path, character*n attribute_name, integer error )
+    tixi_remove_attribute( integer handle, character*n element_path, character*n attribute_name, integer error )
     @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
     @endcond
@@ -1770,7 +1770,7 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
     <b>Fortran syntax:</b>
 
-    tixi_add_header( integer  handle, character*n tool_name, character*n version, character*n author_name, integer error )
+    tixi_add_header( integer handle, character*n tool_name, character*n version, character*n author_name, integer error )
     @cond
     #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
     @endcond
@@ -1801,7 +1801,7 @@ If an strings equals to NULL an empty element is inserted. This routine should b
 
 <b>Fortran syntax:</b>
 
-tixi_add_cpacs_header( integer  handle, character*n name, character*n creator, character*n version, character*n descripton, character*n cpacs_version, integer error )
+tixi_add_cpacs_header( integer handle, character*n name, character*n creator, character*n version, character*n descripton, character*n cpacs_version, integer error )
 @cond
 #PY:# no output params (explicit mark necessary, otherwise assuming last = output)
 @endcond
@@ -1828,7 +1828,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
 
     <b>Fortran syntax:</b>
 
-    tixi_get_named_children_count( integer  handle, character*n element_path, character*n child_name, int* count, integer error )
+    tixi_get_named_children_count( integer handle, character*n element_path, character*n child_name, int* count, integer error )
 
     @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
     @param elementPath elementPath (in) an XPath compliant path to an element in the document
@@ -1853,6 +1853,33 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, char 
   DLL_EXPORT ReturnCode tixiGetNamedChildrenCount (const TixiDocumentHandle handle,
                                                    char *elementPath, char *childName,
                                                    int *count);
+
+
+/**
+  @brief Returns the name of a child element beneath a given path.
+
+  <b>Fortran syntax:</b>
+
+  tixi_get_child_element_name( integer handle, character*n element_path, int* index, character*n child_name_array, integer error )
+
+  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param elementPath elementPath (in) an XPath compliant path to an element in the document
+                    specified by handle (see section \ref XPathExamples above).
+  @param index (in) number index of the child-element of the given path.
+  @param text (out) array of string with the name of sub-elements.
+
+  @return
+
+   - SUCCESS if a count is computed
+   - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+   - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+   - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+   - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                             to a list of elements
+*/
+  DLL_EXPORT ReturnCode tixiGetChildElementName (const TixiDocumentHandle handle,
+                                                  char *elementPath, int index, char **text);
+
 /**
   @brief Checks if the given element exists.
 

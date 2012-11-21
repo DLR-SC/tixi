@@ -1402,9 +1402,31 @@ void tixiXPathExpressionGetTextByIndex_F(const TixiDocumentHandle* handle,
 			*error = STRING_TRUNCATED;
 		}
 	}
-
 	free(cElementPath);
-
 }
 
+
+void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
+                                        char* parentPath,
+                                        int* index,
+                                        char* text,
+                                        ReturnCode* error,
+                                        int lengthString1,
+                                        int lengthString2)
+{
+    char *cElementPath;
+    char *cText = NULL;
+
+    cElementPath = makeCString(parentPath, lengthString1);
+
+  *error = tixiGetChildElementName(*handle, cElementPath, *index, &cText);
+
+    if (*error == SUCCESS) {
+        copyToFortranString(cText, lengthString2, text);
+        if ((size_t) lengthString2 < strlen(cText) + 1) {
+            *error = STRING_TRUNCATED;
+        }
+    }
+    free(cElementPath);
+}
 

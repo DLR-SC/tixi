@@ -16,7 +16,7 @@ endif()
 add_definitions(-DTIXI_VERSION=\"${TIXI_VERSION}\")
 
 if(CMAKE_COMPILER_IS_GNUCC)
-	set(CMAKE_C_FLAGS "-Wall -fmessage-length=0")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fmessage-length=0")
 endif()
 
 add_library(TIXI SHARED ${TIXI_SRC} ${TIXI_HDR})

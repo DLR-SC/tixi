@@ -770,8 +770,6 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, cha
   char *text;
   ReturnCode error = 0;
 
-
-
   error = tixiGetTextElement(handle, elementPath, &text);
 
   if (error) {
@@ -2414,8 +2412,6 @@ DLL_EXPORT ReturnCode tixiGetVectorSize (const TixiDocumentHandle handle, const 
     char *token = NULL;
     *nElements = 0;
 
-
-
     error = tixiGetTextAttribute(handle, vectorPath, MAPTYPE_IDENTIFIER, &tmpString);
     if (error != SUCCESS) {
         return error;
@@ -3200,4 +3196,30 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handl
 	return error;
 }
 
+DLL_EXPORT ReturnCode tixiGetChildElementName(const TixiDocumentHandle handle, char *elementPath,  int index, char **text)
+{
+    TixiDocument *document = getDocument(handle);
+    int error = SUCCESS;
+    char *textPtr = NULL;
+    int i;
+    int arraySize = 0;
+    char xPath[1024];
+
+    if(elementPath[strlen(elementPath)] == '/') {
+        sprintf(xPath, "/%s*", elementPath);
+    } else {
+        sprintf(xPath, "/%s/*", elementPath);
+    }
+
+    textPtr = XPathExpressionGetElementName(document, xPath, index);
+    if (textPtr) {
+        *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
+        strcpy(*text, textPtr);
+        error = addToMemoryList(document, (void *) *text);
+    } else {
+        *text = NULL;
+        error = FAILED;
+    }
+    return error;
+}
 

@@ -71,7 +71,6 @@ int XPathGetNodeNumber(TixiDocument *tixiDocument, char *xPathExpression)
 }
 
 
-
 char* XPathExpressionGetText(TixiDocument *tixiDocument, char *xPathExpression, int index)
 {
 
@@ -122,5 +121,50 @@ char* XPathExpressionGetText(TixiDocument *tixiDocument, char *xPathExpression, 
 	}
 
 	return text;
+}
+
+char* XPathExpressionGetElementName(TixiDocument *tixiDocument, char *xPathExpression, int index)
+{
+
+    xmlDocPtr doc;
+    xmlXPathObjectPtr xpathObject;
+    xmlNodeSetPtr nodes = NULL;
+    xmlNodePtr cur;
+    char* text = NULL;
+    int size = 0;
+
+    /* Load XML document */
+    doc = tixiDocument->docPtr;
+
+    xpathObject = XPathEvaluateExpression(doc, xPathExpression);
+    if (xpathObject == NULL) {
+        return NULL;
+    }
+
+    nodes = xpathObject->nodesetval;
+
+    size = (nodes) ? nodes->nodeNr : 0;
+    if (size == 0) {
+        fprintf(stderr, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
+        return NULL;
+    }
+
+    if (size < index) {
+        fprintf(stderr, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
+        return NULL;
+    }
+
+    if (index <= 0) {
+        fprintf(stderr, "Error: Index number less or equal zero.\n");
+        return NULL;
+    }
+
+    cur = nodes->nodeTab[--index];
+
+    if (cur->type == XML_ELEMENT_NODE) {
+        return cur->name;
+    } else if (cur->type == XML_ATTRIBUTE_NODE) {
+            return NULL;
+    }
 }
 
