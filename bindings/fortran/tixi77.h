@@ -123,6 +123,7 @@
 #define tixiUIDSetToXPath_f TIXI_UID_SET_TO_XPATH
 #define tixiXPathEvaluateNodeNumber_f TIXI_XPATH_EVALUATE_NODE_NUMBER
 #define tixiXPathExpressionGetTextByIndex_f TIXI_XPATH_EXPRESSION_GET_TEXT_BY_INDEX
+#define tixiGetChildElementName_f TIXI_GET_CHILD_ELEMENT_NAME
 
 #else /* (not) IFORT_WIN32 */
 
@@ -196,6 +197,7 @@
 #define tixiUIDSetToXPath_f FORTRAN_NAME(tixi_uid_set_to_xpath)
 #define tixiXPathEvaluateNodeNumber_f FORTRAN_NAME(tixi_xpath_evaluate_node_number)
 #define tixiXPathExpressionGetTextByIndex_f FORTRAN_NAME(tixi_xpath_expression_get_text_by_index)
+#define tixiGetChildElementName_f FORTRAN_NAME(tixi_get_child_element_name)
 
 #endif /* IFORT_WIN32 */
 
