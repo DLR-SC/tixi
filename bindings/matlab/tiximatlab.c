@@ -1352,6 +1352,36 @@ void mex_tixiGetIntegerAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     *mxGetPr(plhs[0]) = (double) val;
 }
 
+void mex_tixiGetBooleanAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name  = NULL;
+    int val      = 0;
+    int handle   = -1;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiGetBooleanAttribute(handle, path, attribName): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!mxIsChar(prhs[3]))
+        mexErrMsgTxt("Invalid attribute name.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    mxToString(prhs[3],&name );
+    handleTixiError(tixiGetBooleanAttribute(handle, xpath, name, &val));
+
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    *mxGetPr(plhs[0]) = (double) val;
+}
+
 void mex_tixiGetDoubleAttribute(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     char * xpath = NULL;
     char * name  = NULL;
@@ -1879,6 +1909,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   RUN_IF_FUNCTION_IS(tixiAddDoubleAttribute)
   RUN_IF_FUNCTION_IS(tixiGetTextAttribute)
   RUN_IF_FUNCTION_IS(tixiGetIntegerAttribute)
+  RUN_IF_FUNCTION_IS(tixiGetBooleanAttribute)
   RUN_IF_FUNCTION_IS(tixiGetDoubleAttribute)
   RUN_IF_FUNCTION_IS(tixiGetVersion)
   RUN_IF_FUNCTION_IS(tixiCheckElement)

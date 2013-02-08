@@ -595,6 +595,24 @@ void tixiGetIntegerAttribute_f(const TixiDocumentHandle *handle,
   free(cAttributeName);
 }
 
+void tixiGetBooleanAttribute_f(const TixiDocumentHandle *handle,
+                               char *elementPath,
+                               char *attributeName,
+                               int *boolean,
+                               ReturnCode *error, int elementPathLength, int attributeNameLength)
+{
+  char *cElementPath = NULL;
+  char *cAttributeName = NULL;
+
+  cElementPath = makeCString(elementPath, elementPathLength);
+  cAttributeName = makeCString(attributeName, attributeNameLength);
+
+  *error = tixiGetBooleanAttribute(*handle, cElementPath, cAttributeName, boolean);
+
+  free(cElementPath);
+  free(cAttributeName);
+}
+
 void tixiGetDoubleAttribute_f(const TixiDocumentHandle *handle,
                               char *elementPath,
                               char *attributeName,

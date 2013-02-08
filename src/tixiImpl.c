@@ -1049,6 +1049,39 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute(const TixiDocumentHandle handle,
   return SUCCESS;
 }
 
+DLL_EXPORT ReturnCode tixiGetBooleanAttribute(const TixiDocumentHandle handle,
+                                   char *elementPath, char *attributeName, int *boolean)
+{
+  char *text;
+  ReturnCode error = FAILED;
+
+  if(!boolean) {
+      fprintf(stderr, "Error: argument boolean must not be a null pointer in tixiGetBooleanAttribute!\n");
+      return FAILED;
+  }
+
+  error = tixiGetTextAttribute(handle, elementPath, attributeName, &text);
+
+  if (error) {
+    fprintf(stderr, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
+    return error;
+  }
+
+  if(strcmp(text,"true")==0 || strcmp(text,"True")==0 || strcmp(text,"1")==0){
+      *boolean = 1;
+  }
+  else if (strcmp(text,"false")==0 || strcmp(text,"False")==0 || strcmp(text,"0")==0){
+      *boolean = 0;
+  }
+  else {
+      fprintf(stderr, "Error: No boolean value found at \"%s\" for attribute \"%s\"\n", elementPath, attributeName);
+      return FAILED;
+  }
+
+  return SUCCESS;
+}
+
+
 
 DLL_EXPORT ReturnCode tixiAddTextElement(const TixiDocumentHandle handle, const char *parentPath,
                               const char *elementName, const char *text)

@@ -83,6 +83,7 @@
 #define tixiRemoveElement_f TIXI_REMOVE_ELEMENT
 #define tixiGetTextAttribute_f TIXI_GET_TEXT_ATTRIBUTE
 #define tixiGetIntegerAttribute_f TIXI_GET_INTEGER_ATTRIBUTE
+#define tixiGetBooleanAttribute_f TIXI_GET_BOOLEAN_ATTRIBUTE
 #define tixiGetDoubleAttribute_f TIXI_GET_DOUBEL_ATTRIBUTE
 #define tixiAddTextAttribute_f TIXI_ADD_TEXT_ATTRIBUTE
 #define tixiAddDoubleAttribute_f TIXI_ADD_DOUBLE_ATTRIBUTE
@@ -157,6 +158,7 @@
 #define tixiRemoveElement_f FORTRAN_NAME(tixi_remove_element)
 #define tixiGetTextAttribute_f FORTRAN_NAME(tixi_get_text_attribute)
 #define tixiGetIntegerAttribute_f FORTRAN_NAME(tixi_get_integer_attribute)
+#define tixiGetBooleanAttribute_f FORTRAN_NAME(tixi_get_boolean_attribute)
 #define tixiGetDoubleAttribute_f FORTRAN_NAME(tixi_get_doubel_attribute)
 #define tixiAddTextAttribute_f FORTRAN_NAME(tixi_add_text_attribute)
 #define tixiAddDoubleAttribute_f FORTRAN_NAME(tixi_add_double_attribute)
@@ -403,6 +405,14 @@ void tixiGetIntegerAttribute_f(const TixiDocumentHandle* handle,
                                char* elementPath,
                                char* attributeName,
                                int* number,
+                               ReturnCode* error,
+                               int lengthString1,
+                               int lengthString2 );
+
+void tixiGetBooleanAttribute_f(const TixiDocumentHandle* handle,
+                               char* elementPath,
+                               char* attributeName,
+                               int* boolean,
                                ReturnCode* error,
                                int lengthString1,
                                int lengthString2 );

@@ -1520,6 +1520,42 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
                                                  int *number);
 
 /**
+    @brief Retrieves value of an element's attribute as an boolean.
+
+    Returns the value of an attribute specified by attributeName of the
+    element, specified by elementPath, in the document specified by
+    handle. On successful return the memory used for value is allocated
+    internally and must not be released by the user. The memory is
+    deallocated when the document referred to by handle is closed.
+
+    <b>Fortran syntax:</b>
+
+    tixi_get_boolean_attribute( integer  handle, character*n element_path, character*n attribute_name, integer boolean, integer error )
+
+    @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+
+    @param elementPath (in) an XPath compliant path to an element in the document
+                      specified by handle (see section \ref XPathExamples above).
+
+    @param attributeName (in) name of the attribute to be added to the element
+
+    @param boolean (out)  value of the specified attribute as an boolean value
+
+    @return
+
+     - SUCCESS if successfully retrieve the text content of a single element
+     - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
+     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+ */
+
+  DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
+                                                 char *elementPath, char *attributeName,
+                                                 int *boolean);
+
+/**
     @brief Retrieves value of an element's attribute as a floating point number.
 
     Returns the value of an attribute specified by attributeName of the
