@@ -124,7 +124,7 @@ char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpres
 	return text;
 }
 
-char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPathExpression, int index)
+char* XPathExpressionGetElementName(TixiDocument *tixiDocument, char *xPathExpression, int index)
 {
 
     xmlDocPtr doc;

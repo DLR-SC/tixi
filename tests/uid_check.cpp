@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,12 +24,12 @@
 #include "tixi.h"
  
 
-static char* filename_uid_correct = "TestData/uid_correct.xml";
-static char* filename_uid_duplicated = "TestData/uid_duplicated.xml";
-static char* filename_without_uids = "TestData/uid_no_uids.xml";
-static char* filename_links_broken = "TestData/uid_broken_link.xml";
-static char* filename_links = "TestData/uid_link.xml";
-static char* xmlFilename = "TestData/xpaths.xml";
+static const char* filename_uid_correct = "TestData/uid_correct.xml";
+static const char* filename_uid_duplicated = "TestData/uid_duplicated.xml";
+static const char* filename_without_uids = "TestData/uid_no_uids.xml";
+static const char* filename_links_broken = "TestData/uid_broken_link.xml";
+static const char* filename_links = "TestData/uid_link.xml";
+static const char* xmlFilename = "TestData/xpaths.xml";
 
 
 

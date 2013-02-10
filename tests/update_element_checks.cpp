@@ -29,15 +29,15 @@
 */   
 
 static TixiDocumentHandle documentHandle = -1;
-static char* formatInt = "%5d";
-static char* formatDbl = "%12.8f";
+static const char* formatInt = "%5d";
+static const char* formatDbl = "%12.8f";
 
 class UpdateElementTests : public ::testing::Test {
  protected:
   virtual void SetUp() {
-    char* rootElementName = "rootElement";
-    char* parentPath = "/rootElement";
-    char* elementName = "level1";
+    const char* rootElementName = "rootElement";
+    const char* parentPath = "/rootElement";
+    const char* elementName = "level1";
 
     tixiCreateDocument( rootElementName, &documentHandle );
 
@@ -53,8 +53,8 @@ class UpdateElementTests : public ::testing::Test {
 
 TEST_F(UpdateElementTests, updateTextElement_success)
 {
-    char* parentPath = "/rootElement/text";
-    char* text = "This is my content.";
+    const char* parentPath = "/rootElement/text";
+    const char* text = "This is my content.";
     char *text2 = NULL;
 
     ASSERT_TRUE( tixiUpdateTextElement( documentHandle, parentPath, text ) == SUCCESS );
@@ -64,15 +64,15 @@ TEST_F(UpdateElementTests, updateTextElement_success)
 
 TEST_F(UpdateElementTests, updateTextElement_wrong_path)
 {
-    char* parentPath = "/rootElement/not_exists";
-    char* text = "This is my content.";
+    const char* parentPath = "/rootElement/not_exists";
+    const char* text = "This is my content.";
 
     ASSERT_TRUE( tixiUpdateTextElement( documentHandle, parentPath, text ) == FAILED );
 }
 
 TEST_F(UpdateElementTests, updateDoubleElement_success)
 {
-    char* parentPath = "/rootElement/double";
+    const char* parentPath = "/rootElement/double";
     double val = 666.666;
     double val2 = 0.0;
 
@@ -83,7 +83,7 @@ TEST_F(UpdateElementTests, updateDoubleElement_success)
 
 TEST_F(UpdateElementTests, updateDoubleElement_path_not_exists)
 {
-    char* parentPath = "/rootElement/wring_path";
+    const char* parentPath = "/rootElement/wring_path";
     double val = 666.666;
 
     ASSERT_TRUE( tixiUpdateDoubleElement( documentHandle, parentPath, val, formatDbl ) == FAILED );
@@ -91,7 +91,7 @@ TEST_F(UpdateElementTests, updateDoubleElement_path_not_exists)
 
 TEST_F(UpdateElementTests, updateIntegerElement_success)
 {
-    char* parentPath = "/rootElement/integer";
+    const char* parentPath = "/rootElement/integer";
     int val = 42;
     int val2 = 0;
 
@@ -102,7 +102,7 @@ TEST_F(UpdateElementTests, updateIntegerElement_success)
 
 TEST_F(UpdateElementTests, updateBooleanElement_success)
 {
-    char* parentPath = "/rootElement/boolean";
+    const char* parentPath = "/rootElement/boolean";
     int val = 0;
     int val2 = 1;
 
@@ -113,7 +113,7 @@ TEST_F(UpdateElementTests, updateBooleanElement_success)
 
 TEST_F(UpdateElementTests, updateBooleanElement_not_bool)
 {
-    char* parentPath = "/rootElement/boolean";
+    const char* parentPath = "/rootElement/boolean";
     int val = 2;
 
     ASSERT_TRUE( tixiUpdateBooleanElement( documentHandle, parentPath, val ) == FAILED );
