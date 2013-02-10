@@ -74,7 +74,7 @@ int string_startsWith(char *string, char *subString)
 }
 
 
-ReturnCode strip_dirname(char *xmlFilename, char **dname, char **fname)
+ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname)
 {
         char* dirBuffer = NULL;
         char* fileBuffer = NULL;

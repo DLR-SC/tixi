@@ -17,7 +17,7 @@ TEST(createDocument, noElementName)
 
 TEST(createDocument, invalidRootNodeName)
 {
-    char* rootElementName = "1";
+    const char* rootElementName = "1";
     TixiDocumentHandle handle = -1;
 
     ASSERT_TRUE( tixiCreateDocument( rootElementName, &handle ) == INVALID_XML_NAME );
@@ -25,7 +25,7 @@ TEST(createDocument, invalidRootNodeName)
 
 TEST(createDocument, createDocumentSuccess)
 {
-    char* rootElementName = "rootElement";
+    const char* rootElementName = "rootElement";
     TixiDocumentHandle handle = -1;
 
     ASSERT_TRUE( tixiCreateDocument( rootElementName, &handle ) == SUCCESS );
@@ -38,7 +38,7 @@ TEST(createDocument, createDocumentSuccess)
 
 TEST(createDocument, createDocumentAddHeader)
 {
-    char* rootElementName = "rootElement";
+    const char* rootElementName = "rootElement";
     TixiDocumentHandle handle = -1;
 
     ASSERT_TRUE( tixiCreateDocument( rootElementName, &handle ) == SUCCESS );
@@ -57,12 +57,12 @@ TEST(createDocument, createDocumentAddHeader)
 
 TEST(createDocument, createDocumentAddCPACSHeader)
 {
-    char* rootElementName = "rootElement";
-    char* cpacsName = "cpacsName";
-    char* cpacsCreator = "cpacsCreator";
-    char *     version = "cpacsVersion";
-    char* cpacsVersion = "2.0";
-    char* cpacsDescription = "cpacsDescription";
+    const char* rootElementName = "rootElement";
+    const char* cpacsName = "cpacsName";
+    const char* cpacsCreator = "cpacsCreator";
+    const char*      version = "cpacsVersion";
+    const char* cpacsVersion = "2.0";
+    const char* cpacsDescription = "cpacsDescription";
     TixiDocumentHandle handle = -1;
     char *text = NULL;
 
