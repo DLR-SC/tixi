@@ -1,19 +1,22 @@
 # TIXI Library
 # @author Martin Siggel
 
+configure_file (
+  "${CMAKE_CURRENT_SOURCE_DIR}/tixi_version.h.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/tixi_version.h"
+)
+
 set(TIXI_SRC tixiImpl.c tixiUtils.c uidHelper.c tixiInternal.c webMethods.c 
 	xpathFunctions.c xslTransformation.c)
 
 set(TIXI_HDR tixi.h tixiData.h tixiInternal.h tixiUtils.h)
 
 
-include_directories(${CURL_INCLUDE_DIRS} ${XML_INCLUDE_DIRS} ${XSLT_INCLUDE_DIRS})
+include_directories(${CURL_INCLUDE_DIRS} ${XML_INCLUDE_DIRS} ${XSLT_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_definitions(-DDEBUG) 
 endif()
-
-add_definitions(-DTIXI_VERSION=\"${TIXI_VERSION}\")
 
 if(CMAKE_COMPILER_IS_GNUCC)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fmessage-length=0")
@@ -33,7 +36,7 @@ install (TARGETS TIXI
 		 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		 )
 		 
-install (FILES tixi.h 
+install (FILES tixi.h ${CMAKE_CURRENT_BINARY_DIR}/tixi_version.h
 		 DESTINATION include
 		 COMPONENT headers)
 		 

@@ -42,6 +42,7 @@
 #include "xpathFunctions.h"
 #include "tixiUtils.h"
 #include "tixi.h"
+#include "tixi_version.h"
 
 static xmlNsPtr nameSpace = NULL;
 
@@ -56,7 +57,7 @@ TixiDocumentListEntry *documentListHead = NULL;
 */
 DLL_EXPORT char* tixiGetVersion()
 {
-	static char version[] = TIXI_VERSION;
+	static char version[] = TIXI_VERSION_STRING;
 	return version;
 }
 
