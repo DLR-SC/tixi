@@ -1437,7 +1437,7 @@ void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
 
     cElementPath = makeCString(parentPath, lengthString1);
 
-  *error = tixiGetChildElementName(*handle, cElementPath, *index, &cText);
+    *error = tixiGetChildElementName(*handle, cElementPath, *index, &cText);
 
     if (*error == SUCCESS) {
         copyToFortranString(cText, lengthString2, text);
@@ -1445,6 +1445,52 @@ void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
             *error = STRING_TRUNCATED;
         }
     }
+    free(cElementPath);
+}
+
+void tixiGetAttributeName_f(const TixiDocumentHandle* handle,
+                            char* elementPath,
+                            int* index,
+                            char* text,
+                            ReturnCode* error,
+                            int lengthString1,
+                            int lengthString2) {
+    
+    char *cElementPath;
+    char *cText = NULL;
+
+    cElementPath = makeCString(elementPath, lengthString1);
+
+    *error = tixiGetAttributeName(*handle, cElementPath, *index, &cText);
+
+    if (*error == SUCCESS) {
+        copyToFortranString(cText, lengthString2, text);
+        if ((size_t) lengthString2 < strlen(cText) + 1) {
+            *error = STRING_TRUNCATED;
+        }
+    }
+    free(cElementPath);
+}
+
+void tixiGetNumberOfChilds_f(const TixiDocumentHandle* handle,
+                                        char* elementPath,
+                                        int * nChilds,
+                                        ReturnCode* error,
+                                        int lengthString1){
+    
+    char *cElementPath = makeCString(elementPath, lengthString1);
+    *error = tixiGetNumberOfChilds(*handle, cElementPath, nChilds);
+    free(cElementPath);
+}
+
+void tixiGetNumberOfAttributes_f(const TixiDocumentHandle* handle,
+                                        char* elementPath,
+                                        int * nAttributes,
+                                        ReturnCode* error,
+                                        int lengthString1){
+    
+    char *cElementPath = makeCString(elementPath, lengthString1);
+    *error = tixiGetNumberOfAttributes(*handle, cElementPath, nAttributes);
     free(cElementPath);
 }
 

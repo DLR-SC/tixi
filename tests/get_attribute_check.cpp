@@ -102,3 +102,38 @@ TEST_F(GetAttributeTests, getIntegerAttribute)
     ASSERT_TRUE( tixiGetIntegerAttribute( documentHandle, elementPath, attributeName, &number ) == SUCCESS );
     EXPECT_EQ( number , 2 );
 }
+
+TEST_F(GetAttributeTests, getNumberOfAttributes){
+    int number = 0;
+    ASSERT_EQ(SUCCESS, tixiGetNumberOfAttributes(documentHandle, "/plane/wings/wing[1]", &number ));
+    ASSERT_EQ(1, number);
+
+    ASSERT_EQ(SUCCESS, tixiGetNumberOfAttributes(documentHandle, "/plane/name", &number ));
+    ASSERT_EQ(0, number);
+
+    ASSERT_EQ(SUCCESS, tixiGetNumberOfAttributes(documentHandle, "/plane/coordinateOrigin/", &number ));
+    ASSERT_EQ(1, number);
+}
+
+TEST_F(GetAttributeTests, getAttributeNames){
+    int number = 0;
+    char * name = NULL;
+    ASSERT_EQ(SUCCESS, tixiGetNumberOfAttributes(documentHandle, "/plane/aPoint[1]", &number ));
+    ASSERT_EQ(2, number);
+    
+    ASSERT_EQ(SUCCESS, tixiGetAttributeName(documentHandle, "/plane/aPoint[1]", 1, &name));
+    ASSERT_STREQ("system", name);
+    
+    ASSERT_EQ(SUCCESS, tixiGetAttributeName(documentHandle, "/plane/aPoint[1]/", 2, &name));
+    ASSERT_STREQ("type", name);
+    
+    //check invalid indices
+    ASSERT_EQ(INDEX_OUT_OF_RANGE, tixiGetAttributeName(documentHandle, "/plane/aPoint[1]", 3, &name));
+    ASSERT_EQ(INDEX_OUT_OF_RANGE, tixiGetAttributeName(documentHandle, "/plane/aPoint[1]", 0, &name));
+    
+    //check invalid paths
+    ASSERT_EQ(ELEMENT_NOT_FOUND, tixiGetAttributeName(documentHandle, "/plane/aPointInvalid", 2, &name));
+    
+    //check invalid handle
+    ASSERT_EQ(INVALID_HANDLE, tixiGetAttributeName(-1, "/plane/aPoint[1]", 1, &name));
+}

@@ -302,15 +302,22 @@ ReturnCode checkExternalNode(const xmlNodePtr element) {
 }
 
 
-ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPath,
+ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPathDirty,
                         xmlNodePtr * element, xmlXPathObjectPtr * xpathObject)
 {
 
   xmlXPathContextPtr xpathContext = NULL;
   xmlNodeSetPtr nodes = NULL;
-
+  char elementPath[1024];
+  
   *xpathObject = NULL;
 
+  /* remove trailing slash */
+  strncpy(elementPath, elementPathDirty, 1024);
+  if(elementPath[strlen(elementPath)-1] == '/'){
+      elementPath[strlen(elementPath)-1] = '\0';
+  }
+  
   /* Create xpath evaluation context */
   xpathContext = xmlXPathNewContext(xmlDocument);
   if (!xpathContext) {

@@ -1817,7 +1817,7 @@ void mex_tixiGetChildElementName(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     int handle   = -1;
 
     if(nrhs != 4){
-        mexErrMsgTxt("tixiGetTextAttribute(handle, path, index): Wrong number of arguments\n");
+        mexErrMsgTxt("tixiGetChildElementName(handle, path, index): Wrong number of arguments\n");
     }
 
     if(!isscalar(prhs[1])){
@@ -1837,6 +1837,93 @@ void mex_tixiGetChildElementName(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     handleTixiError(tixiGetChildElementName(handle, xpath, index, &name));
 
     plhs[0] = mxCreateString(name);
+    mxFree(xpath);
+}
+
+void mex_tixiGetAttributeName(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    char * name   = NULL;
+    int index = -1;
+    int handle   = -1;
+
+    if(nrhs != 4){
+        mexErrMsgTxt("tixiGetAttributeName(handle, path, index): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+    if(!isscalar(prhs[3]))
+        mexErrMsgTxt("Invalid index.\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+    index = mxToInt(prhs[3]);
+    handleTixiError(tixiGetAttributeName(handle, xpath, index, &name));
+
+    plhs[0] = mxCreateString(name);
+    mxFree(xpath);
+}
+
+void mex_tixiGetNumberOfChilds(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    int handle   = -1;
+    int nChilds = 0;
+
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiGetNumberOfChilds(handle, path): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+
+    handleTixiError(tixiGetNumberOfChilds(handle, xpath, &nChilds));
+
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    *mxGetPr(plhs[0]) = (double) nChilds;
+    
+    mxFree(xpath);
+}
+
+void mex_tixiGetNumberOfAttributes(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    char * xpath = NULL;
+    int handle   = -1;
+    int nAttribs = 0;
+
+    if(nrhs != 3){
+        mexErrMsgTxt("tixiGetNumberOfAttributes(handle, path): Wrong number of arguments\n");
+    }
+
+    if(!isscalar(prhs[1])){
+        mexErrMsgTxt("Invalid Handle!\n");
+    }
+
+    if(!mxIsChar(prhs[2]))
+        mexErrMsgTxt("Invalid path argument\n");
+
+
+    handle = mxToInt(prhs[1]);
+    mxToString(prhs[2],&xpath);
+
+    handleTixiError(tixiGetNumberOfAttributes(handle, xpath, &nAttribs));
+
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    *mxGetPr(plhs[0]) = (double) nAttribs;
+    
+    mxFree(xpath);
 }
 
 void mex_closeTixi(void){
@@ -1926,7 +2013,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   RUN_IF_FUNCTION_IS(tixiUIDGetXPath)
   RUN_IF_FUNCTION_IS(tixiUIDSetToXPath)
   RUN_IF_FUNCTION_IS(tixiGetChildElementName)
-
+  RUN_IF_FUNCTION_IS(tixiGetNumberOfChilds)
+  RUN_IF_FUNCTION_IS(tixiGetAttributeName)
+  RUN_IF_FUNCTION_IS(tixiGetNumberOfAttributes)
   {
       // this is only executed if the function could not be identified
       char text[255];

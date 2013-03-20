@@ -125,6 +125,9 @@
 #define tixiXPathEvaluateNodeNumber_f TIXI_XPATH_EVALUATE_NODE_NUMBER
 #define tixiXPathExpressionGetTextByIndex_f TIXI_XPATH_EXPRESSION_GET_TEXT_BY_INDEX
 #define tixiGetChildElementName_f TIXI_GET_CHILD_ELEMENT_NAME
+#define tixiGetNumberOfChilds_f TIXI_GET_NUMBER_OF_CHILDS
+#define tixiGetNumberOfAttributes_f TIXI_GET_NUMBER_OF_ATTRIBUTES
+#define tixiGetAttributeName_f TIXI_GET_ATTRIBUTE_NAME
 
 #else /* (not) IFORT_WIN32 */
 
@@ -200,6 +203,9 @@
 #define tixiXPathEvaluateNodeNumber_f FORTRAN_NAME(tixi_xpath_evaluate_node_number)
 #define tixiXPathExpressionGetTextByIndex_f FORTRAN_NAME(tixi_xpath_expression_get_text_by_index)
 #define tixiGetChildElementName_f FORTRAN_NAME(tixi_get_child_element_name)
+#define tixiGetNumberOfChilds_f FORTRAN_NAME(tixi_get_number_of_childs)
+#define tixiGetNumberOfAttributes_f FORTRAN_NAME(tixi_get_number_of_attributes)
+#define tixiGetAttributeName_f FORTRAN_NAME(tixi_get_attribute_name)
 
 #endif /* IFORT_WIN32 */
 
@@ -748,4 +754,24 @@ void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
                                         int lengthString1,
                                         int lengthString2);
 
+void tixiGetNumberOfChilds_f(const TixiDocumentHandle* handle,
+                                        char* elementPath,
+                                        int * nChilds,
+                                        ReturnCode* error,
+                                        int lengthString1);
+
+void tixiGetNumberOfAttributes_f(const TixiDocumentHandle* handle,
+                                        char* elementPath,
+                                        int * nAttributes,
+                                        ReturnCode* error,
+                                        int lengthString1);
+
+
+void tixiGetAttributeName_f(const TixiDocumentHandle* handle,
+                            char* elementPath,
+                            int* index,
+                            char* text,
+                            ReturnCode* error,
+                            int lengthString1,
+                            int lengthString2);
 #endif /* TIXI77_H */

@@ -3233,12 +3233,25 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handl
 DLL_EXPORT ReturnCode tixiGetChildElementName(const TixiDocumentHandle handle, const char *elementPath,  int index, char **text)
 {
     TixiDocument *document = getDocument(handle);
+    xmlDocPtr xmlDocument = NULL;
+    xmlNodePtr element = NULL;
+    xmlXPathObjectPtr xpathObject = NULL;
     int error = SUCCESS;
     char *textPtr = NULL;
-    int i;
-    int arraySize = 0;
     char xPath[1024];
 
+    if (!document) {
+      fprintf(stderr, "Error: Invalid document handle.\n");
+      return INVALID_HANDLE;
+    }
+    
+    xmlDocument = document->docPtr;
+    
+    error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+    if(error){
+        return error;
+    }
+    
     if(elementPath[strlen(elementPath)] == '/') {
         sprintf(xPath, "/%s*", elementPath);
     } else {
@@ -3256,4 +3269,110 @@ DLL_EXPORT ReturnCode tixiGetChildElementName(const TixiDocumentHandle handle, c
     }
     return error;
 }
+
+DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds)
+{
+  TixiDocument *document = getDocument(handle);
+  xmlDocPtr xmlDocument = NULL;
+  xmlXPathObjectPtr xpathObject = NULL;
+  xmlNodePtr element = NULL;
+  ReturnCode error = SUCCESS;
+
+
+  if (!document) {
+    fprintf(stderr, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+  xmlDocument = document->docPtr;
+
+ 
+  error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+
+  if (!error) {
+    xmlNodePtr children = element->children;
+    *nChilds = 0;
+    
+    while(children){
+        children = children->next;
+        (*nChilds)++;
+    }
+  }
+
+  return error;
+}
+
+DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle, const char *elementPath, int* nAttributes)
+{
+  TixiDocument *document = getDocument(handle);
+  xmlDocPtr xmlDocument = NULL;
+  xmlXPathObjectPtr xpathObject = NULL;
+  xmlNodePtr element = NULL;
+  ReturnCode error = SUCCESS;
+
+
+  if (!document) {
+    fprintf(stderr, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+  xmlDocument = document->docPtr;
+ 
+  error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+
+  if (!error) {
+    xmlAttrPtr attr = element->properties;
+    *nAttributes = 0;
+    
+    while(attr){
+        attr = attr->next;
+        (*nAttributes)++;
+    }
+  }
+
+  return error;
+}
+
+DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, const char *elementPath, int attrIndex, char** attrName)
+{
+  TixiDocument *document = getDocument(handle);
+  xmlDocPtr xmlDocument = NULL; 
+  xmlXPathObjectPtr xpathObject = NULL;
+  xmlNodePtr element = NULL;
+  ReturnCode error = SUCCESS;
+
+
+  if (!document) {
+    fprintf(stderr, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+  xmlDocument = document->docPtr;
+
+  if(attrIndex <= 0){
+      return INDEX_OUT_OF_RANGE;
+  }
+ 
+  error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+
+  if (!error) {
+    xmlAttrPtr attr = element->properties;
+    int pos = 1;
+    
+    while(attr && pos < attrIndex){
+        attr = attr->next;
+        pos++;
+    }
+    
+    if(pos != attrIndex || !attr){
+        return INDEX_OUT_OF_RANGE;
+    }
+    
+    // get name
+    *attrName = (char *) malloc((strlen(attr->name) + 3) * sizeof(char));
+    strcpy(*attrName,  attr->name);
+    error = addToMemoryList(document, (void *) *attrName);
+  }
+
+  return error;
+}
+
+
 

@@ -24,7 +24,7 @@
 		<z unit="m">0.0</z>
 	</coordinateOrigin>
 
-	<aPoint>
+	<aPoint system="cartesian" type="direction">
 		<point>
 			<x>11.0</x>
 			<y>12.2</y>
