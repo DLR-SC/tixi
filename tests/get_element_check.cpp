@@ -252,7 +252,7 @@ TEST_F(GetElementTests, GetChildElements)
     ASSERT_TRUE( !strcmp(string, "z"));
 
     // check an index that is not valid
-    ASSERT_TRUE( tixiGetChildElementName( documentHandle, "/plane/wings/wing[1]/centerOfGravity", 0, &string ) == FAILED );
+    ASSERT_TRUE( tixiGetChildElementName( documentHandle, "/plane/wings/wing[1]/centerOfGravity", 0, &string ) == INDEX_OUT_OF_RANGE );
 
     ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]/centerOfGravity", &nChilds));
     ASSERT_EQ(3, nChilds);
@@ -262,5 +262,13 @@ TEST_F(GetElementTests, GetChildElements)
     
     ASSERT_EQ(SUCCESS, tixiGetChildElementName(documentHandle, "/", 1, &string));
     ASSERT_STREQ("plane", string);
+    
+    ASSERT_EQ(SUCCESS,  tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", &nChilds ));
+    ASSERT_EQ(1, nChilds);
+    
+    ASSERT_EQ(SUCCESS,  tixiGetChildElementName(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", 1, &string ));
+    ASSERT_STREQ("text", string);
+    
+    ASSERT_EQ(SUCCESS,  tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x/text", &nChilds ));
 }
 

@@ -3237,8 +3237,6 @@ DLL_EXPORT ReturnCode tixiGetChildElementName(const TixiDocumentHandle handle, c
     xmlNodePtr element = NULL;
     xmlXPathObjectPtr xpathObject = NULL;
     int error = SUCCESS;
-    char *textPtr = NULL;
-    char xPath[1024];
 
     if (!document) {
       fprintf(stderr, "Error: Invalid document handle.\n");
@@ -3247,25 +3245,29 @@ DLL_EXPORT ReturnCode tixiGetChildElementName(const TixiDocumentHandle handle, c
     
     xmlDocument = document->docPtr;
     
-    error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
-    if(error){
-        return error;
+    if(index <= 0){
+        return INDEX_OUT_OF_RANGE;
     }
     
-    if(elementPath[strlen(elementPath)] == '/') {
-        sprintf(xPath, "/%s*", elementPath);
-    } else {
-        sprintf(xPath, "/%s/*", elementPath);
-    }
+    error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
 
-    textPtr = XPathExpressionGetElementName(document, xPath, index);
-    if (textPtr) {
-        *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
-        strcpy(*text, textPtr);
+    if(!error){
+        xmlNodePtr child = element->children;
+        int pos = 1;
+        
+        while(child && pos < index){
+            child = child->next;
+            pos++;
+        }
+        
+        if(pos != index || !child){
+            return INDEX_OUT_OF_RANGE;
+        }
+        
+        // get name
+        *text = (char *) malloc((strlen(child->name) + 3) * sizeof(char));
+        strcpy(*text,  child->name);
         error = addToMemoryList(document, (void *) *text);
-    } else {
-        *text = NULL;
-        error = FAILED;
     }
     return error;
 }
@@ -3291,7 +3293,6 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
   if (!error) {
     xmlNodePtr children = element->children;
     *nChilds = 0;
-    
     while(children){
         children = children->next;
         (*nChilds)++;
