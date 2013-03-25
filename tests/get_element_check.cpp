@@ -253,8 +253,14 @@ TEST_F(GetElementTests, GetChildElements)
 
     // check an index that is not valid
     ASSERT_TRUE( tixiGetChildElementName( documentHandle, "/plane/wings/wing[1]/centerOfGravity", 0, &string ) == FAILED );
-    
+
     ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]/centerOfGravity", &nChilds));
     ASSERT_EQ(3, nChilds);
+
+    ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(documentHandle, "/", &nChilds));
+    ASSERT_EQ(1, nChilds);
+    
+    ASSERT_EQ(SUCCESS, tixiGetChildElementName(documentHandle, "/", 1, &string));
+    ASSERT_STREQ("plane", string);
 }
 

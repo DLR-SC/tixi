@@ -314,7 +314,7 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPathDirt
 
   /* remove trailing slash */
   strncpy(elementPath, elementPathDirty, 1024);
-  if(elementPath[strlen(elementPath)-1] == '/'){
+  if(strlen(elementPath) > 1 && elementPath[strlen(elementPath)-1] == '/'){
       elementPath[strlen(elementPath)-1] = '\0';
   }
   
@@ -354,7 +354,7 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPathDirt
 
   assert(nodes->nodeTab[0]);
 
-  if (nodes->nodeTab[0]->type == XML_ELEMENT_NODE) {
+  if (nodes->nodeTab[0]->type == XML_ELEMENT_NODE || nodes->nodeTab[0]->type == XML_DOCUMENT_NODE) {
     *element = nodes->nodeTab[0];
     xmlXPathFreeContext(xpathContext);
     return SUCCESS;
