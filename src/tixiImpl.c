@@ -853,7 +853,10 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
     error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
     if (!error) {
         newElement = xmlNewText((xmlChar*) text);
-        xmlReplaceNode(element->children, newElement);
+        if(element->children)
+            xmlReplaceNode(element->children, newElement);
+        else 
+            xmlAddChild(element, newElement);
         return SUCCESS;
     }
     return FAILED;

@@ -41,3 +41,25 @@ TEST(Bugs,cdatatext_segfault){
     ASSERT_EQ(NULL, text);
     
 }
+
+// tests, if an empty text element can be updated
+TEST(Bugs, empty_textelement){
+    TixiDocumentHandle handle;
+    ASSERT_EQ(SUCCESS, tixiCreateDocument("Root", &handle));
+    
+    // the first test always worked... creating empty text element
+    ASSERT_EQ(SUCCESS, tixiAddTextElement(handle, "/Root", "TextEl1", ""));
+    ASSERT_EQ(SUCCESS, tixiUpdateTextElement(handle, "/Root/TextEl1", "mytext1"));
+    
+    char * text = NULL;
+    ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/Root/TextEl1", &text));
+    ASSERT_STREQ("mytext1", text);
+    
+    // the second test does not create a text element, but an empty node
+    ASSERT_EQ(SUCCESS, tixiCreateElement(handle, "/Root", "TextEl2"));
+    ASSERT_EQ(SUCCESS, tixiUpdateTextElement(handle, "/Root/TextEl2", "mytext2"));
+    
+    // here the test failed due to wrong implementation of tixiUpdateTextElement
+    ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/Root/TextEl2", &text));
+    ASSERT_STREQ("mytext2", text);
+}
