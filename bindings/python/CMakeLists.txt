@@ -42,6 +42,8 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
 			DEPENDS ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
 		)
 		
+		file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wrappertests.py DESTINATION ${PROJECT_BINARY_DIR}/tests)
+		
 		install(FILES ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py 
 				DESTINATION share/tixi/python
 				COMPONENT interfaces)

@@ -37,8 +37,8 @@ class Tests(unittest.TestCase):
     def test_open(self):
         t = Tixi()
         self.assertRaises(TixiException, t.open, "____HOPEFULLY_THIS_FILE_NAME_DOES_NOT_EXIST~~~~") #OPEN_FAILED
-        self.assertRaises(TixiException, t.open, os.path.join("..", "..", "tests", "TestData", "illformed.xml")) #NOT_WELL_FORMED
-        t.open(os.path.join("..", "..", "tests", "TestData", "in.xml"))
+        self.assertRaises(TixiException, t.open, os.path.join("TestData", "illformed.xml")) #NOT_WELL_FORMED
+        t.open(os.path.join("TestData", "in.xml"))
         self.assertTrue(t._handle.value != -1)
         t.close()
 
@@ -65,20 +65,20 @@ class Tests(unittest.TestCase):
         a = Tixi()
         b = Tixi()
         self.assertNotEqual(a._handle, b._handle)
-        a.open(os.path.join("..", "..", "tests", "TestData", "in.xml"))
-        b.open(os.path.join("..", "..", "tests", "TestData", "in.xml"))
+        a.open(os.path.join("TestData", "in.xml"))
+        b.open(os.path.join("TestData", "in.xml"))
         self.assertNotEqual(a._handle, b._handle)
         a.close()
         b.close()
         
     def test_validation_and_export(self):
         t = Tixi()
-        t.open(os.path.join("..", "..", "tests", "TestData", "valid_CPACS_dokumentiert.xml"))
+        t.open(os.path.join("TestData", "valid_CPACS_dokumentiert.xml"))
         c = t.exportDocumentAsString()
         self.assertTrue(c != None and c != "")
         header = '<?xml version="1.0" encoding="UTF-8"?>'
         self.assertTrue(c.startswith(header))
-        t.schemaValidateFromFile(os.path.join("..", "..", "tests", "TestData", "valid_cpacs_schema.xsd"))
+        t.schemaValidateFromFile(os.path.join("TestData", "valid_cpacs_schema.xsd"))
         schema = 'invalid'
         self.assertRaises(TixiException, t.schemaValidateFromString, schema) #OPEN_SCHEMA_FAILED
         schema = '<?xml version="1.0" encoding="UTF-8"?>\\n<?xml-stylesheet href="xs3p.xsl" type="text/xsl"?>\\n<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/1999/xhtml" targetNamespace="http://www.w3.org/1999/xhtml" elementFormDefault="qualified" attributeFormDefault="unqualified">\\n</xsd:schema>' # TODO
@@ -87,7 +87,7 @@ class Tests(unittest.TestCase):
     
     def test_elements(self):
         t = Tixi()
-        t.open(os.path.join("..", "..", "tests", "TestData", "in.xml"))
+        t.open(os.path.join("TestData", "in.xml"))
         self.assertEqual(t.getTextElement("/plane/name"), "Junkers JU 52")
         t.updateTextElement("/plane/name", "D150")
         self.assertEqual(t.getTextElement("/plane/name"), "D150")
@@ -108,19 +108,19 @@ class Tests(unittest.TestCase):
         t.updateTextElement("/plane/xx", "value")
         self.assertEquals(t.getTextElement("/plane/xx"), "value")
         t.removeElement("/plane/xx")
-        self.assertRaises(TixiException, t.checkElement, "/plane/xx")
+        self.assertEqual(t.checkElement("/plane/xx"),False)
         self.assertRaises(TixiException, t.getTextElement, "/plane/xx") #ELEMENT_NOT_FOUND
         
     def test_attributes(self):
         t = Tixi()
-        t.open(os.path.join("..", "..", "tests", "TestData", "in.xml"))
+        t.open(os.path.join("TestData", "in.xml"))
         self.assertEquals(t.getTextAttribute("/plane/wings/wing[1]", "position"), "left")
         self.assertEquals(t.getIntegerAttribute("/plane/wings", "numberOfWings"), 2)
         t.addIntegerAttribute("/plane", "intattr", 324, None)
         self.assertEquals(t.getIntegerAttribute("/plane", "intattr"), 324)
         t.removeAttribute("/plane", "intattr")
         self.assertEquals(t.getDoubleAttribute("/plane/coordinateOrigin", "scaling"), 1.3456)
-        self.assertFalse(t.checkAttribute("/plane", "doubleattr")) # ATTRIBUTE_NOT_FOUND
+        self.assertFalse(t.checkAttribute("/plane", "doubleattr")) # ATTRIBUTE_NOT_FOUND \n
         t.addDoubleAttribute("/plane", "doubleattr", 123.456, None)
         t.checkAttribute("/plane", "doubleattr")
         self.assertEquals(t.getDoubleAttribute("/plane", "doubleattr"), 123.456)
@@ -143,13 +143,13 @@ class Tests(unittest.TestCase):
         
     def test_vector_array(self):
         t = Tixi()
-        t.open(os.path.join("..", "..", "tests", "TestData", "vectorcount.xml"))
+        t.open(os.path.join("TestData", "vectorcount.xml"))
         self.assertEquals(t.getVectorSize("/a/aeroPerformanceMap/cfx"), 32)
         #v = t.getFloatVector("/a/aeroPerformanceMap/cfx", 32)
         #print v[0], v[1], v[-1]
         #1 2 118
         t.close()
-        t.open(os.path.join("..", "..", "tests", "TestData", "arraytests.xml"))
+        t.open(os.path.join("TestData", "arraytests.xml"))
         self.assertEquals(t.getArrayDimensions("/root/aeroPerformanceMap"), 4)
         self.assertEquals(t.getArrayDimensionSizes("/root/aeroPerformanceMap", 4), ((1, 2, 3, 8), 48))
         self.assertEquals(t.getArrayDimensionNames("/root/aeroPerformanceMap", 4), ("machNumber", "reynoldsNumber", "angleOfYaw", "angleOfAttack"))
@@ -162,20 +162,49 @@ class Tests(unittest.TestCase):
         #8
         #print t.getArrayElementNames("/root/aeroPerformanceMap", "vector")
         #print t.getArrayElementNames("/root/aeroPerformanceMap", "array")
+        t.getArrayElementCount("/root/aeroPerformanceMap","array")
         t.createElement("/root", "p1")
         t.addPoint("/root/p1", 1, 2, 3, None)
         self.assertEquals(t.getPoint("/root/p1"), (1.0, 2.0, 3.0))
         self.assertEquals(t.xPathEvaluateNodeNumber("/root/aeroPerformanceMap"), 1)
         t.close()
-        t.open(os.path.join("..", "..", "tests", "TestData", "in.xml"))
+        t.open(os.path.join("TestData", "in.xml"))
         self.assertEquals(t.xPathExpressionGetTextByIndex("/plane/wings/wing/centerOfGravity/x", 2), "30.0")
         t.close()
-        t.open(os.path.join("..", "..", "tests", "TestData", "uid_correct.xml"))
+        t.open(os.path.join("TestData", "uid_correct.xml"))
         t.uIDCheckDuplicates()
         t.uIDCheckExists("schlumpf")
         t.close()
-        t.open(os.path.join("..", "..", "tests", "TestData", "uid_duplicated.xml"))
+        t.open(os.path.join("TestData", "uid_duplicated.xml"))
         self.assertRaises(TixiException, t.uIDCheckDuplicates) #UID_NOT_UNIQUE
 
+    def test_api(self):
+        t = Tixi()
+        print "Tixi Version: ",t.version
+        t.create("root")
+        t.addDoubleElement("/root","myDouble",3.2,0)
+        t.addIntegerElement("/root","myInteger",6,None)
+
+        # Here starts the rest
+        t.addBooleanElement("/root","myBoolean",0)
+        t.updateDoubleElement("/root/myDouble",3.14159262,0)
+        t.updateIntegerElement("/root/myInteger",7,None)
+        t.updateBooleanElement("/root/myBoolean",1)
+        t.addTextElementAtIndex("/root","myNewTextElement","myText",2)
+        t.createElementAtIndex("/root","array",0)
+        t.addFloatVector("/root","myFloatVector",(0.0,1.1,2.2),3)
+        t.addExternalLink("/root","/externalLink",".xml")
+        t.addHeader("tool","version","author")
+        t.addCpacsHeader("name","creator","version","description","cpacsVersion")
+        t.usePrettyPrint(1)
+        t.uIDCheckLinks()
+        t.uIDSetToXPath("/root/myBoolean","booleanID")
+        self.assertEqual(t.uIDGetXPath("booleanID"),"/root/myBoolean")
+        #t.dTDValidate()
+        #t.xSLTransformationToFile()
+        t.save(os.path.join("TestData", "test_save.xml"))
+        t.close()
+        t.cleanup()
+        
 if __name__ == '__main__':
     unittest.main()
