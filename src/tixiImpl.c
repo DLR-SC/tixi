@@ -3230,7 +3230,7 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handl
 	return error;
 }
 
-DLL_EXPORT ReturnCode tixiGetChildElementName(const TixiDocumentHandle handle, const char *elementPath,  int index, char **text)
+DLL_EXPORT ReturnCode   tixiGetChildElementName(const TixiDocumentHandle handle, const char *elementPath,  int index, char **text)
 {
     TixiDocument *document = getDocument(handle);
     xmlDocPtr xmlDocument = NULL;
@@ -3264,10 +3264,17 @@ DLL_EXPORT ReturnCode tixiGetChildElementName(const TixiDocumentHandle handle, c
             return INDEX_OUT_OF_RANGE;
         }
         
-        // get name
-        *text = (char *) malloc((strlen(child->name) + 3) * sizeof(char));
-        strcpy(*text,  child->name);
-        error = addToMemoryList(document, (void *) *text);
+        // test special cases text and cdata elements, these element 
+        // do not have a name
+        if(child->type == XML_TEXT_NODE || child->type == XML_CDATA_SECTION_NODE){
+            *text = NULL;
+        }
+        else {
+            // get name
+            *text = (char *) malloc((strlen(child->name) + 3) * sizeof(char));
+            strcpy(*text,  child->name);
+            error = addToMemoryList(document, (void *) *text);
+        }
     }
     return error;
 }

@@ -1902,7 +1902,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
   @param elementPath elementPath (in) an XPath compliant path to an element in the document
                     specified by handle (see section \ref XPathExamples above).
   @param index (in) number index of the child-element of the given path.
-  @param text (out) String containing the name of the child node.
+  @param text (out) String containing the name of the child node. If the node is a text element (or cdata), which
+                    do not have a name, a null pointer will be returned.
 
   @return
 
