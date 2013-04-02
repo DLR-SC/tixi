@@ -3233,7 +3233,7 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handl
 	return error;
 }
 
-DLL_EXPORT ReturnCode   tixiGetChildElementName(const TixiDocumentHandle handle, const char *elementPath,  int index, char **text)
+DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, const char *elementPath,  int index, char **text)
 {
     TixiDocument *document = getDocument(handle);
     xmlDocPtr xmlDocument = NULL;

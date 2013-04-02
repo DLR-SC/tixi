@@ -1867,7 +1867,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
     tixi_get_named_children_count( integer handle, character*n element_path, character*n child_name, int* count, integer error )
 
     @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-    @param elementPath elementPath (in) an XPath compliant path to an element in the document
+    @param elementPath elementPath (in) the path to an element in the document
                       specified by handle (see section \ref XPathExamples above).
     @param childName (in) name of children to be counted
     @param count (out) number of children with name childName.
@@ -1892,14 +1892,14 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
 
 
 /**
-  @brief Returns the name of a child element beneath a given path.
+  @brief Returns the name of a child node beneath a given path.
 
   <b>Fortran syntax:</b>
 
-  tixi_get_child_element_name( integer handle, character*n element_path, int* index, character*n child_name_array, integer error )
+  tixi_get_child_node_name( integer handle, character*n element_path, int* index, character*n child_name_array, integer error )
 
   @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath elementPath (in) an XPath compliant path to an element in the document
+  @param parentElementPath (in) the path to the parent element in the document
                     specified by handle (see section \ref XPathExamples above).
   @param index (in) number index of the child-element of the given path.
   @param text (out) String containing the name of the child node. If the node is a text element (or cdata), which
@@ -1914,8 +1914,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
                              to a list of elements
 */
-  DLL_EXPORT ReturnCode tixiGetChildElementName (const TixiDocumentHandle handle,
-                                                  const char *elementPath, int index, char **text);
+  DLL_EXPORT ReturnCode tixiGetChildNodeName (const TixiDocumentHandle handle,
+                                              const char *parentElementPath, int index, char **text);
 
   
 /**

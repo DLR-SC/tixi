@@ -124,7 +124,7 @@
 #define tixiUIDSetToXPath_f TIXI_UID_SET_TO_XPATH
 #define tixiXPathEvaluateNodeNumber_f TIXI_XPATH_EVALUATE_NODE_NUMBER
 #define tixiXPathExpressionGetTextByIndex_f TIXI_XPATH_EXPRESSION_GET_TEXT_BY_INDEX
-#define tixiGetChildElementName_f TIXI_GET_CHILD_ELEMENT_NAME
+#define tixiGetChildNodeName_f TIXI_GET_CHILD_NODE_NAME
 #define tixiGetNumberOfChilds_f TIXI_GET_NUMBER_OF_CHILDS
 #define tixiGetNumberOfAttributes_f TIXI_GET_NUMBER_OF_ATTRIBUTES
 #define tixiGetAttributeName_f TIXI_GET_ATTRIBUTE_NAME
@@ -202,7 +202,7 @@
 #define tixiUIDSetToXPath_f FORTRAN_NAME(tixi_uid_set_to_xpath)
 #define tixiXPathEvaluateNodeNumber_f FORTRAN_NAME(tixi_xpath_evaluate_node_number)
 #define tixiXPathExpressionGetTextByIndex_f FORTRAN_NAME(tixi_xpath_expression_get_text_by_index)
-#define tixiGetChildElementName_f FORTRAN_NAME(tixi_get_child_element_name)
+#define tixiGetChildNodeName_f FORTRAN_NAME(tixi_get_child_node_name)
 #define tixiGetNumberOfChilds_f FORTRAN_NAME(tixi_get_number_of_childs)
 #define tixiGetNumberOfAttributes_f FORTRAN_NAME(tixi_get_number_of_attributes)
 #define tixiGetAttributeName_f FORTRAN_NAME(tixi_get_attribute_name)
@@ -746,7 +746,7 @@ void tixiXPathExpressionGetTextByIndex_F(const TixiDocumentHandle* handle,
 										int lengthString1,
 										int lengthString2);
 
-void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
+void tixiGetChildNodeName_F(const TixiDocumentHandle* handle,
                                         char* elementPath,
                                         int* index,
                                         char* text,
