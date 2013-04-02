@@ -267,11 +267,17 @@ TEST_F(GetElementTests, GetChildElements)
     ASSERT_EQ(1, nChilds);
     
     ASSERT_EQ(SUCCESS,  tixiGetChildNodeName(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", 1, &string ));
-    ASSERT_EQ(NULL, string);
+    ASSERT_STREQ("#text", string);
     
     ASSERT_EQ(SUCCESS,  tixiGetTextElement(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", &string ));
     ASSERT_STREQ("30.0", string);
     
     ASSERT_EQ(ELEMENT_NOT_FOUND,  tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x/text", &nChilds ));
+    
+    ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]", &nChilds));
+    ASSERT_EQ(2, nChilds);
+    
+    ASSERT_EQ(SUCCESS, tixiGetChildNodeName(documentHandle,  "/plane/wings/wing[1]", 2, &string));
+    ASSERT_STREQ("#comment", string);
 }
 

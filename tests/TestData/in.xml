@@ -9,6 +9,7 @@
 				<y unit="m">10.0</y>
 				<z unit="m">5.0</z>
 			</centerOfGravity>
+			<!-- myComment -->
 		</wing>
 		<wing position="right">
 			<centerOfGravity referenceSystem="relative">

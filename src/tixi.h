@@ -1438,6 +1438,88 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
   DLL_EXPORT ReturnCode tixiRemoveElement (const TixiDocumentHandle handle, const char *elementPath);
 
+/**
+    @brief Returns the number of children elements with the same name.
+
+    <b>Fortran syntax:</b>
+
+    tixi_get_named_children_count( integer handle, character*n element_path, character*n child_name, int* count, integer error )
+
+    @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+    @param elementPath elementPath (in) the path to an element in the document
+                      specified by handle (see section \ref XPathExamples above).
+    @param childName (in) name of children to be counted
+    @param count (out) number of children with name childName.
+                       0 is returned if either the element specified by elementPath has no
+               children at all or has no children with name childName.
+
+    @return
+
+     - SUCCESS if a count is computed
+     - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                               to a list of elements
+     - NO_CHILD_NAME if childName is NULL
+
+ */
+
+  DLL_EXPORT ReturnCode tixiGetNamedChildrenCount (const TixiDocumentHandle handle,
+                                                   const char *elementPath, const char *childName,
+                                                   int *count);
+
+/**
+  @brief Returns the name of a child node beneath a given path.
+
+  <b>Fortran syntax:</b>
+
+  tixi_get_child_node_name( integer handle, character*n element_path, int* index, character*n child_name_array, integer error )
+
+  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param parentElementPath (in) the path to the parent element in the document
+                    specified by handle (see section \ref XPathExamples above).
+  @param index (in) number index of the child-element of the given path.
+  @param name (out) String containing the name of the child node. If the node is not a normal node, the name variable will contain:
+                     - #text - in case of a text node
+                     - #comment - in case of a comment node
+                     - #cdata-section - in case of a CDATA section node
+
+  @return
+
+   - SUCCESS if a count is computed
+   - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+   - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+   - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+   - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                             to a list of elements
+*/
+  DLL_EXPORT ReturnCode tixiGetChildNodeName (const TixiDocumentHandle handle,
+                                              const char *parentElementPath, int index, char **name);
+
+/**
+  @brief Returns the number of child elements beneath a given path.
+
+  <b>Fortran syntax:</b>
+
+  tixi_get_number_of_childs( integer handle, character*n element_path, int* nchilds, integer error )
+
+  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param elementPath elementPath (in) an XPath compliant path to an element in the document
+                    specified by handle (see section \ref XPathExamples above).
+  @param nChilds (out) Number of child elements beneath the given elementPath.
+
+  @return
+
+   - SUCCESS if a count is computed
+   - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+   - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+   - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+   - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                             to a list of elements
+*/
+  DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds);
+
 /*@}*/
 
 /**
@@ -1759,7 +1841,56 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
   DLL_EXPORT ReturnCode tixiRemoveAttribute (const TixiDocumentHandle handle,
                                              const char *elementPath, const char *attributeName);
+    
 
+  /**
+    @brief Returns the number of attributes  of a given node.
+  
+    <b>Fortran syntax:</b>
+  
+    tixi_get_number_of_attributes( integer handle, character*n element_path, int* nattr, integer error )
+  
+    @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+    @param elementPath elementPath (in) an XPath compliant path to an element in the document
+                      specified by handle (see section \ref XPathExamples above).
+    @param nAttributes (out) Number of attributes of a given node.
+  
+    @return
+    
+     - SUCCESS if a count is computed
+     - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                               to a list of elements
+  */
+    DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle, const char *elementPath, int* nAttributes);
+    
+    
+  /**
+    @brief Returns the name of an attribute beneath a given path.
+  
+    <b>Fortran syntax:</b>
+  
+    tixi_get_attribute_name( integer handle, character*n element_path, int* index, character*n attr_name_array, integer error )
+  
+    @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+    @param elementPath elementPath (in) an XPath compliant path to an element in the document
+                      specified by handle (see section \ref XPathExamples above).
+    @param attrIndex (in) number index of the attribute of the given path (counting from 1...tixiGetNumberOfAttributes)
+    @param attrName (out) String containing the attribute name.
+  
+    @return
+  
+     - SUCCESS if a count is computed
+     - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                               to a list of elements
+  */
+    DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, const char *elementPath, int attrIndex, char** attrName);
+  
 /*@}*/
 
 /**
@@ -1858,136 +1989,6 @@ tixi_add_cpacs_header( integer handle, character*n name, character*n creator, ch
 DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const char *name, const char *creator,
                                           const char *version, const char *description, const char * cpacsVersion);
 
-
-/**
-    @brief Returns the number of children elements with the same name.
-
-    <b>Fortran syntax:</b>
-
-    tixi_get_named_children_count( integer handle, character*n element_path, character*n child_name, int* count, integer error )
-
-    @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-    @param elementPath elementPath (in) the path to an element in the document
-                      specified by handle (see section \ref XPathExamples above).
-    @param childName (in) name of children to be counted
-    @param count (out) number of children with name childName.
-                       0 is returned if either the element specified by elementPath has no
-               children at all or has no children with name childName.
-
-    @return
-
-     - SUCCESS if a count is computed
-     - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
-     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
-     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
-     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
-                               to a list of elements
-     - NO_CHILD_NAME if childName is NULL
-
- */
-
-  DLL_EXPORT ReturnCode tixiGetNamedChildrenCount (const TixiDocumentHandle handle,
-                                                   const char *elementPath, const char *childName,
-                                                   int *count);
-
-
-/**
-  @brief Returns the name of a child node beneath a given path.
-
-  <b>Fortran syntax:</b>
-
-  tixi_get_child_node_name( integer handle, character*n element_path, int* index, character*n child_name_array, integer error )
-
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param parentElementPath (in) the path to the parent element in the document
-                    specified by handle (see section \ref XPathExamples above).
-  @param index (in) number index of the child-element of the given path.
-  @param text (out) String containing the name of the child node. If the node is a text element (or cdata), which
-                    do not have a name, a null pointer will be returned.
-
-  @return
-
-   - SUCCESS if a count is computed
-   - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
-   - INVALID_XPATH if elementPath is not a well-formed XPath-expression
-   - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
-   - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
-                             to a list of elements
-*/
-  DLL_EXPORT ReturnCode tixiGetChildNodeName (const TixiDocumentHandle handle,
-                                              const char *parentElementPath, int index, char **text);
-
-  
-/**
-  @brief Returns the number of child elements beneath a given path.
-
-  <b>Fortran syntax:</b>
-
-  tixi_get_number_of_childs( integer handle, character*n element_path, int* nchilds, integer error )
-
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath elementPath (in) an XPath compliant path to an element in the document
-                    specified by handle (see section \ref XPathExamples above).
-  @param nChilds (out) Number of child elements beneath the given elementPath.
-
-  @return
-
-   - SUCCESS if a count is computed
-   - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
-   - INVALID_XPATH if elementPath is not a well-formed XPath-expression
-   - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
-   - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
-                             to a list of elements
-*/
-  DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds);
-  
-/**
-  @brief Returns the number of attributes  of a given node.
-
-  <b>Fortran syntax:</b>
-
-  tixi_get_number_of_attributes( integer handle, character*n element_path, int* nattr, integer error )
-
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath elementPath (in) an XPath compliant path to an element in the document
-                    specified by handle (see section \ref XPathExamples above).
-  @param nAttributes (out) Number of attributes of a given node.
-
-  @return
-  
-   - SUCCESS if a count is computed
-   - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
-   - INVALID_XPATH if elementPath is not a well-formed XPath-expression
-   - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
-   - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
-                             to a list of elements
-*/
-  DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle, const char *elementPath, int* nAttributes);
-  
-  
-/**
-  @brief Returns the name of an attribute beneath a given path.
-
-  <b>Fortran syntax:</b>
-
-  tixi_get_attribute_name( integer handle, character*n element_path, int* index, character*n attr_name_array, integer error )
-
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath elementPath (in) an XPath compliant path to an element in the document
-                    specified by handle (see section \ref XPathExamples above).
-  @param attrIndex (in) number index of the attribute of the given path (counting from 1...tixiGetNumberOfAttributes)
-  @param attrName (out) String containing the attribute name.
-
-  @return
-
-   - SUCCESS if a count is computed
-   - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
-   - INVALID_XPATH if elementPath is not a well-formed XPath-expression
-   - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
-   - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
-                             to a list of elements
-*/
-  DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, const char *elementPath, int attrIndex, char** attrName);
   
 /**
   @brief Checks if the given element exists.
