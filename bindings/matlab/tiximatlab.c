@@ -1810,7 +1810,7 @@ void mex_tixiUIDSetToXPath(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
     mxFree(xpath);
 }
 
-void mex_tixiGetChildElementName(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+void mex_tixiGetChildNodeName(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     char * xpath = NULL;
     char * name   = NULL;
     int index = -1;
@@ -1834,7 +1834,7 @@ void mex_tixiGetChildElementName(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     handle = mxToInt(prhs[1]);
     mxToString(prhs[2],&xpath);
     index = mxToInt(prhs[3]);
-    handleTixiError(tixiGetChildElementName(handle, xpath, index, &name));
+    handleTixiError(tixiGetChildNodeName(handle, xpath, index, &name));
 
     plhs[0] = mxCreateString(name);
     mxFree(xpath);
@@ -2012,7 +2012,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   RUN_IF_FUNCTION_IS(tixiUIDCheckExists)
   RUN_IF_FUNCTION_IS(tixiUIDGetXPath)
   RUN_IF_FUNCTION_IS(tixiUIDSetToXPath)
-  RUN_IF_FUNCTION_IS(tixiGetChildElementName)
+  RUN_IF_FUNCTION_IS(tixiGetChildNodeName)
   RUN_IF_FUNCTION_IS(tixiGetNumberOfChilds)
   RUN_IF_FUNCTION_IS(tixiGetAttributeName)
   RUN_IF_FUNCTION_IS(tixiGetNumberOfAttributes)

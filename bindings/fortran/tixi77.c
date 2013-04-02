@@ -1424,7 +1424,7 @@ void tixiXPathExpressionGetTextByIndex_F(const TixiDocumentHandle* handle,
 }
 
 
-void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
+void tixiGetChildNodeName_F(const TixiDocumentHandle* handle,
                                         char* parentPath,
                                         int* index,
                                         char* text,
@@ -1437,7 +1437,7 @@ void tixiGetChildElementName_F(const TixiDocumentHandle* handle,
 
     cElementPath = makeCString(parentPath, lengthString1);
 
-    *error = tixiGetChildElementName(*handle, cElementPath, *index, &cText);
+    *error = tixiGetChildNodeName(*handle, cElementPath, *index, &cText);
 
     if (*error == SUCCESS) {
         copyToFortranString(cText, lengthString2, text);

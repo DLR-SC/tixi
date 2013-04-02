@@ -245,14 +245,14 @@ TEST_F(GetElementTests, GetChildElements)
     char *string;
     int nChilds = 0;
 
-    ASSERT_TRUE( tixiGetChildElementName( documentHandle, "/plane/wings/wing[1]/centerOfGravity", 1, &string ) == SUCCESS );
+    ASSERT_TRUE( tixiGetChildNodeName( documentHandle, "/plane/wings/wing[1]/centerOfGravity", 1, &string ) == SUCCESS );
     ASSERT_TRUE( !strcmp(string, "x"));
 
-    ASSERT_TRUE( tixiGetChildElementName( documentHandle, "/plane/wings/wing[1]/centerOfGravity/", 3, &string ) == SUCCESS );
+    ASSERT_TRUE( tixiGetChildNodeName( documentHandle, "/plane/wings/wing[1]/centerOfGravity/", 3, &string ) == SUCCESS );
     ASSERT_TRUE( !strcmp(string, "z"));
 
     // check an index that is not valid
-    ASSERT_TRUE( tixiGetChildElementName( documentHandle, "/plane/wings/wing[1]/centerOfGravity", 0, &string ) == INDEX_OUT_OF_RANGE );
+    ASSERT_TRUE( tixiGetChildNodeName( documentHandle, "/plane/wings/wing[1]/centerOfGravity", 0, &string ) == INDEX_OUT_OF_RANGE );
 
     ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]/centerOfGravity", &nChilds));
     ASSERT_EQ(3, nChilds);
@@ -260,13 +260,13 @@ TEST_F(GetElementTests, GetChildElements)
     ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(documentHandle, "/", &nChilds));
     ASSERT_EQ(1, nChilds);
     
-    ASSERT_EQ(SUCCESS, tixiGetChildElementName(documentHandle, "/", 1, &string));
+    ASSERT_EQ(SUCCESS, tixiGetChildNodeName(documentHandle, "/", 1, &string));
     ASSERT_STREQ("plane", string);
     
     ASSERT_EQ(SUCCESS,  tixiGetNumberOfChilds(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", &nChilds ));
     ASSERT_EQ(1, nChilds);
     
-    ASSERT_EQ(SUCCESS,  tixiGetChildElementName(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", 1, &string ));
+    ASSERT_EQ(SUCCESS,  tixiGetChildNodeName(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", 1, &string ));
     ASSERT_EQ(NULL, string);
     
     ASSERT_EQ(SUCCESS,  tixiGetTextElement(documentHandle, "/plane/wings/wing[1]/centerOfGravity/x", &string ));
