@@ -182,12 +182,12 @@ char* stringToLower(char* string)
 char* string_stripLeft(char* string, int len)
 {
     char *resultString = NULL;
-    int x = 0;
+    size_t x = 0;
     size_t stringLength = 0;
     int y = 0;
 
     stringLength = strlen(string);
-    if (stringLength < len) {
+    if (stringLength < (size_t) len) {
         fprintf(stderr, "Error: could not strip %d bytes from string \"%s\"", len, string);
         return NULL;
     }

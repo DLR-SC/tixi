@@ -13,6 +13,10 @@ if(CMAKE_COMPILER_IS_GNUCC)
 	set(CMAKE_C_FLAGS "-Wall -fmessage-length=0")
 endif()
 
+if(MSVC)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
 add_executable(tixiDemo ${DEMO_SRC})
 target_link_libraries (tixiDemo TIXI)
 

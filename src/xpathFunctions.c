@@ -165,7 +165,7 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
     if (cur->type == XML_ELEMENT_NODE) {
         return cur->name;
     } else if (cur->type == XML_ATTRIBUTE_NODE) {
-            return NULL;
+        return NULL;
     }
 }
 
