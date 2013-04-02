@@ -3267,17 +3267,25 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
             return INDEX_OUT_OF_RANGE;
         }
         
-        // test special cases text and cdata elements, these element 
-        // do not have a name
-        if(child->type == XML_TEXT_NODE || child->type == XML_CDATA_SECTION_NODE){
-            *text = NULL;
+        // return node value according to dom specification: http://www.w3schools.com/dom/dom_nodetype.asp
+        if(child->type == XML_TEXT_NODE){
+            *text = (char *) malloc(10 * sizeof(char));
+            strcpy(*text, "#text");
+        }
+        else if(child->type == XML_CDATA_SECTION_NODE){
+            *text = (char *) malloc(20 * sizeof(char));
+            strcpy(*text, "#cdata-section");
+        }
+        else if(child->type == XML_COMMENT_NODE){
+            *text = (char *) malloc(10 * sizeof(char));
+            strcpy(*text, "#comment");
         }
         else {
             // get name
             *text = (char *) malloc((strlen(child->name) + 3) * sizeof(char));
             strcpy(*text,  child->name);
-            error = addToMemoryList(document, (void *) *text);
         }
+        error = addToMemoryList(document, (void *) *text);
     }
     return error;
 }

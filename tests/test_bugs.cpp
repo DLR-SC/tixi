@@ -38,7 +38,7 @@ TEST(Bugs,cdatatext_segfault){
     
     // this query segfaultet due to its cdata section
     ASSERT_EQ(SUCCESS, tixiGetChildNodeName(handle, "/Assembly/BodySkeleton[1]/BodyFrame[1]", 1, &text));
-    ASSERT_EQ(NULL, text);
+    ASSERT_STREQ("#cdata-section", text);
     
 }
 
