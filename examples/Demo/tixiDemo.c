@@ -212,9 +212,10 @@ void readIBUCKInput(char *filename)
   Panel aPanel;
   Stringer aStringer;
   Frame aFrame;
-
-  assert(tixiOpenDocument(filename, &handle) == SUCCESS);
-
+  
+  ReturnCode ret = tixiOpenDocument(filename, &handle);
+  assert(ret == SUCCESS);
+  
   /* get panel data */
 
   getPanelData(handle, panelPath, &aPanel);
