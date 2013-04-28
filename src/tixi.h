@@ -2419,7 +2419,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
        tixi_get_float_vector( integer handle, character*n vectorPath, real array, integer eNumber)
 
        @cond
-       #PY:1:-1# unconventional position of output parameter, manual size argument ("-1" means "manual")
+       #PY:1:1# unconventional position of output parameter
        @endcond
 
       @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
