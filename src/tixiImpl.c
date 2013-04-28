@@ -2995,7 +2995,7 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
         (*vectorArray)[count ++] = atof(token);    /* starting with zero */
         token = strtok(0, VECTOR_SEPARATOR);
     }
-    return SUCCESS;
+    return count < eNumber ? INDEX_OUT_OF_RANGE : SUCCESS;
 }
 
 
