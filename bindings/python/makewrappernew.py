@@ -81,7 +81,7 @@ class Annotation(object):
                                   'index': arg_index}
             ins = ins.replace(tmp.group(),'')
 
-class FunctionArg(object):
+class CFunctionArg(object):
     '''
     Stores the type, name, number of pointers
     and constness of a function argument
@@ -90,11 +90,12 @@ class FunctionArg(object):
     def __init__(self, string, type_list = None, handle_str = None):
         self.type = ''
         self.npointer = 0
-        self.is_const = False
         self.name = ''
-        self.is_handle = False
-        self.is_array = False
-        self.is_outarg = False
+        self.is_const   = False
+        self.is_handle  = False
+        self.is_string  = False
+        self.is_array   = False
+        self.is_outarg  = False
         self.is_sizearg = False
         
         if len(string) > 0:
@@ -120,6 +121,7 @@ class FunctionArg(object):
         self.npointer  = len(res.group('pointer'))
         self.name      = res.group('name')
         self.is_handle = self.type == handle_str
+        self.is_string = self.type == 'char' and self.npointer > 0
         
         # reserved keywords and types that are not allowed as names
         keywords = ['const', 'while', 'for']
@@ -149,7 +151,7 @@ class CFunctionDec(object):
         Scans for function name, arguments and return value
         '''        
         
-        regex = r'(?P<retval>(const )?[\w*]+)[\s]+(?P<name>[\w]+)' + \
+        regex = r'(?P<retval>(const )?[\w*]+([\s]+[\*]+)?)[\s]+(?P<name>[\w]+)' + \
                 r'\((?P<args>[\w\s,*\[\]]*)\)'
         res = re.search(regex, string)
         if not res:
@@ -157,32 +159,38 @@ class CFunctionDec(object):
         
         arg_string = res.group('args')
         arg_str_list = arg_string.split(',')
-        for index, arg in enumerate(arg_str_list):
-            ARGUMENT = FunctionArg(arg, type_list, handle_str)
+        for index, arg_str in enumerate(arg_str_list):
+            arg = CFunctionArg(arg_str, type_list, handle_str)
 
             # apply some default behaviour
             
             # first argument is assumed to be handle
-            if index == 0 and ARGUMENT.npointer == 0:
-                ARGUMENT.is_handle = True
+            if index == 0 and arg.npointer == 0:
+                arg.is_handle = True
             
 
             # if there is a asterisk, we assume it to be an array, except
             # if its the last argument, then it is an outarg
-            ARGUMENT.is_outarg = False
-            if ARGUMENT.npointer > 0:
+            arg.is_outarg = False
+            if arg.npointer > 0:
                 if index < len(arg_str_list) - 1:
-                    ARGUMENT.is_array = True
-                else:
-                    ARGUMENT.is_outarg = True
+                    arg.is_array = True
+                elif (arg.is_string and arg.npointer > 1) \
+                 or (not arg.is_string and arg.npointer > 0):
+                    arg.is_outarg = True
             
-            self.arguments.append(ARGUMENT)
+            self.arguments.append(arg)
             
             
-        self.return_value = FunctionArg(res.group('retval'), type_list, handle_str)
+        self.return_value = CFunctionArg(res.group('retval'), type_list, handle_str)
         self.method_name  = res.group('name')
         
     def apply_annotation(self, annotation):
+        '''
+        Uses the information parsed from the annotation to identify
+        the roles of the arguments (in, outs, arrays, arraysizes...)
+        '''
+        
         if annotation.returns_error:
             self.returns_error = True
         else:
@@ -207,11 +215,12 @@ class CFunctionDec(object):
             self.arguments[index].is_array  = inarg['isarray']
             if inarg['isarray']:
                 for sizeindex in inarg['arraysizes']:
-                    print 'hall'
                     self.arguments[sizeindex].is_sizearg = True
             
             
         self.uses_handle = annotation.uses_handle
+        if not self.uses_handle and len(self.arguments) > 0:
+            self.arguments[0].is_handle = False
 
 class PythonGenerator(object):
     '''
@@ -224,16 +233,11 @@ class PythonGenerator(object):
         if len(name_prefix) > 0:
             self.handle_str = name_prefix + '_' + self.handle_str
     
-    def create_method_wrapper(self, fun_dec):
-        '''
-        Generates the python wrapper code around a c function call
-        '''
+    def create_header(self, fun_dec, indention_depth):
+        '''Creates the method header as "def myFunc(self, myvalue):"'''
         
-        native_types = ['int','double','float','char','bool']
-        
-        indent = 4*' '
-        
-        raw_name = fun_dec.method_name
+        string = ''
+        indent = 4*indention_depth*' '
         
         # generate simplified method name, e.g.: tixiGetValue -> getValue
         name = fun_dec.method_name
@@ -243,11 +247,9 @@ class PythonGenerator(object):
         # position of the handle variable
         handle_index = -1
         
-        ret_val = None if fun_dec.returns_error else fun_dec.return_value
-        num_inargs = 0
-        num_outargs= 0
+        num_inargs  = 0
+        num_outargs = 0
         
-        string = ''
         # create method header
         string += indent + 'def %s(self' % name
         for index, arg in enumerate(fun_dec.arguments):
@@ -261,57 +263,85 @@ class PythonGenerator(object):
                 num_outargs += 1
             
         string += '):\n'
-
+        return (string, num_inargs, num_outargs, handle_index)
+    
+    @staticmethod
+    def create_pre_call(fun_dec, num_inargs, num_outargs, indention_depth):
+        '''
+        Creates the code for the input argument conversion and prepares the
+        output arguments.
+        '''
+        indent = 4*(indention_depth+1)*' '
+        string = ''
+        raw_name = fun_dec.method_name
+        native_types = ['int', 'double', 'float', 'char', 'bool']
+        
         #create input arguments
         if num_inargs > 0:
-            string += 2*indent + '# input arg conversion\n'
-        for index, arg in enumerate(fun_dec.arguments):
+            string += indent + '# input arg conversion\n'
+            
+        iargs = (arg for arg in fun_dec.arguments if not arg.is_outarg)
+        for arg in iargs:
             tmp_str = ''
-            if arg.is_outarg:
+            if arg.is_handle:
                 continue
+            elif arg.is_string:
+                tmp_str = '_c_%s = ctypes.c_char_p(%s)' \
+                    % (arg.name, arg.name)
+            elif not arg.is_array and arg.npointer == 0:
+                tmp_str = '_c_%s = ctypes.c_%s(%s)' \
+                    % (arg.name, arg.type, arg.name)
+            elif arg.is_array and arg.npointer > 0:
+                # create type
+                tmp_str = 'array_t_%s = ctypes.c_%s * len(%s)\n' \
+                    % (arg.name, arg.type, arg.name)
+                tmp_str += indent
+                tmp_str += '_c_%s = array_t_%s(*%s)' \
+                    % (arg.name, arg.name, arg.name)
             else:
-                if arg.is_handle:
-                    continue
-                elif not arg.is_array and arg.npointer == 0:
-                    tmp_str = '_c_%s = ctypes.c_%s(%s)' % (arg.name, arg.type, arg.name)
-                elif arg.is_array and arg.npointer > 0:
-                    # create type
-                    tmp_str = 'array_t_%s = ctypes.c_%s * len(%s)\n' % (arg.name, arg.type, arg.name)
-                    tmp_str += 2*indent
-                    tmp_str += '_c_%s = array_t_%s(*%s)' % (arg.name, arg.name, arg.name)
-                else:
-                    raise Exception('Cannot create python to c conversion ' + 
-                     'for input argument "%s" in "%s"' % (arg.name, raw_name))
-                
-                if not arg.type in native_types:
-                    raise Exception('Cannot create python to c conversion for type "%s"' % arg.type)
-                
-                string += 2*indent + tmp_str + '\n'
+                raise Exception('Cannot create python to c conversion ' +
+                 'for input argument "%s" in "%s"' % (arg.name, raw_name))
+            
+            if not arg.type in native_types:
+                raise Exception('Cannot create python to c conversion ' +
+                 'for type "%s"' % arg.type)
+            
+            string += indent + tmp_str + '\n'
 
         #create output arguments
         if num_outargs > 0:
             string += '\n'
-            string += 2*indent + '# output arg preparation\n'
-        for index, arg in enumerate(fun_dec.arguments):
-            tmp_str = ''
-            if not arg.is_outarg:
-                continue
+            string += indent + '# output arg preparation\n'
+        oargs = (arg for arg in fun_dec.arguments if arg.is_outarg)
+        for arg in oargs:
+            if arg.is_array and arg.npointer > 0:
+                tmp_str = '_c_%s = ctypes.POINTER(ctypes.c_%s)()' \
+                    % (arg.name, arg.type)
+            elif arg.is_string:
+                tmp_str = '_c_%s = ctypes.c_char_p()' % (arg.name)
+            elif not arg.is_array and arg.npointer == 1:
+                tmp_str = '_c_%s = ctypes.c_%s()' % (arg.name, arg.type)
             else:
-                if arg.is_array and arg.npointer > 0:
-                    tmp_str = '_c_%s = ctypes.POINTER(ctypes.c_%s)()' % (arg.name, arg.type)
-                elif not arg.is_array and arg.npointer == 1:
-                    tmp_str = '_c_%s = ctypes.c_%s()' % (arg.name, arg.type)
-                else:
-                    raise Exception('Cannot create python to c conversion ' +
-                     'for output argument "%s" in %s' % (arg.name, raw_name) )
-                    
-                string += 2*indent + tmp_str + '\n'
-                            
-        # create function call
-        string += '\n'
-        string += 2*indent + '# call to native function\n'
+                raise Exception('Cannot create python to c conversion ' +
+                 'for output argument "%s" in %s' % (arg.name, raw_name) )
+                
+            string += indent + tmp_str + '\n'
+                
+        return string
+        
+    def create_call(self, fun_dec, ret_val, handle_index, indention_depth):
+        '''
+        Create function call code
+        '''
+        indent = 4*(indention_depth+1)*' '
+        
+        string = indent + '# call to native function\n'
         if ret_val:
-            string += 2*indent + 'self.lib.%s.restype = ctypes.c_%s\n' \
+            if ret_val.is_string:
+                string +=  indent + 'self.lib.%s.restype = ctypes.c_char_p\n' \
+                      % (fun_dec.method_name)
+            else:
+                string += indent + 'self.lib.%s.restype = ctypes.c_%s\n' \
                       % (fun_dec.method_name, ret_val.type)
             
         call = 'self.lib.%s(' % fun_dec.method_name
@@ -327,8 +357,8 @@ class PythonGenerator(object):
                 call += ', '
                 
         call += ')'
-                       
-        #we assume that each function is returning an error code
+        
+        # we assume that each function is returning an error code
         # only if explictly specified otherwise
         if not ret_val:
             call = 'catch_error(%s)' % call
@@ -336,7 +366,26 @@ class PythonGenerator(object):
             call = '_c_%s = %s' % (ret_val.name, call)
                 
         
-        string += 2*indent + call + '\n'
+        string += indent + call + '\n'
+        return string
+    
+    def create_method_wrapper(self, fun_dec):
+        '''
+        Generates the python wrapper code around a c function call
+        '''
+        
+        indent = 4*' '
+        
+        string, num_inargs, num_outargs, handle_index = \
+            self.create_header(fun_dec, 1)
+        
+        ret_val = None if fun_dec.returns_error else fun_dec.return_value
+
+        string += self.create_pre_call(fun_dec, num_inargs, num_outargs, 1)
+        string += '\n'
+                            
+        string += self.create_call(fun_dec, ret_val, handle_index, 1)
+
         
         # accumulate return values
         outargs = []
@@ -352,9 +401,11 @@ class PythonGenerator(object):
             string += '\n'
         for arg in outargs:
             if arg.is_array:
-                tmp_str = '_py_%s = [_c_%s[i] for i in xrange(%s_size)]' % (arg.name, arg.name, arg.name)
+                tmp_str = '_py_%s = [_c_%s[i] for i in xrange(%s_size)]' \
+                    % (arg.name, arg.name, arg.name)
             else:
-                tmp_str = '_py_%s = _c_%s.value' % (arg.name, arg.name)
+                tmp_str = '_py_%s = _c_%s.value' \
+                    % (arg.name, arg.name)
             
             string += 2*indent + tmp_str + '\n'
                 
@@ -370,23 +421,20 @@ class PythonGenerator(object):
                     string += ', '
             string += ')\n'
         
-        print string
+        return string
     
 
 if __name__ == '__main__':
     AN = Annotation()
-    AN.parse_string('#annotate noerror outs: 2,3  #')
-    for k, v in AN.outargs.iteritems():
-        print  k, v
-        
-    print AN.returns_error
-    FA = FunctionArg('const TixiHandle value',
+    AN.parse_string('#annotate nohandle #')
+
+    FA = CFunctionArg('const TixiHandle value',
                      handle_str = 'TixiHandle', type_list=['RetVal'])
     
     MP = CFunctionDec()
-    MP.parse_method_header('double tixiGetFloatVector(TixiHandle handle, int index,  double * x, double * y)',
+    MP.parse_method_header('char*  tixiExportAsString(int code, double in)',
                             type_list=['RetVal', 'TixiHandle'])
     MP.apply_annotation(AN)
     
     PG = PythonGenerator('tixi')
-    PG.create_method_wrapper(MP)
+    print PG.create_method_wrapper(MP)
