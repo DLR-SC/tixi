@@ -6,29 +6,178 @@ Created on Sat Apr 27 22:38:05 2013
 """
 
 import re
+import copy
+
+class CHeaderFileParser(object):
+    '''
+    Parses C-Header file code and creates a semantic
+    This generated semantic can passed to wrapper generator
+    classes in order to create bindings for the code
+    '''
+
+    def __init__(self, libname, libprefix):
+        self.declarations = []
+        
+        # blacklist of methods not to be parsed
+        self.blacklist = ()
+        
+        self.libname = libname
+        self.prefix = libprefix
+        self.lines = []
+        self.decoration = 'DLL_EXPORT'
+        self.enums = []
+        self.typedefs = {}
+        
+    def read_header(self, filename):
+        fop = open( filename, 'r')
+        self.lines = fop.readlines()
+        
+        # remove // style comments
+        for index, line in enumerate(self.lines):
+            pos = line.find('//')
+            if pos >= 0:
+                self.lines[index] = line[:pos]
+    
+    def parse_enum_string(self, enumstr):
+        # simplify
+        thestr = copy.copy(enumstr).strip()
+        thestr = thestr.replace('\n',' ')
+
+        # remove comments
+        match = re.compile(r'/\*(?P<comment>.*?)\*/')  
+        #comments = match.findall(thestr)   
+        thestr = match.sub('', thestr)
+        
+        # remove multpiple whitespaces
+        thestr = re.compile(r'\s+').sub(' ', thestr)
+        
+        #extract name and value
+        match = re.compile(r'enum\s+(?P<name>\w+)\s*?{(?P<values>.*?)}')
+        res = match.search(thestr)
+        
+        values = res.group('values').split(',')
+        for index, val in enumerate(values):
+            values[index] = val.strip()
+            
+        return {'name': res.group('name'), 'values': values}
+    
+    def parse_methods(self):
+        '''
+        Parse methods and their annotations
+        '''
+        dec_pattern = re.compile(self.decoration + 
+            r'\s+(?P<fundec>\w+\s+\w+\s*\([\w\s,*]*(\);)?)')
+            
+        anno_pattern = re.compile('#annotate.*?#')
+        
+        endterm = ');'        
+        
+        fundec_dict = []
+        anno_dict = []
+        
+        # find functions
+        continuing = False
+        fundec = ''
+        for index, line in enumerate(self.lines):
+            if not continuing:
+                match = dec_pattern.search(line)
+                if match:
+                    fundec = match.group('fundec').strip()
+                    if not endterm in line:
+                        continuing = True
+                    else:
+                        fundec_dict.append({'line': index, 'declaration': fundec})
+            else:
+                fundec += ' ' + line.strip()
+                if endterm in line:
+                    continuing = False
+                    fundec_dict.append({'line': index, 'declaration': fundec})
+        
+        for index, line in enumerate(self.lines):
+            match = anno_pattern.search(line)
+            if match:
+                anno_dict.append({'line': index, 'annotation': match.group()})
+        
+        # match annotation with functions
+        anno_pos = 0
+        for function in fundec_dict:
+            dec = CFunctionDec()
+            dec.parse_method_header(function['declaration'], self.typedefs, self.enums)
+            if anno_pos < len(anno_dict) and anno_dict[anno_pos]['line'] < function['line']:
+                anno = Annotation(anno_dict[anno_pos]['annotation'])
+                dec.apply_annotation(anno)
+                anno_pos += 1
+                
+            self.declarations.append(dec)
+            
+        for dec in self.declarations:
+                PG = PythonGenerator('tixi')
+                print PG.create_method_wrapper(dec)
+                
+    
+    def add_alias(self, newname, basictype):
+        self.typedefs[newname] = basictype
+    
+    
+    def parse_defines(self):
+        '''
+        Parse typedefs, enums...
+        '''
+        
+        enum_pattern = re.compile(r'\s*enum\s+(?P<name>\w+)')
+        continuing = False
+        enum_str = ''
+        for line in self.lines:
+            if not continuing:
+                match = enum_pattern.match(line)
+                if match:
+                    continuing = True
+                    enum_str = line
+                    if "};" in line:
+                        self.enums.append(self.parse_enum_string(enum_str))
+            else:
+                enum_str += line
+                if "};" in line:
+                    self.enums.append(self.parse_enum_string(enum_str))
+                    continuing = False
+                    
+        # parse typedefs
+        typedef_pattern = re.compile('typedef\s+(?P<type>[\w\s]+)\s+(?P<name>\w+)\s*?;')
+        for line in self.lines:
+            match = typedef_pattern.search(line)
+            if match:
+                self.typedefs[match.group('name')] =  match.group('type')
+        
+                
+    
+    def register_own_type(self, own_type, cnative_type):
+        pass
 
 class Annotation(object):
     """Helper class to parse the function annotation if present"""
     
     regex = r'((?P<index>\d)((?P<array>A)(?P<indexlist>\([\d,\s]+\))?)?)'    
     
-    def __init__(self):
+    def __init__(self, string = None):
         self.inargs = {}
         self.outargs = {}
         self.uses_handle = True
         self.returns_error = True
+        
+        if string:
+            self.parse_string(string)
 
     def parse_string(self, string):
         """
         Parses an annotion string for input and output arguments        
-        #annotate ins: 1,2 outs: 3A(4) nohandle returns: error|value
+        #annotate in: 1,2 out: 3A(4) nohandle returns: error|value
         """
 
         #search output args
-        self.parse_param_group('outs', string, self.outargs)
+        self.parse_param_group('out', string, self.outargs)
 
         #search input args
-        self.parse_param_group('ins', string, self.inargs)
+        self.parse_param_group('in', string, self.inargs)
 
         #search if to use handle
         res = re.search(r'\bnohandle\b|\bhandle\b', string)
@@ -57,7 +206,7 @@ class Annotation(object):
         
         # find the appropriate section in the annotation string
         res = re.search(inout + r':\s((' + Annotation.regex + 
-                        r'|(,[\s]*))+)($|\s)', text)
+                        r'|(,[\s]*))+)($|\s|#)', text)
         if not res:
             return
         
@@ -87,7 +236,7 @@ class CFunctionArg(object):
     and constness of a function argument
     '''    
     
-    def __init__(self, string, type_list = None, handle_str = None):
+    def __init__(self, string, typedeflist = None, enumlist = None, handle_str = None):
         self.type = ''
         self.npointer = 0
         self.name = ''
@@ -99,9 +248,9 @@ class CFunctionArg(object):
         self.is_sizearg = False
         
         if len(string) > 0:
-            self.parse_arg(string, type_list, handle_str)
+            self.parse_arg(string, typedeflist, enumlist, handle_str)
         
-    def parse_arg(self, string, type_list = None, handle_str = None):
+    def parse_arg(self, string, typedeflist, enumlist, handle_str):
         ''' Parse the function argument.
             param: type definition from the signature
             Attributes:
@@ -125,16 +274,39 @@ class CFunctionArg(object):
         
         # reserved keywords and types that are not allowed as names
         keywords = ['const', 'while', 'for']
-        types    = ['int', 'long', 'float', 'double', 'char', handle_str]
-        if type_list: 
-            types.extend(type_list)   
+        
+        # resolve type
+        self.type = self.resolv_type(self.type, enums = enumlist, typedefs = typedeflist)
+
         
         if self.name in keywords:
             raise Exception('"%s" is an invalid argument name' % (self.name))
             
-        if self.type not in types:
-            raise Exception('"%s" is not a valid type name' % (self.type))
+            
+    def resolv_type(self, mytype, enums, typedefs):
+        basictypes    = ['int', 'long', 'float', 'double', 'char', 'void']
 
+        if mytype in basictypes:
+            return mytype
+        
+        while True:
+            if mytype.startswith('enum'):
+                return 'int'
+            
+            if mytype in typedefs:
+                newtype = typedefs[mytype]
+                if newtype in basictypes:
+                    return newtype
+                if newtype == mytype:
+                    raise Exception('Recursive definition of type %s' % mytype)
+                else:
+                    mytype = newtype
+            else:
+                break
+        
+        
+        raise Exception('"%s" is not a valid type name' % (self.type))
+             
 class CFunctionDec(object):
     def __init__(self):
         self.arguments = []
@@ -143,7 +315,7 @@ class CFunctionDec(object):
         self.method_name = ''
         self.uses_handle = True
         
-    def parse_method_header(self, string, type_list = None, handle_str = None):
+    def parse_method_header(self, string, typedeflist = None, enumlist = None,  handle_str = None):
         '''
         Parses a typical function header like
             int getMyValue(double * p, int index)
@@ -152,7 +324,7 @@ class CFunctionDec(object):
         '''        
         
         regex = r'(?P<retval>(const )?[\w*]+([\s]+[\*]+)?)[\s]+(?P<name>[\w]+)' + \
-                r'\((?P<args>[\w\s,*\[\]]*)\)'
+                r'[\s]*\((?P<args>[\w\s,*\[\]]*)\)'
         res = re.search(regex, string)
         if not res:
             raise Exception('Cannot parse function declaration "%s"' % string)
@@ -160,7 +332,7 @@ class CFunctionDec(object):
         arg_string = res.group('args')
         arg_str_list = arg_string.split(',')
         for index, arg_str in enumerate(arg_str_list):
-            arg = CFunctionArg(arg_str, type_list, handle_str)
+            arg = CFunctionArg(arg_str, typedeflist, enumlist, handle_str)
 
             # apply some default behaviour
             
@@ -178,11 +350,14 @@ class CFunctionDec(object):
                 elif (arg.is_string and arg.npointer > 1) \
                  or (not arg.is_string and arg.npointer > 0):
                     arg.is_outarg = True
+                    
+            if not arg.name:
+                arg.name = 'arg%d' % index
             
             self.arguments.append(arg)
             
             
-        self.return_value = CFunctionArg(res.group('retval'), type_list, handle_str)
+        self.return_value = CFunctionArg(res.group('retval'), typedeflist, enumlist, handle_str)
         self.method_name  = res.group('name')
         
     def apply_annotation(self, annotation):
@@ -200,7 +375,8 @@ class CFunctionDec(object):
         # apply outpt args
         for index, outarg in annotation.outargs.iteritems():
             if index >= len(self.arguments):
-                raise Exception('annotation index is too large for function %s' % self.method_name)
+                raise Exception('annotation index is too large for function %s'\
+                    % self.method_name)
                 
             self.arguments[index].is_outarg = True
             self.arguments[index].is_array  = outarg['isarray']
@@ -209,7 +385,8 @@ class CFunctionDec(object):
         # apply input args
         for index, inarg in annotation.inargs.iteritems():
             if index >= len(self.arguments):
-                raise Exception('annotation index is too large for function %s' % self.method_name)
+                raise Exception('annotation index is too large for function %s'\
+                    % self.method_name)
                 
             self.arguments[index].is_outarg = False
             self.arguments[index].is_array  = inarg['isarray']
@@ -230,6 +407,7 @@ class PythonGenerator(object):
     def __init__(self, name_prefix):
         self.prefix = name_prefix
         self.handle_str = 'doc_handle'
+        self.native_types = ['int', 'double', 'float', 'char', 'bool']
         if len(name_prefix) > 0:
             self.handle_str = name_prefix + '_' + self.handle_str
     
@@ -265,8 +443,7 @@ class PythonGenerator(object):
         string += '):\n'
         return (string, num_inargs, num_outargs, handle_index)
     
-    @staticmethod
-    def create_pre_call(fun_dec, num_inargs, num_outargs, indention_depth):
+    def create_pre_call(self, fun_dec, num_inargs, num_outargs, indention_depth):
         '''
         Creates the code for the input argument conversion and prepares the
         output arguments.
@@ -274,7 +451,6 @@ class PythonGenerator(object):
         indent = 4*(indention_depth+1)*' '
         string = ''
         raw_name = fun_dec.method_name
-        native_types = ['int', 'double', 'float', 'char', 'bool']
         
         #create input arguments
         if num_inargs > 0:
@@ -302,7 +478,7 @@ class PythonGenerator(object):
                 raise Exception('Cannot create python to c conversion ' +
                  'for input argument "%s" in "%s"' % (arg.name, raw_name))
             
-            if not arg.type in native_types:
+            if not arg.type in self.native_types:
                 raise Exception('Cannot create python to c conversion ' +
                  'for type "%s"' % arg.type)
             
@@ -401,7 +577,7 @@ class PythonGenerator(object):
             string += '\n'
         for arg in outargs:
             if arg.is_array:
-                tmp_str = '_py_%s = [_c_%s[i] for i in xrange(%s_size)]' \
+                tmp_str = '_py_%s = (_c_%s[i] for i in xrange(%s_size))' \
                     % (arg.name, arg.name, arg.name)
             else:
                 tmp_str = '_py_%s = _c_%s.value' \
@@ -412,7 +588,7 @@ class PythonGenerator(object):
 
         # create the return statement
         if len(outargs) == 1:
-            string += '\n' + 2*indent + 'return _py_%s' % outargs[0].name
+            string += '\n' + 2*indent + 'return _py_%s\n' % outargs[0].name
         elif len(outargs) > 1:
             string += '\n' + 2*indent + 'return ('
             for i, arg in enumerate(outargs):
@@ -421,20 +597,15 @@ class PythonGenerator(object):
                     string += ', '
             string += ')\n'
         
-        return string
+        return string + '\n'
     
 
 if __name__ == '__main__':
     AN = Annotation()
-    AN.parse_string('#annotate nohandle #')
-
-    FA = CFunctionArg('const TixiHandle value',
-                     handle_str = 'TixiHandle', type_list=['RetVal'])
+    AN.parse_string('')
     
-    MP = CFunctionDec()
-    MP.parse_method_header('char*  tixiExportAsString(int code, double in)',
-                            type_list=['RetVal', 'TixiHandle'])
-    MP.apply_annotation(AN)
-    
-    PG = PythonGenerator('tixi')
-    print PG.create_method_wrapper(MP)
+    parser = CHeaderFileParser('TIXI', 'tixi')
+    parser.read_header(r'D:\src\tixi\src\tixi2.h')
+    #parser.add_alias('TixiDocumentHandle', 'int')
+    parser.parse_defines()
+    parser.parse_methods()
