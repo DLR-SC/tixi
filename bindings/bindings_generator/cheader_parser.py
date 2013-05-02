@@ -2,7 +2,7 @@
 """
 Created on Sat Apr 27 22:38:05 2013
 
-@author: Martin Siggel
+@author: Martin Siggel <martin.siggel@dlr.de>
 """
 
 import re
@@ -15,19 +15,24 @@ class CHeaderFileParser(object):
     classes in order to create bindings for the code
     '''
 
-    def __init__(self, libname, libprefix):
+    def __init__(self):
         self.declarations = []
         
         # blacklist of methods not to be parsed
         self.blacklist = ()
         
-        self.libname = libname
-        self.prefix = libprefix
         self.lines = []
         self.decoration = 'DLL_EXPORT'
-        self.enums = []
+        self.enums = {}
         self.typedefs = {}
-        
+        self.handle_str = None
+        self.returncode_str = None
+    
+    def parse_header_file(self, filename):
+        self.read_header(filename)
+        self.parse_defines()
+        self.parse_methods()
+    
     def read_header(self, filename):
         fop = open( filename, 'r')
         self.lines = fop.readlines()
@@ -66,7 +71,7 @@ class CHeaderFileParser(object):
         Parse methods and their annotations
         '''
         dec_pattern = re.compile(self.decoration + 
-            r'\s+(?P<fundec>\w+\s+\w+\s*\([\w\s,*]*(\);)?)')
+            r'\s+(?P<fundec>.*?\([\w\s,*]*(\);)?)')
             
         anno_pattern = re.compile('#annotate.*?#')
         
@@ -80,7 +85,7 @@ class CHeaderFileParser(object):
         fundec = ''
         for index, line in enumerate(self.lines):
             if not continuing:
-                match = dec_pattern.search(line)
+                match = dec_pattern.match(line.strip())
                 if match:
                     fundec = match.group('fundec').strip()
                     if not endterm in line:
@@ -102,17 +107,13 @@ class CHeaderFileParser(object):
         anno_pos = 0
         for function in fundec_dict:
             dec = CFunctionDec()
-            dec.parse_method_header(function['declaration'], self.typedefs, self.enums)
+            dec.parse_method_header(function['declaration'], self.typedefs, self.enums, self.handle_str, self.returncode_str)
             if anno_pos < len(anno_dict) and anno_dict[anno_pos]['line'] < function['line']:
                 anno = Annotation(anno_dict[anno_pos]['annotation'])
                 dec.apply_annotation(anno)
                 anno_pos += 1
                 
             self.declarations.append(dec)
-            
-        for dec in self.declarations:
-                PG = PythonGenerator('tixi')
-                print PG.create_method_wrapper(dec)
                 
     
     def add_alias(self, newname, basictype):
@@ -134,11 +135,13 @@ class CHeaderFileParser(object):
                     continuing = True
                     enum_str = line
                     if "};" in line:
-                        self.enums.append(self.parse_enum_string(enum_str))
+                        enum = self.parse_enum_string(enum_str)
+                        self.enums[enum['name']] = enum['values']
             else:
                 enum_str += line
                 if "};" in line:
-                    self.enums.append(self.parse_enum_string(enum_str))
+                    enum = self.parse_enum_string(enum_str)
+                    self.enums[enum['name']] = enum['values']
                     continuing = False
                     
         # parse typedefs
@@ -148,15 +151,11 @@ class CHeaderFileParser(object):
             if match:
                 self.typedefs[match.group('name')] =  match.group('type')
         
-                
-    
-    def register_own_type(self, own_type, cnative_type):
-        pass
 
 class Annotation(object):
     """Helper class to parse the function annotation if present"""
     
-    regex = r'((?P<index>\d)((?P<array>A)(?P<indexlist>\([\d,\s]+\))?)?)'    
+    regex = r'(?P<index>\d)((?P<array>A)(\((?P<indexlist>[\d,\s]+)\))?)?'    
     
     def __init__(self, string = None):
         self.inargs = {}
@@ -223,12 +222,12 @@ class Annotation(object):
             indexlist = ()
             if tmp.group('indexlist'):
                 tmpstr = tmp.group('indexlist')
-                indexlist = tuple([int(val) for val in tmpstr[1:-1].split(",")])
+                indexlist = [int(val) for val in tmpstr.split(',')]
             
             params[arg_index]  = {'isarray':  tmp.group('array') is 'A', 
                                   'arraysizes': indexlist,
                                   'index': arg_index}
-            ins = ins.replace(tmp.group(),'')
+            ins = ins.replace(tmp.group(),'',1)
 
 class CFunctionArg(object):
     '''
@@ -238,6 +237,7 @@ class CFunctionArg(object):
     
     def __init__(self, string, typedeflist = None, enumlist = None, handle_str = None):
         self.type = ''
+        self.rawtype = ''
         self.npointer = 0
         self.name = ''
         self.is_const   = False
@@ -246,6 +246,7 @@ class CFunctionArg(object):
         self.is_array   = False
         self.is_outarg  = False
         self.is_sizearg = False
+        self.arraysizes = None
         
         if len(string) > 0:
             self.parse_arg(string, typedeflist, enumlist, handle_str)
@@ -258,7 +259,9 @@ class CFunctionArg(object):
               .type = type of the parameter in the signature
               .is_const = True if there was a const
               .npointer = number of "*" stars
-
+              
+             This is the place, if you want to add some automagical
+             detection features
         '''
         regex = r'((?P<const>const)[\s]+)?(?P<type>[\w]+)[\s]*' + \
                 r'(?P<pointer>[\*]*)[\s]*(?P<name>[\w]+)?[\s]*'
@@ -266,17 +269,17 @@ class CFunctionArg(object):
          
         
         self.is_const  = res.group('const') == 'const'
-        self.type      = res.group('type')
+        self.rawtype   = res.group('type')
         self.npointer  = len(res.group('pointer'))
         self.name      = res.group('name')
-        self.is_handle = self.type == handle_str
-        self.is_string = self.type == 'char' and self.npointer > 0
+        self.is_handle = self.rawtype == handle_str
+        self.is_string = self.rawtype == 'char' and self.npointer > 0
         
         # reserved keywords and types that are not allowed as names
         keywords = ['const', 'while', 'for']
         
         # resolve type
-        self.type = self.resolv_type(self.type, enums = enumlist, typedefs = typedeflist)
+        self.type = self.resolv_type(self.rawtype, enums = enumlist, typedefs = typedeflist)
 
         
         if self.name in keywords:
@@ -284,6 +287,11 @@ class CFunctionArg(object):
             
             
     def resolv_type(self, mytype, enums, typedefs):
+        '''
+        Tries to deduce the type of a arguments, in particular
+        if the type is not native (typedef, enum)        
+        '''        
+        
         basictypes    = ['int', 'long', 'float', 'double', 'char', 'void']
 
         if mytype in basictypes:
@@ -305,7 +313,7 @@ class CFunctionArg(object):
                 break
         
         
-        raise Exception('"%s" is not a valid type name' % (self.type))
+        raise Exception('"%s" is not a valid type name' % (self.rawtype))
              
 class CFunctionDec(object):
     def __init__(self):
@@ -315,7 +323,7 @@ class CFunctionDec(object):
         self.method_name = ''
         self.uses_handle = True
         
-    def parse_method_header(self, string, typedeflist = None, enumlist = None,  handle_str = None):
+    def parse_method_header(self, string, typedeflist = None, enumlist = None,  handle_str = None, returncode_str = None):
         '''
         Parses a typical function header like
             int getMyValue(double * p, int index)
@@ -329,7 +337,15 @@ class CFunctionDec(object):
         if not res:
             raise Exception('Cannot parse function declaration "%s"' % string)
         
+        self.return_value = CFunctionArg(res.group('retval'), typedeflist, enumlist, handle_str)
+        self.return_value.name = 'ret'
+        self.returns_error =  returncode_str == self.return_value.rawtype
+        self.method_name  = res.group('name')        
+        
         arg_string = res.group('args')
+        if not arg_string:
+            return
+        
         arg_str_list = arg_string.split(',')
         for index, arg_str in enumerate(arg_str_list):
             arg = CFunctionArg(arg_str, typedeflist, enumlist, handle_str)
@@ -337,8 +353,8 @@ class CFunctionDec(object):
             # apply some default behaviour
             
             # first argument is assumed to be handle
-            if index == 0 and arg.npointer == 0:
-                arg.is_handle = True
+            #if index == 0 and arg.npointer == 0:
+            #    arg.is_handle = True
             
 
             # if there is a asterisk, we assume it to be an array, except
@@ -355,10 +371,6 @@ class CFunctionDec(object):
                 arg.name = 'arg%d' % index
             
             self.arguments.append(arg)
-            
-            
-        self.return_value = CFunctionArg(res.group('retval'), typedeflist, enumlist, handle_str)
-        self.method_name  = res.group('name')
         
     def apply_annotation(self, annotation):
         '''
@@ -370,7 +382,6 @@ class CFunctionDec(object):
             self.returns_error = True
         else:
             self.returns_error = False
-            self.return_value.name = 'ret'
         
         # apply outpt args
         for index, outarg in annotation.outargs.iteritems():
@@ -380,7 +391,10 @@ class CFunctionDec(object):
                 
             self.arguments[index].is_outarg = True
             self.arguments[index].is_array  = outarg['isarray']
-            
+            if outarg['isarray']:
+                self.arguments[index].arraysizes = outarg['arraysizes']
+                for sizeindex in outarg['arraysizes']:
+                    self.arguments[sizeindex].is_sizearg = True
             
         # apply input args
         for index, inarg in annotation.inargs.iteritems():
@@ -391,6 +405,7 @@ class CFunctionDec(object):
             self.arguments[index].is_outarg = False
             self.arguments[index].is_array  = inarg['isarray']
             if inarg['isarray']:
+                self.arguments[index].arraysizes = inarg['arraysizes']
                 for sizeindex in inarg['arraysizes']:
                     self.arguments[sizeindex].is_sizearg = True
             
@@ -398,214 +413,3 @@ class CFunctionDec(object):
         self.uses_handle = annotation.uses_handle
         if not self.uses_handle and len(self.arguments) > 0:
             self.arguments[0].is_handle = False
-
-class PythonGenerator(object):
-    '''
-    Generates Python code wrappers from the parsed semantics
-    '''    
-    
-    def __init__(self, name_prefix):
-        self.prefix = name_prefix
-        self.handle_str = 'doc_handle'
-        self.native_types = ['int', 'double', 'float', 'char', 'bool']
-        if len(name_prefix) > 0:
-            self.handle_str = name_prefix + '_' + self.handle_str
-    
-    def create_header(self, fun_dec, indention_depth):
-        '''Creates the method header as "def myFunc(self, myvalue):"'''
-        
-        string = ''
-        indent = 4*indention_depth*' '
-        
-        # generate simplified method name, e.g.: tixiGetValue -> getValue
-        name = fun_dec.method_name
-        if name.startswith(self.prefix):
-            name = name[len(self.prefix)].lower() + name[len(self.prefix)+1:]
-        
-        # position of the handle variable
-        handle_index = -1
-        
-        num_inargs  = 0
-        num_outargs = 0
-        
-        # create method header
-        string += indent + 'def %s(self' % name
-        for index, arg in enumerate(fun_dec.arguments):
-            if arg.is_handle and fun_dec.uses_handle:
-                # we dont use the handle as an function argument
-                handle_index = index
-            elif not arg.is_outarg:
-                string += ', %s' % arg.name
-                num_inargs += 1
-            elif arg.is_outarg:
-                num_outargs += 1
-            
-        string += '):\n'
-        return (string, num_inargs, num_outargs, handle_index)
-    
-    def create_pre_call(self, fun_dec, num_inargs, num_outargs, indention_depth):
-        '''
-        Creates the code for the input argument conversion and prepares the
-        output arguments.
-        '''
-        indent = 4*(indention_depth+1)*' '
-        string = ''
-        raw_name = fun_dec.method_name
-        
-        #create input arguments
-        if num_inargs > 0:
-            string += indent + '# input arg conversion\n'
-            
-        iargs = (arg for arg in fun_dec.arguments if not arg.is_outarg)
-        for arg in iargs:
-            tmp_str = ''
-            if arg.is_handle:
-                continue
-            elif arg.is_string:
-                tmp_str = '_c_%s = ctypes.c_char_p(%s)' \
-                    % (arg.name, arg.name)
-            elif not arg.is_array and arg.npointer == 0:
-                tmp_str = '_c_%s = ctypes.c_%s(%s)' \
-                    % (arg.name, arg.type, arg.name)
-            elif arg.is_array and arg.npointer > 0:
-                # create type
-                tmp_str = 'array_t_%s = ctypes.c_%s * len(%s)\n' \
-                    % (arg.name, arg.type, arg.name)
-                tmp_str += indent
-                tmp_str += '_c_%s = array_t_%s(*%s)' \
-                    % (arg.name, arg.name, arg.name)
-            else:
-                raise Exception('Cannot create python to c conversion ' +
-                 'for input argument "%s" in "%s"' % (arg.name, raw_name))
-            
-            if not arg.type in self.native_types:
-                raise Exception('Cannot create python to c conversion ' +
-                 'for type "%s"' % arg.type)
-            
-            string += indent + tmp_str + '\n'
-
-        #create output arguments
-        if num_outargs > 0:
-            string += '\n'
-            string += indent + '# output arg preparation\n'
-        oargs = (arg for arg in fun_dec.arguments if arg.is_outarg)
-        for arg in oargs:
-            if arg.is_array and arg.npointer > 0:
-                tmp_str = '_c_%s = ctypes.POINTER(ctypes.c_%s)()' \
-                    % (arg.name, arg.type)
-            elif arg.is_string:
-                tmp_str = '_c_%s = ctypes.c_char_p()' % (arg.name)
-            elif not arg.is_array and arg.npointer == 1:
-                tmp_str = '_c_%s = ctypes.c_%s()' % (arg.name, arg.type)
-            else:
-                raise Exception('Cannot create python to c conversion ' +
-                 'for output argument "%s" in %s' % (arg.name, raw_name) )
-                
-            string += indent + tmp_str + '\n'
-                
-        return string
-        
-    def create_call(self, fun_dec, ret_val, handle_index, indention_depth):
-        '''
-        Create function call code
-        '''
-        indent = 4*(indention_depth+1)*' '
-        
-        string = indent + '# call to native function\n'
-        if ret_val:
-            if ret_val.is_string:
-                string +=  indent + 'self.lib.%s.restype = ctypes.c_char_p\n' \
-                      % (fun_dec.method_name)
-            else:
-                string += indent + 'self.lib.%s.restype = ctypes.c_%s\n' \
-                      % (fun_dec.method_name, ret_val.type)
-            
-        call = 'self.lib.%s(' % fun_dec.method_name
-        for index, arg in enumerate(fun_dec.arguments):
-            if index == handle_index:
-                call += 'self.%s' % self.handle_str
-            elif arg.is_outarg:
-                call += 'ctypes.byref(_c_%s)' % arg.name
-            else:
-                call += '_c_%s' % arg.name
-                
-            if index < len(fun_dec.arguments) - 1:
-                call += ', '
-                
-        call += ')'
-        
-        # we assume that each function is returning an error code
-        # only if explictly specified otherwise
-        if not ret_val:
-            call = 'catch_error(%s)' % call
-        else:
-            call = '_c_%s = %s' % (ret_val.name, call)
-                
-        
-        string += indent + call + '\n'
-        return string
-    
-    def create_method_wrapper(self, fun_dec):
-        '''
-        Generates the python wrapper code around a c function call
-        '''
-        
-        indent = 4*' '
-        
-        string, num_inargs, num_outargs, handle_index = \
-            self.create_header(fun_dec, 1)
-        
-        ret_val = None if fun_dec.returns_error else fun_dec.return_value
-
-        string += self.create_pre_call(fun_dec, num_inargs, num_outargs, 1)
-        string += '\n'
-                            
-        string += self.create_call(fun_dec, ret_val, handle_index, 1)
-
-        
-        # accumulate return values
-        outargs = []
-        if ret_val:
-            outargs.insert(0, ret_val)
-        
-        for arg in fun_dec.arguments:
-            if arg.is_outarg:
-                outargs.append(arg)
-        
-        # convert c ouputs to python output values
-        if len(outargs) > 0:
-            string += '\n'
-        for arg in outargs:
-            if arg.is_array:
-                tmp_str = '_py_%s = (_c_%s[i] for i in xrange(%s_size))' \
-                    % (arg.name, arg.name, arg.name)
-            else:
-                tmp_str = '_py_%s = _c_%s.value' \
-                    % (arg.name, arg.name)
-            
-            string += 2*indent + tmp_str + '\n'
-                
-
-        # create the return statement
-        if len(outargs) == 1:
-            string += '\n' + 2*indent + 'return _py_%s\n' % outargs[0].name
-        elif len(outargs) > 1:
-            string += '\n' + 2*indent + 'return ('
-            for i, arg in enumerate(outargs):
-                string += '_py_' + arg.name
-                if i < len(outargs)-1:
-                    string += ', '
-            string += ')\n'
-        
-        return string + '\n'
-    
-
-if __name__ == '__main__':
-    AN = Annotation()
-    AN.parse_string('')
-    
-    parser = CHeaderFileParser('TIXI', 'tixi')
-    parser.read_header(r'D:\src\tixi\src\tixi2.h')
-    #parser.add_alias('TixiDocumentHandle', 'int')
-    parser.parse_defines()
-    parser.parse_methods()
