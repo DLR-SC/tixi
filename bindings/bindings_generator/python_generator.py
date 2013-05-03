@@ -18,7 +18,9 @@ class PythonGenerator(object):
         self.native_types = ['int', 'double', 'float', 'char', 'bool']
         self.license = None
         self.userfunctions = None
+        self.postconstr = None
         self.closefunction = None
+        self.blacklist = []
         self.aliases = {}
             
     def add_alias(self, oldname, newname):
@@ -36,7 +38,13 @@ class PythonGenerator(object):
         string += self.create_error_handler(cparser)+'\n\n'
         
         string += 'class %s(object):\n\n' % (self.classname)
-        string += self.create_constructor() + '\n\n'
+        string += self.create_constructor()
+        if self.postconstr:
+            for line in self.postconstr.splitlines():
+                string += 8*' ' + line + '\n'
+        string += '\n\n'
+        
+        
         string += self.create_destructor()  + '\n\n'
             
         if self.userfunctions:
@@ -44,7 +52,8 @@ class PythonGenerator(object):
                 string += '    ' + line + '\n'
         
         for dec in cparser.declarations:
-            string += self.create_method_wrapper(dec) + '\n\n'
+            if dec.method_name not in self.blacklist:
+                string += self.create_method_wrapper(dec) + '\n\n'
             
         return string
         
@@ -111,10 +120,10 @@ class PythonGenerator(object):
         indent = 4*' '
         string = indent + 'def __del__(self):\n'
         indent += indent
-        string += indent + 'if hasattr(self, "%s"):\n' % self.libname
-        string += indent + '    if self.%s != None:\n' % self.libname
+        string += indent + 'if hasattr(self, "lib"):\n'
+        string += indent + '    if self.lib != None:\n'
         string += indent + '        self.%s()\n' % self.closefunction
-        string += indent + '        self.%s = None\n' % self.libname
+        string += indent + '        self.lib = None\n'
         return string
 
     def create_enum(self, enumname, values):
@@ -160,6 +169,11 @@ class PythonGenerator(object):
                 num_inargs += 1
             elif arg.is_outarg:
                 num_outargs += 1
+                
+        for index, arg in enumerate(fun_dec.arguments):
+            # create aditional size argument for manually allocated arrays
+            if arg.is_array and arg.is_outarg and arg.arraysizes == 'M':
+                string += ', %s_len' % arg.name
             
         string += '):\n'
         return (string, num_inargs, num_outargs, handle_index)
@@ -182,9 +196,16 @@ class PythonGenerator(object):
             tmp_str = ''
             if arg.is_handle:
                 continue
-            elif arg.is_string:
+            elif arg.is_string and not arg.is_array:
                 tmp_str = '_c_%s = ctypes.c_char_p(%s)' \
                     % (arg.name, arg.name)
+            elif arg.is_string and arg.is_array:
+                # create type
+                tmp_str = 'array_t_%s = ctypes.c_char_p * len(%s)\n' \
+                    % (arg.name, arg.name)
+                tmp_str += indent
+                tmp_str += '_c_%s = array_t_%s(*%s)' \
+                    % (arg.name, arg.name, arg.name)
             elif not arg.is_array and arg.npointer == 0:
                 tmp_str = '_c_%s = ctypes.c_%s(%s)' \
                     % (arg.name, arg.type, arg.name)
@@ -213,9 +234,15 @@ class PythonGenerator(object):
         for arg in oargs:
             if arg.is_handle:
                 continue
-            elif arg.is_array and arg.npointer > 0:
+            elif arg.is_array and arg.npointer > 0 and not arg.arraysizes == 'M':
                 tmp_str = '_c_%s = ctypes.POINTER(ctypes.c_%s)()' \
                     % (arg.name, arg.type)
+            elif arg.is_array and arg.npointer > 0 and arg.arraysizes == 'M' and not arg.is_string:
+                tmp_str = '_c_%s = (ctypes.c_%s * %s_len)()' \
+                    % (arg.name, arg.type, arg.name)
+            elif arg.is_array and arg.npointer > 0 and arg.arraysizes == 'M' and arg.is_string:
+                tmp_str = '_c_%s = (ctypes.c_char_p * %s_len)()' \
+                    % (arg.name, arg.name)
             elif arg.is_string:
                 tmp_str = '_c_%s = ctypes.c_char_p()' % (arg.name)
             elif not arg.is_array and arg.npointer == 1:
@@ -321,24 +348,27 @@ class PythonGenerator(object):
                     % (arg.name, arg.name)
             
                 string += 2*indent + tmp_str + '\n' 
+        
         # arrays  
-        for arg in outargs:
-            if arg.is_array:
-                # calculate size of array
-                size_str = '%s_size =' % arg.name
+        arrays = (arg for arg in outargs if arg.is_array)
+        for arg in arrays:
+            # calculate size of array
+            size_str = '%s_array_size =' % arg.name
+            if arg.arraysizes == 'M':
+                size_str += ' %s_len ' % arg.name
+            else:
                 for sizeindex in arg.arraysizes:
                     sizearg = fun_dec.arguments[sizeindex]
                     if not sizearg.is_outarg:
                         size_str += ' %s *' % sizearg.name
                     else:
                         size_str += ' _py_%s *' % sizearg.name
-                string += 2*indent + size_str[0:-1] + '\n'    
-                
-                
-                tmp_str = '_py_%s = [_c_%s[i] for i in xrange(%s_size)]' \
-                    % (arg.name, arg.name, arg.name)
-            
-                string += 2*indent + tmp_str + '\n'
+                        
+            string += 2*indent + size_str[0:-1] + '\n'       
+            tmp_str = '_py_%s = tuple(_c_%s[i] for i in xrange(%s_array_size))' \
+                % (arg.name, arg.name, arg.name)
+        
+            string += 2*indent + tmp_str + '\n'
                 
         # remove size arguments from the return statement
         for index, arg in enumerate(outargs):

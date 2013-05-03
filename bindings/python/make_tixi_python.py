@@ -13,7 +13,7 @@ sys.path.append(tixipath + '/bindings')
 import bindings_generator.python_generator as PG
 import bindings_generator.cheader_parser   as CP
 
-tixilicense = \
+apache = \
 '''#############################################################################
 # Copyright (C) 2007-2013 German Aerospace Center (DLR/SC)
 #
@@ -33,12 +33,10 @@ tixilicense = \
 #############################################################################
 
 '''
-tixilicense += \
+apache += \
 '# This file is automatically created from tixi.h on %s.\n'\
     % date.today() + \
 '# If you experience any bugs please contact the authors\n\n'
-
-print date.today()
 
 userfunctions = \
 '''def open(self, xmlInputFilename, recursive = False):
@@ -46,6 +44,12 @@ userfunctions = \
         self.openDocumentRecursive(xmlInputFilename, OpenMode.OPENMODE_RECURSIVE)
     else:
         self.openDocument(xmlInputFilename)
+
+def close(self):
+    if self._handle.value >= 0:
+        ret = self.lib.tixiCloseDocument(self._handle)
+        self._handle.value = -1
+        catch_error(ret)
 
 def save(self, fileName, recursive = False, remove = False):
     \'\'\' Save the main tixi document.
@@ -61,9 +65,48 @@ def save(self, fileName, recursive = False, remove = False):
     else:
         self.saveDocument(fileName)
 
-
+def checkElement(self, elementPath):
+    \'\'\' boolean return values from special return code is coded manually here \'\'\'
+    _c_elementPath = ctypes.c_char_p()
+    _c_elementPath.value = elementPath
+    tixiReturn = self.lib.tixiCheckElement(self._handle, _c_elementPath)
+    if tixiReturn == ReturnCode.SUCCESS:
+        return True
+    if tixiReturn == ReturnCode.ELEMENT_NOT_FOUND:
+        return False
+    catch_error(tixiReturn, elementPath)
+    
+def uIDCheckExists(self, uID):
+    _c_uID = ctypes.c_char_p()
+    _c_uID.value = uID
+    tixiReturn = self.lib.tixiUIDCheckExists(self._handle, _c_uID)
+    if tixiReturn == ReturnCode.SUCCESS:
+        return True
+    else:
+        return False
+    catch_error(tixiReturn, uID) 
+    
+def checkAttribute(self, elementPath, attributeName):
+    \'\'\' boolean return values from special return code is coded manually here \'\'\'
+    _c_elementPath = ctypes.c_char_p()
+    _c_elementPath.value = elementPath
+    _c_attributeName = ctypes.c_char_p()
+    _c_attributeName.value = attributeName
+    tixiReturn = self.lib.tixiCheckAttribute(self._handle, _c_elementPath, _c_attributeName)
+    if tixiReturn == ReturnCode.SUCCESS:
+        return True
+    if tixiReturn == ReturnCode.ATTRIBUTE_NOT_FOUND:
+        return False
+    catch_error(tixiReturn, elementPath, attributeName)
+    
+    
 '''
 
+postconstr = '''
+self.version = self.getVersion()
+'''
+
+blacklist = ['tixiCheckElement', 'tixiUIDCheckExists', 'tixiCheckAttribute', 'tixiCloseDocument', 'tixiGetRawInterface']
 
 if __name__ == '__main__':
     # parse the file
@@ -78,15 +121,25 @@ if __name__ == '__main__':
     parser.parse_header_file(tixipath + '/src/tixi2.h')
     
     # create the wrapper
-    pg = PG.PythonGenerator('tixi','TIXI')
-    pg.license = tixilicense
+    pg = PG.PythonGenerator(name_prefix = 'tixi', libname = 'TIXI')
+    pg.license = apache
     pg.userfunctions = userfunctions
+    pg.blacklist = blacklist
+    pg.postconstr = postconstr
     pg.closefunction = 'close'
-    pg.add_alias('tixiCloseDocument', 'close')
     pg.add_alias('tixiOpenDocumentFromHTTP', 'openHttp')
     pg.add_alias('tixiCreateDocument', 'create')
+    pg.add_alias('tixiImportFromString', 'openString')
+    
+    print 'Creating python interface... ',
     wrapper = pg.create_wrapper(parser)
+    print 'done'
     
     # write file
-    fop = open('tixiwrapper.py','w')
+    filename = 'tixiwrapper.py'
+    print 'Write tixi python interface to file "%s" ... ' % filename, 
+    fop = open(filename, 'w')
     fop.write(wrapper)
+    print 'done'
+    
+    

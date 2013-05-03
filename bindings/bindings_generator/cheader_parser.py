@@ -32,6 +32,8 @@ class CHeaderFileParser(object):
         self.read_header(filename)
         self.parse_defines()
         self.parse_methods()
+        print 'Parsed %d functions, %d enums, and %d typedefs'\
+            % (len(self.declarations), len(self.enums), len(self.typedefs))
     
     def read_header(self, filename):
         fop = open( filename, 'r')
@@ -63,6 +65,8 @@ class CHeaderFileParser(object):
         values = res.group('values').split(',')
         for index, val in enumerate(values):
             values[index] = val.strip()
+        
+        print 'Parsed enum %s' % res.group('name')
             
         return {'name': res.group('name'), 'values': values}
     
@@ -114,7 +118,7 @@ class CHeaderFileParser(object):
                 anno_pos += 1
                 
             self.declarations.append(dec)
-                
+            dec.deduce_arg_roles()    
     
     def add_alias(self, newname, basictype):
         self.typedefs[newname] = basictype
@@ -155,7 +159,7 @@ class CHeaderFileParser(object):
 class Annotation(object):
     """Helper class to parse the function annotation if present"""
     
-    regex = r'(?P<index>\d)((?P<array>A)(\((?P<indexlist>[\d,\s]+)\))?)?'    
+    regex = r'(?P<index>\d)((?P<array>A)(\(((?P<indexlist>[\d,\s]+)|(?P<manual>M))\))?)?'    
     
     def __init__(self, string = None):
         self.inargs = {}
@@ -169,7 +173,17 @@ class Annotation(object):
     def parse_string(self, string):
         """
         Parses an annotion string for input and output arguments        
-        #annotate in: 1,2 out: 3A(4) nohandle returns: error|value
+        #annotate in: 1,2 out: 3A(4), 5A(M) nohandle returns: error|value
+        
+        the number in the annotation specifies the index of an argument 
+        (counting from 0).
+        An "A" states, that the argument is an array
+        Brackets after an Array like 4A(1,2) mean, that the size of an
+        array is determinind by the product of the given arguments values.
+        In this case the array4 had a size arg1.value*arg2.value.
+        An M means, that the array is not allocated inside the wrapped function,
+        but has to be preallocated. The normally requires an additional argument
+        stating the size of the array. 
         """
 
         #search output args
@@ -223,6 +237,8 @@ class Annotation(object):
             if tmp.group('indexlist'):
                 tmpstr = tmp.group('indexlist')
                 indexlist = [int(val) for val in tmpstr.split(',')]
+            if tmp.group('manual'):
+                indexlist = 'M'
             
             params[arg_index]  = {'isarray':  tmp.group('array') is 'A', 
                                   'arraysizes': indexlist,
@@ -340,7 +356,9 @@ class CFunctionDec(object):
         self.return_value = CFunctionArg(res.group('retval'), typedeflist, enumlist, handle_str)
         self.return_value.name = 'ret'
         self.returns_error =  returncode_str == self.return_value.rawtype
-        self.method_name  = res.group('name')        
+        self.method_name  = res.group('name') 
+        
+        print 'Parsed function %s' % self.method_name    
         
         arg_string = res.group('args')
         if not arg_string:
@@ -349,28 +367,46 @@ class CFunctionDec(object):
         arg_str_list = arg_string.split(',')
         for index, arg_str in enumerate(arg_str_list):
             arg = CFunctionArg(arg_str, typedeflist, enumlist, handle_str)
-
-            # apply some default behaviour
-            
-            # first argument is assumed to be handle
-            #if index == 0 and arg.npointer == 0:
-            #    arg.is_handle = True
-            
-
-            # if there is a asterisk, we assume it to be an array, except
-            # if its the last argument, then it is an outarg
-            arg.is_outarg = False
-            if arg.npointer > 0:
-                if index < len(arg_str_list) - 1:
-                    arg.is_array = True
-                elif (arg.is_string and arg.npointer > 1) \
-                 or (not arg.is_string and arg.npointer > 0):
-                    arg.is_outarg = True
                     
             if not arg.name:
                 arg.name = 'arg%d' % index
             
             self.arguments.append(arg)
+            
+    def deduce_arg_roles(self):
+        ''' should be called after applying annotations'''
+        for index, arg in enumerate(self.arguments):
+            # apply some default behaviour
+            
+            # we explicitly know that it is an outarg            
+            if arg.is_outarg:
+               if arg.npointer > 1 and not arg.is_string:
+                   arg.is_array = True
+               elif arg.npointer == 1 and not arg.is_string:
+                   pass
+               elif arg.is_string and arg.npointer == 2:
+                   # there are two possibilties now, we return a string
+                   # or an array, which has to bre preallocalted
+                   pass
+               else:
+                   raise Exception('Can not determine type of argument %s' % arg.name)
+               
+            elif arg.is_const:
+                # can not be an output argument
+                if arg.is_string and arg.npointer == 2:
+                    arg.is_array = True
+                elif not arg.is_string and arg.npointer == 1:
+                    arg.is_array = True
+                arg.is_outarg = False
+                
+            elif arg.npointer > 0:
+                if index < len(self.arguments) - 1:
+                    arg.is_array = True
+                elif (arg.is_string and arg.npointer > 1 and not arg.is_const) \
+                 or (not arg.is_string and arg.npointer > 0):
+                    arg.is_outarg = True
+
+            
         
     def apply_annotation(self, annotation):
         '''
@@ -393,6 +429,9 @@ class CFunctionDec(object):
             self.arguments[index].is_array  = outarg['isarray']
             if outarg['isarray']:
                 self.arguments[index].arraysizes = outarg['arraysizes']
+                if outarg['arraysizes'] == 'M':
+                    continue
+                
                 for sizeindex in outarg['arraysizes']:
                     self.arguments[sizeindex].is_sizearg = True
             
@@ -406,6 +445,9 @@ class CFunctionDec(object):
             self.arguments[index].is_array  = inarg['isarray']
             if inarg['isarray']:
                 self.arguments[index].arraysizes = inarg['arraysizes']
+                if inarg['arraysizes'] == 'M':
+                    continue
+                
                 for sizeindex in inarg['arraysizes']:
                     self.arguments[sizeindex].is_sizearg = True
             
