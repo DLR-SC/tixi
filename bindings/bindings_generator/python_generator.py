@@ -5,6 +5,27 @@ Created on Wed May 01 11:43:11 2013
 @author: Martin Siggel <martin.siggel@dlr.de>
 """
 
+class GeneratorException(Exception):
+    
+    def __init__(self, errormsg, arg):
+        msg = errormsg + '\n'
+        msg += 'Argument was:\n'
+        msg += '  type      : ' + arg.type + '\n'
+        msg += '  name      : ' + arg.name + '\n'
+        msg += '  is_outarg : ' + str(arg.is_outarg) + '\n'
+        msg += '  is_const  : ' + str(arg.is_const) + '\n'
+        msg += '  is_array  : ' + str(arg.is_array) + '\n'
+        msg += '  npointer  : ' + str(arg.npointer) + '\n'
+        msg += '  is_string : ' + str(arg.is_string) + '\n'
+        msg += '  arraysizes: ' + str(arg.arraysizes)+ '\n'
+        msg += '  is_handle : ' + str(arg.is_handle) + '\n'
+        self.value = msg
+        
+    def __str__(self):
+        return repr(self.value)
+
+        
+
 class PythonGenerator(object):
     '''
     Generates Python code wrappers from the parsed semantics
@@ -248,8 +269,8 @@ class PythonGenerator(object):
             elif not arg.is_array and arg.npointer == 1:
                 tmp_str = '_c_%s = ctypes.c_%s()' % (arg.name, arg.type)
             else:
-                raise Exception('Cannot create python to c conversion ' +
-                 'for output argument "%s" in %s' % (arg.name, raw_name) )
+                raise GeneratorException('Cannot create python to c conversion ' +
+                 'for output argument "%s" in %s' % (arg.name, raw_name), arg )
                 
             string += indent + tmp_str + '\n'
                 
@@ -357,6 +378,7 @@ class PythonGenerator(object):
             if arg.arraysizes == 'M':
                 size_str += ' %s_len ' % arg.name
             else:
+                print fun_dec.method_name, arg.name, arg.type
                 for sizeindex in arg.arraysizes:
                     sizearg = fun_dec.arguments[sizeindex]
                     if not sizearg.is_outarg:

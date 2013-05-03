@@ -263,6 +263,7 @@ class CFunctionArg(object):
         self.is_outarg  = False
         self.is_sizearg = False
         self.arraysizes = None
+        self.is_annotated = False
         
         if len(string) > 0:
             self.parse_arg(string, typedeflist, enumlist, handle_str)
@@ -375,37 +376,32 @@ class CFunctionDec(object):
             
     def deduce_arg_roles(self):
         ''' should be called after applying annotations'''
-        for index, arg in enumerate(self.arguments):
+        not_annotated_args = (arg for arg in self.arguments if not arg.is_annotated)
+        for index, arg in enumerate(not_annotated_args):
             # apply some default behaviour
-            
-            # we explicitly know that it is an outarg            
-            if arg.is_outarg:
-               if arg.npointer > 1 and not arg.is_string:
-                   arg.is_array = True
-               elif arg.npointer == 1 and not arg.is_string:
-                   pass
-               elif arg.is_string and arg.npointer == 2:
-                   # there are two possibilties now, we return a string
-                   # or an array, which has to bre preallocalted
-                   pass
-               else:
-                   raise Exception('Can not determine type of argument %s' % arg.name)
                
-            elif arg.is_const:
+            if arg.is_const:
                 # can not be an output argument
                 if arg.is_string and arg.npointer == 2:
                     arg.is_array = True
                 elif not arg.is_string and arg.npointer == 1:
                     arg.is_array = True
                 arg.is_outarg = False
-                
-            elif arg.npointer > 0:
-                if index < len(self.arguments) - 1:
-                    arg.is_array = True
-                elif (arg.is_string and arg.npointer > 1 and not arg.is_const) \
-                 or (not arg.is_string and arg.npointer > 0):
-                    arg.is_outarg = True
-
+        
+            elif arg.npointer == 1 and not arg.is_string:
+                # arg is assumed to output variable
+                arg.is_outarg = True
+            elif arg.npointer == 1 and arg.is_string:
+                # normal input string
+                pass
+            elif arg.npointer == 2 and arg.is_string:
+                # outpur string, malloced by lib
+                arg.is_outarg = True
+            elif arg.npointer == 2 and not arg.is_string:
+                arg.is_outarg = True
+                arg.is_array = True
+                if arg.arraysizes is None:
+                    raise Exception('Cannot continue without annotation for argument "%s" in "%s"' % (arg.name, self.method_name))
             
         
     def apply_annotation(self, annotation):
@@ -427,6 +423,7 @@ class CFunctionDec(object):
                 
             self.arguments[index].is_outarg = True
             self.arguments[index].is_array  = outarg['isarray']
+            self.arguments[index].is_annotated = True
             if outarg['isarray']:
                 self.arguments[index].arraysizes = outarg['arraysizes']
                 if outarg['arraysizes'] == 'M':
@@ -443,6 +440,7 @@ class CFunctionDec(object):
                 
             self.arguments[index].is_outarg = False
             self.arguments[index].is_array  = inarg['isarray']
+            self.arguments[index].is_annotated = True
             if inarg['isarray']:
                 self.arguments[index].arraysizes = inarg['arraysizes']
                 if inarg['arraysizes'] == 'M':

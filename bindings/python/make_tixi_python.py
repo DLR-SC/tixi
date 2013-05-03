@@ -118,7 +118,7 @@ if __name__ == '__main__':
     # set the handle string that the parser can identify the handles
     parser.handle_str = 'TixiDocumentHandle'
     parser.returncode_str  ='ReturnCode'
-    parser.parse_header_file(tixipath + '/src/tixi2.h')
+    parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper
     pg = PG.PythonGenerator(name_prefix = 'tixi', libname = 'TIXI')
