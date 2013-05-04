@@ -14,10 +14,9 @@ class GeneratorException(Exception):
         msg += '  name      : ' + arg.name + '\n'
         msg += '  is_outarg : ' + str(arg.is_outarg) + '\n'
         msg += '  is_const  : ' + str(arg.is_const) + '\n'
-        msg += '  is_array  : ' + str(arg.is_array) + '\n'
         msg += '  npointer  : ' + str(arg.npointer) + '\n'
         msg += '  is_string : ' + str(arg.is_string) + '\n'
-        msg += '  arraysizes: ' + str(arg.arraysizes)+ '\n'
+        msg += '  arrayinfos: ' + str(arg.arrayinfos)+ '\n'
         msg += '  is_handle : ' + str(arg.is_handle) + '\n'
         self.value = msg
         
@@ -193,7 +192,7 @@ class PythonGenerator(object):
                 
         for index, arg in enumerate(fun_dec.arguments):
             # create aditional size argument for manually allocated arrays
-            if arg.is_array and arg.is_outarg and arg.arraysizes == 'M':
+            if arg.arrayinfos['is_array'] and arg.is_outarg and not arg.arrayinfos['autoalloc'] and len(arg.arrayinfos['arraysizes']) == 0:
                 string += ', %s_len' % arg.name
             
         string += '):\n'
@@ -217,20 +216,20 @@ class PythonGenerator(object):
             tmp_str = ''
             if arg.is_handle:
                 continue
-            elif arg.is_string and not arg.is_array:
+            elif arg.is_string and not arg.arrayinfos['is_array']:
                 tmp_str = '_c_%s = ctypes.c_char_p(%s)' \
                     % (arg.name, arg.name)
-            elif arg.is_string and arg.is_array:
+            elif arg.is_string and arg.arrayinfos['is_array']:
                 # create type
                 tmp_str = 'array_t_%s = ctypes.c_char_p * len(%s)\n' \
                     % (arg.name, arg.name)
                 tmp_str += indent
                 tmp_str += '_c_%s = array_t_%s(*%s)' \
                     % (arg.name, arg.name, arg.name)
-            elif not arg.is_array and arg.npointer == 0:
+            elif not arg.arrayinfos['is_array'] and arg.npointer == 0:
                 tmp_str = '_c_%s = ctypes.c_%s(%s)' \
                     % (arg.name, arg.type, arg.name)
-            elif arg.is_array and arg.npointer > 0:
+            elif arg.arrayinfos['is_array'] and arg.npointer > 0:
                 # create type
                 tmp_str = 'array_t_%s = ctypes.c_%s * len(%s)\n' \
                     % (arg.name, arg.type, arg.name)
@@ -255,24 +254,34 @@ class PythonGenerator(object):
         for arg in oargs:
             if arg.is_handle:
                 continue
-            elif arg.is_array and arg.npointer > 0 and not arg.arraysizes == 'M':
+            elif arg.arrayinfos['is_array'] and arg.npointer > 0 and arg.arrayinfos['autoalloc']:
                 tmp_str = '_c_%s = ctypes.POINTER(ctypes.c_%s)()' \
                     % (arg.name, arg.type)
-            elif arg.is_array and arg.npointer > 0 and arg.arraysizes == 'M' and not arg.is_string:
-                tmp_str = '_c_%s = (ctypes.c_%s * %s_len)()' \
+            elif arg.arrayinfos['is_array'] and arg.npointer > 0 and not arg.arrayinfos['autoalloc'] and not arg.is_string:
+                if(len(arg.arrayinfos['arraysizes']) > 0):
+                    tmp_str = '%s_len = 1 ' % arg.name
+                    for sizearg_index in arg.arrayinfos['arraysizes']:
+                        tmp_str += '* ' + fun_dec.arguments[sizearg_index].name
+                    tmp_str += '\n'
+                else:
+                    tmp_str = ''
+                tmp_str += '_c_%s = (ctypes.c_%s * %s_len)()' \
                     % (arg.name, arg.type, arg.name)
-            elif arg.is_array and arg.npointer > 0 and arg.arraysizes == 'M' and arg.is_string:
+
+                    
+            elif arg.arrayinfos['is_array'] and arg.npointer > 0 and not arg.arrayinfos['autoalloc'] and arg.is_string:
                 tmp_str = '_c_%s = (ctypes.c_char_p * %s_len)()' \
                     % (arg.name, arg.name)
             elif arg.is_string:
                 tmp_str = '_c_%s = ctypes.c_char_p()' % (arg.name)
-            elif not arg.is_array and arg.npointer == 1:
+            elif not arg.arrayinfos['is_array'] and arg.npointer == 1:
                 tmp_str = '_c_%s = ctypes.c_%s()' % (arg.name, arg.type)
             else:
                 raise GeneratorException('Cannot create python to c conversion ' +
                  'for output argument "%s" in %s' % (arg.name, raw_name), arg )
                 
-            string += indent + tmp_str + '\n'
+            for line in tmp_str.splitlines():
+                string += indent + line + '\n'
                 
         return string
         
@@ -359,7 +368,7 @@ class PythonGenerator(object):
             string += '\n'
         # non array value
         for arg in outargs:
-            if not arg.is_array and not arg is ret_val and not arg.is_handle:
+            if not arg.arrayinfos['is_array'] and not arg is ret_val and not arg.is_handle:
                 tmp_str = '_py_%s = _c_%s.value' \
                     % (arg.name, arg.name)
             
@@ -371,15 +380,14 @@ class PythonGenerator(object):
                 string += 2*indent + tmp_str + '\n' 
         
         # arrays  
-        arrays = (arg for arg in outargs if arg.is_array)
+        arrays = (arg for arg in outargs if arg.arrayinfos['is_array'])
         for arg in arrays:
             # calculate size of array
             size_str = '%s_array_size =' % arg.name
-            if arg.arraysizes == 'M':
+            if not arg.arrayinfos['autoalloc']:
                 size_str += ' %s_len ' % arg.name
             else:
-                print fun_dec.method_name, arg.name, arg.type
-                for sizeindex in arg.arraysizes:
+                for sizeindex in arg.arrayinfos['arraysizes']:
                     sizearg = fun_dec.arguments[sizeindex]
                     if not sizearg.is_outarg:
                         size_str += ' %s *' % sizearg.name

@@ -159,7 +159,7 @@ class CHeaderFileParser(object):
 class Annotation(object):
     """Helper class to parse the function annotation if present"""
     
-    regex = r'(?P<index>\d)((?P<array>A)(\(((?P<indexlist>[\d,\s]+)|(?P<manual>M))\))?)?'    
+    regex = r'(?P<index>\d)((?P<array>A)(?P<alloc>M)?(\((?P<indexlist>[\d,\s]+)\))?)?'
     
     def __init__(self, string = None):
         self.inargs = {}
@@ -216,12 +216,14 @@ class Annotation(object):
         parses the index values of each in and output argument group,
         i.e. it tries to decode something like: 1, 4A(5)
         """
-        
+        if not inout in text:
+            return
+
         # find the appropriate section in the annotation string
         res = re.search(inout + r':\s((' + Annotation.regex + 
                         r'|(,[\s]*))+)($|\s|#)', text)
         if not res:
-            return
+            raise Exception('Cannot understand annotation "%s"' % text)
         
         ins = res.group()
         # parse each input parameter
@@ -233,16 +235,16 @@ class Annotation(object):
             
             arg_index =  int(tmp.group('index'))
             # parse array size arguments
-            indexlist = ()
+            indexlist = []
             if tmp.group('indexlist'):
                 tmpstr = tmp.group('indexlist')
                 indexlist = [int(val) for val in tmpstr.split(',')]
-            if tmp.group('manual'):
-                indexlist = 'M'
             
             params[arg_index]  = {'isarray':  tmp.group('array') is 'A', 
                                   'arraysizes': indexlist,
+                                  'autoalloc': tmp.group('alloc') is None,
                                   'index': arg_index}
+            
             ins = ins.replace(tmp.group(),'',1)
 
 class CFunctionArg(object):
@@ -259,11 +261,10 @@ class CFunctionArg(object):
         self.is_const   = False
         self.is_handle  = False
         self.is_string  = False
-        self.is_array   = False
+        self.arrayinfos = {'is_array': False, 'arraysizes': None, 'autoalloc': True}
         self.is_outarg  = False
-        self.is_sizearg = False
-        self.arraysizes = None
         self.is_annotated = False
+        self.is_sizearg   = False
         
         if len(string) > 0:
             self.parse_arg(string, typedeflist, enumlist, handle_str)
@@ -383,9 +384,9 @@ class CFunctionDec(object):
             if arg.is_const:
                 # can not be an output argument
                 if arg.is_string and arg.npointer == 2:
-                    arg.is_array = True
+                    arg.arrayinfos['is_array'] = True
                 elif not arg.is_string and arg.npointer == 1:
-                    arg.is_array = True
+                    arg.arrayinfos['is_array'] = True
                 arg.is_outarg = False
         
             elif arg.npointer == 1 and not arg.is_string:
@@ -399,8 +400,8 @@ class CFunctionDec(object):
                 arg.is_outarg = True
             elif arg.npointer == 2 and not arg.is_string:
                 arg.is_outarg = True
-                arg.is_array = True
-                if arg.arraysizes is None:
+                arg.arrayinfos['is_array'] = True
+                if arg.arraysinfos['arraysizes'] is None:
                     raise Exception('Cannot continue without annotation for argument "%s" in "%s"' % (arg.name, self.method_name))
             
         
@@ -422,11 +423,12 @@ class CFunctionDec(object):
                     % self.method_name)
                 
             self.arguments[index].is_outarg = True
-            self.arguments[index].is_array  = outarg['isarray']
+            self.arguments[index].arrayinfos['is_array']  = outarg['isarray']
+            self.arguments[index].arrayinfos['autoalloc'] = outarg['autoalloc']
             self.arguments[index].is_annotated = True
             if outarg['isarray']:
-                self.arguments[index].arraysizes = outarg['arraysizes']
-                if outarg['arraysizes'] == 'M':
+                self.arguments[index].arrayinfos['arraysizes'] = outarg['arraysizes']
+                if not outarg['autoalloc']:
                     continue
                 
                 for sizeindex in outarg['arraysizes']:
@@ -439,11 +441,12 @@ class CFunctionDec(object):
                     % self.method_name)
                 
             self.arguments[index].is_outarg = False
-            self.arguments[index].is_array  = inarg['isarray']
+            self.arguments[index].arrayinfos['is_array']  = inarg['isarray']
+            self.arguments[index].arrayinfos['autoalloc'] = outarg['autoalloc']
             self.arguments[index].is_annotated = True
             if inarg['isarray']:
-                self.arguments[index].arraysizes = inarg['arraysizes']
-                if inarg['arraysizes'] == 'M':
+                self.arguments[index].arrayinfos['arraysizes'] = inarg['arraysizes']
+                if not inarg['autoalloc']:
                     continue
                 
                 for sizeindex in inarg['arraysizes']:

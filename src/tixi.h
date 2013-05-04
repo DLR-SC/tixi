@@ -2242,7 +2242,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
     - NON_MATCHING_SIZE if nRows and nColumns do not match the sizes of the matrix in the document
     
   @cond
-  #annotate out: 7A(4,5)# use row * col output array (row = index 4, col = index 5)
+  #annotate out: 7AM(4,5)# use row * col output array (row = index 4, col = index 5), manually allocated
   @endcond
     
 
@@ -2416,7 +2416,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
       - ELEMENT_NOT_FOUND if the arrayPath points to a element that is no array
     
     @cond
-    #annotate out: 2A(M) # sizes is an output array that has to be manually preallocated
+    #annotate out: 2AM# sizes is an output array that has to be manually preallocated
     @endcond
   */
     DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handle, const char *arrayPath,
@@ -2446,7 +2446,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
         - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
 
       @cond
-      #annotate out: 2A(M)# one user specified return array (of strings)
+      #annotate out: 2AM# one user specified return array (of strings)
       @endcond
     */
       DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handle,
