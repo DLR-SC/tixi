@@ -62,9 +62,17 @@ class CHeaderFileParser(object):
         match = re.compile(r'enum\s+(?P<name>\w+)\s*?{(?P<values>.*?)}')
         res = match.search(thestr)
         
-        values = res.group('values').split(',')
-        for index, val in enumerate(values):
-            values[index] = val.strip()
+        values = {}
+        names = res.group('values').split(',')
+        for index, val in enumerate(names):
+            name = val.strip()
+            match = re.search(r'(?P<id>.+)=(?P<value>.+)', name)
+            if match:
+                value = int(match.group('value').strip())
+                values[value] = match.group('id').strip()
+            else:
+                values[index] = name
+        
         
         print 'Parsed enum %s' % res.group('name')
             

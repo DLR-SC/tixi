@@ -150,10 +150,10 @@ class PythonGenerator(object):
         string = ''
         string = 'class %s(object):\n' % enumname
         indent = 4*' '
-        for index, val in enumerate(values):
+        for index, val in values.iteritems():
             string += indent + '%s = %d\n' % (val, index)
         string += indent + '_names = {}\n'
-        for index, val in enumerate(values):
+        for index, val in values.iteritems():
             string += indent + '_names[%d] = \'%s\'\n' % (index, val)
         
         return string
