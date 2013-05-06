@@ -320,7 +320,7 @@ class PythonGenerator(object):
         # only if explictly specified otherwise
         if not ret_val:
             call  = indent + 'errorCode = %s\n' % call
-            call += indent + 'catch_error(errorCode'
+            call += indent + 'catch_error(errorCode, \'%s\'' % fun_dec.method_name
             for index, arg in enumerate(fun_dec.arguments):
                 if arg.is_handle and fun_dec.uses_handle:
                     # we dont use the handle as an function argument
