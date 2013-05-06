@@ -71,3 +71,18 @@ int mxToInt(const mxArray * mxArr){
 
     return (int)dv;
 }
+
+void mxToIntArray(const mxArray * mxArr, int ** pIntArray){
+	mwSize ndims =  mxGetNumberOfDimensions(mxArr);
+	mwSize idim, i;
+
+	mwSize totalSize = 1;
+	for(idim = 0; idim < ndims; ++idim){
+		totalSize *= mxGetDimensions(mxArr)[idim];
+	}
+	
+	*pIntArray = (int*) malloc(sizeof(int)*totalSize);
+	for(i = 0; i< totalSize; ++i){
+		(*pIntArray)[i] = (int)mxGetPr(mxArr)[i];
+	}
+}

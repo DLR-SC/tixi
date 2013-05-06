@@ -14,6 +14,7 @@ class MatlabGenerator(object):
         self.cparser = cparser
         self.prefix  = prefix
         self.libinclude = includefile
+        self.blacklist  = []
         self.mex_body = '(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])'
         
     def create_m_file(self, fun_dec):
@@ -71,7 +72,7 @@ class MatlabGenerator(object):
         
         fop.write(string)
         fop.close()
-        
+    
     def create_mex_function(self, func):
         string = 'void mex_%s %s {\n' % (func.method_name, self.mex_body)
         #declare variables
@@ -116,12 +117,65 @@ class MatlabGenerator(object):
         string += 4*' ' + '    mexErrMsgTxt("%s: Wrong number of arguments\\n");\n' % pseudocall
         string += 4*' ' + '}\n'
         
+        #input arg checks
+        for index,arg in enumerate(inargs):
+            if not arg.arrayinfos['is_array']:
+                if arg.type == 'int' or arg.type == 'double':
+                    string += 4*' ' + 'if(!isscalar(prhs[%s])){\n' \
+                        % (index + 1)
+                    string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must not be an array.\\n");\n' \
+                        % (arg.name)
+                    string += 4*' ' + '}\n\n'
+                elif arg.is_string:
+                    string += 4*' ' + 'if(!mxIsChar(prhs[%s])){\n' \
+                        % (index + 1)
+                    string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must be a string.\\n");\n' \
+                        % (arg.name)
+                    string += 4*' ' + '}\n\n'
+     
+        
+        # input arg conversion
+        for index,arg in enumerate(inargs):
+            if not arg.arrayinfos['is_array']:
+                if arg.type == 'int':
+                    string += 4*' ' + '%s = mxToInt(prhs[%d]);\n' \
+                        % (arg.name, index+1)
+                elif arg.is_string:
+                    string += 4*' ' + 'mxToString(prhs[%d], &%s);\n' \
+                        % (index+1, arg.name)
+                elif arg.type == 'double':
+                    string += 4*' ' + '%s = *mxGetPr(prhs[%d]);\n' \
+                        % (arg.name, index + 1)
+                else:
+                    raise Exception('Code wrapper for type "%s" currently not supported' % arg.type)
+            else:
+                if arg.type == 'double' and arg.npointer == 1:
+                    string += 4*' ' + '%s = mxGetPr(prhs[%d]);\n' \
+                        % (arg.name, index + 1)
+                elif arg.type == 'int' and arg.npointer == 1:
+                    string += 4*' ' + 'mxToIntArray(prhs[%d], &%s);\n' \
+                        % (index + 1, arg.name)
+                else:
+                   raise Exception('Code wrapper for "%s array" currently not supported' % arg.type) 
+                    
+        string += '\n'
+        
         # function call
         string += 4*' '
         if func.return_value.rawtype != 'void':
             string +=  func.return_value.name + ' = '
                 
-        string += func.method_name + '();\n'
+        string += func.method_name + '('
+        
+        for arg in func.arguments:
+            if arg.is_outarg:
+                string += '&'
+            string += arg.name + ', '
+        
+        if len(func.arguments) > 0:
+            string = string[0:-2]
+        
+        string += ');\n'
             
         string += '\n'
         
@@ -153,7 +207,8 @@ extern "C" {
 
 ''' 
         call = ''
-        for index, func in enumerate(self.cparser.declarations):
+        defs = (fun for fun in self.cparser.declarations if fun.method_name not in self.blacklist)
+        for index, func in enumerate(defs):
             if index > 0:
                 call += 'else '
             call += 'if(strcmp(functionName, "%s") == 0) {\n' % func.method_name
@@ -198,7 +253,8 @@ mxFree(functionName);
         
         string += '#include <%s>\n\n' % self.libinclude
         
-        for function in self.cparser.declarations:
+        defs = (fun for fun in self.cparser.declarations if fun.method_name not in self.blacklist)
+        for function in defs:
             string += self.create_mex_function(function)
         
         string += self.create_mex_dispatcher()
@@ -207,7 +263,8 @@ mxFree(functionName);
         fop.close()
         
     def create_wrapper(self):
-        for fun_dec in self.cparser.declarations:
+        defs = (fun for fun in self.cparser.declarations if fun.method_name not in self.blacklist)
+        for fun_dec in defs:
             self.create_m_file(fun_dec)
             
         self.create_cmex_file()

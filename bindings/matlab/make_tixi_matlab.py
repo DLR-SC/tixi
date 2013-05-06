@@ -13,7 +13,7 @@ import bindings_generator.matlab_generator as MG
 import bindings_generator.cheader_parser   as CP
 
 
-blacklist = []
+blacklist = ['tixiGetRawInterface', 'tixiAddDoubleListWithAttributes']
 
 if __name__ == '__main__':
     # parse the file
@@ -29,6 +29,7 @@ if __name__ == '__main__':
     
     # create the wrapper
     generator = MG.MatlabGenerator(parser, 'tixi', 'tixi.h')
+    generator.blacklist = blacklist
     generator.create_wrapper()
     
     
