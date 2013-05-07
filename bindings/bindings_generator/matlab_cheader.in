@@ -73,16 +73,36 @@ int mxToInt(const mxArray * mxArr){
 }
 
 void mxToIntArray(const mxArray * mxArr, int ** pIntArray){
-	mwSize ndims =  mxGetNumberOfDimensions(mxArr);
-	mwSize idim, i;
+    mwSize ndims =  mxGetNumberOfDimensions(mxArr);
+    mwSize idim, i;
 
-	mwSize totalSize = 1;
-	for(idim = 0; idim < ndims; ++idim){
-		totalSize *= mxGetDimensions(mxArr)[idim];
-	}
-	
-	*pIntArray = (int*) malloc(sizeof(int)*totalSize);
-	for(i = 0; i< totalSize; ++i){
-		(*pIntArray)[i] = (int)mxGetPr(mxArr)[i];
-	}
+    mwSize totalSize = 1;
+    for(idim = 0; idim < ndims; ++idim){
+        totalSize *= mxGetDimensions(mxArr)[idim];
+    }
+    
+    *pIntArray = (int*) mxMalloc(sizeof(int)*totalSize);
+    for(i = 0; i< totalSize; ++i){
+        (*pIntArray)[i] = (int)mxGetPr(mxArr)[i];
+    }
+}
+
+mxArray * iArrayToMx(const int * array, int size){
+    mxArray * out = mxCreateDoubleMatrix(1,size, mxREAL);
+    double * rawArray = mxGetPr(out);
+    int i;
+    for(i = 0; i < size; ++i)
+        rawArray[i] = (double) array[i];
+    
+    return out;
+}
+
+mxArray * dArrayToMx(const double * array, int size){
+    mxArray * out = mxCreateDoubleMatrix(1,size, mxREAL);
+    double *  rawArray = mxGetPr(out);
+    int i;
+    for(i = 0; i < size; ++i)
+        rawArray[i] = array[i];
+    
+    return out;
 }

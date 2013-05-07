@@ -28,6 +28,7 @@ class MatlabGenerator(object):
         # get number of outargs
         outargs = [arg for arg in fun_dec.arguments if arg.is_outarg]
         inargs = [arg for arg in fun_dec.arguments if not arg.is_outarg]
+        outarrays = [arg for arg in fun_dec.arguments if arg.is_outarg and arg.arrayinfos['is_array']]
         outstr = ''
         if len(outargs) > 1:
             outstr += '['
@@ -42,7 +43,14 @@ class MatlabGenerator(object):
         instr = ''
         for arg in inargs:
             instr += arg.name + ', '
-        if len(inargs) > 0:
+            
+        count = 0
+        for arg in outarrays:
+            if len(arg.arrayinfos['arraysizes']) == 0:
+                instr += '_' + arg.name + '_size , '
+                count += 1
+        
+        if len(inargs) + count > 0:
             instr = instr[0:-2]
         
         string += instr + ')\n'
@@ -73,6 +81,37 @@ class MatlabGenerator(object):
         fop.write(string)
         fop.close()
     
+    def convert_c_to_mx(self, arg, index):
+        string = ''
+        if not arg.arrayinfos['is_array']:
+            if arg.is_string and arg.npointer <= 2:
+                string = 'plhs[%d] = mxCreateString(%s);\n' % (index, arg.name)
+            elif arg.type == 'double' and arg.npointer <= 1:
+                string = 'plhs[%d] = mxCreateDoubleMatrix(1,1, mxREAL);\n' \
+                    % index
+                string +='*mxGetPr(plhs[%d]) = %s;\n' % (index, arg.name)
+            elif arg.type == 'int' and arg.npointer == 1:
+                string = 'plhs[%d] = mxCreateDoubleMatrix(1,1, mxREAL);\n' \
+                    % index
+                string +='*mxGetPr(plhs[%d]) = (double)%s;\n' % (index, arg.name)
+            else:
+                #pass
+                print arg.name, arg.type
+                raise Exception('Conversion from "%s" to mx not yet implemented' \
+                    % (arg.name + '*'*arg.npointer))    
+        else:
+            if arg.type == 'double':
+                string += 'plhs[%d] = dArrayToMx(%s, _%s_size);\n' % (index, arg.name, arg.name)
+            elif arg.type == 'int':
+                string += 'plhs[%d] = iArrayToMx(%s, _%s_size);\n' % (index, arg.name, arg.name)                
+            else:
+                pass
+                #raise Exception('Conversion from "%s, %s" to mx not yet implemented' \
+                #% (arg.type + '*'*arg.npointer, arg.name))
+                
+        return string
+        
+    
     def create_mex_function(self, func):
         string = 'void mex_%s %s {\n' % (func.method_name, self.mex_body)
         #declare variables
@@ -91,11 +130,26 @@ class MatlabGenerator(object):
             string += 4*' ' + '/* output variables */\n'
             for arg in outargs:
                 assert(arg.npointer > 0)
-                string += 4*' ' + arg.rawtype + '*'*(arg.npointer-1) + ' ' + arg.name
-                if arg.npointer > 1:
-                    string += ' = NULL'
+                if arg.arrayinfos['is_array'] and not arg.arrayinfos['autoalloc']:
+                    string += 4*' ' + arg.rawtype + '*'*(arg.npointer) + ' ' + arg.name + ' = NULL'
+                else:
+                    string += 4*' ' + arg.rawtype + '*'*(arg.npointer-1) + ' ' + arg.name
+                    if arg.npointer > 1:
+                        string += ' = NULL'
                 string += ';\n'
             string += '\n'
+            
+         # output array sizes
+        outarrays = [arg for arg in func.arguments if arg.is_outarg and arg.arrayinfos['is_array']]
+        if len(outarrays) > 0:
+            sizestr = 'int '
+            _count = 0
+            for arg in outarrays:
+                sizestr += '_%s_size, ' % arg.name
+                _count += 1
+            sizestr = sizestr[0:-2]
+            if _count > 0:
+                string += 4*' ' + sizestr + ';\n'
             
         if func.return_value.rawtype != 'void':
             string += 4*' '  + func.return_value.rawtype \
@@ -103,19 +157,38 @@ class MatlabGenerator(object):
             if func.return_value.npointer > 0:
                 string += ' = NULL'
             string += ';\n\n'
-        
-        #check correct number in inargs
-        string += 4*' ' + 'if(nrhs != %d) {\n' % (len(inargs) + 1)
 
         pseudocall = func.method_name + '('
         for arg in inargs:
             pseudocall += arg.name + ', '
+        
+        # create arg of manual size
+        add_arg_count = 0
+        for arg in outarrays:
+            if len(arg.arrayinfos['arraysizes']) == 0:
+                pseudocall += '_%s_size, ' % arg.name
+                add_arg_count += 1
+            
         if len(inargs) > 0:
             pseudocall = pseudocall[0:-2]
         pseudocall += ')'
         
+        #check correct number in inargs
+        string += 4*' ' + '/* check for corect number of in and out args */\n'
+        string += 4*' ' + 'if(nrhs != %d)\n' % (len(inargs) + 1 + add_arg_count)
+        
         string += 4*' ' + '    mexErrMsgTxt("%s: Wrong number of arguments\\n");\n' % pseudocall
-        string += 4*' ' + '}\n'
+        
+        #check correct bumber of outargs
+        noutargs = len(outargs)
+        if not func.returns_error and func.return_value.type != 'void':
+            noutargs += 1
+            
+        string += 4*' ' + 'if(nlhs != %d) \n' % (noutargs)
+        string += 4*' ' + '    mexErrMsgTxt("%s: Wrong number of output values. \
+This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
+
+        string += '\n'
         
         #input arg checks
         for index,arg in enumerate(inargs):
@@ -132,7 +205,18 @@ class MatlabGenerator(object):
                     string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must be a string.\\n");\n' \
                         % (arg.name)
                     string += 4*' ' + '}\n\n'
-     
+                    
+        # checks for manual size arguments
+        count = 0
+        ninargs = len(inargs)
+        for arg in outarrays:
+            if len(arg.arrayinfos['arraysizes']) == 0:
+                string += 4*' ' + 'if(!isscalar(prhs[%s])){\n' \
+                        % (count + ninargs + 1)
+                string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must not be an array.\\n");\n' \
+                        % ('_' + arg.name + '_size')
+                string += 4*' ' + '}\n\n'
+                count += 1
         
         # input arg conversion
         for index,arg in enumerate(inargs):
@@ -157,6 +241,13 @@ class MatlabGenerator(object):
                         % (index + 1, arg.name)
                 else:
                    raise Exception('Code wrapper for "%s array" currently not supported' % arg.type) 
+        
+        count = 0
+        for arg in outarrays:
+            if len(arg.arrayinfos['arraysizes']) == 0:
+                string += 4*' ' + '%s = mxToInt(prhs[%d]);\n' \
+                    % ('_' + arg.name + '_size', count + ninargs +1)
+                count += 1
                     
         string += '\n'
         
@@ -168,7 +259,7 @@ class MatlabGenerator(object):
         string += func.method_name + '('
         
         for arg in func.arguments:
-            if arg.is_outarg:
+            if arg.is_outarg and (arg.arrayinfos['autoalloc'] or not arg.arrayinfos['is_array']):
                 string += '&'
             string += arg.name + ', '
         
@@ -178,6 +269,25 @@ class MatlabGenerator(object):
         string += ');\n'
             
         string += '\n'
+        
+        # calc output array sizes
+        for arg in outarrays:
+            if len(arg.arrayinfos['arraysizes']) > 0:
+                sizestr = '_%s_size = 1' % arg.name
+                for sizeindex in arg.arrayinfos['arraysizes']:
+                    sizestr += ' * ' + func.arguments[sizeindex].name
+                sizestr += ';\n'
+                string += 4*' ' + sizestr
+        
+        # output arg conversion      
+        retargs = outargs
+        if not func.returns_error and func.return_value.type != 'void':
+            retargs.insert(0, func.return_value)
+            
+        for index, arg in enumerate(retargs):
+            for line in self.convert_c_to_mx(arg, index).splitlines():
+                string += 4*' ' + line + '\n'
+                
         
         string += '}\n\n'
         return string
