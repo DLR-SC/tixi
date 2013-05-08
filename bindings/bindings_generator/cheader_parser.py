@@ -273,6 +273,8 @@ class CFunctionArg(object):
         self.is_outarg  = False
         self.is_annotated = False
         self.is_sizearg   = False
+        # if arg is sizearg, store argument that is referenced by the sizearg
+        self.size_ref     = 0
         
         if len(string) > 0:
             self.parse_arg(string, typedeflist, enumlist, handle_str)
@@ -441,6 +443,7 @@ class CFunctionDec(object):
                 
                 for sizeindex in outarg['arraysizes']:
                     self.arguments[sizeindex].is_sizearg = True
+                    self.arguments[sizeindex].size_ref = index
             
         # apply input args
         for index, inarg in annotation.inargs.iteritems():
@@ -450,7 +453,7 @@ class CFunctionDec(object):
                 
             self.arguments[index].is_outarg = False
             self.arguments[index].arrayinfos['is_array']  = inarg['isarray']
-            self.arguments[index].arrayinfos['autoalloc'] = outarg['autoalloc']
+            self.arguments[index].arrayinfos['autoalloc'] = inarg['autoalloc']
             self.arguments[index].is_annotated = True
             if inarg['isarray']:
                 self.arguments[index].arrayinfos['arraysizes'] = inarg['arraysizes']
@@ -459,6 +462,7 @@ class CFunctionDec(object):
                 
                 for sizeindex in inarg['arraysizes']:
                     self.arguments[sizeindex].is_sizearg = True
+                    self.arguments[sizeindex].size_ref = index
             
             
         self.uses_handle = annotation.uses_handle

@@ -1261,6 +1261,8 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
   tixi_add_float_vector( integer handle, character*n parent_path, character*n element_name, real array, integer numElements, integer error )
 
+  #annotate in: 3A(4)#
+  
   @param handle (in) file handle as returned by ::tixiCreateDocument
 
   @param parentPath (in) an XPath compliant path to an element in the document

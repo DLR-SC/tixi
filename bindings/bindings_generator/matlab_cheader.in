@@ -64,6 +64,18 @@ int mxToString(const mxArray * mxStr, char ** cstr){
   return mxGetString(mxStr, *cstr, strLen);
 }
 
+mwSize mxGetArraySize(const mxArray * mxArr){
+    mwSize ndims =  mxGetNumberOfDimensions(mxArr);
+    mwSize idim;
+
+    mwSize totalSize = 1;
+    for(idim = 0; idim < ndims; ++idim){
+        totalSize *= mxGetDimensions(mxArr)[idim];
+    }
+    
+    return totalSize;
+}
+
 int mxToInt(const mxArray * mxArr){
     double dv = *mxGetPr(mxArr);
     if(!isinteger(dv))
@@ -73,13 +85,8 @@ int mxToInt(const mxArray * mxArr){
 }
 
 void mxToIntArray(const mxArray * mxArr, int ** pIntArray){
-    mwSize ndims =  mxGetNumberOfDimensions(mxArr);
-    mwSize idim, i;
-
-    mwSize totalSize = 1;
-    for(idim = 0; idim < ndims; ++idim){
-        totalSize *= mxGetDimensions(mxArr)[idim];
-    }
+    mwSize i, totalSize;
+    totalSize = mxGetArraySize(mxArr);
     
     *pIntArray = (int*) mxMalloc(sizeof(int)*totalSize);
     for(i = 0; i< totalSize; ++i){

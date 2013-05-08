@@ -28,6 +28,8 @@ class MatlabGenerator(object):
         # get number of outargs
         outargs = [arg for arg in fun_dec.arguments if arg.is_outarg]
         inargs = [arg for arg in fun_dec.arguments if not arg.is_outarg]
+        inargs = [arg for arg in inargs if not arg.is_sizearg or fun_dec.arguments[arg.size_ref].is_outarg]
+        
         outarrays = [arg for arg in fun_dec.arguments if arg.is_outarg and arg.arrayinfos['is_array']]
         outstr = ''
         if len(outargs) > 1:
@@ -112,10 +114,33 @@ class MatlabGenerator(object):
         return string
         
     
+    def create_mex_inarraysizes(self, func):
+        string = ''
+        inargs = [arg for arg in func.arguments if not arg.is_outarg]
+        inargs_sizes = [arg for arg in inargs if arg.is_sizearg and not func.arguments[arg.size_ref].is_outarg]
+        
+        for arg in inargs_sizes:
+            string += 4*' ' + arg.name + ' = mxGetArraySize(prhs[%d]);\n' \
+                % (arg.size_ref + 1)
+                
+        return string
+        
+    def create_mex_allocs(self, func):
+        string = ''
+        outarrays = [arg for arg in func.arguments if arg.is_outarg and \
+            arg.arrayinfos['is_array'] and not arg.arrayinfos['autoalloc']]
+        for arg in outarrays:
+            string += 4*' ' + '%s = mxMalloc(sizeof(%s) * %s);\n' \
+                % (arg.name, arg.type + (arg.npointer-1)*'*', '_' + arg.name+'_size')
+                
+        return string
+        
+    
     def create_mex_function(self, func):
         string = 'void mex_%s %s {\n' % (func.method_name, self.mex_body)
         #declare variables
         inargs = [arg for arg in func.arguments if not arg.is_outarg]
+        inargs_wo_sizes = [arg for arg in inargs if not arg.is_sizearg or func.arguments[arg.size_ref].is_outarg]
         if len(inargs) > 0:
             string += 4*' ' + '/* input arguments */\n'
             for arg in inargs:
@@ -159,7 +184,7 @@ class MatlabGenerator(object):
             string += ';\n\n'
 
         pseudocall = func.method_name + '('
-        for arg in inargs:
+        for arg in inargs_wo_sizes:
             pseudocall += arg.name + ', '
         
         # create arg of manual size
@@ -175,7 +200,7 @@ class MatlabGenerator(object):
         
         #check correct number in inargs
         string += 4*' ' + '/* check for corect number of in and out args */\n'
-        string += 4*' ' + 'if(nrhs != %d)\n' % (len(inargs) + 1 + add_arg_count)
+        string += 4*' ' + 'if(nrhs != %d)\n' % (len(inargs_wo_sizes) + 1 + add_arg_count)
         
         string += 4*' ' + '    mexErrMsgTxt("%s: Wrong number of arguments\\n");\n' % pseudocall
         
@@ -191,7 +216,7 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
         string += '\n'
         
         #input arg checks
-        for index,arg in enumerate(inargs):
+        for index,arg in enumerate(inargs_wo_sizes):
             if not arg.arrayinfos['is_array']:
                 if arg.type == 'int' or arg.type == 'double':
                     string += 4*' ' + 'if(!isscalar(prhs[%s])){\n' \
@@ -219,7 +244,7 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
                 count += 1
         
         # input arg conversion
-        for index,arg in enumerate(inargs):
+        for index,arg in enumerate(inargs_wo_sizes):
             if not arg.arrayinfos['is_array']:
                 if arg.type == 'int':
                     string += 4*' ' + '%s = mxToInt(prhs[%d]);\n' \
@@ -242,6 +267,8 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
                 else:
                    raise Exception('Code wrapper for "%s array" currently not supported' % arg.type) 
         
+        string += self.create_mex_inarraysizes(func)
+        
         count = 0
         for arg in outarrays:
             if len(arg.arrayinfos['arraysizes']) == 0:
@@ -250,6 +277,9 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
                 count += 1
                     
         string += '\n'
+        
+        # manual allocation if necessary
+        string += self.create_mex_allocs(func)        
         
         # function call
         string += 4*' '
