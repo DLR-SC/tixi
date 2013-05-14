@@ -1688,8 +1688,6 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
   xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr parent = NULL;
 
-
-
   if (!document) {
     fprintf(stderr, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;

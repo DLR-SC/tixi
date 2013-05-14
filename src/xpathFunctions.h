@@ -21,12 +21,19 @@
  * @date   Tue Jul 25 12:06:33 2010
  * @brief  Header file for managing xpath expressions.
  */
+
+#ifndef XPATH_FUNCTIONS_H
+#define XPATH_FUNCTIONS_H
+
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "libxml/xmlsave.h"
 #include "tixi.h"
 #include "tixiData.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr document, const char *xPathExpression);
 
@@ -36,3 +43,8 @@ char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpres
 
 char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPathExpression, int index);
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* XPATH_FUNCTIONS_H */

@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -109,23 +109,25 @@ typedef  enum DocumentStatusType
  * @brief Structure to build a link list of documents.
  *
  */
-typedef struct
+typedef struct TixiMemoryListEntry TixiMemoryListEntry;
+struct TixiMemoryListEntry
 {
       void* memory;                        /**< Pointer to memory area allocated by libxml */
-      struct TixiMemoryListEntry* next;    /**< Pointer to next entry in the list */
-} TixiMemoryListEntry;
+      TixiMemoryListEntry* next;    /**< Pointer to next entry in the list */
+};
 
 
 /**
  * @brief Structure to build a link list of UIDs.
  *
  */
-typedef struct
+typedef struct TixiUIDListEntry TixiUIDListEntry;
+struct TixiUIDListEntry
 {
-	xmlNodePtr nodePtr;						/**< Pointer to the node with the UID */
-	char* uIDName;							/**< Name of this uID */
-    struct TixiUIDListEntry* next;    		/**< Pointer to next entry in the list */
-} TixiUIDListEntry;
+    xmlNodePtr nodePtr;						/**< Pointer to the node with the UID */
+    char* uIDName;							/**< Name of this uID */
+    TixiUIDListEntry* next;    		/**< Pointer to next entry in the list */
+};
 
 /**
  * @brief Structure to hold the document meta data.
@@ -142,18 +144,19 @@ typedef struct
       char* validationFilename;     /**< Name of the file the document is validate against */
       DocumentStatus status;        /**< Status of the document: opened/saved/closed */
       TixiDocumentHandle handle;
-	  TixiMemoryListEntry* memoryListHead; /**< Pointer to the head of the list of memory location */
+      TixiMemoryListEntry* memoryListHead; /**< Pointer to the head of the list of memory location */
       TixiMemoryListEntry* memoryListTail; /**< Pointer to the tail of the list of memory location */
       int hasIncludedExternalFiles;        /**< Flag to indicate if the master file includes external files */
       int usePrettyPrint;                  /**< if pretty print should used when saving a file */
       TixiUIDListEntry* uidListHead;			   /**< Pointer to the head of the list of uids */
 } TixiDocument;
 
-typedef struct
+typedef struct TixiDocumentListEntry TixiDocumentListEntry;
+struct TixiDocumentListEntry
 {
-      TixiDocument* document; /**< Document meta data */
-      struct TixiDocumentListEntry* next;    /**< Pointer to next document in the list */
-} TixiDocumentListEntry;
+    TixiDocument* document; /**< Document meta data */
+    TixiDocumentListEntry* next;    /**< Pointer to next document in the list */
+};
 
 /**
    Pointer to the head of the list of documents managed by TIXI

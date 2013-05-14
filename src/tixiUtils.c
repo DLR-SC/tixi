@@ -29,8 +29,10 @@
 #ifdef WIN32
   #include <direct.h>
   #define mkdir(dir, attr) _mkdir((dir))
+  #define rmdir(dir) _rmdir((dir))
 #else
   #include <sys/stat.h>
+  #include <unistd.h>
 #endif
 
 
@@ -63,7 +65,7 @@ int create_local_directory(const char *dirname) {
 
 
 
-int string_startsWith(char *string, char *subString)
+int string_startsWith(const char *string, const char *subString)
 {
     size_t len = strlen(subString);
 
@@ -145,12 +147,13 @@ ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname)
 
 
 
-int isPathRelative(char *dirname)
+int isPathRelative(const char *dirname)
 {
     int returnCode = -1;
 
     if (dirname == NULL) {
         returnCode = -1;
+        return returnCode;
     }
 
     if (string_startsWith(dirname, "file:") == 0) {
@@ -179,7 +182,7 @@ char* stringToLower(char* string)
     return string;
 }
 
-char* string_stripLeft(char* string, int len)
+char* string_stripLeft(const char* string, int len)
 {
     char *resultString = NULL;
     size_t x = 0;

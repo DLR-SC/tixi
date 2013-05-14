@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,12 +25,18 @@
  * @brief Utility functions used to fetch files from a url.
  * @file Utility functions used to fetch files from a url.
  */
+#ifndef WEB_METHODS_H
+#define WEB_METHODS_H
+
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "libxml/xmlsave.h"
 #include "tixi.h"
 #include "tixiData.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct MemoryStruct{
 	char *memory;
@@ -81,3 +87,9 @@ size_t writeMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data);
 	The content of the url-resource as string.
  */
 char* curlGetURLInMemory(const char *url);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* WEB_METHODS_H */

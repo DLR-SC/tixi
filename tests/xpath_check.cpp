@@ -22,46 +22,113 @@
 #include "test.h" // Brings in the GTest framework
 
 #include "tixi.h"
+#include "tixiInternal.h"
+#include "xpathFunctions.h"
 
 
 static const char* xPathXmlFilename = "TestData/xpathsEvaluate.xml";
 
 static const char *elementPathExists = "/root/a[@uID=\"test\"]/b[@uID=\"b\"]";
 static const char *elementPathDoesnt = "/root/a[@uID=\"schlumpf\"]/b[@uID=\"empty_element\"]";
+static const char *elementPathNoExists = "/root/a[@uID=\"schlumpf\"]/b[@uID=\"invalid_uid\"]";
+
+class XPathChecks : public ::testing::Test{
+protected:
+    void SetUp(){
+        documentHandle = -1;
+        ASSERT_TRUE( tixiOpenDocument( xPathXmlFilename, &documentHandle ) == SUCCESS );
+    }
+
+    void TearDown(){
+        ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
+        documentHandle = -1;
+    }
+
+    TixiDocumentHandle documentHandle;
+};
 
 
-TEST(xpath_evaluate_checks, tixiXPathEvaluateNodeNumber)
+TEST_F(XPathChecks, tixiXPathEvaluateNodeNumber)
 {
-    TixiDocumentHandle documentHandle = -1;
     int num = 0;
 
-    ASSERT_TRUE( tixiOpenDocument( xPathXmlFilename, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( tixiXPathEvaluateNodeNumber( documentHandle, "//@uID", &num) == SUCCESS );
     ASSERT_TRUE( num == 6 );
-    ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
 }
 
-TEST(xpath_evaluate_checks, tixiXPathEvaluateNodeNumber_fail)
+TEST_F(XPathChecks, tixiXPathEvaluateNodeNumber_fail)
 {
-    TixiDocumentHandle documentHandle = -1;
     int num = 0;
-
-    ASSERT_TRUE( tixiOpenDocument( xPathXmlFilename, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( tixiXPathEvaluateNodeNumber( documentHandle, "//@kruzifix", &num) == FAILED );
-    ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
 }
 
 
-TEST(xpath_evaluate_checks, tixiXPathExpressionGetTextByIndex_char)
+TEST_F(XPathChecks, tixiXPathExpressionGetTextByIndex_char)
 {
-    TixiDocumentHandle documentHandle = -1;
     char *text = NULL;
 
-    ASSERT_TRUE( tixiOpenDocument( xPathXmlFilename, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( tixiXPathExpressionGetTextByIndex( documentHandle, "//@uID", 4, &text) == SUCCESS );
     if ( text ) {
         ASSERT_TRUE( !strcmp(text, "schlumpf"));
     }
-    ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
+}
+
+TEST_F(XPathChecks, XPathEvaluateExpression){
+    TixiDocument *document = getDocument(documentHandle);
+
+    xmlXPathObjectPtr res = XPathEvaluateExpression(document->docPtr, elementPathExists);
+    ASSERT_TRUE(res != NULL);
+}
+
+TEST_F(XPathChecks, XPathEvaluateExpression_invalidDoc){
+    xmlXPathObjectPtr res = XPathEvaluateExpression(NULL, elementPathExists);
+    ASSERT_TRUE(res == NULL);
+}
+
+TEST_F(XPathChecks, XPathEvaluateExpression_invalidXPath){
+    TixiDocument *document = getDocument(documentHandle);
+    xmlXPathObjectPtr res = XPathEvaluateExpression(document->docPtr, "\\");
+    ASSERT_TRUE(res == NULL);
+}
+
+TEST_F(XPathChecks, getText){
+    TixiDocument *document = getDocument(documentHandle);
+    char * text = XPathExpressionGetText(document, elementPathExists, 1);
+    ASSERT_STREQ("Blupp", text);
+}
+TEST_F(XPathChecks, getText_invalidIndex){
+    TixiDocument *document = getDocument(documentHandle);
+    char * text = XPathExpressionGetText(document, elementPathExists , 3);
+    ASSERT_EQ(NULL, text);
+
+    text = XPathExpressionGetText(document, elementPathExists, 0);
+    ASSERT_EQ(NULL, text);
+}
+
+TEST_F(XPathChecks, getElementName){
+    TixiDocument *document = getDocument(documentHandle);
+    char * name = XPathExpressionGetElementName(document, elementPathExists, 1);
+    ASSERT_STREQ("b", name);
+}
+
+TEST_F(XPathChecks, getElementName_invalidIndex){
+    TixiDocument *document = getDocument(documentHandle);
+    char * name = XPathExpressionGetElementName(document, elementPathExists, 3);
+    ASSERT_EQ(NULL, name);
+
+    name = XPathExpressionGetElementName(document, elementPathExists, 0);
+    ASSERT_EQ(NULL, name);
+}
+
+TEST_F(XPathChecks, getElementName_noElement){
+    TixiDocument *document = getDocument(documentHandle);
+    char * name = XPathExpressionGetElementName(document, elementPathNoExists, 1);
+    ASSERT_EQ(NULL, name);
+}
+
+TEST_F(XPathChecks, getElementName_selectAttribute){
+    TixiDocument *document = getDocument(documentHandle);
+    char * name = XPathExpressionGetElementName(document, "/root/a[1]/@uID", 1);
+    ASSERT_EQ(NULL, name);
 }
 

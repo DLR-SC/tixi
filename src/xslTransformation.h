@@ -25,6 +25,14 @@
  * @brief Utility functions used to perform xsl transformations.
  * @file Utility functions used to perform xsl transformations.
  */
+
+#ifndef XSL_TRANSFORMATION_H
+#define XSL_TRANSFORMATION_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "libxml/xmlsave.h"
@@ -43,7 +51,7 @@
     @param char *xslFilename (in) Filename of the stylesheet file
     @return char* The resulting document as string
  */
-char* xsltTransformToString(xmlDocPtr doc, char *xslFilename);
+char* xsltTransformToString(xmlDocPtr doc, const char *xslFilename);
 
 /**
     @brief Performs XSL transformation to a document and saves the resulting doc in a local file.
@@ -56,3 +64,9 @@ char* xsltTransformToString(xmlDocPtr doc, char *xslFilename);
      - FAILED                  for all internal errors
  */
 ReturnCode xsltTransformToFile(xmlDocPtr doc, const char *xslFilename, const char *outputFilename);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* XSL_TRANSFORMATION_H */
