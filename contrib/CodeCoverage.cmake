@@ -21,9 +21,9 @@ IF(NOT GCOV_PATH)
         MESSAGE(FATAL_ERROR "gcov not found! Aborting...")
 ENDIF() # NOT GCOV_PATH
 
-IF(NOT CMAKE_COMPILER_IS_GNUCXX)
-        MESSAGE(FATAL_ERROR "Compiler is not GNU gcc! Aborting...")
-ENDIF() # NOT CMAKE_COMPILER_IS_GNUCXX
+IF(NOT CMAKE_COMPILER_IS_GNUCXX AND NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        MESSAGE(FATAL_ERROR "Compiler is not GNU gcc or clang! Aborting...")
+ENDIF() # NOT CMAKE_COMPILER_IS_GNUCXX AND NOT CLANG
 
 IF ( NOT CMAKE_BUILD_TYPE STREQUAL "Debug" )
   MESSAGE( WARNING "Code coverage results with an optimised (non-Debug) build may be misleading" )
@@ -31,9 +31,16 @@ ENDIF() # NOT CMAKE_BUILD_TYPE STREQUAL "Debug"
 
 
 # Setup compiler options
-ADD_DEFINITIONS(-fprofile-arcs -ftest-coverage)
-LINK_LIBRARIES(gcov)
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  ADD_DEFINITIONS(-fprofile-arcs -ftest-coverage)
+  LINK_LIBRARIES(gcov)
+ENDIF()
 
+IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  ADD_DEFINITIONS("--coverage")
+  SET( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} --coverage" )
+  SET (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS_INIT} --coverage" )
+ENDIF()
 
 # Param _targetname     The name of new the custom make target
 # Param _testrunner     The name of the target which runs the tests
