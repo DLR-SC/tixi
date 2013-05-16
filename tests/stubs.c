@@ -21,3 +21,12 @@
 /**
    @file Stubs implement simple stubs to support unitTests.
 */
+
+
+char* curlGetURLInMemory_stub(const char *url)
+{
+    if (strcmp(url, "http://www.w3schools.com/XML/note.xml") == 0) {
+                return "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><a></a>"
+    }
+}
+

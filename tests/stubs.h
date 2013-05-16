@@ -30,9 +30,14 @@
 
 
 
+// Define all functions to be replaced by stubs
+#ifdef TIXI_TEST_STUBS
+#define curlGetURLInMemory curlGetURLInMemory_stub
+#endif /* TIXI_TEST_STUBS */
 
 
-
+// stub definitions
+char* curlGetURLInMemory_stub(const char *url);
 
 
 
