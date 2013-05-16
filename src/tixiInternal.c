@@ -799,7 +799,7 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 
 
 
-xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath)
+xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPath)
 {
 
   TixiDocument *document = getDocument(handle);
@@ -812,11 +812,6 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath)
 
   if (!document) {
     fprintf(stderr, "Error: Invalid document handle.\n");
-    return parent;
-  }
-
-  if (document->status == SAVED) {
-    fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
     return parent;
   }
 

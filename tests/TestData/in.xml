@@ -3,7 +3,7 @@
 	<name>Junkers JU 52</name>
 	<numberOfPassengers>57</numberOfPassengers>
 	<wings numberOfWings="2">
-		<wing position="left">
+		<wing position="left" top="true">
 			<centerOfGravity referenceSystem="relative">
 				<x unit="m">30.0</x>
 				<y unit="m">10.0</y>
@@ -11,7 +11,7 @@
 			</centerOfGravity>
 			<!-- myComment -->
 		</wing>
-		<wing position="right">
+		<wing position="right" top="false">
 			<centerOfGravity referenceSystem="relative">
 				<x unit="m">30.0</x>
 				<y unit="m">-10.0</y>

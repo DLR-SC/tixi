@@ -132,3 +132,44 @@ TEST_F(XPathChecks, getElementName_selectAttribute){
     ASSERT_EQ(NULL, name);
 }
 
+TEST_F(XPathChecks, getParentNodeToXPath){
+    xmlNodePtr node = getParentNodeToXPath(documentHandle, "/root/a[1]/@uID");
+    ASSERT_TRUE(node != NULL);
+}
+
+TEST_F(XPathChecks, getParentNodeToXPath_invalidHandle){
+    xmlNodePtr node = getParentNodeToXPath(-1, "/root/a[1]/@uID");
+    ASSERT_TRUE(node == NULL);
+}
+
+TEST_F(XPathChecks, getParentNodeToXPath_pathNotUnique){
+    xmlNodePtr node = getParentNodeToXPath(documentHandle, "/root/a/@uID");
+    ASSERT_TRUE(node == NULL);
+}
+
+TEST_F(XPathChecks, getParentNodeToXPath_invalidXPath){
+    xmlNodePtr node = getParentNodeToXPath(documentHandle, "/root/a/@\\uID");
+    ASSERT_TRUE(node == NULL);
+
+    node = getParentNodeToXPath(documentHandle, "/invalidroot/a/@uID");
+    ASSERT_TRUE(node == NULL);
+}
+
+TEST_F(XPathChecks, generateXPathFromNodePtr){
+    xmlNodePtr node = getParentNodeToXPath(documentHandle, "/root/a[1]/@uID");
+    ASSERT_TRUE(node != NULL);
+
+    char * xpath = generateXPathFromNodePtr(documentHandle, node);
+    ASSERT_STREQ("/root/a[@uID=\"test\"]", xpath);
+}
+
+TEST_F(XPathChecks, generateXPathFromNodePtr_invalidHandle){
+    char * xpath = generateXPathFromNodePtr(-1, NULL);
+    ASSERT_TRUE(xpath == NULL);
+}
+
+TEST_F(XPathChecks, generateXPathFromNodePtr_invalidNode){
+    char * xpath = generateXPathFromNodePtr(documentHandle, NULL);
+    ASSERT_STREQ("", xpath);
+}
+

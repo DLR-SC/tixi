@@ -263,7 +263,7 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePrt, TixiDocument *aTixiDocument);
     - xmlNodePtr of the parent node
     - NULL if a error occured
  */
-xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath);
+xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPath);
 
 
 /**

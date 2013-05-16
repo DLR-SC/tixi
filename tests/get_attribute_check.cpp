@@ -106,7 +106,7 @@ TEST_F(GetAttributeTests, getIntegerAttribute)
 TEST_F(GetAttributeTests, getNumberOfAttributes){
     int number = 0;
     ASSERT_EQ(SUCCESS, tixiGetNumberOfAttributes(documentHandle, "/plane/wings/wing[1]", &number ));
-    ASSERT_EQ(1, number);
+    ASSERT_EQ(2, number);
 
     ASSERT_EQ(SUCCESS, tixiGetNumberOfAttributes(documentHandle, "/plane/name", &number ));
     ASSERT_EQ(0, number);
@@ -136,4 +136,33 @@ TEST_F(GetAttributeTests, getAttributeNames){
     
     //check invalid handle
     ASSERT_EQ(INVALID_HANDLE, tixiGetAttributeName(-1, "/plane/aPoint[1]", 1, &name));
+}
+
+TEST_F(GetAttributeTests, getBooleanAttribute){
+    int mybool = 2;
+    ASSERT_EQ(SUCCESS, tixiGetBooleanAttribute(documentHandle, "/plane/wings/wing[1]", "top", &mybool));
+    ASSERT_EQ(1, mybool);
+
+    ASSERT_EQ(SUCCESS, tixiGetBooleanAttribute(documentHandle, "/plane/wings/wing[2]", "top", &mybool));
+    ASSERT_EQ(0, mybool);
+
+    // invalid calls
+     ASSERT_EQ(FAILED, tixiGetBooleanAttribute(documentHandle, "/plane/wings/wing[2]", "top", NULL));
+     ASSERT_EQ(ELEMENT_NOT_FOUND, tixiGetBooleanAttribute(documentHandle, "/plane/wings/wing[3]", "top", &mybool));
+     ASSERT_EQ(FAILED, tixiGetBooleanAttribute(documentHandle, "/plane/wings/wing[1]", "position", &mybool));
+
+}
+
+TEST_F(GetAttributeTests, checkAttribute){
+    ASSERT_EQ(SUCCESS, tixiCheckAttribute(documentHandle, "/plane/wings/wing[1]", "top"));
+}
+
+TEST_F(GetAttributeTests, checkAttribute_invalidHandle){
+    ASSERT_EQ(INVALID_HANDLE, tixiCheckAttribute(-1, "/plane/wings/wing[1]", "top"));
+}
+
+TEST_F(GetAttributeTests, checkAttribute_notFound){
+    ASSERT_EQ(ATTRIBUTE_NOT_FOUND, tixiCheckAttribute(documentHandle, "/plane/wings/wing[1]", "thisattdoesnoexist"));
+
+    ASSERT_EQ(ELEMENT_NOT_FOUND, tixiCheckAttribute(documentHandle, "/plane/wings/elementdoesnotexist", "top"));
 }
