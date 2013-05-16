@@ -84,7 +84,7 @@ char* curlGetURLInMemory(const char *url)
 
     /* some servers don't like requests that are made without a user-agent
      field, so we provide one */
-    curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0-TIXI");
+    curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/2.0.4-TIXI");
 
     /* get it! */
     res = curl_easy_perform(curl_handle);
