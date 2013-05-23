@@ -2028,30 +2028,6 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
 */
   DLL_EXPORT ReturnCode tixiCheckDocumentHandle (const TixiDocumentHandle handle);
 
-
-/**
-    @internal
-    @brief Retrieves low level handle.
-
-    Retrieves a handle to the underlying library's representation of a
-    document. This may then be used to call routines, e.g. libxml2, from the
-    underlying library directly.
-
-    <b>Fortran syntax:</b>
-
-    tixi_get_raw_interface( integer  handle, void* raw_handle, integer error )
-
-    @param handle  (in) handle as returned by ::tixiOpenDocument
-      @param rawHandle (out) handle as used by the underlying implementation
-
-    @return
-     - SUCCESS if a count is computed
-     - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
-*/
-  DLL_EXPORT ReturnCode tixiGetRawInterface (TixiDocumentHandle handle, void *rawHandle);
-
-
-
   /**
       @brief Sets Pretty print on or off.
 

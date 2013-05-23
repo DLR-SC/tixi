@@ -25,7 +25,7 @@
 #include "xslTransformation.h"
 
 
-char* xsltTransformToString(xmlDocPtr doc, char *xslFilename) {
+char* xsltTransformToString(xmlDocPtr doc, const char *xslFilename) {
     xmlDocPtr res;
     xmlChar *string;
 	int len;

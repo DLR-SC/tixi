@@ -23,40 +23,77 @@
 
 #include "tixi.h"
 
+#include <cstdio>
+
+#define N_VALUES 5
+
+static double values[N_VALUES] = {0., 1., 2., 3., 4.};
+static const char* attributes[N_VALUES] = { "a", "b", "c", "d", "e"};
+static const char* parentPath = "/root";
+static const char* listName = "numbers";
+static const char* childName = "number";
+static const char* format = "%08.2f";
+static const char* childAttributeName = "letter";
+static int nValues = N_VALUES;
 
 /** 
     @test Tests for adding composite elements.
 */   
 
-static TixiDocumentHandle documentHandle = -1;
-
 class CompositeTests : public ::testing::Test {
  protected:
-  virtual void SetUp() {
+    virtual void SetUp() {
         const char* rootElementName = "root";
+        documentHandle = -1;
         ASSERT_TRUE( tixiCreateDocument( rootElementName, &documentHandle ) == SUCCESS);
-  }
+    }
   
-  // virtual void TearDown() {}
+    virtual void TearDown() {
+        ASSERT_EQ(SUCCESS, tixiCloseDocument(documentHandle));
+        documentHandle = -1;
+    }
+
+    TixiDocumentHandle documentHandle;
 };
 
 
-TEST_F(CompositeTests, add_composits) 
+TEST_F(CompositeTests, add_list)
 {
-#define N_VALUES 5
-
-    double values[N_VALUES] = {0., 1., 2., 3., 4.};
-    const char* attributes[N_VALUES] = { "a", "b", "c", "d", "e"};
-    const char* parentPath = "/root";
-    const char* listName = "numbers";
-    const char* childName = "number";
-    const char* format = "%08.2f";
-    const char* childAttributeName = "letter";
-    int nValues = N_VALUES;
-
-    ASSERT_TRUE( tixiAddDoubleListWithAttributes( documentHandle, parentPath,  listName, childName, childAttributeName, 
+    ASSERT_TRUE( tixiAddDoubleListWithAttributes( documentHandle, parentPath,  listName, childName, childAttributeName,
                                            values,  format,  attributes,  nValues ) == SUCCESS );
 
-    ASSERT_TRUE( tixiSaveDocument( documentHandle, "list.xml" )== SUCCESS);
-    ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS);
+    ASSERT_TRUE( tixiAddDoubleListWithAttributes( documentHandle, parentPath,  "numbers2", childName, childAttributeName,
+                                           values,  NULL,  attributes,  nValues ) == SUCCESS );
+}
+
+TEST_F(CompositeTests, add_list_invalid_handle)
+{
+    ASSERT_EQ(INVALID_HANDLE, tixiAddDoubleListWithAttributes( -1, parentPath,  listName, childName, childAttributeName,
+                                           values,  format,  attributes,  nValues ) );
+}
+
+TEST_F(CompositeTests, add_list_already_saved)
+{
+    ASSERT_EQ( SUCCESS, tixiAddDoubleListWithAttributes( documentHandle, parentPath,  listName, childName, childAttributeName,
+                                           values,  format,  attributes,  nValues ) );
+
+    const char * tmpfile = "tmp12345656.xml";
+    ASSERT_EQ(SUCCESS, tixiSaveDocument(documentHandle, tmpfile));
+
+    ASSERT_EQ(ALREADY_SAVED, tixiAddDoubleListWithAttributes( documentHandle, parentPath,  "numbers2", childName, childAttributeName,
+                                           values,  format,  attributes,  nValues ) );
+
+    remove(tmpfile);
+}
+
+TEST_F(CompositeTests, add_list_invalid_names)
+{
+    ASSERT_EQ( INVALID_XML_NAME, tixiAddDoubleListWithAttributes( documentHandle, parentPath,  "list\\Name", childName, childAttributeName,
+                                           values,  format,  attributes,  nValues ) );
+
+    ASSERT_EQ( INVALID_XML_NAME, tixiAddDoubleListWithAttributes( documentHandle, parentPath,  listName, "child\\Name", childAttributeName,
+                                           values,  format,  attributes,  nValues ) );
+
+    ASSERT_EQ( INVALID_XML_NAME, tixiAddDoubleListWithAttributes( documentHandle, parentPath,  listName, childName, "childAttr\\ibuteName",
+                                           values,  format,  attributes,  nValues ) );
 }

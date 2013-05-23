@@ -1,3 +1,10 @@
+#ifndef TIXI_UTILS_H
+#define TIXI_UTILS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* 
 * Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
 *
@@ -67,7 +74,7 @@ int create_local_directory(const char *dirname);
     - 0 if string starts with substring
     - -1 if string does not start with substring or an error occured
  */
-int string_startsWith(char *string, char *subString);
+int string_startsWith(const char *string, const char *subString);
 
 
 /**
@@ -94,7 +101,7 @@ ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname);
     - 0 if path is realtiv
     - != 0 if path seems to be absolute
  */
-int isPathRelative(char *dirname);
+int isPathRelative(const char *dirname);
 
 
 /**
@@ -114,4 +121,10 @@ char* stringToLower(char* string);
  @return
     char destinationString (out) to string converted to lower case
  */
-char* string_stripLeft(char* string, int len);
+char* string_stripLeft(const char *string, int len);
+
+#ifdef __cplusplus
+} /* extern C */
+#endif
+
+#endif /* TIXI_UTILS_H */

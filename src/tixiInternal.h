@@ -18,6 +18,14 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+#ifndef TIXI_INTERNAL_H
+#define TIXI_INTERNAL_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @file   tixiInternal.h
  * @author Hans-Peter Kersken <Hans-Peter.Kersken@dlr.de>
@@ -30,6 +38,8 @@
 #include "libxml/xmlsave.h"
 #include "tixi.h"
 #include "tixiData.h"
+
+
 
 typedef enum
 { SUCESS, MEMORY_ALLOCATION_FAILED } InternalReturnCode;
@@ -253,7 +263,7 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePrt, TixiDocument *aTixiDocument);
     - xmlNodePtr of the parent node
     - NULL if a error occured
  */
-xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath);
+xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPath);
 
 
 /**
@@ -365,4 +375,10 @@ DLL_EXPORT char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr 
      - SUCCESS 					If the reordering went well
      - FAILED 					If fromIndex or toIndex is out of range.
  */
-ReturnCode reorderXmlElements(TixiDocumentHandle handle, char *elementPath, int fromIndex, int toIndex);
+ReturnCode reorderXmlElements(TixiDocumentHandle handle, const char *elementPath, int fromIndex, int toIndex);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* TIXI_INTERNAL_H */

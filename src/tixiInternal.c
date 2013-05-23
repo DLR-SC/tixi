@@ -629,7 +629,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             externalDataNodePath = (char *) xmlGetNodePath(nodes->nodeTab[iNode]);
 
             /* now get the subdirectory */
-            externalDataDirectoryPath = (char *) malloc(sizeof(char) * strlen(externalDataNodePath) + strlen(EXTERNAL_DATA_NODE_NAME_PATH) + 1);
+            externalDataDirectoryPath = (char *) malloc(sizeof(char) * strlen(externalDataNodePath) + strlen(EXTERNAL_DATA_NODE_NAME_PATH) + 4);
             externalDataDirectoryPath[0] = '\0';
             strcat(externalDataDirectoryPath, externalDataNodePath);
             strcat(externalDataDirectoryPath, "/");
@@ -647,7 +647,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             }
 
             /* iterate through all "filename" nodes */
-            for (i = 1; i <= externalFileCount; i++) {
+             for (i = 1; i <= externalFileCount; i++) {
                 ptrFilename = (char *) malloc(sizeof(char) * strlen(externalDataNodePath) + strlen(EXTERNAL_DATA_NODE_NAME_FILENAME) + 5);
                 ptrFilename[0] = '\0';
                 sprintf(ptrFilename, "%s/filename[%d]", externalDataNodePath, i);
@@ -799,7 +799,7 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 
 
 
-xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath)
+xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPath)
 {
 
   TixiDocument *document = getDocument(handle);
@@ -812,11 +812,6 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, char *elementPath)
 
   if (!document) {
     fprintf(stderr, "Error: Invalid document handle.\n");
-    return parent;
-  }
-
-  if (document->status == SAVED) {
-    fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
     return parent;
   }
 
@@ -1190,83 +1185,4 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
     addToMemoryList(document, (void *) generatedXPath);
     return generatedXPath;
 }
-
-
-ReturnCode reorderXmlElements(TixiDocumentHandle handle, char *elementPath,int fromIndex, int toIndex)
-{
-	int i = 0;
-	xmlNodePtr node;
-	xmlDocPtr xmlDocument = NULL;
-	xmlXPathContextPtr xpathContext = NULL;
-	xmlXPathObjectPtr xpathObject = NULL;
-	xmlNodeSetPtr nodes = NULL;
-	TixiDocument *document = getDocument(handle);
-
-	xmlDocument = document->docPtr;
-	xpathContext = xmlXPathNewContext(xmlDocument);
-	if (!xpathContext) {
-		fprintf(stderr, "Error: unable to create new XPath context\n");
-		xmlXPathFreeContext(xpathContext);
-		return FAILED;
-	}
-
-	xpathObject = xmlXPathEvalExpression((xmlChar *) elementPath, xpathContext);
-
-	if (!xpathObject) {
-		fprintf(stderr, "Error: unable to evaluate XPath expression \"%s\"\n",
-				elementPath);
-		xmlXPathFreeContext(xpathContext);
-		return INVALID_XPATH;
-	}
-
-	if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-		fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n",
-				elementPath);
-		xmlXPathFreeContext(xpathContext);
-		xmlXPathFreeObject(xpathObject);
-		return ELEMENT_NOT_FOUND;
-	}
-
-	nodes = xpathObject->nodesetval;
-
-	if ((fromIndex == -1) && (toIndex == -1)) {
-		fprintf(stderr, "Error: index error. Either from or toIndex must be set!\n");
-		return FAILED;
-	}
-
-	if (toIndex == -1) {
-		toIndex = nodes->nodeNr;
-	}
-	if (fromIndex == -1) {
-		fromIndex = nodes->nodeNr;
-	}
-
-	// decrease fromIndex and toIndex for array indices
-	fromIndex--;
-	toIndex--;
-
-	if (nodes->nodeNr < max(fromIndex, toIndex)) {
-		fprintf(stderr, "Error: index out of range.\n");
-		return FAILED;
-	}
-
-	if (max(fromIndex, toIndex) == fromIndex){
-		node = xmlCopyNode(nodes->nodeTab[fromIndex], 1);
-		node = xmlReplaceNode(nodes->nodeTab[toIndex], node);
-		for(i = toIndex + 1; i <= fromIndex; i++) {
-			node = xmlReplaceNode(nodes->nodeTab[i], node);
-		}
-	} else {
-		node = xmlCopyNode(nodes->nodeTab[fromIndex], 1);
-		node = xmlReplaceNode(nodes->nodeTab[toIndex], node);
-		for(i = toIndex - 1; i >= fromIndex; i--) {
-			node = xmlReplaceNode(nodes->nodeTab[i], node);
-		}
-	}
-	xmlXPathFreeContext(xpathContext);
-	xmlXPathFreeObject(xpathObject);
-	printf("\n\n-----\n\n");
-	return SUCCESS;
-}
-
 

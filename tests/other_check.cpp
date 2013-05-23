@@ -58,6 +58,28 @@ TEST_F(OtherTests, childCount_hasNoChild)
     ASSERT_TRUE( count  == 0 );
 }
 
+TEST_F(OtherTests, childCound_invalidHandle){
+    int count = 0;
+    ASSERT_EQ(INVALID_HANDLE, tixiGetNamedChildrenCount(-.1, "/plane", "wings", &count));
+}
+
+TEST_F(OtherTests, childCound_invalidParent){
+    int count = 0;
+    ASSERT_EQ(ELEMENT_NOT_FOUND, tixiGetNamedChildrenCount( inDocumentHandle, "/invalidparent", "wings", &count));
+}
+
+TEST_F(OtherTests, childCound_pathNotUnique){
+    int count = 0;
+    ASSERT_EQ(ELEMENT_PATH_NOT_UNIQUE, tixiGetNamedChildrenCount( inDocumentHandle, "/plane/wings/wing", "centerOfGravity", &count));
+}
+
+TEST_F(OtherTests, childCound_invalidXPath){
+    int count = 0;
+    ASSERT_EQ(INVALID_XPATH, tixiGetNamedChildrenCount( inDocumentHandle, "/plane/wings/\\blubb", "centerOfGravity", &count));
+
+    ASSERT_EQ(INVALID_XPATH, tixiGetNamedChildrenCount( inDocumentHandle, "/plane/wings/wing[1]", "centerOf\\Gravity", &count));
+}
+
 TEST_F(OtherTests, checkDocumentHandle)
 {
     ASSERT_TRUE( tixiCheckDocumentHandle( inDocumentHandle ) == SUCCESS );
@@ -152,6 +174,27 @@ TEST_F(OtherTests, createMatrix)
     ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourby fourCol", "row", "column", 4, 4) == INVALID_XML_NAME);
 }
 
+TEST_F(OtherTests, usePrettyPrint) {
+    ASSERT_EQ(SUCCESS, tixiUsePrettyPrint(inDocumentHandle, 0));
+    ASSERT_EQ(SUCCESS, tixiUsePrettyPrint(inDocumentHandle, 1));
+
+    ASSERT_EQ(FAILED, tixiUsePrettyPrint(inDocumentHandle, -1));
+    ASSERT_EQ(FAILED, tixiUsePrettyPrint(inDocumentHandle,  2));
+
+    // invalid handle
+    ASSERT_EQ(INVALID_HANDLE, tixiUsePrettyPrint(-1,  0));
+}
+
+TEST_F(OtherTests, exportAsString){
+    char * text  = NULL;
+    char * text2 = NULL;
+    ASSERT_EQ(SUCCESS, tixiExportDocumentAsString(inDocumentHandle, &text));
+    //invalid handle
+    ASSERT_EQ(INVALID_HANDLE, tixiExportDocumentAsString(-1, &text2));
+
+    ASSERT_EQ(FAILED, tixiExportDocumentAsString(inDocumentHandle, NULL));
+}
+
 TEST(VersionTests, get_Version_notNull) {
 	char *version = tixiGetVersion();
 	ASSERT_TRUE(version != NULL);
@@ -159,4 +202,26 @@ TEST(VersionTests, get_Version_notNull) {
 	ASSERT_LT(atof(version), 100.0);
 }
 
+
+TEST(OtherTests2, importFromString){
+    const char * s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root/>";
+    TixiDocumentHandle handle;
+    ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
+    tixiCloseDocument(handle);
+}
+
+TEST(OtherTests2, importFromString_invalidxml){
+    const char * s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root></notmatch>";
+    TixiDocumentHandle handle;
+    ASSERT_EQ(NOT_WELL_FORMED, tixiImportFromString(s, &handle));
+    tixiCloseDocument(handle);
+}
+
+TEST(OtherTests2, cleanup){
+    TixiDocumentHandle handle;
+    tixiCreateDocument("root", &handle);
+
+    ASSERT_EQ(SUCCESS, tixiCloseAllDocuments());
+    ASSERT_EQ(SUCCESS, tixiCleanup());
+}
 

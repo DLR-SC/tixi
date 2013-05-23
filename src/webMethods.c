@@ -108,18 +108,27 @@ int curlGetFileToLocalDisk(const char* url, const char* local)
     CURLcode res;
     FILE *localFile;
 
-    /* local file name to store the file as */
-    localFile = fopen(local, "wb"); /* b is binary for win */
-
     curl = curl_easy_init();
     if (curl) {
+        /* local file name to store the file as */
+        localFile = fopen(local, "wb"); /* b is binary for win */
+
         curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_FILE, localFile);
+
         res = curl_easy_perform(curl);
 
         /* always cleanup */
         curl_easy_cleanup(curl);
+
+        if (res != CURLE_OK){
+            return -1;
+        }
+
+        fclose(localFile); /* close the local file */
+        return 0;
     }
-    fclose(localFile); /* close the local file */
-    return 0;
+    else {
+        return -1;
+    }
 }

@@ -22,18 +22,80 @@
 #include "test.h" // Brings in the GTest framework
 
 #include "tixi.h"
- 
+#include "tixiInternal.h"
+#include "xslTransformation.h"
+
 static const char *xmlFilename = "TestData/valid_CPACS_dokumentiert.xml";
 static const char *stylesheetFilename = "TestData/mappingInputRaw.xsl";
 static const char *resultFileName = "TestData/result.xml";
 
-TEST(xslt_checks, xslTransformationToFile)
+class XsltChecks : public ::testing::Test{
+protected:
+    virtual void SetUp() {
+        documentHandle = -1;
+        ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
+    }
+
+    virtual void TearDown() {
+        tixiCloseDocument(documentHandle);
+        documentHandle  = -1;
+    }
+
+    TixiDocumentHandle documentHandle;
+};
+
+TEST_F(XsltChecks, xslTransformationToFile)
 {
-    TixiDocumentHandle documentHandle = -1;
-    ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( tixiXSLTransformationToFile( documentHandle, stylesheetFilename, resultFileName ) == SUCCESS );
     
     /* finish */
     ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
+}
+
+TEST_F(XsltChecks, xslTransformationToFile_invalidStylesheet)
+{
+    TixiDocument *document = getDocument(documentHandle);
+
+    ReturnCode ret = xsltTransformToFile(document->docPtr, "", resultFileName);
+    ASSERT_EQ(FAILED, ret);
+}
+
+TEST_F(XsltChecks, xslTransformationToFile_invalidOutfile)
+{
+    TixiDocument *document = getDocument(documentHandle);
+
+    ReturnCode ret = xsltTransformToFile(document->docPtr, stylesheetFilename, NULL);
+    ASSERT_EQ(FAILED, ret);
+
+    ret = xsltTransformToFile(document->docPtr, NULL, NULL);
+    ASSERT_EQ(FAILED, ret);
+}
+
+TEST_F(XsltChecks, xslTransformationToFile_invalidDoc)
+{
+    ReturnCode ret = xsltTransformToFile(NULL, stylesheetFilename, resultFileName);
+    ASSERT_EQ(FAILED, ret);
+}
+
+TEST_F(XsltChecks, xslTransformationToString)
+{
+    TixiDocument *document = getDocument(documentHandle);
+
+    const char * string = xsltTransformToString(document->docPtr, stylesheetFilename);
+    ASSERT_STRNE("", string);
+}
+
+TEST_F(XsltChecks, xslTransformationToString_invalidStylesheet)
+{
+    TixiDocument *document = getDocument(documentHandle);
+
+    const char * string = xsltTransformToString(document->docPtr, "");
+    ASSERT_EQ(NULL, string);
+}
+
+TEST_F(XsltChecks, xslTransformationToString_invalidDoc)
+{
+    const char * string = xsltTransformToString(NULL, stylesheetFilename);
+    ASSERT_EQ(NULL, string);
 }
 

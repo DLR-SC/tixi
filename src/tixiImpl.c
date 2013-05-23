@@ -430,6 +430,11 @@ DLL_EXPORT ReturnCode tixiExportDocumentAsString(const TixiDocumentHandle handle
         return INVALID_HANDLE;
     }
 
+    if (!text) {
+        fprintf(stderr, "Error: Null Pointer in tixiExportDocumentAsString.\n");
+        return FAILED;
+    }
+
     xmlDocument = document->docPtr;
 
     xmlDocDumpFormatMemory(xmlDocument, &xmlbuff, &buffersize, document->usePrettyPrint);
@@ -1688,8 +1693,6 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
   xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr parent = NULL;
 
-
-
   if (!document) {
     fprintf(stderr, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
@@ -1827,17 +1830,6 @@ DLL_EXPORT ReturnCode tixiAddExternalLink(const TixiDocumentHandle handle, const
 
   return error;
 }
-
-DLL_EXPORT ReturnCode tixiGetRawInterface(TixiDocumentHandle handle, void *rawHandle)
-{
-
-  fprintf(stderr, "Error: tixiGetRawInterface not implemented.\n");
-  if (&handle == NULL) ;  /* suppress warning */
-  if (rawHandle == NULL) ;  /* suppress warning */
-  assert(0);
-  return SUCCESS;
-}
-
 
 
 DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrettyPrint)

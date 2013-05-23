@@ -38,6 +38,7 @@ class ArrayTests : public ::testing::Test {
  protected:
   virtual void SetUp() {
      const char* xmlFilename = "TestData/arraytests.xml";
+     ASSERT_EQ  (SUCCESS, tixiCloseAllDocuments());
      ASSERT_TRUE(tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS);
   }
 
