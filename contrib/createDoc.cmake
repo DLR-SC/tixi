@@ -3,6 +3,7 @@ if(DOXYGEN_FOUND)
 	configure_file(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/Doxyfile @ONLY)
 	configure_file(${PROJECT_SOURCE_DIR}/doc/footer.html ${PROJECT_BINARY_DIR}/doc/footer.html @ONLY)
 	add_custom_command(
+		DEPENDS ${PROJECT_SOURCE_DIR}/src/tixi.h
 		OUTPUT ${PROJECT_BINARY_DIR}/doc/html/index.html
 		OUTPUT ${PROJECT_BINARY_DIR}/doc/latex/refman.tex
 		COMMAND ${DOXYGEN_EXECUTABLE}
