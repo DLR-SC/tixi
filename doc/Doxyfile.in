@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = TIXI
+PROJECT_NAME           = TiXI
 PROJECT_NUMBER         = @TIXI_VERSION@ 
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
