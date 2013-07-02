@@ -175,7 +175,7 @@ typedef enum InternalSaveModeType
 
 
 
-#if WIN32
+#ifdef _WIN32
 /* this is the name for mingw gcc's and MSVC */
 #define VSNPRINTF _vsnprintf
 #else
