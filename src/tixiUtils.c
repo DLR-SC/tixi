@@ -26,7 +26,7 @@
 #include "tixiInternal.h"
 
 #include <ctype.h>
-#ifdef WIN32
+#ifdef _WIN32
   #include <direct.h>
   #define mkdir(dir, attr) _mkdir((dir))
   #define rmdir(dir) _rmdir((dir))
@@ -83,7 +83,7 @@ ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname)
         char* tmpString = NULL;
         int   length    = 0;
 
-#if WIN32
+#if _WIN32
 /* use windows code to determine dirname and filename */
 
         /* variables for dirname/basename stripping */

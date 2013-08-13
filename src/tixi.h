@@ -1481,9 +1481,9 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
                     specified by handle (see section \ref XPathExamples above).
   @param index (in) number index of the child-element of the given path.
   @param name (out) String containing the name of the child node. If the node is not a normal node, the name variable will contain:
-                     - #text - in case of a text node
-                     - #comment - in case of a comment node
-                     - #cdata-section - in case of a CDATA section node
+                     - \#text - in case of a text node
+                     - \#comment - in case of a comment node
+                     - \#cdata-section - in case of a CDATA section node
 
   @return
 

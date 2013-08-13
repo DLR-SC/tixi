@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = TIXI
+PROJECT_NAME           = TiXI
 PROJECT_NUMBER         = @TIXI_VERSION@ 
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
@@ -75,7 +75,6 @@ GENERATE_DEPRECATEDLIST= YES
 ENABLED_SECTIONS       = 
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
-SHOW_DIRECTORIES       = NO
 FILE_VERSION_FILTER    = 
 #---------------------------------------------------------------------------
 # configuration options related to warning and progress messages
@@ -132,16 +131,12 @@ HTML_FILE_EXTENSION    = .html
 HTML_HEADER            = 
 HTML_FOOTER            = doc/footer.html
 HTML_STYLESHEET        = 
-HTML_ALIGN_MEMBERS     = YES
 HTML_DYNAMIC_SECTIONS  = YES
 GENERATE_DOCSET        = NO
 DOCSET_FEEDNAME        = "Doxygen generated docs"
 DOCSET_BUNDLE_ID       = org.doxygen.Project
-GENERATE_HTMLHELP      = YES
-CHM_FILE               = 
-HHC_LOCATION           = "hhc.exe"
 GENERATE_CHI           = NO
-CHM_INDEX_ENCODING     = 
+CHM_INDEX_ENCODING     = UTF-8 
 BINARY_TOC             = YES
 TOC_EXPAND             = YES
 GENERATE_QHP           = NO
