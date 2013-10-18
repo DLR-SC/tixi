@@ -42,3 +42,7 @@ install (FILES tixi.h ${CMAKE_CURRENT_BINARY_DIR}/tixi_version.h
 		 
 install (EXPORT tixi-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/tixi)	 
 
+install (FILES
+  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config.cmake"
+  "${PROJECT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/tixi-config-version.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/tixi)
