@@ -22,12 +22,14 @@ if(CMAKE_COMPILER_IS_GNUCC)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fmessage-length=0")
 endif()
 
+set(TIXI_LIBS ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES} ${VLD_LIBRARIES})
 add_library(TIXI SHARED ${TIXI_SRC} ${TIXI_HDR})
-target_link_libraries (TIXI  ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES} ${VLD_LIBRARIES})
+target_link_libraries (TIXI  ${TIXI_LIBS})
 set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})
 set_target_properties( TIXI PROPERTIES SOVERSION "${TIXI_VERSION_MAJOR}")
 
 add_library(TIXI_static ${TIXI_SRC} ${TIXI_HDR})
+target_link_libraries (TIXI_static  ${TIXI_LIBS})
 
 install (TARGETS TIXI 
 		 EXPORT tixi-targets
