@@ -1175,9 +1175,11 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
 
     if(targetNode != NULL && index > 0){
         /* insert at position index */
-        xmlNodePtr headingChildNode = xmlNewText( (xmlChar *) text );
         child = xmlNewNode(NULL, (xmlChar *) elementName);
-        xmlAddChild( child, headingChildNode );
+        if (text != NULL) {
+            xmlNodePtr headingChildNode = xmlNewText( (xmlChar *) text );
+            xmlAddChild( child, headingChildNode );
+        }
         xmlAddPrevSibling(targetNode, child);
     }
     else {

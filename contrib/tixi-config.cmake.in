@@ -1,0 +1,16 @@
+# - Config file for the TIXI package
+# It defines the following variables
+#  TIXI_INCLUDE_DIRS - include directories for TiXI
+#  TIXI_LIBRARIES    - libraries to link against
+
+# Compute paths
+get_filename_component(TIXI_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(TIXI_INCLUDE_DIRS "${TIXI_CMAKE_DIR}/../../include/")
+ 
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET TIXI)
+  include("${TIXI_CMAKE_DIR}/tixi-targets.cmake")
+endif()
+ 
+# These are IMPORTED targets created by tixi-targets.cmake
+set(TIXI_LIBRARIES TIXI)
