@@ -3382,4 +3382,91 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
 }
 
 
+DLL_EXPORT ReturnCode tixiGetNodeType(const TixiDocumentHandle handle, const char *nodePath, char **nodeType)
+{
+    TixiDocument *document = getDocument(handle);
+    xmlDocPtr  xmlDocument = NULL;
+    xmlNodePtr element     = NULL;
+    xmlXPathObjectPtr xpathObject = NULL;
+    int error = SUCCESS;
 
+    if (!document) {
+        fprintf(stderr, "Error: Invalid document handle.\n");
+        return INVALID_HANDLE;
+    }
+
+    xmlDocument = document->docPtr;
+    error = checkElement(xmlDocument, nodePath, &element, &xpathObject);
+
+    if (!error) {
+        switch (element->type) {
+        case  XML_ELEMENT_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (12 + 3));
+            strcpy(*nodeType, "ELEMENT_NODE");
+            break;
+
+        case  XML_ATTRIBUTE_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (14 + 3));
+            strcpy(*nodeType, "ATTRIBUTE_NODE");
+            break;
+
+        case  XML_TEXT_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (9 + 3));
+            strcpy(*nodeType, "TEXT_NODE");
+            break;
+
+        case  XML_CDATA_SECTION_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (18 + 3));
+            strcpy(*nodeType, "CDATA_SECTION_NODE");
+            break;
+
+        case  XML_ENTITY_REF_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (21 + 3));
+            strcpy(*nodeType, "ENTITY_REFERENCE_NODE");
+            break;
+
+        case  XML_ENTITY_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (11 + 3));
+            strcpy(*nodeType, "ENTITY_NODE");
+            break;
+
+        case  XML_PI_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (27 + 3));
+            strcpy(*nodeType, "PROCESSING_INSTRUCTION_NODE");
+            break;
+
+        case  XML_COMMENT_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (12 + 3));
+            strcpy(*nodeType, "COMMENT_NODE");
+            break;
+
+        case  XML_DOCUMENT_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (13 + 3));
+            strcpy(*nodeType, "DOCUMENT_NODE");
+            break;
+
+        case  XML_DOCUMENT_TYPE_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (18 + 3));
+            strcpy(*nodeType, "DOCUMENT_TYPE_NODE");
+            break;
+
+        case XML_DOCUMENT_FRAG_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (22 + 3));
+            strcpy(*nodeType, "DOCUMENT_FRAGMENT_NODE");
+            break;
+
+        case  XML_NOTATION_NODE:
+            *nodeType = (char*) malloc ( sizeof(char)* (13 + 3));
+            strcpy(*nodeType, "NOTATION_NODE");
+            break;
+
+        default:
+            *nodeType = (char*) malloc ( sizeof(char)* (12 + 3));
+            strcpy(*nodeType, "UNKNOWN_NODE");
+            break;
+        }
+
+        error = addToMemoryList(document, (void *) *nodeType);
+    }
+    return error;
+}

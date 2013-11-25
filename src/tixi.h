@@ -1384,6 +1384,33 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
   DLL_EXPORT ReturnCode tixiRemoveElement (const TixiDocumentHandle handle, const char *elementPath);
 
+
+  /**
+    @brief Returns the number of child elements beneath a given path.
+
+    <b>Fortran syntax:</b>
+
+    tixi_get_node_type( integer handle, character*n element_path, integer error )
+
+    @param handle   (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+    @param nodePath (in) an XPath compliant path to an element or node in the document
+                      specified by handle (see section \ref XPathExamples above).
+    @param nodeType (out) String containing the type of the node. The nodes types are named according to
+                      the xml standard, defined on http://www.w3schools.com/dom/dom_nodetype.asp under
+                      the section NodeTypes - Named Constants.
+    @return
+
+     - SUCCESS if the type is obtained
+     - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                               to a list of elements
+  */
+  DLL_EXPORT ReturnCode tixiGetNodeType (const TixiDocumentHandle handle,
+                                         const char *nodePath, char **nodeType);
+
+
 /**
     @brief Returns the number of children elements with the same name.
 
