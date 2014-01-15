@@ -12,7 +12,7 @@ function value = tixiGetChildElementName(handle, path, index)
     end
     
     try 
-        value = tixi_matlab('tixiGetChildElementName',handle, path, index);
+        value = tixi_matlab('tixiGetChildNodeName',handle, path, index);
     catch  err
         error(err.message);
     end

@@ -1817,7 +1817,7 @@ void mex_tixiGetChildNodeName(int nlhs, mxArray *plhs[], int nrhs, const mxArray
     int handle   = -1;
 
     if(nrhs != 4){
-        mexErrMsgTxt("tixiGetChildElementName(handle, path, index): Wrong number of arguments\n");
+        mexErrMsgTxt("tixiGetChildNodeName(handle, path, index): Wrong number of arguments\n");
     }
 
     if(!isscalar(prhs[1])){
