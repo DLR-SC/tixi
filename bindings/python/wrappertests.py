@@ -130,10 +130,6 @@ class Tests(unittest.TestCase):
         t.addDoubleListWithAttributes("/plane", "list", "elem", "attr", [1., 2., 3.], None, ["a", "b", "c"], 3)
         self.assertEquals(t.getTextAttribute("/plane/list/elem[1]", "attr"), "a")
         self.assertEquals(t.getDoubleElement("/plane/list/elem[3]"), 3.0)
-        t.checkElement("/plane/matrix/row/col")
-        t.removeElement("/plane/matrix")
-        self.assertEquals(t.getDoubleElement("/plane/matrix/row[2]/col[2]"), 22.0)
-        self.assertEquals(t.getIntegerElement("/plane/matrix/row[2]/col[1]"), 12)
         t.close()
         
     def test_vector_array(self):
