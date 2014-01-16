@@ -130,14 +130,10 @@ class Tests(unittest.TestCase):
         t.addDoubleListWithAttributes("/plane", "list", "elem", "attr", [1., 2., 3.], None, ["a", "b", "c"], 3)
         self.assertEquals(t.getTextAttribute("/plane/list/elem[1]", "attr"), "a")
         self.assertEquals(t.getDoubleElement("/plane/list/elem[3]"), 3.0)
-        t.createMatrix("/plane", "matrix", "row", "col", 3, 2) # create 3x2 matrix
         t.checkElement("/plane/matrix/row/col")
         t.removeElement("/plane/matrix")
-        t.addFloatMatrix("/plane", "matrix", "row", "col", 2, 2, StorageMode.COLUMN_WISE, [11., 12., 21., 22.], None)
         self.assertEquals(t.getDoubleElement("/plane/matrix/row[2]/col[2]"), 22.0)
         self.assertEquals(t.getIntegerElement("/plane/matrix/row[2]/col[1]"), 12)
-#print t.getFloatMatrix("/plane/matrix", "row", "col", 2, 2, StorageMode.COLUMN_WISE)
-        self.assertEquals(t.getMatrixSize("/plane/matrix", "row", "col"), (2, 2, ))
         t.close()
         
     def test_vector_array(self):
@@ -188,26 +184,6 @@ class Tests(unittest.TestCase):
         t.close()
         t.open(os.path.join("TestData", "uid_duplicated.xml"))
         self.assertRaises(TixiException, t.uIDCheckDuplicates) #UID_NOT_UNIQUE
-        
-    def test_matrix(self):
-        t = Tixi()
-        t.create("root")
-        t.addFloatMatrix('/root','mymatrix', 'row', 'col', 3, 4, 0,  range(12), '%f')
-        
-        # get matrix size
-        sizes = t.getMatrixSize('/root/mymatrix', 'row', 'col')
-        self.assertEqual(sizes, (3,4))
-        
-        # fetch matrix
-        M = t.getFloatMatrix('/root/mymatrix', 'row', 'col', 3, 4, 0)
-        self.assertEquals(M, tuple(range(12)))
-        
-        # test wrong row and column names
-        print 'The following error messages are intended'
-        self.assertRaises(TixiException, t.getFloatMatrix, '/root/mymatrix', 'wrong_rowname', 'col', 3, 3, 0)
-        self.assertRaises(TixiException, t.getFloatMatrix, '/root/mymatrix', 'row', 'wrong_colname', 3, 3, 0)
-        # test wrong array size
-        self.assertRaises(TixiException, t.getFloatMatrix, '/root/mymatrix', 'row', 'col', 1000, 3, 0)
 
     def test_api(self):
         t = Tixi()

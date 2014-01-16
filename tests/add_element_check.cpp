@@ -149,42 +149,6 @@ TEST_F(AddElementTests, addElement_addPoint)
     ASSERT_TRUE( tixiAddPoint( documentHandle, parentPath, x, y, z, NULL ) == SUCCESS );
 }
 
-TEST_F(AddElementTests, addElement_addMatrix)
-{
-    const char* parentPath = "/rootElement";
-    double array[16] = { 1., 2., 3., 4., 5., 6., 7., 8., 9., 10., 11., 12., 13., 14., 15., 16. };
-
-    const char* format = "%10.3f";
-    ASSERT_TRUE(tixiAddFloatMatrix(documentHandle, parentPath, "fourbyfour", "row", "column", 4, 4, ROW_WISE, array, format) == SUCCESS);
-    ASSERT_TRUE(tixiAddFloatMatrix(documentHandle, parentPath, "fourbyfour", NULL, NULL, 3, 3, ROW_WISE, array, format) == SUCCESS);
-    ASSERT_TRUE(tixiAddFloatMatrix(documentHandle, parentPath, "fourbyfourCol", "row", "column", 4, 4, COLUMN_WISE, array, "%5.1f") == SUCCESS);
-    ASSERT_TRUE(tixiAddFloatMatrix(documentHandle, parentPath, "fourby fourCol", "row", "column", 4, 4, COLUMN_WISE, array, "%5.1f") == INVALID_XML_NAME);
-}
-
-TEST_F(AddElementTests, addElement_addMatrixOfPoints)
-{
-    const char* parentPath = "/rootElement";
-    int i;
-    int nPoints = 10;
-    int nRows = nPoints;
-    int nColumns = 1;
-    char entryPath[50];
-    size_t insertPosition = -1;
-
-    strcpy(entryPath, "/rootElement/matrixOfPoints/r[");
-    insertPosition = strlen(entryPath);
-
-    ASSERT_TRUE(tixiCreateMatrix(documentHandle, parentPath, "matrixOfPoints", NULL, NULL, nRows, nColumns) == SUCCESS);
-
-    for (i = 0; i < nPoints; i++) {
-        double x = i;
-        double y = 2. * i;
-        double z = 3. * i;
-
-        sprintf(&(entryPath[insertPosition]), "%02d]/c[1]", i + 1);
-        ASSERT_TRUE(tixiAddPoint(documentHandle, entryPath, x, y, z, NULL) == SUCCESS);
-    }
-}
 
 TEST_F(AddElementTests, addElement_addTextElementAtIndex)
 {

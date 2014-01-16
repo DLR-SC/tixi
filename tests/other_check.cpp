@@ -60,7 +60,7 @@ TEST_F(OtherTests, childCount_hasNoChild)
 
 TEST_F(OtherTests, childCound_invalidHandle){
     int count = 0;
-    ASSERT_EQ(INVALID_HANDLE, tixiGetNamedChildrenCount(-.1, "/plane", "wings", &count));
+    ASSERT_EQ(INVALID_HANDLE, tixiGetNamedChildrenCount(-1, "/plane", "wings", &count));
 }
 
 TEST_F(OtherTests, childCound_invalidParent){
@@ -144,35 +144,6 @@ TEST_F(OtherTests, addExternalLink_withoutAttribute)
     ASSERT_TRUE( tixiAddExternalLink( outDocumentHandle, parentPath, "TestData/externalFile2", NULL ) == SUCCESS );
 }
 
-TEST_F(OtherTests, getMatrixSize)
-{
-    const char* matrixPath = "/plane/myMatrix";
-    const char* rowName = "blub";
-    const char* columnName = "bla";
-    int nRows = -1;
-    int nColumns = -1;
-    const char* pathInvalidMatrix1 = "/plane/invalidMatrix1";
-    const char* pathInvalidMatrix2 = "/plane/invalidMatrix2";
-
-    ASSERT_TRUE(tixiGetMatrixSize(inDocumentHandle, matrixPath, rowName, columnName, &nRows, &nColumns) == SUCCESS);
-    ASSERT_TRUE(nRows == 2 && nColumns == 2);
-    ASSERT_TRUE(tixiGetMatrixSize(inDocumentHandle, matrixPath, "gargel", columnName, &nRows, &nColumns) == NON_MATCHING_NAME);
-    ASSERT_TRUE(tixiGetMatrixSize(inDocumentHandle, matrixPath, rowName, "gargel", &nRows, &nColumns) == NON_MATCHING_NAME);
-    ASSERT_TRUE(tixiGetMatrixSize(inDocumentHandle, pathInvalidMatrix1, rowName, columnName, &nRows, &nColumns) == NON_MATCHING_NAME);
-    ASSERT_TRUE(tixiGetMatrixSize(inDocumentHandle, pathInvalidMatrix2, rowName, columnName, &nRows, &nColumns) == NON_MATCHING_SIZE);
-}
-
-TEST_F(OtherTests, createMatrix)
-{
-    const char* parentPath = "/root";
-
-    ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourbyfour", "row", "column", 4, 4) == SUCCESS);
-    ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourbyfour", "row", "column", 4, 0) == MATRIX_DIMENSION_ERROR);
-    ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourbyfour", "row", "column", 0, 1) == MATRIX_DIMENSION_ERROR);
-    ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "threebyone", NULL, NULL, 3, 1) == SUCCESS);
-    ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "onebyfour", "row", "column", 1, 4) == SUCCESS);
-    ASSERT_TRUE(tixiCreateMatrix(outDocumentHandle, parentPath, "fourby fourCol", "row", "column", 4, 4) == INVALID_XML_NAME);
-}
 
 TEST_F(OtherTests, usePrettyPrint) {
     ASSERT_EQ(SUCCESS, tixiUsePrettyPrint(inDocumentHandle, 0));

@@ -176,48 +176,6 @@ TEST_F(GetElementTests, getPointElement)
 }
 
 
-TEST_F(GetElementTests, getMatrixElement) {
-    const char* matrixPath = "/plane/myMatrix";
-    const char* rowName = "blub";
-    const char* columnName = "bla";
-    int nRows = 2;
-    int nColumns = 2;
-    double array22[2][2];
-    const char* pathInvalidMatrix1 = "/plane/invalidMatrix1";
-    const char* pathInvalidMatrix2 = "/plane/invalidMatrix2";
-
-    ASSERT_TRUE( tixiGetFloatMatrix( documentHandle, matrixPath, rowName, columnName, nRows, nColumns, ROW_WISE, (double*) array22 ) == SUCCESS);
-
-    ASSERT_TRUE( array22[0][0] == 11. && array22[0][1] == 12. && array22[1][0] == 21. && array22[1][1] == 22.);
-
-    ASSERT_TRUE( tixiGetFloatMatrix( documentHandle, matrixPath, rowName, columnName, nRows, nColumns, COLUMN_WISE, (double*) array22 ) == SUCCESS);
-
-    ASSERT_TRUE( array22[0][0] == 11. && array22[0][1] == 21. && array22[1][0] == 12. && array22[1][1] == 22.);
-
-    ASSERT_TRUE(
-            tixiGetFloatMatrix( documentHandle, matrixPath, rowName, columnName, nRows, 3, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_SIZE);
-
-    ASSERT_TRUE(
-            tixiGetFloatMatrix( documentHandle, matrixPath, rowName, columnName, nRows, 1, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_SIZE);
-    ASSERT_TRUE(
-            tixiGetFloatMatrix( documentHandle, matrixPath, rowName, columnName, 1, nColumns, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_SIZE);
-
-    ASSERT_TRUE( tixiGetFloatMatrix( documentHandle, matrixPath, rowName, columnName, 3, 1, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_SIZE);
-
-    ASSERT_TRUE(
-            tixiGetFloatMatrix( documentHandle, matrixPath, "gargel", columnName, nRows, nColumns, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_NAME);
-
-    ASSERT_TRUE(
-            tixiGetFloatMatrix( documentHandle, matrixPath, rowName, "gargel", nRows, nColumns, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_NAME);
-
-    ASSERT_TRUE(
-            tixiGetFloatMatrix( documentHandle, pathInvalidMatrix1, rowName, columnName, nRows, nColumns, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_NAME);
-
-    ASSERT_TRUE(
-            tixiGetFloatMatrix( documentHandle, pathInvalidMatrix2, rowName, columnName, nRows, nColumns, COLUMN_WISE, (double*) array22 ) == NON_MATCHING_SIZE);
-}
-
-
 TEST_F(GetElementTests, getMatrixOfPoints)
 {
     int i;

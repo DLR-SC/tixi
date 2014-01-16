@@ -95,10 +95,6 @@
 #define tixiAddExternalLink_f TIXI_ADD_EXTERNAL_LINK
 #define tixiAddPoint_f TIXI_ADD_POINT
 #define tixiGetPoint_f TIXI_GET_POINT
-#define tixiCreateMatrix_f TIXI_CREATE_MATRIX
-#define tixiAddFloatMatrix_f TIXI_ADD_FLOAT_MATRIX
-#define tixiGetFloatMatrix_f TIXI_GET_FLOAT_MATRIX
-#define tixiGetMatrixSize_f TIXI_GET_MATRIX_SIZE
 #define tixiCheckElement_f TIXI_CHECK_ELEMENT
 #define tixiCheckDocumentHandle_f TIXI_CHECK_DOCUMENT_HANDLE
 #define tixiAddFloatVector_f TIXI_ADD_FLOAT_VECTOR
@@ -173,10 +169,6 @@
 #define tixiAddExternalLink_f FORTRAN_NAME(tixi_add_external_link)
 #define tixiAddPoint_f FORTRAN_NAME(tixi_add_point)
 #define tixiGetPoint_f FORTRAN_NAME(tixi_get_point)
-#define tixiCreateMatrix_f FORTRAN_NAME(tixi_create_matrix)
-#define tixiAddFloatMatrix_f FORTRAN_NAME(tixi_add_float_matrix)
-#define tixiGetFloatMatrix_f FORTRAN_NAME(tixi_get_float_matrix)
-#define tixiGetMatrixSize_f FORTRAN_NAME(tixi_get_matrix_size)
 #define tixiCheckElement_f FORTRAN_NAME(tixi_check_element)
 #define tixiCheckDocumentHandle_f FORTRAN_NAME(tixi_check_document_handle)
 #define tixiAddFloatVector_f FORTRAN_NAME(tixi_add_float_vector)
