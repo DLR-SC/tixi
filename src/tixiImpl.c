@@ -1327,7 +1327,7 @@ DLL_EXPORT ReturnCode tixiAddIntegerAttribute(const TixiDocumentHandle handle,
 }
 
 
-DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, double *vector, const int numElements)
+DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const double *vector, const int numElements)
 {
     ReturnCode error;
     char *stringVector = NULL;
@@ -1578,7 +1578,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
                                            const char *parentPath, const char *listName,
                                            const char *childName,
                                            const char *attributeName,
-                                           double *values, const char *format,
+                                           const double *values, const char *format,
                                            const char **attributes, int nValues)
 {
   ReturnCode error = -1;
@@ -1976,7 +1976,7 @@ DLL_EXPORT ReturnCode tixiCreateMatrix(const TixiDocumentHandle handle, const ch
 DLL_EXPORT ReturnCode tixiAddFloatMatrix(const TixiDocumentHandle handle, const char *parentPath,
                               const char *matrixName, const char *rowName,
                               const char *columnName, int nRows, int nColumns,
-                              StorageMode mode, double *array, const char *format)
+                              StorageMode mode, const double *array, const char *format)
 {
   ReturnCode error = -1;
   TixiDocument *document = getDocument(handle);

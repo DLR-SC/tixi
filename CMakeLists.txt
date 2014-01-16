@@ -65,6 +65,11 @@ configure_file(contrib/tixi-config-version.cmake.in
 configure_file(contrib/tixi-config.cmake.in 
     "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config.cmake" @ONLY)
 
+configure_file(contrib/tixi-config-version.cmake.in 
+    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config-version.cmake" @ONLY)
+configure_file(contrib/tixi-config.cmake.in 
+    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config.cmake" @ONLY)
+
 #create tixi library
 add_subdirectory(src)
 

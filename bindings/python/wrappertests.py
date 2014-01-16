@@ -21,9 +21,8 @@
 #############################################################################
 
 import os
-import sys
 import unittest
-from tixiwrapper import *
+from tixiwrapper import Tixi, TixiException, StorageMode
 
 class Tests(unittest.TestCase):
     ''' Test almost all TIXI functions to ensure correct generated code '''
@@ -149,6 +148,18 @@ class Tests(unittest.TestCase):
         #print v[0], v[1], v[-1]
         #1 2 118
         t.close()
+
+        # manual creation of vector
+        t.create('doc')
+        t.addFloatVector('/doc', 'myvec', range(100,130), 30)
+        
+        size = t.getVectorSize('/doc/myvec')  
+        self.assertEquals(size, 30)
+        v = t.getFloatVector('/doc/myvec', 30)
+        self.assertEquals(v, tuple(range(100,130)))
+        
+        t.close()
+        
         t.open(os.path.join("TestData", "arraytests.xml"))
         self.assertEquals(t.getArrayDimensions("/root/aeroPerformanceMap"), 4)
         self.assertEquals(t.getArrayDimensionSizes("/root/aeroPerformanceMap", 4), ((1, 2, 3, 8), 48))
@@ -177,10 +188,30 @@ class Tests(unittest.TestCase):
         t.close()
         t.open(os.path.join("TestData", "uid_duplicated.xml"))
         self.assertRaises(TixiException, t.uIDCheckDuplicates) #UID_NOT_UNIQUE
+        
+    def test_matrix(self):
+        t = Tixi()
+        t.create("root")
+        t.addFloatMatrix('/root','mymatrix', 'row', 'col', 3, 4, 0,  range(12), '%f')
+        
+        # get matrix size
+        sizes = t.getMatrixSize('/root/mymatrix', 'row', 'col')
+        self.assertEqual(sizes, (3,4))
+        
+        # fetch matrix
+        M = t.getFloatMatrix('/root/mymatrix', 'row', 'col', 3, 4, 0)
+        self.assertEquals(M, tuple(range(12)))
+        
+        # test wrong row and column names
+        print 'The following error messages are intended'
+        self.assertRaises(TixiException, t.getFloatMatrix, '/root/mymatrix', 'wrong_rowname', 'col', 3, 3, 0)
+        self.assertRaises(TixiException, t.getFloatMatrix, '/root/mymatrix', 'row', 'wrong_colname', 3, 3, 0)
+        # test wrong array size
+        self.assertRaises(TixiException, t.getFloatMatrix, '/root/mymatrix', 'row', 'col', 1000, 3, 0)
 
     def test_api(self):
         t = Tixi()
-        print "Tixi Version: ",t.version
+        self.assertEquals(t.version, t.getVersion())
         t.create("root")
         t.addDoubleElement("/root","myDouble",3.2,0)
         t.addIntegerElement("/root","myInteger",6,None)
