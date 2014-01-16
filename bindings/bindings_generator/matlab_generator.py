@@ -30,6 +30,9 @@ class MatlabGenerator(object):
         inargs = [arg for arg in fun_dec.arguments if not arg.is_outarg]
         inargs = [arg for arg in inargs if not arg.is_sizearg or fun_dec.arguments[arg.size_ref].is_outarg]
         
+        if not fun_dec.returns_error and fun_dec.return_value.type != 'void':
+            outargs.insert(0, fun_dec.return_value)
+        
         outarrays = [arg for arg in fun_dec.arguments if arg.is_outarg and arg.arrayinfos['is_array']]
         outstr = ''
         if len(outargs) > 1:
@@ -43,19 +46,20 @@ class MatlabGenerator(object):
         string += outstr + fun_dec.method_name + '('
         
         instr = ''
+
         for arg in inargs:
-            instr += arg.name + ', '
+            instr += ', ' + arg.name
             
         count = 0
         for arg in outarrays:
             if len(arg.arrayinfos['arraysizes']) == 0:
-                instr += '_' + arg.name + '_size , '
+                instr += ', _' + arg.name + '_size'
                 count += 1
         
-        if len(inargs) + count > 0:
-            instr = instr[0:-2]
-        
-        string += instr + ')\n'
+        if len(instr) > 0:
+            string += instr[2:]
+            
+        string += ')\n'
         
         indent = ' '*4
         string += indent \
@@ -72,7 +76,7 @@ class MatlabGenerator(object):
                 
         # call the mex interface
         string += indent + 'try\n'
-        string += 2*indent + outstr + self.prefix + '_matlab(\'%s\', %s);\n' \
+        string += 2*indent + outstr + self.prefix + '_matlab(\'%s\'%s);\n' \
                 % (name, instr)
         indent = ' '*4
         string += indent + 'catch err\n'
@@ -89,27 +93,29 @@ class MatlabGenerator(object):
             if arg.is_string and arg.npointer <= 2:
                 string = 'plhs[%d] = mxCreateString(%s);\n' % (index, arg.name)
             elif arg.type == 'double' and arg.npointer <= 1:
-                string = 'plhs[%d] = mxCreateDoubleMatrix(1,1, mxREAL);\n' \
+                string = 'plhs[%d] = mxCreateDoubleMatrix(1, 1, mxREAL);\n' \
                     % index
                 string +='*mxGetPr(plhs[%d]) = %s;\n' % (index, arg.name)
             elif arg.type == 'int' and arg.npointer == 1:
-                string = 'plhs[%d] = mxCreateDoubleMatrix(1,1, mxREAL);\n' \
+                string = 'plhs[%d] = mxCreateDoubleMatrix(1, 1, mxREAL);\n' \
                     % index
                 string +='*mxGetPr(plhs[%d]) = (double)%s;\n' % (index, arg.name)
             else:
                 #pass
                 print arg.name, arg.type
-                raise Exception('Conversion from "%s" to mx not yet implemented' \
-                    % (arg.name + '*'*arg.npointer))    
+                raise Exception('Conversion from "%s, %s" to mx not yet implemented' \
+                    % (arg.type + '*'*arg.npointer, arg.name))    
         else:
             if arg.type == 'double':
                 string += 'plhs[%d] = dArrayToMx(%s, _%s_size);\n' % (index, arg.name, arg.name)
             elif arg.type == 'int':
-                string += 'plhs[%d] = iArrayToMx(%s, _%s_size);\n' % (index, arg.name, arg.name)                
+                string += 'plhs[%d] = iArrayToMx(%s, _%s_size);\n' % (index, arg.name, arg.name) 
+            elif arg.is_string:
+                string += 'plhs[%d] = mxCreateCharMatrixFromStrings(_%s_size, %s);\n' % (index, arg.name, arg.name)
             else:
-                pass
-                #raise Exception('Conversion from "%s, %s" to mx not yet implemented' \
-                #% (arg.type + '*'*arg.npointer, arg.name))
+                #pass
+                raise Exception('Conversion from "%s, %s" to mx not yet implemented' \
+                    % (arg.type + '*'*arg.npointer, arg.name))
                 
         return string
         
@@ -125,6 +131,37 @@ class MatlabGenerator(object):
                 
         return string
         
+    def create_mex_array_malloced_sizes(self, func):
+        string = ''
+        outarrays = [arg for arg in func.arguments if arg.is_outarg and \
+            arg.arrayinfos['is_array'] and not arg.arrayinfos['autoalloc']]
+        for arg in outarrays:   
+            if len(arg.arrayinfos['arraysizes']) > 0:
+                sizestr = '_%s_size = 1' % arg.name
+                for sizeindex in arg.arrayinfos['arraysizes']:
+                    sizestr += ' * ' + func.arguments[sizeindex].name
+                sizestr += ';\n'
+                string += 4*' ' + sizestr
+                
+        return string
+        
+        
+    def create_mex_array_auto_sizes(self, func):
+        string = ''
+        outarrays = [arg for arg in func.arguments if arg.is_outarg and \
+            arg.arrayinfos['is_array'] and arg.arrayinfos['autoalloc']]
+        # calc output array sizes
+        for arg in outarrays:
+            if len(arg.arrayinfos['arraysizes']) > 0:
+                sizestr = '_%s_size = 1' % arg.name
+                for sizeindex in arg.arrayinfos['arraysizes']:
+                    sizestr += ' * ' + func.arguments[sizeindex].name
+                sizestr += ';\n'
+                string += 4*' ' + sizestr
+                
+        return string
+        
+        
     def create_mex_allocs(self, func):
         string = ''
         outarrays = [arg for arg in func.arguments if arg.is_outarg and \
@@ -137,7 +174,7 @@ class MatlabGenerator(object):
         
     
     def create_mex_function(self, func):
-        string = 'void mex_%s %s {\n' % (func.method_name, self.mex_body)
+        string = 'void mex_%s%s {\n' % (func.method_name, self.mex_body)
         #declare variables
         inargs = [arg for arg in func.arguments if not arg.is_outarg]
         inargs_wo_sizes = [arg for arg in inargs if not arg.is_sizearg or func.arguments[arg.size_ref].is_outarg]
@@ -156,9 +193,9 @@ class MatlabGenerator(object):
             for arg in outargs:
                 assert(arg.npointer > 0)
                 if arg.arrayinfos['is_array'] and not arg.arrayinfos['autoalloc']:
-                    string += 4*' ' + arg.rawtype + '*'*(arg.npointer) + ' ' + arg.name + ' = NULL'
+                    string += 4*' ' + arg.rawtype + '*'*(arg.raw_npointer) + ' ' + arg.name + ' = NULL'
                 else:
-                    string += 4*' ' + arg.rawtype + '*'*(arg.npointer-1) + ' ' + arg.name
+                    string += 4*' ' + arg.rawtype + '*'*(arg.raw_npointer-1) + ' ' + arg.name
                     if arg.npointer > 1:
                         string += ' = NULL'
                 string += ';\n'
@@ -178,7 +215,7 @@ class MatlabGenerator(object):
             
         if func.return_value.rawtype != 'void':
             string += 4*' '  + func.return_value.rawtype \
-                + '*'*func.return_value.npointer + ' ' + func.return_value.name
+                + '*'*func.return_value.raw_npointer + ' ' + func.return_value.name
             if func.return_value.npointer > 0:
                 string += ' = NULL'
             string += ';\n\n'
@@ -200,7 +237,7 @@ class MatlabGenerator(object):
         
         #check correct number in inargs
         string += 4*' ' + '/* check for corect number of in and out args */\n'
-        string += 4*' ' + 'if(nrhs != %d)\n' % (len(inargs_wo_sizes) + 1 + add_arg_count)
+        string += 4*' ' + 'if (nrhs != %d)\n' % (len(inargs_wo_sizes) + 1 + add_arg_count)
         
         string += 4*' ' + '    mexErrMsgTxt("%s: Wrong number of arguments\\n");\n' % pseudocall
         
@@ -209,7 +246,7 @@ class MatlabGenerator(object):
         if not func.returns_error and func.return_value.type != 'void':
             noutargs += 1
             
-        string += 4*' ' + 'if(nlhs != %d) \n' % (noutargs)
+        string += 4*' ' + 'if (nlhs != %d)\n' % (noutargs)
         string += 4*' ' + '    mexErrMsgTxt("%s: Wrong number of output values. \
 This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
 
@@ -219,13 +256,13 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
         for index,arg in enumerate(inargs_wo_sizes):
             if not arg.arrayinfos['is_array']:
                 if arg.type == 'int' or arg.type == 'double':
-                    string += 4*' ' + 'if(!isscalar(prhs[%s])){\n' \
+                    string += 4*' ' + 'if (!isscalar(prhs[%s])) {\n' \
                         % (index + 1)
                     string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must not be an array.\\n");\n' \
                         % (arg.name)
                     string += 4*' ' + '}\n\n'
                 elif arg.is_string:
-                    string += 4*' ' + 'if(!mxIsChar(prhs[%s])){\n' \
+                    string += 4*' ' + 'if (!mxIsChar(prhs[%s])) {\n' \
                         % (index + 1)
                     string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must be a string.\\n");\n' \
                         % (arg.name)
@@ -236,7 +273,7 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
         ninargs = len(inargs)
         for arg in outarrays:
             if len(arg.arrayinfos['arraysizes']) == 0:
-                string += 4*' ' + 'if(!isscalar(prhs[%s])){\n' \
+                string += 4*' ' + 'if (!isscalar(prhs[%s])) {\n' \
                         % (count + ninargs + 1)
                 string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must not be an array.\\n");\n' \
                         % ('_' + arg.name + '_size')
@@ -279,7 +316,8 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
         string += '\n'
         
         # manual allocation if necessary
-        string += self.create_mex_allocs(func)        
+        string += self.create_mex_array_malloced_sizes(func)
+        string += self.create_mex_allocs(func)    
         
         # function call
         string += 4*' '
@@ -297,18 +335,15 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
             string = string[0:-2]
         
         string += ');\n'
+        # validate return value
+        if func.returns_error:
+            string += 4*' ' + 'handleError("%s", %s);\n' % (func.method_name, func.return_value.name)
+        
             
         string += '\n'
         
-        # calc output array sizes
-        for arg in outarrays:
-            if len(arg.arrayinfos['arraysizes']) > 0:
-                sizestr = '_%s_size = 1' % arg.name
-                for sizeindex in arg.arrayinfos['arraysizes']:
-                    sizestr += ' * ' + func.arguments[sizeindex].name
-                sizestr += ';\n'
-                string += 4*' ' + sizestr
-        
+        string += self.create_mex_array_auto_sizes(func)
+                
         # output arg conversion      
         retargs = outargs
         if not func.returns_error and func.return_value.type != 'void':
@@ -338,11 +373,11 @@ extern "C" {
         
         string += '''
     char * functionName = NULL;
-    if(nrhs < 1){
+    if (nrhs < 1) {
         mexErrMsgTxt("No function argument given!");
         return;
     }
-    
+
     mxToString(prhs[0],&functionName);
 
 ''' 
@@ -351,15 +386,14 @@ extern "C" {
         for index, func in enumerate(defs):
             if index > 0:
                 call += 'else '
-            call += 'if(strcmp(functionName, "%s") == 0) {\n' % func.method_name
+            call += 'if (strcmp(functionName, "%s") == 0)\n' % func.method_name
             call += '    mex_%s(nlhs, plhs, nrhs, prhs);\n' % func.method_name
-            call += '}\n'
         
         call += '''else {
     // this is only executed if the function could not be identified
     char text[255];
 '''
-        call += '    snprintf(text, 250, "%%s is not a valid %s function!\\n",functionName);\n' % self.prefix
+        call += '    snprintf(text, 250, "%%s is not a valid %s function!\\n", functionName);\n' % self.prefix
         call += '''    mxFree(functionName);
     mexErrMsgTxt(text);
 }
@@ -377,7 +411,27 @@ mxFree(functionName);
 
 '''   
         return string
+       
+    def create_mex_error_handler(self):
+        string = ''
+        mycodename = self.cparser.returncode_str if self.cparser.returncode_str != "" else 'int'
         
+        string += 'void handleError(const char * funcname, %s code) {\n' % (mycodename)
+     
+        if self.cparser.returncode_str in self.cparser.enums:
+            successcode = '%s' % (self.cparser.enums[self.cparser.returncode_str][0])
+        else:
+            successcode = '0'
+
+        string += '    if (code != %s){\n' % successcode
+        string += '        char errormsg[1024];\n'
+        string += '        sprintf(errormsg, "Error: \\"%s\\" returned code %d", funcname, code);\n'
+        string += '        mexErrMsgTxt(errormsg);\n'
+        string += '    }\n'
+        string += '}'
+
+              
+        return string
         
     def create_cmex_file(self):
         '''creates the .c file, which then is compiled to the matlab mex library'''        
@@ -392,13 +446,15 @@ mxFree(functionName);
         fop.close()
         
         string += '#include <%s>\n\n' % self.libinclude
+        string += self.create_mex_error_handler() + '\n\n'
         
         defs = (fun for fun in self.cparser.declarations if fun.method_name not in self.blacklist)
         for function in defs:
             string += self.create_mex_function(function)
         
         string += self.create_mex_dispatcher()
-        fop = open('tiximatlab.c', 'w')
+        filename = self.prefix + 'matlab.c'
+        fop = open(filename, 'w')
         fop.write(string)
         fop.close()
         

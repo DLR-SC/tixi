@@ -25,16 +25,13 @@ if(PYTHON_EXECUTABLE)
 endif(PYTHON_EXECUTABLE)
 
 if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
-	
-	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/make-wrapper.py.in ${CMAKE_CURRENT_BINARY_DIR}/make-wrapper.py)
-	
 	#run python to create the wrapper
 		add_custom_command(
 			OUTPUT ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
-			DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/make-wrapper.py
+			DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_python.py ${PROJECT_SOURCE_DIR}/src/tixi.h
 			WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 			COMMAND ${PYTHON_EXECUTABLE}
-			ARGS ${CMAKE_CURRENT_BINARY_DIR}/make-wrapper.py
+			ARGS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_python.py
 		)
 
 		add_custom_target(tixiPython ALL
