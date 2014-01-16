@@ -947,12 +947,6 @@ DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle,
 DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle, const char *elementPath, int boolean)
 {
     TixiDocument *document = getDocument(handle);
-    xmlDocPtr xmlDocument = NULL;
-    xmlXPathObjectPtr xpathObject = NULL;
-    xmlNodePtr element = NULL;
-    xmlNodePtr newElement = NULL;
-    ReturnCode error = SUCCESS;
-    char *textBuffer = NULL;
 
     if (!document) {
         fprintf(stderr, "Error: Invalid document handle.\n");
@@ -3276,8 +3270,8 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
         }
         else {
             // get name
-            *text = (char *) malloc((strlen(child->name) + 3) * sizeof(char));
-            strcpy(*text,  child->name);
+            *text = (char *) malloc((strlen((char*)child->name) + 3) * sizeof(char));
+            strcpy(*text,  (char*) child->name);
         }
         error = addToMemoryList(document, (void *) *text);
     }
@@ -3379,8 +3373,8 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
     }
     
     // get name
-    *attrName = (char *) malloc((strlen(attr->name) + 3) * sizeof(char));
-    strcpy(*attrName,  attr->name);
+    *attrName = (char *) malloc((strlen((char*)attr->name) + 3) * sizeof(char));
+    strcpy(*attrName,  (char*)attr->name);
     error = addToMemoryList(document, (void *) *attrName);
   }
 

@@ -818,7 +818,7 @@ void tixiAddDoubleListWithAttributes_f(const TixiDocumentHandle *handle,
 
   *error = tixiAddDoubleListWithAttributes(*handle, cParentPath, cListName, cChildName,
                                            cChildAttributeName, values, cFormat,
-                                           (char **) attributeList, *nValues);
+                                           (const char **) attributeList, *nValues);
 
   free(cParentPath);
   free(cListName);

@@ -214,7 +214,10 @@ void readIBUCKInput(char *filename)
   Frame aFrame;
   
   ReturnCode ret = tixiOpenDocument(filename, &handle);
-  assert(ret == SUCCESS);
+  if (ret != SUCCESS) {
+      fprintf(stderr, "Error: Cannot open document %s\n", filename);
+      return;
+  }
   
   /* get panel data */
 
@@ -311,7 +314,7 @@ void outputIBUCKResult(char *outputFilename)
 
   tixiAddDoubleListWithAttributes(handle, "/toolOutput/outputData",
                                   "eigenvals", "eigenval", "type",
-                                  eigenvalues, "%g", types, N_EIGENVALUES);
+                                  eigenvalues, "%g", (const char**) types, N_EIGENVALUES);
 
   /* Append additional eigenvalue to the list. */
 

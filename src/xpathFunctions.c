@@ -131,7 +131,6 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
     xmlXPathObjectPtr xpathObject;
     xmlNodeSetPtr nodes = NULL;
     xmlNodePtr cur;
-    char* text = NULL;
     int size = 0;
 
     /* Load XML document */
@@ -163,9 +162,10 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
     cur = nodes->nodeTab[--index];
 
     if (cur->type == XML_ELEMENT_NODE) {
-        return cur->name;
+        return (char*)cur->name;
     } else if (cur->type == XML_ATTRIBUTE_NODE) {
         return NULL;
     }
+    return NULL;
 }
 
