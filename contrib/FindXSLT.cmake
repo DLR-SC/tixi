@@ -28,7 +28,8 @@ MARK_AS_ADVANCED(XSLT_INCLUDE_DIR)
 FIND_LIBRARY(XSLT_LIBRARY NAMES 
     xslt
   # Windows MSVC prebuilts:
-	libxslt
+    libxslt_a
+    libxslt
 )
 MARK_AS_ADVANCED(XSLT_LIBRARY)
 

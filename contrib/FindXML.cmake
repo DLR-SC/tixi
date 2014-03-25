@@ -31,7 +31,8 @@ MARK_AS_ADVANCED(XML_INCLUDE_DIR)
 FIND_LIBRARY(XML_LIBRARY NAMES 
     xml2
   # Windows MSVC prebuilts:
-	libxml2
+    libxml2_a
+    libxml2
 )
 MARK_AS_ADVANCED(XML_LIBRARY)
 
