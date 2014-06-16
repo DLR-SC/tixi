@@ -2663,8 +2663,11 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
         int pos = 1;
         
         while(child && pos < index){
+            // Ignore DTD nodes
+            if (child->type != XML_DTD_NODE) {
+                pos++;
+            }
             child = child->next;
-            pos++;
         }
         
         if(pos != index || !child){
@@ -2716,8 +2719,11 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
     xmlNodePtr children = element->children;
     *nChilds = 0;
     while(children){
+        // Ignore DTD nodes, we don't select them with xpath
+        if (children->type != XML_DTD_NODE) {
+            (*nChilds)++;
+        }
         children = children->next;
-        (*nChilds)++;
     }
   }
 
