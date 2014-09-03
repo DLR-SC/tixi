@@ -1413,8 +1413,6 @@ DLL_EXPORT ReturnCode tixiRemoveElement(const TixiDocumentHandle handle, const c
 
   retVal = getNodePtrFromElementPath(handle, elementPath, &parent);
 
-  printf("retVal = %d", retVal);
-
   if(parent != NULL) {
     xmlUnlinkNode(parent);
     xmlFreeNode(parent);
