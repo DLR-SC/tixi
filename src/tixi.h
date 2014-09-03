@@ -1295,6 +1295,42 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
 
     /**
+    @brief Updates the data of a vector element.
+  
+  
+    <b>Fortran syntax:</b>
+  
+    tixi_update_float_vector( integer handle, character*n path, real array, integer numElements, integer error )
+  
+    #annotate in: 2A(3)#
+    
+    @param handle (in) file handle as returned by ::tixiCreateDocument
+  
+    @param path   (in) an XPath compliant path to an element in the document
+                           specified by handle (see section \ref XPathExamples above).
+  
+    @param vector (in) The new Vector data replacing the old data at path. If
+                        Vector is NULL an empty element will be created.
+  
+    @param numElements (in) the Number of vector-elements to be inserted in the new element.
+    
+    @param format (in) format used to convert number into a string. If format is
+                        NULL "%g" will be used to format the string.
+  
+    @return
+        - SUCCESS if successfully added the text element
+        - FAILED for internal errors
+        - INVALID_XML_NAME if elementName is not a valid XML-element name
+        - INVALID_HANDLE if the handle is not valid
+        - INVALID_XPATH if path is not a well-formed XPath-expression
+        - ELEMENT_PATH_NOT_UNIQUE if path resolves not to a single element but to a list of elements
+        - ELEMENT_NOT_FOUND if path points to a non-existing element
+        - ALREADY_SAVED if element should be added to an already saved document
+    */
+    DLL_EXPORT ReturnCode tixiUpdateFloatVector (const TixiDocumentHandle handle, const char *path, const double *vector, const int numElements, const char* format);
+
+
+    /**
     @brief Creates an empty element.
 
     Creates an empty element specified by the elementPath expression

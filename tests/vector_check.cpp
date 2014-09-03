@@ -62,7 +62,7 @@ TEST_F(VectorTests, tixiVectorGetTests)
     // check values returned
     count = 10;
     ASSERT_TRUE ( tixiGetFloatVector(documentHandleGet, "/a/aeroPerformanceMap/cfx", &allPoints, count) == SUCCESS );
-    ASSERT_TRUE ( allPoints[0] == 1.0 ); printf("\n\n==>%f\n\n", allPoints[0]);
+    ASSERT_TRUE ( allPoints[0] == 1.0 );
     ASSERT_TRUE ( allPoints[7] == 8.0 );
 }
 
@@ -83,4 +83,29 @@ TEST_F(VectorTests, tixiVectorAddTests)
     ASSERT_TRUE ( tixiGetFloatVector(tmpHandle, "/a/test", &newPoints, count) == SUCCESS );
     ASSERT_TRUE ( (newPoints[0] == 1) && (newPoints[1] == 4) && (newPoints[2] == 5.8) );
     ASSERT_TRUE ( tixiCloseDocument( tmpHandle ) == SUCCESS );
+}
+
+TEST_F(VectorTests, tixiUpdateVectorTests)
+{
+    int count = 0;
+    double points[10] = {1, 4, 5.8, 77.0, 5, 6, 7, 8, 9, 10};
+    double pointsUpdated[10] = {2, 8, 11.6, 154.0, 10, 12, 14, 16, 18, 20};
+    double *newPoints = NULL;
+    count = 3;
+
+    // write parts of the array to an intermediate file
+    ASSERT_TRUE ( tixiAddFloatVector(documentHandleAdd, "/a", "test", points, count, "%g") == SUCCESS );
+    
+    ASSERT_TRUE ( tixiUpdateFloatVector(documentHandleAdd, "/a/test", pointsUpdated, count, "%f") == SUCCESS);
+    
+    // check result
+    ASSERT_TRUE ( tixiGetFloatVector(documentHandleAdd, "/a/test", &newPoints, count) == SUCCESS );
+    ASSERT_NEAR (2., newPoints[0], 1e-10);
+    ASSERT_NEAR (8., newPoints[1], 1e-10);
+    ASSERT_NEAR (11.6, newPoints[2], 1e-10);
+    
+    // check invalid input data
+    ASSERT_TRUE ( tixiUpdateFloatVector(documentHandleAdd, "/a/test_not_there", pointsUpdated, count, "%f") == ELEMENT_NOT_FOUND);
+    ASSERT_TRUE ( tixiUpdateFloatVector(-1, "/a/test", pointsUpdated, count, "%f") == INVALID_HANDLE );
+    ASSERT_TRUE ( tixiUpdateFloatVector(documentHandleAdd, "/a/test", pointsUpdated, 0, "%f") == FAILED );
 }

@@ -864,7 +864,7 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
             xmlAddChild(element, newElement);
         return SUCCESS;
     }
-    return FAILED;
+    return error;
 }
 
 
@@ -1388,6 +1388,51 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
 
     return SUCCESS;
 }
+
+DLL_EXPORT ReturnCode tixiUpdateFloatVector (const TixiDocumentHandle handle, const char *path, const double *vector, const int numElements, const char* format)
+{
+    ReturnCode error;
+    char *stringVector = NULL;
+    char *textBuffer = NULL;
+    int i;
+    int stringSize = 0;
+
+    if(numElements < 1) {
+        return FAILED;
+    }
+    
+    if (!format) {
+      format = "%g";
+    };
+
+    /* calculate the size of the resulting string */
+    for(i=0; i<numElements; i++) {
+        textBuffer = buildString(format, vector[i]);
+        stringSize += (int) strlen(textBuffer);
+        free(textBuffer);
+    }
+
+    /* allocate memory */
+    stringVector = (char *) malloc(sizeof(char) * (stringSize + numElements + 1));
+
+    /* copy strings to stringVector */
+    stringVector[0] = '\0';
+    textBuffer = buildString(format, vector[0]);
+    strcat(stringVector, textBuffer);
+    free(textBuffer);
+    for(i=1; i<numElements; i++) {
+        textBuffer = buildString(format, vector[i]);
+        strcat(stringVector, VECTOR_SEPARATOR);
+        strcat(stringVector, textBuffer);
+        free(textBuffer);
+    }
+    
+    error = tixiUpdateTextElement(handle, path, stringVector);
+    free(stringVector);
+    
+    return error;
+}
+
 
 
 DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const char *elementPath, const char *attributeName)

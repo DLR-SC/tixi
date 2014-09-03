@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -67,7 +67,7 @@ TEST_F(UpdateElementTests, updateTextElement_wrong_path)
     const char* parentPath = "/rootElement/not_exists";
     const char* text = "This is my content.";
 
-    ASSERT_TRUE( tixiUpdateTextElement( documentHandle, parentPath, text ) == FAILED );
+    ASSERT_TRUE( tixiUpdateTextElement( documentHandle, parentPath, text ) == ELEMENT_NOT_FOUND );
 }
 
 TEST_F(UpdateElementTests, updateDoubleElement_success)
