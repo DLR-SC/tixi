@@ -897,20 +897,28 @@ void tixiAddFloatVector_f(const TixiDocumentHandle *handle,
                           char *elementName,
                           double *vector,
                           int *numElements,
+                          char* format,
                           int *error,
                           int parentPathLength,
-                          int elementNameLength)
+                          int elementNameLength,
+                          int formatLength)
 {
     char *cParentPath = NULL;
     char *cElementName = NULL;
+    char *cFormat = NULL;
 
     cParentPath = makeCString(parentPath, parentPathLength);
     cElementName = makeCString(elementName, elementNameLength);
 
-    *error = tixiAddFloatVector(*handle, cParentPath, cElementName, vector, *numElements);
+    if (formatLength > 0) {
+      cFormat = makeCString(format, formatLength);
+    }
+    
+    *error = tixiAddFloatVector(*handle, cParentPath, cElementName, vector, *numElements, cFormat);
 
     free(cParentPath);
     free(cElementName);
+    free(cFormat);
 }
 
 

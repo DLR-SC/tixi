@@ -75,7 +75,7 @@ TEST_F(VectorTests, tixiVectorAddTests)
     count = 3;
 
     // write parts of the array to an intermediate file
-    ASSERT_TRUE ( tixiAddFloatVector(documentHandleAdd, "/a", "test", points, count) == SUCCESS );
+    ASSERT_TRUE ( tixiAddFloatVector(documentHandleAdd, "/a", "test", points, count, "%g") == SUCCESS );
     ASSERT_TRUE ( tixiSaveDocument(documentHandleAdd, xmlOutName) == SUCCESS );
 
     // read in again and check values

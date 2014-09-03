@@ -1276,6 +1276,9 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
                       Vector is NULL an empty element will be created.
 
   @param numElements (in) the Number of vector-elements to be inserted in the new element.
+  
+  @param format (in) format used to convert number into a string. If format is
+                      NULL "%g" will be used to format the string.
 
   @return
       - SUCCESS if successfully added the text element
@@ -1288,7 +1291,7 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
       - ALREADY_SAVED if element should be added to an already saved document
   */
 
-    DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const double *vector, const int numElements);
+    DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const double *vector, const int numElements, const char* format);
 
 
     /**

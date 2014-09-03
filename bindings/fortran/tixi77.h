@@ -590,9 +590,11 @@ void tixiAddFloatVector_f(const TixiDocumentHandle *handle,
             char *elementName,
             double *vector,
             int *numElements,
+            char *format,
             int *error,
             int parentPathLength,
-            int elementNameLength);
+            int elementNameLength,
+            int formatLength);
 
 void tixiGetVectorSize_f(const TixiDocumentHandle *handle,
                         const char *vectorPath,

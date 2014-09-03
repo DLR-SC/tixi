@@ -353,7 +353,7 @@ int main(int argc, char **argv)
   //add float vector
   myFloat = (double*) malloc(sizeof(double)*20);
   for(i = 0; i < 20; ++i) myFloat[i] = (double)i*i;
-  tixiAddFloatVector(handle, "/MyRoot","MyFloatVector", myFloat, 20);
+  tixiAddFloatVector(handle, "/MyRoot","MyFloatVector", myFloat, 20, "%g");
   free(myFloat);
 
   //print doc

@@ -1327,7 +1327,7 @@ DLL_EXPORT ReturnCode tixiAddIntegerAttribute(const TixiDocumentHandle handle,
 }
 
 
-DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const double *vector, const int numElements)
+DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const double *vector, const int numElements, const char* format)
 {
     ReturnCode error;
     char *stringVector = NULL;
@@ -1340,10 +1340,14 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
     if(numElements < 1) {
         return FAILED;
     }
+    
+    if (!format) {
+      format = "%g";
+    };
 
     /* calculate the size of the resulting string */
     for(i=0; i<numElements; i++) {
-        textBuffer = buildString("%g", vector[i]);
+        textBuffer = buildString(format, vector[i]);
         stringSize += (int) strlen(textBuffer);
         free(textBuffer);
     }
@@ -1353,11 +1357,11 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
 
     /* copy strings to stringVector */
     stringVector[0] = '\0';
-    textBuffer = buildString("%g", vector[0]);
+    textBuffer = buildString(format, vector[0]);
     strcat(stringVector, textBuffer);
     free(textBuffer);
     for(i=1; i<numElements; i++) {
-        textBuffer = buildString("%g", vector[i]);
+        textBuffer = buildString(format, vector[i]);
         strcat(stringVector, VECTOR_SEPARATOR);
         strcat(stringVector, textBuffer);
         free(textBuffer);

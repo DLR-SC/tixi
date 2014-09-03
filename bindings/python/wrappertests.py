@@ -143,7 +143,7 @@ class Tests(unittest.TestCase):
 
         # manual creation of vector
         t.create('doc')
-        t.addFloatVector('/doc', 'myvec', range(100,130), 30)
+        t.addFloatVector('/doc', 'myvec', range(100,130), 30, "%g")
         
         size = t.getVectorSize('/doc/myvec')  
         self.assertEquals(size, 30)
@@ -195,7 +195,7 @@ class Tests(unittest.TestCase):
         t.updateBooleanElement("/root/myBoolean",1)
         t.addTextElementAtIndex("/root","myNewTextElement","myText",2)
         t.createElementAtIndex("/root","array",0)
-        t.addFloatVector("/root","myFloatVector",(0.0,1.1,2.2),3)
+        t.addFloatVector("/root","myFloatVector",(0.0,1.1,2.2),3, "%g")
         t.addExternalLink("/root","/externalLink",".xml")
         t.addHeader("tool","version","author")
         t.addCpacsHeader("name","creator","version","description","cpacsVersion")
