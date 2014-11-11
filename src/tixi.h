@@ -987,7 +987,9 @@ typedef int TixiDocumentHandle;
                           specified by handle (see section \ref XPathExamples above).
 
         @param number (in) double content of the element to update the element specified by elementPath
-        @param format (in) format used to convert number into a string. If format is NULL "%g" will be used to format the string.
+        @param format (in) format string used to convert number into a string. 
+                           The format string usage is identical to format strings in ::printf.
+                           If format is NULL "%g" will be used to format the string.
 
         @return
          - SUCCESS if successfully retrieve the text content of a single element
@@ -1017,7 +1019,9 @@ typedef int TixiDocumentHandle;
                            specified by handle (see section \ref XPathExamples above).
 
          @param number (in) integer content of the element to update the element specified by elementPath
-         @param format (in) format used to convert number into a string. If format is NULL "%g" will be used to format the string.
+         @param format (in) format string used to convert number into a string. 
+                            The format string usage is identical to format strings in ::printf.
+                            If format is NULL "%g" will be used to format the string.
 
          @return
           - SUCCESS if successfully retrieve the text content of a single element
@@ -1193,8 +1197,9 @@ specified by handle (see section \ref XPathExamples above).
 @param number (in) floating point number to be placed inside the element pointed to by
 elementPath. If number is NULL an empty element will be created.
 
-@param format (in) format used to convert number into a string. If format is
-NULL "%g" will be used to format the string.
+@param format (in) format string used to convert number into a string. 
+                   The format string usage is identical to format strings in ::printf.
+                   If format is NULL "%g" will be used to format the string.
 
 @return
 
@@ -1231,8 +1236,9 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 @param number (in) integer number to be placed inside the element pointed to by
                     elementPath. If number is NULL an empty element will be created.
 
-@param format (in) format used to convert number into a string. If format is
-                    NULL "%d" will be used to format the string.
+@param format (in) format string used to convert number into a string. 
+                   The format string usage is identical to format strings in ::printf.
+                   If format is NULL "%g" will be used to format the string.
 
 @return
 
@@ -1277,8 +1283,9 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
 
   @param numElements (in) the Number of vector-elements to be inserted in the new element.
   
-  @param format (in) format used to convert number into a string. If format is
-                      NULL "%g" will be used to format the string.
+  @param format (in) format string used to convert number into a string. 
+                     The format string usage is identical to format strings in ::printf.
+                     If format is NULL "%g" will be used to format the string.
 
   @return
       - SUCCESS if successfully added the text element
@@ -1314,8 +1321,9 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
   
     @param numElements (in) the Number of vector-elements to be inserted in the new element.
     
-    @param format (in) format used to convert number into a string. If format is
-                        NULL "%g" will be used to format the string.
+    @param format (in) format string used to convert number into a string. 
+                       The format string usage is identical to format strings in ::printf.
+                       If format is NULL "%g" will be used to format the string.
   
     @return
         - SUCCESS if successfully added the text element
@@ -1751,8 +1759,9 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
                        number is NULL an error is return and the attribute
                        is not created.
 
-    @param format (in) format used to convert attributeValue into a string. If format is
-                       NULL "%g" will be used to format the string.
+    @param format (in) format string used to convert number into a string. 
+                       The format string usage is identical to format strings in ::printf.
+                       If format is NULL "%g" will be used to format the string.
 
     @return
 
@@ -1792,8 +1801,9 @@ tixi_add_integer_element( integer  handle, character*n parent_path, character*n 
                        number is NULL an error is return and the attribute
                        is not created.
 
-    @param format (in) format used to convert attributeValue into a string. If format is
-                       NULL "%d" will be used to format the string.
+    @param format (in) format string used to convert number into a string. 
+                       The format string usage is identical to format strings in ::printf.
+                       If format is NULL "%g" will be used to format the string.
 
     @return
 
@@ -2069,8 +2079,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
 
     @param values (in) array of double holding the element values to be added ("text" content between the tags)
 
-    @param format (in) format used to convert the values into strings. If format is
-                       NULL "%g" will be used to format the string.
+    @param format (in) format string used to convert number into a string. 
+                       The format string usage is identical to format strings in ::printf.
+                       If format is NULL "%g" will be used to format the string.
 
     @param attributes (in) array of pointers to strings holding the attribute values (vs. attribute name which is the same for each list entry)
 
@@ -2484,8 +2495,9 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
   @param x (in) x coordinate of the point
   @param y (in) y coordinate of the point
   @param z (in) z coordinate of the point
-  @param format (in) format used to convert the coordinate values into a string. If format is
-                       NULL "%g" will be used.
+  @param format (in) format string used to convert number into a string. 
+                     The format string usage is identical to format strings in ::printf.
+                     If format is NULL "%g" will be used to format the string.
 
   @return
     - SUCCESS if successfully added the point element
