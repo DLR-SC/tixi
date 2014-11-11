@@ -115,12 +115,8 @@ class PythonGenerator(object):
         indent +=  4*' '
         string += indent + 'self.%s = ctypes.c_int(-1)\n\n' % self.handle_str
                
-        string += indent + '# We only support python2.5 - 3.0 now\n'
-        string += indent + 'if sys.version_info>(3,0,0):\n'
-        string += indent + '    print("Python3 not supported in %sWrapper.")\n'\
-            % self.prefix
-        string += indent + '    sys.exit()\n'
-        string += indent + 'elif sys.version_info<(2,5,0):\n'
+        string += indent + '# We only support python2.5 and newer\n'
+        string += indent + 'if sys.version_info<(2,5,0):\n'
         string += indent + '    print("At least python 2.5 is needed from %sWrapper.")\n\n' \
             % self.prefix
         
@@ -217,15 +213,17 @@ class PythonGenerator(object):
             if arg.is_handle:
                 continue
             elif arg.is_string and not arg.arrayinfos['is_array']:
-                tmp_str = '_c_%s = ctypes.c_char_p(%s)' \
-                    % (arg.name, arg.name)
+                tmp_str = '_c_%s = ctypes.c_char_p(0 if (%s == 0 or %s is None) else str.encode(%s))' \
+                    % (arg.name, arg.name, arg.name, arg.name)
             elif arg.is_string and arg.arrayinfos['is_array']:
                 # create type
                 tmp_str = 'array_t_%s = ctypes.c_char_p * len(%s)\n' \
                     % (arg.name, arg.name)
-                tmp_str += indent
-                tmp_str += '_c_%s = array_t_%s(*%s)' \
-                    % (arg.name, arg.name, arg.name)
+                tmp_str += indent + '_c_%s = array_t_%s()\n' \
+                    % (arg.name, arg.name)
+                tmp_str += indent + 'for i in range(len(%s)):\n' % (arg.name)
+                tmp_str += indent + '    _c_%s[i] = str.encode(%s[i])' % (arg.name, arg.name)
+
             elif not arg.arrayinfos['is_array'] and arg.npointer == 0:
                 tmp_str = '_c_%s = ctypes.c_%s(%s)' \
                     % (arg.name, arg.type, arg.name)
@@ -371,13 +369,22 @@ class PythonGenerator(object):
             string += '\n'
         # non array value
         for arg in outargs:
-            if not arg.arrayinfos['is_array'] and not arg is ret_val and not arg.is_handle:
+            if not arg.arrayinfos['is_array'] and not arg is ret_val and not arg.is_handle and not arg.is_string:
                 tmp_str = '_py_%s = _c_%s.value' \
                     % (arg.name, arg.name)
             
                 string += 2*indent + tmp_str + '\n'
-            elif arg is ret_val:
+            elif not arg.arrayinfos['is_array'] and not arg is ret_val and not arg.is_handle and arg.is_string:
+                tmp_str = '_py_%s = _c_%s.value.decode("utf-8")' \
+                    % (arg.name, arg.name)
+            
+                string += 2*indent + tmp_str + '\n'
+            elif arg is ret_val and not arg.is_string:
                 tmp_str = '_py_%s = _c_%s' \
+                    % (arg.name, arg.name)
+            
+            elif arg is ret_val and arg.is_string:
+                tmp_str = '_py_%s = _c_%s.decode("utf-8")' \
                     % (arg.name, arg.name)
             
                 string += 2*indent + tmp_str + '\n' 
@@ -397,9 +404,13 @@ class PythonGenerator(object):
                     else:
                         size_str += ' _py_%s *' % sizearg.name
                         
-            string += 2*indent + size_str[0:-1] + '\n'       
-            tmp_str = '_py_%s = tuple(_c_%s[i] for i in xrange(%s_array_size))' \
-                % (arg.name, arg.name, arg.name)
+            string += 2*indent + size_str[0:-1] + '\n'
+            if not arg.is_string:
+                tmp_str = '_py_%s = tuple(_c_%s[i] for i in range(%s_array_size))' \
+                    % (arg.name, arg.name, arg.name)
+            else:
+                tmp_str = '_py_%s = tuple(_c_%s[i].decode("utf-8") for i in range(%s_array_size))' \
+                    % (arg.name, arg.name, arg.name)
         
             string += 2*indent + tmp_str + '\n'
                 

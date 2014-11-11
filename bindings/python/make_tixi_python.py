@@ -68,7 +68,7 @@ def save(self, fileName, recursive = False, remove = False):
 def checkElement(self, elementPath):
     \'\'\' boolean return values from special return code is coded manually here \'\'\'
     _c_elementPath = ctypes.c_char_p()
-    _c_elementPath.value = elementPath
+    _c_elementPath.value = str.encode(elementPath)
     tixiReturn = self.lib.tixiCheckElement(self._handle, _c_elementPath)
     if tixiReturn == ReturnCode.SUCCESS:
         return True
@@ -78,7 +78,7 @@ def checkElement(self, elementPath):
     
 def uIDCheckExists(self, uID):
     _c_uID = ctypes.c_char_p()
-    _c_uID.value = uID
+    _c_uID.value = str.encode(uID)
     tixiReturn = self.lib.tixiUIDCheckExists(self._handle, _c_uID)
     if tixiReturn == ReturnCode.SUCCESS:
         return True
@@ -89,9 +89,9 @@ def uIDCheckExists(self, uID):
 def checkAttribute(self, elementPath, attributeName):
     \'\'\' boolean return values from special return code is coded manually here \'\'\'
     _c_elementPath = ctypes.c_char_p()
-    _c_elementPath.value = elementPath
+    _c_elementPath.value = str.encode(elementPath)
     _c_attributeName = ctypes.c_char_p()
-    _c_attributeName.value = attributeName
+    _c_attributeName.value = str.encode(attributeName)
     tixiReturn = self.lib.tixiCheckAttribute(self._handle, _c_elementPath, _c_attributeName)
     if tixiReturn == ReturnCode.SUCCESS:
         return True
