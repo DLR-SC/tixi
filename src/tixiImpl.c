@@ -55,6 +55,29 @@ TixiDocumentListEntry *documentListHead = NULL;
 
 TixiPrintMsgFnc printMsg = tixiDefaultMessage;
 
+int _initialized = 0;
+
+void xmlErrorHandler(void * ctx, const char *message, ...) {
+    char buffer[2048];
+    va_list varArgs;
+    va_start(varArgs, message);
+    vsnprintf(buffer, 2048, message, varArgs);
+    printMsg(MESSAGETYPE_ERROR, buffer);
+    va_end(varArgs);
+    // just silence unused warning
+    (void*) ctx;
+}
+
+static void tixiInit(void)
+{
+    if (!_initialized) {
+        printMsg(MESSAGETYPE_STATUS, "TiXI initialized\n");
+        xmlSetGenericErrorFunc(NULL, xmlErrorHandler);
+        _initialized = 1;
+    }
+}
+
+
 /**
 	gives the tixi version number
 */
@@ -198,6 +221,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
   ReturnCode returnValue = -1;
   int count;
 
+  tixiInit();
   checkLibxml2Version();
 
   xmlKeepBlanksDefault(0);
@@ -272,8 +296,9 @@ DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (const char *httpURL, TixiDocumen
     char* xmlDocument = NULL;
     ReturnCode returnCode = FAILED;
 
+    tixiInit();
     xmlKeepBlanksDefault(0);
-	xmlIndentTreeOutput = 1;
+    xmlIndentTreeOutput = 1;
 
     xmlDocument = curlGetURLInMemory(httpURL);
     if(xmlDocument == NULL) {
@@ -288,11 +313,11 @@ DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (const char *httpURL, TixiDocumen
 
 DLL_EXPORT ReturnCode tixiCreateDocument(const char *rootElementName, TixiDocumentHandle *handle)
 {
-
   TixiDocument *document = NULL;
   xmlDocPtr xmlDocument = NULL;
   xmlNodePtr rootNode = NULL;
 
+  tixiInit();
   xmlKeepBlanksDefault(0);
   xmlIndentTreeOutput = 1;
 
@@ -469,7 +494,7 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
   char *tixiFileName = NULL;
   char relativDirPath[3];
 
-
+  tixiInit();
   tixiFileName = (char *) malloc(sizeof(char) * strlen("tixiDocument.xml") + 1);
   tixiFileName[0] = '\0';
   strcat(tixiFileName, "tixiDocument.xml");
