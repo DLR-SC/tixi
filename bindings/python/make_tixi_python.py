@@ -106,7 +106,7 @@ postconstr = '''
 self.version = self.getVersion()
 '''
 
-blacklist = ['tixiCheckElement', 'tixiUIDCheckExists', 'tixiCheckAttribute', 'tixiCloseDocument', 'tixiGetRawInterface']
+blacklist = ['tixiCheckElement', 'tixiUIDCheckExists', 'tixiCheckAttribute', 'tixiCloseDocument', 'tixiGetRawInterface', 'tixiSetPrintMsgFunc']
 
 if __name__ == '__main__':
     # parse the file
@@ -118,6 +118,7 @@ if __name__ == '__main__':
     # set the handle string that the parser can identify the handles
     parser.handle_str = 'TixiDocumentHandle'
     parser.returncode_str  ='ReturnCode'
+    parser.typedefs = {'TixiPrintMsgFnc': 'void'}
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper

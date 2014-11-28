@@ -22,7 +22,7 @@
 #include "uidHelper.h"
 #include "tixiInternal.h"
 
-
+extern TixiPrintMsgFnc printMsg;
 
 int uid_readDocumentUIDs(TixiDocument* tixiDocument)
 {
@@ -36,7 +36,7 @@ int uid_readDocumentUIDs(TixiDocument* tixiDocument)
 	/* Create xpath evaluation context */
 	xpathCtx = xmlXPathNewContext(doc);
 	if(xpathCtx == NULL) {
-		fprintf(stderr,"Error: unable to create new XPath context\n");
+		printMsg(MESSAGETYPE_ERROR,"Error: unable to create new XPath context\n");
 		xmlFreeDoc(doc);
 		return(FAILED);
 	}
@@ -44,7 +44,7 @@ int uid_readDocumentUIDs(TixiDocument* tixiDocument)
 	/* Evaluate xpath expression */
 	xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_XPATH, xpathCtx);
 	if(xpathObj == NULL) {
-		fprintf(stderr,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_XPATH);
+		printMsg(MESSAGETYPE_ERROR,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_XPATH);
 		xmlXPathFreeContext(xpathCtx);
 		xmlFreeDoc(doc);
 		return(FAILED);
@@ -92,7 +92,7 @@ int uid_buildUIDNodeList(TixiDocument* tixiDocument, xmlNodeSetPtr nodes)
 		// add new uid entry
 		currentEntry->next = malloc(sizeof(TixiUIDListEntry));
 		if (!currentEntry) {
-			fprintf(stderr, "Error: Memory allocation failed in uidHelper::buildUIDNodeList");
+			printMsg(MESSAGETYPE_ERROR, "Error: Memory allocation failed in uidHelper::buildUIDNodeList");
 			return MEMORY_ALLOCATION_FAILED;
 		}
 		currentEntry = (TixiUIDListEntry *) currentEntry->next;
@@ -120,10 +120,10 @@ int uid_checkForDuplicates(TixiDocument *document)
 					continue;
 				} if (!strcmp("", currentEntry->uIDName)) {
 					// if we found an emtpy uid, we only warn about that.
-					if (alreadyDisplayed) fprintf(stderr, "Warning: Empty uID found! This might lead to unknown errors!\n");
+					if (alreadyDisplayed) printMsg(MESSAGETYPE_ERROR, "Warning: Empty uID found! This might lead to unknown errors!\n");
 					alreadyDisplayed=0; 
 				} else if (!strcmp(compareElement->uIDName, currentEntry->uIDName)) {
-					fprintf(stderr, "Error: duplicated uID '%s' found!\n", currentEntry->uIDName);
+					printMsg(MESSAGETYPE_ERROR, "Error: duplicated uID '%s' found!\n", currentEntry->uIDName);
 					return FAILED;
 				}
 				compareElement = (TixiUIDListEntry *) compareElement->next;
@@ -155,7 +155,7 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 	/* Create xpath evaluation context */
 	xpathCtx = xmlXPathNewContext(doc);
 	if(xpathCtx == NULL) {
-		fprintf(stderr,"Error: unable to create new XPath context\n");
+		printMsg(MESSAGETYPE_ERROR,"Error: unable to create new XPath context\n");
 		xmlFreeDoc(doc);
 		return(FAILED);
 	}
@@ -163,7 +163,7 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 	/* Evaluate xpath expression */
 	xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_LINK_XPATH, xpathCtx);
 	if(xpathObj == NULL) {
-		fprintf(stderr,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_LINK_XPATH);
+		printMsg(MESSAGETYPE_ERROR,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_LINK_XPATH);
 		xmlXPathFreeContext(xpathCtx);
 		xmlFreeDoc(doc);
 		return(FAILED);
@@ -193,7 +193,7 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 			currentEntry = (TixiUIDListEntry *) currentEntry->next;
 		}
 		if (foundUID == FAILED) {
-			fprintf(stderr, "Error: Broken link, UID '%s' not found!", linkName);
+			printMsg(MESSAGETYPE_ERROR, "Error: Broken link, UID '%s' not found!", linkName);
 			xmlXPathFreeObject(xpathObj);
 			xmlXPathFreeContext(xpathCtx);
 			xmlFree(linkName);

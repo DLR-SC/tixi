@@ -15,7 +15,7 @@ import bindings_generator.matlab_generator as MG
 import bindings_generator.cheader_parser   as CP
 
 
-blacklist = ['tixiGetRawInterface', 'tixiAddDoubleListWithAttributes']
+blacklist = ['tixiGetRawInterface', 'tixiAddDoubleListWithAttributes', 'tixiSetPrintMsgFunc']
 
 if __name__ == '__main__':
     # parse the file
@@ -31,6 +31,7 @@ if __name__ == '__main__':
     # set the handle string that the parser can identify the handles
     parser.handle_str = 'TixiDocumentHandle'
     parser.returncode_str  ='ReturnCode'
+    parser.typedefs = {'TixiPrintMsgFnc': 'void'}
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper

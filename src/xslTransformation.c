@@ -24,6 +24,7 @@
 
 #include "xslTransformation.h"
 
+extern TixiPrintMsgFnc printMsg;
 
 char* xsltTransformToString(xmlDocPtr doc, const char *xslFilename) {
     xmlDocPtr res;
@@ -33,13 +34,13 @@ char* xsltTransformToString(xmlDocPtr doc, const char *xslFilename) {
 
     style = xsltParseStylesheetFile ((const xmlChar *) xslFilename);
     if (style == NULL) {
-        fprintf(stderr, "xsltTransformToString: Could not parse XSLT file");
+        printMsg(MESSAGETYPE_ERROR, "xsltTransformToString: Could not parse XSLT file");
         return NULL;
     }
 
     res = xsltApplyStylesheet(style, doc, NULL);
     if(res == NULL) {
-        fprintf(stderr, "xsltTransformToString: Problem applying stylesheet");
+        printMsg(MESSAGETYPE_ERROR, "xsltTransformToString: Problem applying stylesheet");
         return NULL;
     }
 
@@ -54,19 +55,19 @@ ReturnCode xsltTransformToFile(xmlDocPtr doc, const char *xslFilename, const cha
     xsltStylesheetPtr style;
 
     if( (xslFilename == NULL) || (outputFilename == NULL) ) {
-        fprintf(stderr, "xsltTransformToFile: Null pointer error");
+        printMsg(MESSAGETYPE_ERROR, "xsltTransformToFile: Null pointer error");
         return FAILED;
     }
 
     style = xsltParseStylesheetFile ((const xmlChar *) xslFilename);
     if (style == NULL) {
-        fprintf(stderr, "xsltTransformToFile: Could not parse XSLT file: %s", xslFilename);
+        printMsg(MESSAGETYPE_ERROR, "xsltTransformToFile: Could not parse XSLT file: %s", xslFilename);
         return FAILED;
     }
 
     res = xsltApplyStylesheet(style, doc, NULL);
     if(res == NULL){
-        fprintf(stderr, "xsltTransformToFile: Problem applying stylesheet");
+        printMsg(MESSAGETYPE_ERROR, "xsltTransformToFile: Problem applying stylesheet");
         return FAILED;
     }
 

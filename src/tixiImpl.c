@@ -46,11 +46,14 @@
 
 static xmlNsPtr nameSpace = NULL;
 
+void tixiDefaultMessage(MessageType type, const char* msg, ...);
+
 /**
    Pointer to the head of the list of documents managed by TIXI
 */
 TixiDocumentListEntry *documentListHead = NULL;
 
+TixiPrintMsgFnc printMsg = tixiDefaultMessage;
 
 /**
 	gives the tixi version number
@@ -70,112 +73,112 @@ void printError(ReturnCode error, char *function)
 	switch(error)
 	{
 	case SUCCESS:
-		fprintf(stderr, "Error: %s returns %d. No error occurred.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. No error occurred.\n", function, error);
 		break;
 	case FAILED:
-		fprintf(stderr, "Error: %s returns %d. Unspecified error .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Unspecified error .\n", function, error);
 		break;
 	case INVALID_XML_NAME:
-		fprintf(stderr, "Error: %s returns %d. Non XML standard complaint name specified.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Non XML standard complaint name specified.\n", function, error);
 		break;
 	case NOT_WELL_FORMED:
-		fprintf(stderr, "Error: %s returns %d. Document is not well formed.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Document is not well formed.\n", function, error);
 		break;
 	case NOT_SCHEMA_COMPLIANT:
-		fprintf(stderr, "Error: %s returns %d. Document is not schema complaint.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Document is not schema complaint.\n", function, error);
 		break;
 	case NOT_DTD_COMPLIANT:
-		fprintf(stderr, "Error: %s returns %d. Document is not DTD complaint.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Document is not DTD complaint.\n", function, error);
 		break;
 	case INVALID_HANDLE:
-		fprintf(stderr, "Error: %s returns %d. Document handle is not valid.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Document handle is not valid.\n", function, error);
 		break;
 	case INVALID_XPATH:
-		fprintf(stderr, "Error: %s returns %d. XPath expression is not valid.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. XPath expression is not valid.\n", function, error);
 		break;
 	case ELEMENT_NOT_FOUND:
-		fprintf(stderr, "Error: %s returns %d. Element does not exist in document.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Element does not exist in document.\n", function, error);
 		break;
 	case INDEX_OUT_OF_RANGE:
-		fprintf(stderr, "Error: %s returns %d. Index supplied as argument is not inside the admissible range.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Index supplied as argument is not inside the admissible range.\n", function, error);
 		break;
 	case NO_POINT_FOUND:
-		fprintf(stderr, "Error: %s returns %d. No point element found a given XPath.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. No point element found a given XPath.\n", function, error);
 		break;
 	case NOT_AN_ELEMENT:
-		fprintf(stderr, "Error: %s returns %d. XPath expression does not point to an XML-element node .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. XPath expression does not point to an XML-element node .\n", function, error);
 		break;
 	case ATTRIBUTE_NOT_FOUND:
-		fprintf(stderr, "Error: %s returns %d. Element does not have the attribute .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Element does not have the attribute .\n", function, error);
 		break;
 	case OPEN_FAILED:
-		fprintf(stderr, "Error: %s returns %d. Error on opening the file   .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Error on opening the file   .\n", function, error);
 		break;
 	case OPEN_SCHEMA_FAILED:
-		fprintf(stderr, "Error: %s returns %d. Error on opening the schema file.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Error on opening the schema file.\n", function, error);
 		break;
 	case OPEN_DTD_FAILED:
-		fprintf(stderr, "Error: %s returns %d. Error on opening the DTD file.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Error on opening the DTD file.\n", function, error);
 		break;
 	case CLOSE_FAILED:
-		fprintf(stderr, "Error: %s returns %d. Error on closing the file.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Error on closing the file.\n", function, error);
 		break;
 	case ALREADY_SAVED:
-		fprintf(stderr, "Error: %s returns %d. Trying to modify already saved document.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Trying to modify already saved document.\n", function, error);
 		break;
 	case ELEMENT_PATH_NOT_UNIQUE:
-		fprintf(stderr, "Error: %s returns %d. Path expression can not be resolved unambiguously.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Path expression can not be resolved unambiguously.\n", function, error);
 		break;
 	case NO_ELEMENT_NAME:
-		fprintf(stderr, "Error: %s returns %d. Element name argument is NULL .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Element name argument is NULL .\n", function, error);
 		break;
 	case NO_CHILDREN:
-		fprintf(stderr, "Error: %s returns %d. Node has no children.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Node has no children.\n", function, error);
 		break;
 	case CHILD_NOT_FOUND:
-		fprintf(stderr, "Error: %s returns %d. Named child is not child of element specified .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Named child is not child of element specified .\n", function, error);
 		break;
 	case EROROR_CREATE_ROOT_NODE:
-		fprintf(stderr, "Error: %s returns %d. Error when adding root node to new document.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Error when adding root node to new document.\n", function, error);
 		break;
 	case DEALLOCATION_FAILED:
-		fprintf(stderr, "Error: %s returns %d. On closing a document the deallocation of allocated memory fails.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. On closing a document the deallocation of allocated memory fails.\n", function, error);
 		break;
 	case NO_NUMBER:
-		fprintf(stderr, "Error: %s returns %d. No number specified.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. No number specified.\n", function, error);
 		break;
 	case NO_ATTRIBUTE_NAME:
-		fprintf(stderr, "Error: %s returns %d. No attribute name specified.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. No attribute name specified.\n", function, error);
 		break;
 	case STRING_TRUNCATED:
-		fprintf(stderr, "Error: %s returns %d. String variable supplied is to small to hold the result, Fortran only.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. String variable supplied is to small to hold the result, Fortran only.\n", function, error);
 		break;
 	case NON_MATCHING_NAME:
-		fprintf(stderr, "Error: %s returns %d. Row or column name specified do not match the names used in the document.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Row or column name specified do not match the names used in the document.\n", function, error);
 		break;
 	case NON_MATCHING_SIZE:
-		fprintf(stderr, "Error: %s returns %d. Number of rows or columns specified do not match the sizes of the matrix in the document .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Number of rows or columns specified do not match the sizes of the matrix in the document .\n", function, error);
 		break;
 	case MATRIX_DIMENSION_ERROR:
-		fprintf(stderr, "Error: %s returns %d. If nRows or nColumns or both are less than 1.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. If nRows or nColumns or both are less than 1.\n", function, error);
 		break;
 	case COORDINATE_NOT_FOUND:
-		fprintf(stderr, "Error: %s returns %d. Missing coordinate inside a point element.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. Missing coordinate inside a point element.\n", function, error);
 		break;
 	case UNKNOWN_STORAGE_MODE:
-		fprintf(stderr, "Error: %s returns %d. storage mode specified is neither ROW_WISE nor COLUMN_WISE.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. storage mode specified is neither ROW_WISE nor COLUMN_WISE.\n", function, error);
 		break;
 	case UID_NOT_UNIQUE:
-		fprintf(stderr, "Error: %s returns %d. One or more uID's are not unique.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. One or more uID's are not unique.\n", function, error);
 		break;
 	case UID_DONT_EXISTS:
-		fprintf(stderr, "Error: %s returns %d. A given uID's does not exist.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. A given uID's does not exist.\n", function, error);
 		break;
 	case UID_LINK_BROKEN:
-		fprintf(stderr, "Error: %s returns %d. .\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. .\n", function, error);
 		break;
 	default:
-		fprintf(stderr, "Error: %s returns %d. No further description specified.\n", function, error);
+		printMsg(MESSAGETYPE_ERROR, "Error: %s returns %d. No further description specified.\n", function, error);
 		break;
 	}
 }
@@ -204,7 +207,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
 
   file = fopen(xmlFilename, "r");
   if (!file) {
-    fprintf(stderr, "Error: Unable to open file \"%s\".\n", xmlFilename);
+    printMsg(MESSAGETYPE_ERROR, "Error: Unable to open file \"%s\".\n", xmlFilename);
     return OPEN_FAILED;
   }
   else {
@@ -240,7 +243,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
         while(count != 0) { /* open as long as there where externalfile-statements */
             returnValue = openExternalFiles(document, &count);
             if (returnValue != SUCCESS){
-                fprintf(stderr, "Error %d in including external files into tixiDoument.\n", returnValue);
+                printMsg(MESSAGETYPE_ERROR, "Error %d in including external files into tixiDoument.\n", returnValue);
                 freeTixiDocument(document);
                 document = NULL;
                 count = 0;
@@ -249,7 +252,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
     }
   }
   else {
-    fprintf(stderr, "Error: \"%s\" is not a wellformed XML-file.\n", xmlFilename);
+    printMsg(MESSAGETYPE_ERROR, "Error: \"%s\" is not a wellformed XML-file.\n", xmlFilename);
     returnValue = NOT_WELL_FORMED;
   }
   return returnValue;
@@ -294,26 +297,26 @@ DLL_EXPORT ReturnCode tixiCreateDocument(const char *rootElementName, TixiDocume
   xmlIndentTreeOutput = 1;
 
   if (!rootElementName) {
-    fprintf(stderr, "Error: No root element name specified.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: No root element name specified.\n");
     return NO_ELEMENT_NAME;
   }
 
   if (!xmlValidateNameValue((xmlChar *) rootElementName)) {
-    fprintf(stderr, "Error: Invalid name for root element \"%s\"\n", rootElementName);
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid name for root element \"%s\"\n", rootElementName);
     return INVALID_XML_NAME;
   }
 
   xmlDocument = xmlNewDoc((xmlChar *) "1.0");
 
   if (!xmlDocument) {
-    fprintf(stderr, "Error: Could not create new document.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Could not create new document.\n");
     return FAILED;
   }
 
   rootNode = xmlNewDocRawNode(xmlDocument, NULL, (xmlChar *) rootElementName, NULL);
 
   if (!rootNode) {
-    fprintf(stderr, "Error: Could not create root node \"%s\" in new document.\n", rootElementName);
+    printMsg(MESSAGETYPE_ERROR, "Error: Could not create root node \"%s\" in new document.\n", rootElementName);
     return EROROR_CREATE_ROOT_NODE;
   }
 
@@ -335,7 +338,7 @@ DLL_EXPORT ReturnCode tixiCreateDocument(const char *rootElementName, TixiDocume
   document->uidListHead = NULL;
 
   if (addDocumentToList(document, &(document->handle)) != SUCESS) {
-    fprintf(stderr, "Error: Failed  adding document to document list.");
+    printMsg(MESSAGETYPE_ERROR, "Error: Failed  adding document to document list.");
     return FAILED;
   }
 
@@ -370,7 +373,7 @@ DLL_EXPORT ReturnCode tixiCloseDocument(TixiDocumentHandle handle)
   TixiDocument *document = getDocument(handle);
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle in tixiCloseDocument.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle in tixiCloseDocument.\n");
     return INVALID_HANDLE;
   }
 
@@ -426,12 +429,12 @@ DLL_EXPORT ReturnCode tixiExportDocumentAsString(const TixiDocumentHandle handle
 
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
     if (!text) {
-        fprintf(stderr, "Error: Null Pointer in tixiExportDocumentAsString.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Null Pointer in tixiExportDocumentAsString.\n");
         return FAILED;
     }
 
@@ -499,7 +502,7 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
     returnValue = SUCCESS; /*?*/
   }
   else {
-    fprintf(stderr, "Error: XML-string to import is not wellformed!\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: XML-string to import is not wellformed!\n");
     returnValue = NOT_WELL_FORMED;
   }
   free(tixiFileName);
@@ -519,12 +522,12 @@ DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, const char 
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
   if (document->status == SAVED) {
-    fprintf(stderr, "Error:  Can not add header to document. Document already saved.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error:  Can not add header to document. Document already saved.\n");
     return ALREADY_SAVED;
   }
 
@@ -537,7 +540,7 @@ DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, const char 
     xmlNodePtr authorElment = NULL;
 
     if (!toolInfo) {
-      fprintf(stderr, "Error:  Failed to created \"tool\" element.\n");
+      printMsg(MESSAGETYPE_ERROR, "Error:  Failed to created \"tool\" element.\n");
       return FAILED;
     }
     else {
@@ -545,12 +548,12 @@ DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, const char 
                                             (xmlChar *) toolName);
 
       if (!newChild) {
-        fprintf(stderr, "Error:  Failed to created \"toolName\" element.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Failed to created \"toolName\" element.\n");
         return FAILED;
       }
       newChild = xmlNewTextChild(toolInfo, nameSpace, (xmlChar *) "version", (xmlChar *) version);
       if (!newChild) {
-        fprintf(stderr, "Error:  Failed to created version\" element.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Failed to created version\" element.\n");
         return FAILED;
       }
     }
@@ -559,7 +562,7 @@ DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, const char 
       xmlNewTextChild(headerElement, nameSpace, (xmlChar *) "author", (xmlChar *) authorName);
 
     if (!authorElment) {
-      fprintf(stderr, "Error:  Failed to created \"author\" element.\n");
+      printMsg(MESSAGETYPE_ERROR, "Error:  Failed to created \"author\" element.\n");
       return FAILED;
     }
 
@@ -578,24 +581,24 @@ DLL_EXPORT ReturnCode tixiAddHeader(const TixiDocumentHandle handle, const char 
         xmlNewTextChild(headerElement, nameSpace, (xmlChar *) "timestamp", (xmlChar *) timestamp);
 
       if (!newChild) {
-        fprintf(stderr, "Error:  Failed to add timestamp element.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add timestamp element.\n");
         return FAILED;
       }
     }
   }
   else {
-    fprintf(stderr, "Error:  Failed to created \"tixiHeader\" element.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error:  Failed to created \"tixiHeader\" element.\n");
     return FAILED;
   }
 
   rootElement = xmlDocGetRootElement(document->docPtr);
   if (!rootElement) {
-    fprintf(stderr, "Error:  Failed to get root element.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error:  Failed to get root element.\n");
     return FAILED;
   }
 
   if (!xmlAddChild(rootElement, headerElement)) {
-    fprintf(stderr, "Error:  Failed to add header element.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add header element.\n");
     return FAILED;
   }
   return SUCCESS;
@@ -612,12 +615,12 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 
 
 	if (!document) {
-		fprintf(stderr, "Error: Invalid document handle.\n");
+		printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
 		return INVALID_HANDLE;
 	}
 
 	if (document->status == SAVED) {
-		fprintf(stderr,
+		printMsg(MESSAGETYPE_ERROR,
 				"Error:  Can not add header to document. Document already saved.\n");
 		return ALREADY_SAVED;
 	}
@@ -636,35 +639,35 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 		xmlNodePtr cpacsVersionElement = NULL;
 
 		if (!newChild) {
-			fprintf(stderr, "Error:  Failed to create \"toolName\" element.\n");
+			printMsg(MESSAGETYPE_ERROR, "Error:  Failed to create \"toolName\" element.\n");
 			return FAILED;
 		}
 
 		newChild = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "version", (xmlChar *) version);
 		if (!newChild) {
-			fprintf(stderr, "Error:  Failed to create version\" element.\n");
+			printMsg(MESSAGETYPE_ERROR, "Error:  Failed to create version\" element.\n");
 			return FAILED;
 		}
 
 		cpacsVersionElement = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "cpacsVersion", (xmlChar *) cpacsVersion);
 		if (!cpacsVersionElement) {
-			fprintf(stderr, "Error:  Failed to create cpacs version\" element.\n");
+			printMsg(MESSAGETYPE_ERROR, "Error:  Failed to create cpacs version\" element.\n");
 			return FAILED;
 		}
 
 		creatorElement = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "creator", (xmlChar *) creator);
 		if (!creatorElement) {
-			fprintf(stderr, "Error:  Failed to create \"creator\" element.\n");
+			printMsg(MESSAGETYPE_ERROR, "Error:  Failed to create \"creator\" element.\n");
 			return FAILED;
 		}
 
 		descriptionElement = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "description", (xmlChar *) description);
 		if (!creatorElement) {
-			fprintf(stderr,
+			printMsg(MESSAGETYPE_ERROR,
 					"Error:  Failed to create \"description\" element.\n");
 			return FAILED;
 		}
@@ -684,7 +687,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 					(xmlChar *) "timestamp", (xmlChar *) timestamp);
 
 			if (!newChild) {
-				fprintf(stderr, "Error:  Failed to add timestamp element.\n");
+				printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add timestamp element.\n");
 				return FAILED;
 			}
 		}
@@ -692,12 +695,12 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 
 	rootElement = xmlDocGetRootElement(document->docPtr);
 	if (!rootElement) {
-		fprintf(stderr, "Error:  Failed to get root element.\n");
+		printMsg(MESSAGETYPE_ERROR, "Error:  Failed to get root element.\n");
 		return FAILED;
 	}
 
 	if (!xmlAddChild(rootElement, headerElement)) {
-		fprintf(stderr, "Error:  Failed to add header element.\n");
+		printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add header element.\n");
 		return FAILED;
 	}
 	return SUCCESS;
@@ -725,7 +728,7 @@ DLL_EXPORT ReturnCode tixiDTDValidate(const TixiDocumentHandle handle, const cha
 {
 
   PRINT_DEBUG2("%s %d\n", DTDFilename, handle);
-  fprintf(stderr, "Error: tixiDTDValidate not implemented.\n");
+  printMsg(MESSAGETYPE_ERROR, "Error: tixiDTDValidate not implemented.\n");
   assert(0);
   return SUCCESS;
 }
@@ -740,7 +743,7 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
@@ -779,7 +782,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, con
   error = tixiGetTextElement(handle, elementPath, &text);
 
   if (error) {
-    fprintf(stderr, "Error: tixiGetTextElement returns %d in tixiGetIntegerElement.\n", error);
+    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextElement returns %d in tixiGetIntegerElement.\n", error);
     return error;
   }
 
@@ -815,7 +818,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanElement(const TixiDocumentHandle handle, con
   error = tixiGetTextElement(handle, elementPath, &text);
 
   if (error) {
-    fprintf(stderr, "Error: tixiGetTextElement returns %d in tixiGetBooleanElement.\n", error);
+    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextElement returns %d in tixiGetBooleanElement.\n", error);
     return error;
   }
 
@@ -828,7 +831,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanElement(const TixiDocumentHandle handle, con
   } else if(strcmp(text, "0") == 0) {
 	  *boolean = 0;
   } else {
-	  fprintf(stderr, "Error: No boolean value found at \"%s\"\n", elementPath);
+	  printMsg(MESSAGETYPE_ERROR, "Error: No boolean value found at \"%s\"\n", elementPath);
 	  return FAILED;
   }
   return SUCCESS;
@@ -844,12 +847,12 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
     ReturnCode error = SUCCESS;
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
     if (document->status == SAVED) {
-        fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
         return ALREADY_SAVED;
     }
 
@@ -879,12 +882,12 @@ DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, 
     char *textBuffer = NULL;
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
     if (document->status == SAVED) {
-        fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
         return ALREADY_SAVED;
     }
 
@@ -917,12 +920,12 @@ DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle,
     char *textBuffer = NULL;
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
     if (document->status == SAVED) {
-        fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
         return ALREADY_SAVED;
     }
 
@@ -949,12 +952,12 @@ DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle,
     TixiDocument *document = getDocument(handle);
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
     if (document->status == SAVED) {
-        fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
         return ALREADY_SAVED;
     }
 
@@ -963,7 +966,7 @@ DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle,
     } else if( boolean == 1 ) {
         return tixiUpdateTextElement (handle, elementPath, "true");
     } else {
-        fprintf(stderr, "Error: boolean is either 1 or 0 in tixiUpdateBooleanElement.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: boolean is either 1 or 0 in tixiUpdateBooleanElement.\n");
         return FAILED;
     }
 }
@@ -981,7 +984,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
@@ -1001,7 +1004,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
       return error;
     }
     else {
-      /*fprintf(stderr,
+      /*printMsg(MESSAGETYPE_ERROR,
               "Error: Attribute \"%s\" of element \"%s\" not found.  \n",
               attributeName, elementPath); */
       xmlXPathFreeObject(xpathObject);
@@ -1023,7 +1026,7 @@ DLL_EXPORT ReturnCode tixiGetDoubleAttribute(const TixiDocumentHandle handle,
   error = tixiGetTextAttribute(handle, elementPath, attributeName, &text);
 
   if (error) {
-    fprintf(stderr, "Error: tixiGetTextAttribute returns %d in tixiGetDoubleAttribute.\n", error);
+    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextAttribute returns %d in tixiGetDoubleAttribute.\n", error);
     return error;
   }
 
@@ -1043,7 +1046,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute(const TixiDocumentHandle handle,
   error = tixiGetTextAttribute(handle, elementPath, attributeName, &text);
 
   if (error) {
-    fprintf(stderr, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
+    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
     return error;
   }
 
@@ -1059,14 +1062,14 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute(const TixiDocumentHandle handle,
   ReturnCode error = FAILED;
 
   if(!boolean) {
-      fprintf(stderr, "Error: argument boolean must not be a null pointer in tixiGetBooleanAttribute!\n");
+      printMsg(MESSAGETYPE_ERROR, "Error: argument boolean must not be a null pointer in tixiGetBooleanAttribute!\n");
       return FAILED;
   }
 
   error = tixiGetTextAttribute(handle, elementPath, attributeName, &text);
 
   if (error) {
-    fprintf(stderr, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
+    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
     return error;
   }
 
@@ -1077,7 +1080,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute(const TixiDocumentHandle handle,
       *boolean = 0;
   }
   else {
-      fprintf(stderr, "Error: No boolean value found at \"%s\" for attribute \"%s\"\n", elementPath, attributeName);
+      printMsg(MESSAGETYPE_ERROR, "Error: No boolean value found at \"%s\" for attribute \"%s\"\n", elementPath, attributeName);
       return FAILED;
   }
 
@@ -1108,17 +1111,17 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
 
 
     if (!document) {
-      fprintf(stderr, "Error: Invalid document handle.\n");
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
       return INVALID_HANDLE;
     }
 
     if (document->status == SAVED) {
-      fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+      printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
       return ALREADY_SAVED;
     }
 
     if (!xmlValidateNameValue((xmlChar *) elementName)) {
-      fprintf(stderr, "Error: Invalid element name \"%s\"\n", elementName);
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid element name \"%s\"\n", elementName);
       return INVALID_XML_NAME;
     }
 
@@ -1129,7 +1132,7 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
     xpathContext = xmlXPathNewContext(xmlDocument);
 
     if (!xpathContext) {
-      fprintf(stderr, "Error: unable to create new XPath context\n");
+      printMsg(MESSAGETYPE_ERROR, "Error: unable to create new XPath context\n");
       xmlXPathFreeContext(xpathContext);
       return FAILED;
     }
@@ -1137,13 +1140,13 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
     xpathObject = xmlXPathEvalExpression((xmlChar *) parentPath, xpathContext);
 
     if (!xpathObject) {
-      fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", parentPath);
+      printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", parentPath);
       xmlXPathFreeContext(xpathContext);
       return INVALID_XPATH;
     }
 
     if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-      fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", parentPath);
+      printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", parentPath);
       xmlXPathFreeContext(xpathContext);
       xmlXPathFreeObject(xpathObject);
       return ELEMENT_NOT_FOUND;
@@ -1154,7 +1157,7 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
     assert(nodes);
 
     if (nodes->nodeNr > 1) {
-      fprintf(stderr,
+      printMsg(MESSAGETYPE_ERROR,
               "Error: Element chosen by XPath \"%s\" expression is not unique. \n", parentPath);
       xmlXPathFreeContext(xpathContext);
       xmlXPathFreeObject(xpathObject);
@@ -1195,7 +1198,7 @@ DLL_EXPORT ReturnCode tixiAddBooleanElement(const TixiDocumentHandle handle, con
   } else if( boolean == 1 ) {
 	  tixiAddTextElement(handle, parentPath, elementName, "true");
   } else {
-  	  fprintf(stderr, "Error: boolean is either 1 or 0 in tixiAddBooleanElement.\n");
+  	  printMsg(MESSAGETYPE_ERROR, "Error: boolean is either 1 or 0 in tixiAddBooleanElement.\n");
   	  return FAILED;
   }
   return SUCCESS;
@@ -1221,7 +1224,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleElement(const TixiDocumentHandle handle, cons
     free(textBuffer);
   }
   else {
-    fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddDoubleElement.\n");
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddDoubleElement.\n");
     exit(1);
   }
 
@@ -1247,7 +1250,7 @@ DLL_EXPORT ReturnCode tixiAddIntegerElement(const TixiDocumentHandle handle, con
     free(textBuffer);
   }
   else {
-    fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddIntegerElement.\n");
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddIntegerElement.\n");
     exit(1);
   }
 
@@ -1261,12 +1264,12 @@ DLL_EXPORT ReturnCode tixiAddTextAttribute(const TixiDocumentHandle handle, cons
   xmlDocPtr xmlDocument = NULL;
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
   if (document->status == SAVED) {
-    fprintf(stderr, "Error: Can not add attribute to element. Document already saved.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Can not add attribute to element. Document already saved.\n");
     return ALREADY_SAVED;
   }
 
@@ -1293,7 +1296,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute(const TixiDocumentHandle handle,
     free(textBuffer);
   }
   else {
-    fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddDoubleAttribute.\n");
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddDoubleAttribute.\n");
     exit(1);
   }
   return error;
@@ -1320,7 +1323,7 @@ DLL_EXPORT ReturnCode tixiAddIntegerAttribute(const TixiDocumentHandle handle,
     free(textBuffer);
   }
   else {
-    fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddIntegerAttribute.\n");
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddIntegerAttribute.\n");
     exit(1);
   }
   return error;
@@ -1489,7 +1492,7 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     free(childElementPath);
     free(allChildren);
     return INVALID_HANDLE;
@@ -1512,7 +1515,7 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   xpathContext = xmlXPathNewContext(xmlDocument);
 
   if (!xpathContext) {
-    fprintf(stderr, "Error: unable to create new XPath context\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to create new XPath context\n");
     free(childElementPath);
     free(allChildren);
     return FAILED;
@@ -1522,7 +1525,7 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   xpathObject = xmlXPathEvalExpression((xmlChar *) elementPath, xpathContext);
 
   if (!xpathObject) {
-    fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
     xmlXPathFreeContext(xpathContext);
     free(childElementPath);
     free(allChildren);
@@ -1539,7 +1542,7 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   assert(nodes);
 
   if (nodes->nodeNr > 1) {
-    fprintf(stderr,
+    printMsg(MESSAGETYPE_ERROR,
             "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
     free(childElementPath);
     free(allChildren);
@@ -1554,7 +1557,7 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   xpathObject = xmlXPathEvalExpression((xmlChar *) allChildren, xpathContext);
 
   if (!xpathObject) {
-    fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", allChildren);
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", allChildren);
     xmlXPathFreeContext(xpathContext);
     free(childElementPath);
     free(allChildren);
@@ -1580,7 +1583,7 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   xpathObject = xmlXPathEvalExpression((xmlChar *) childElementPath, xpathContext);
 
   if (!xpathObject) {
-    fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", childElementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", childElementPath);
     xmlXPathFreeContext(xpathContext);
     free(childElementPath);
     free(allChildren);
@@ -1638,29 +1641,29 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
   if (document->status == SAVED) {
-    fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
     return ALREADY_SAVED;
   }
 
   xmlDocument = document->docPtr;
 
   if (!xmlValidateNameValue((xmlChar *) listName)) {
-    fprintf(stderr, "Error: Invalid element name \"%s\"\n", listName);
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid element name \"%s\"\n", listName);
     return INVALID_XML_NAME;
   }
 
   if (!xmlValidateNameValue((xmlChar *) childName)) {
-    fprintf(stderr, "Error: Invalid element name \"%s\"\n", childName);
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid element name \"%s\"\n", childName);
     return INVALID_XML_NAME;
   }
 
   if (!xmlValidateNameValue((xmlChar *) attributeName)) {
-    fprintf(stderr, "Error: Invalid element name \"%s\"\n", attributeName);
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid element name \"%s\"\n", attributeName);
     return INVALID_XML_NAME;
   }
 
@@ -1680,7 +1683,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
       char *textBuffer = buildString(format, values[iValue]);
 
       if (!textBuffer) {
-        fprintf(stderr,
+        printMsg(MESSAGETYPE_ERROR,
                 "Internal Error: Failed to allocate memory in tixiAddDoubleListWithAttributes.\n");
         exit(1);
       }
@@ -1691,7 +1694,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
       textBuffer = NULL;
 
       if (!child) {
-        fprintf(stderr,
+        printMsg(MESSAGETYPE_ERROR,
                 "Error:  Failed to add child #%d to list  element \"%s\".\n", iValue + 1, listName);
         xmlFreeNode(listNode);
         xmlXPathFreeObject(xpathObject);
@@ -1699,7 +1702,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
       }
 
       if (!xmlNewProp(child, (xmlChar *) attributeName, (xmlChar *) attributes[iValue])) {
-        fprintf(stderr,
+        printMsg(MESSAGETYPE_ERROR,
                 "Error:  Failed to add attribute \"%s\" to element \"%s/%-s%-s\".\n",
                 attributeName, parentPath, listName, childName);
         xmlFreeNode(listNode);
@@ -1710,7 +1713,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
 
 
     if (!xmlAddChild(parent, listNode)) {
-      fprintf(stderr,
+      printMsg(MESSAGETYPE_ERROR,
               "Error:  Failed to add list element \"%s\" to parent \"%s\".\n",
               listName, parentPath);
       xmlFreeNode(listNode);
@@ -1737,12 +1740,12 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
   xmlNodePtr parent = NULL;
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
   if (document->status == SAVED) {
-    fprintf(stderr, "Error:  Can not add element to document. Document already saved.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
     return ALREADY_SAVED;
   }
 
@@ -1771,14 +1774,14 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
       textBuffer = NULL;
 
       if (!child) {
-        fprintf(stderr, "Error:  Failed to add %1s coordinate to point element.\n", "x");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "x");
         xmlFreeNode(pointNode);
         xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
     }
     else {
-      fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
+      printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
       exit(1);
     }
 
@@ -1792,14 +1795,14 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
       textBuffer = NULL;
 
       if (!child) {
-        fprintf(stderr, "Error:  Failed to add %1s coordinate to point element.\n", "y");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "y");
         xmlFreeNode(pointNode);
         xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
     }
     else {
-      fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
+      printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
       exit(1);
     }
 
@@ -1814,14 +1817,14 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
       textBuffer = NULL;
 
       if (!child) {
-        fprintf(stderr, "Error:  Failed to add %1s coordinate to point element.\n", "z");
+        printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "z");
         xmlFreeNode(pointNode);
         xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
     }
     else {
-      fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
+      printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
       exit(1);
     }
   }
@@ -1856,7 +1859,7 @@ DLL_EXPORT ReturnCode tixiAddExternalLink(const TixiDocumentHandle handle, const
 
 
   if (!textBuffer) {
-    fprintf(stderr, "Internal Error: Failed to allocate memory in tixiAddExternalLink.\n");
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddExternalLink.\n");
     exit(1);
   }
 
@@ -1880,7 +1883,7 @@ DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrett
     TixiDocument *document = getDocument(handle);
 
     if (!document) {
-      fprintf(stderr, "Error: Invalid document handle.\n");
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
       return INVALID_HANDLE;
     }
 
@@ -1890,6 +1893,17 @@ DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrett
 
     document->usePrettyPrint = usePrettyPrint;
     return SUCCESS;
+}
+
+DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func)
+{
+    if (func) {
+        printMsg = func;
+        return SUCCESS;
+    }
+    else {
+        return FAILED;
+    }
 }
 
 
@@ -1960,7 +1974,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handl
 
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         free(xpathSubElementsName);
         return INVALID_HANDLE;
     }
@@ -1975,14 +1989,14 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handl
     xpathObject = xmlXPathEvalExpression((xmlChar *) xpathSubElementsName, xpathContext);
 
     if (!xpathObject) {
-      fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
+      printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
       free(xpathSubElementsName);
       xmlXPathFreeContext(xpathContext);
       return INVALID_XPATH;
     }
 
     if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-      fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
+      printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
       free(xpathSubElementsName);
       xmlXPathFreeContext(xpathContext);
       xmlXPathFreeObject(xpathObject);
@@ -1999,7 +2013,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handl
         node = nodes->nodeTab[dim];
         assert(node);
         if (!(node->children)) {
-            fprintf(stderr, "Error: No string content in vector subelement at XPath expression \"%s\"\n", xpathSubElementsName);
+            printMsg(MESSAGETYPE_ERROR, "Error: No string content in vector subelement at XPath expression \"%s\"\n", xpathSubElementsName);
             free(xpathSubElementsName);
             xmlXPathFreeContext(xpathContext);
             xmlXPathFreeObject(xpathObject);
@@ -2053,7 +2067,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
 
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         free(xpathSubElementsName);
         return INVALID_HANDLE;
     }
@@ -2066,14 +2080,14 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
     xpathObject = xmlXPathEvalExpression((xmlChar *) xpathSubElementsName, xpathContext);
 
     if (!xpathObject) {
-      fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
+      printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
       free(xpathSubElementsName);
       xmlXPathFreeContext(xpathContext);
       return INVALID_XPATH;
     }
 
     if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-      fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
+      printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
       free(xpathSubElementsName);
       xmlXPathFreeContext(xpathContext);
       xmlXPathFreeObject(xpathObject);
@@ -2086,7 +2100,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
     dimensions = nodes->nodeNr;    /* number of sub elements conforming to the constructed XPath */
 
     if (dimensions <= dimension) {    /* check if there are enough elements to read from */
-        fprintf(stderr, "Error: Not enough dimensions found for array \"%s\"\n", xpathSubElementsName);
+        printMsg(MESSAGETYPE_ERROR, "Error: Not enough dimensions found for array \"%s\"\n", xpathSubElementsName);
         free(xpathSubElementsName);
         xmlXPathFreeContext(xpathContext);
         xmlXPathFreeObject(xpathObject);
@@ -2159,7 +2173,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         free(xpathSubElementsName);
         return INVALID_HANDLE;
     }
@@ -2174,14 +2188,14 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
     xpathObject = xmlXPathEvalExpression((xmlChar *) xpathSubElementsName, xpathContext);
 
     if (!xpathObject) {
-      fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
+      printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
       free(xpathSubElementsName);
       xmlXPathFreeContext(xpathContext);
       return INVALID_XPATH;
     }
 
     if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-      fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
+      printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
       free(xpathSubElementsName);
       xmlXPathFreeContext(xpathContext);
       xmlXPathFreeObject(xpathObject);
@@ -2199,7 +2213,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
     if (attributeName) {
         if (strcmp(attributeName, "array") != 0) {
-            fprintf(stderr,
+            printMsg(MESSAGETYPE_ERROR,
                 "Error: The given sub element is not of mapType= \"array\" in \"%s\": %s \n",
                 xpathSubElementsName,
                 attributeName);
@@ -2210,7 +2224,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
             return ATTRIBUTE_NOT_FOUND;
         }
     } else {
-        fprintf(stderr,
+        printMsg(MESSAGETYPE_ERROR,
             "Error: The given sub element has no attribute mapType in \"%s\". \n",
             xpathSubElementsName);
         free(xpathSubElementsName);
@@ -2221,7 +2235,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
     node = node->children;    /* get children, because there must be a node containing the string value */
     if(!(node)) {
-        fprintf(stderr,
+        printMsg(MESSAGETYPE_ERROR,
             "Error: The given sub element has no children in \"%s\". \n",
             xpathSubElementsName);
         free(xpathSubElementsName);
@@ -2261,7 +2275,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
     //check if number of entries is the same as arraySize
     if(count != arraySize || token != NULL){
-        fprintf(stderr, 
+        printMsg(MESSAGETYPE_ERROR, 
             "Error: the number of elements of array \"%s\" does not match the specified size of %d!\n", 
             elementName, arraySize);
         free(tmpArray);
@@ -2307,7 +2321,7 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
     char *xpathSubElementsName = NULL;
 
     if (!document || !document->docPtr) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
@@ -2323,14 +2337,14 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
     xpathObject = xmlXPathEvalExpression((xmlChar *) xpathSubElementsName, xpathContext);
 
     if (!xpathObject) {
-        fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
+        printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
         free(xpathSubElementsName);
         xmlXPathFreeContext(xpathContext);
         return INVALID_XPATH;
     }
 
     if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-        fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
+        printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
         free(xpathSubElementsName);
         xmlXPathFreeContext(xpathContext);
         xmlXPathFreeObject(xpathObject);
@@ -2361,7 +2375,7 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
     char *xpathSubElementsName = NULL;
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
@@ -2376,14 +2390,14 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
     xpathObject = xmlXPathEvalExpression((xmlChar *) xpathSubElementsName, xpathContext);
 
     if (!xpathObject) {
-        fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
+        printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", xpathSubElementsName);
         free(xpathSubElementsName);
         xmlXPathFreeContext(xpathContext);
         return INVALID_XPATH;
     }
 
     if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-        fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
+        printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", xpathSubElementsName);
         free(xpathSubElementsName);
         xmlXPathFreeContext(xpathContext);
         xmlXPathFreeObject(xpathObject);
@@ -2486,7 +2500,7 @@ DLL_EXPORT ReturnCode tixiCheckElement(const TixiDocumentHandle handle, const ch
   ReturnCode error = SUCCESS;
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
@@ -2510,7 +2524,7 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
     ReturnCode error = SUCCESS;
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
@@ -2601,7 +2615,7 @@ DLL_EXPORT ReturnCode tixiUIDGetXPath(TixiDocumentHandle handle, const char *uID
 
 	error = tixiUIDCheckDuplicates(handle);
 	if (error != SUCCESS) {
-		fprintf(stderr, "Warning: There are duplicated UID's in the data set!");
+		printMsg(MESSAGETYPE_ERROR, "Warning: There are duplicated UID's in the data set!");
 	}
 
     textPtr = (char *) uid_getXpath(document, uID);
@@ -2693,7 +2707,7 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
     int error = SUCCESS;
 
     if (!document) {
-      fprintf(stderr, "Error: Invalid document handle.\n");
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
       return INVALID_HANDLE;
     }
     
@@ -2754,7 +2768,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
   xmlDocument = document->docPtr;
@@ -2787,7 +2801,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle,
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
   xmlDocument = document->docPtr;
@@ -2817,7 +2831,7 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
   xmlDocument = document->docPtr;
@@ -2860,7 +2874,7 @@ DLL_EXPORT ReturnCode tixiGetNodeType(const TixiDocumentHandle handle, const cha
     int error = SUCCESS;
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
@@ -2938,4 +2952,15 @@ DLL_EXPORT ReturnCode tixiGetNodeType(const TixiDocumentHandle handle, const cha
         error = addToMemoryList(document, (void *) *nodeType);
     }
     return error;
+}
+
+void tixiDefaultMessage(MessageType type, const char *message, ...)
+{
+    va_list varArgs;
+    va_start(varArgs, message);
+    // only show errors and warnings by default
+    if (type < MESSAGETYPE_STATUS) {
+        vfprintf(stderr, message, varArgs);
+    }
+    va_end(varArgs);
 }

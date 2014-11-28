@@ -368,7 +368,35 @@ typedef int TixiDocumentHandle;
 
   typedef enum OpenMode OpenMode;
 
+  /**
 
+  \ingroup Enums
+       Type of a TiXI message
+
+       This is used, if the user wants to override the default message system
+       in TiXI.
+    */
+   enum MessageType
+   {
+     MESSAGETYPE_ERROR,                 /*!< The message is an error      */
+     MESSAGETYPE_WARNING,               /*!< The message is a warning     */
+     MESSAGETYPE_STATUS,                /*!< A status message             */
+   };
+ 
+ 
+   typedef enum MessageType MessageType;
+  
+  /**
+   * TixiPrintMsgFnc:
+   * @param type The message type (error, warning, status)
+   * @param msg The message
+   * @param ... extra arguments
+   *
+   * Signature of a callback function to handle messages (errors, warnings ...)
+   * To be used in conjuction with ::tixiSetPrintMsgFunc.
+   */
+  typedef void (*TixiPrintMsgFnc) (MessageType type, const char *msg, ...);
+  
 /**
 	@brief Returns the version number of this TIXI version.
 
@@ -2047,6 +2075,28 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
   */
   DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrettyPrint);
 
+  /**
+    @brief Reroutes all messages of tixi to the message function func
+    
+    This can be used, to rerout all tixi messages to a log file, to modify
+    the messages, to parse them etc...
+    
+    <b>Example to keep tixi silent:</b>
+    @code{.c}
+    // define the message sink
+    void tixiSilentMessage(MessageType , const char *, ...){}
+    
+    // set the message sink
+    tixiSetPrintMsgFunc(tixiSilentMessage);
+    @endcode
+    
+    @param func The new message receiver function
+    
+    @return 
+        - SUCCESS if func is valid
+        - FAILED if func is a null pointer
+  */  
+  DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func);
 
 /*@}*/
 

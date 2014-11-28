@@ -28,7 +28,7 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
 
-
+extern TixiPrintMsgFnc printMsg;
 
 void *myrealloc(void *ptr, size_t size)
 {
@@ -94,7 +94,7 @@ char* curlGetURLInMemory(const char *url)
 
     if (res != CURLE_OK)
     {
-        fprintf(stderr, "curl request failed: %s", curl_error_buffer);
+        printMsg(MESSAGETYPE_ERROR, "curl request failed: %s", curl_error_buffer);
         return NULL;
     }
 

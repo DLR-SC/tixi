@@ -21,6 +21,7 @@
 #include "xpathFunctions.h"
 #include "tixiInternal.h"
 
+extern TixiPrintMsgFnc printMsg;
 
 xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char *xPathExpression)
 {
@@ -30,14 +31,14 @@ xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char *xPathExpres
 	/* Create xpath evaluation context */
 	xpathContext = xmlXPathNewContext(doc);
 	if (!xpathContext) {
-	  fprintf(stderr, "Error: Unable to create new XPath context.\n");
+	  printMsg(MESSAGETYPE_ERROR, "Error: Unable to create new XPath context.\n");
 	  return NULL;
 	}
 
 	/* Evaluate Expression */
 	xpathObject = xmlXPathEvalExpression((xmlChar *) xPathExpression, xpathContext);
 	if (!(xpathObject)) {
-	  fprintf(stderr, "Error: Invalid XPath expression \"%s\"\n", xPathExpression);
+	  printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", xPathExpression);
 	  xmlXPathFreeContext(xpathContext);
 	  return NULL;
 	}
@@ -94,17 +95,17 @@ char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpres
 
 	size = (nodes) ? nodes->nodeNr : 0;
 	if (size == 0) {
-		fprintf(stderr, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
+		printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
 		return NULL;
 	}
 
 	if (size < index) {
-		fprintf(stderr, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
+		printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
 		return NULL;
 	}
 
 	if (index <= 0) {
-		fprintf(stderr, "Error: Index number less or equal zero.\n");
+		printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
 		return NULL;
 	}
 
@@ -145,17 +146,17 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
 
     size = (nodes) ? nodes->nodeNr : 0;
     if (size == 0) {
-        fprintf(stderr, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
+        printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
         return NULL;
     }
 
     if (size < index) {
-        fprintf(stderr, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
+        printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
         return NULL;
     }
 
     if (index <= 0) {
-        fprintf(stderr, "Error: Index number less or equal zero.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
         return NULL;
     }
 

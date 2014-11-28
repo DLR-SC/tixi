@@ -45,6 +45,8 @@
 #endif
 
 
+extern TixiPrintMsgFnc printMsg;
+
 InternalReturnCode clearMemoryList(TixiDocument *document)
 {
 
@@ -242,13 +244,13 @@ ReturnCode checkExistence(const xmlDocPtr xmlDocument, const char *elementPath, 
   /* Create xpath evaluation context */
   xpathContext = xmlXPathNewContext(xmlDocument);
   if (!xpathContext) {
-    fprintf(stderr, "Error: Unable to create new XPath context.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Unable to create new XPath context.\n");
     return FAILED;
   }
 
   *xpathObject = xmlXPathEvalExpression((const xmlChar *) elementPath, xpathContext);
   if (!(*xpathObject)) {
-    fprintf(stderr, "Error: Invalid XPath expression \"%s\"\n", elementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", elementPath);
     //xmlXPathFreeObject(*xpathObject);
     xmlXPathFreeContext(xpathContext);
     *xpathObject = NULL;
@@ -321,14 +323,14 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPathDirt
   /* Create xpath evaluation context */
   xpathContext = xmlXPathNewContext(xmlDocument);
   if (!xpathContext) {
-    fprintf(stderr, "Error: Unable to create new XPath context.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Unable to create new XPath context.\n");
     return FAILED;
   }
 
   /* Evaluate Expression */
   *xpathObject = xmlXPathEvalExpression((xmlChar *) elementPath, xpathContext);
   if (!(*xpathObject)) {
-    fprintf(stderr, "Error: Invalid XPath expression \"%s\"\n", elementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", elementPath);
     xmlXPathFreeContext(xpathContext);
     return INVALID_XPATH;
   }
@@ -344,7 +346,7 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPathDirt
   assert(nodes);
 
   if (nodes->nodeNr > 1) {
-    fprintf(stderr,
+    printMsg(MESSAGETYPE_ERROR,
             "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(*xpathObject);
@@ -360,7 +362,7 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char *elementPathDirt
     return SUCCESS;
   }
   else {
-    fprintf(stderr,
+    printMsg(MESSAGETYPE_ERROR,
             "Error: XPath expression \"%s\"does not point to an element node.\n", elementPath);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(*xpathObject);
@@ -383,7 +385,7 @@ ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char *pointPath,
   char *suffixString = buildString("[%d]/%1s", pointIndex, name);
 
   if (!suffixString) {
-    fprintf(stderr, "Internal Error: Failed to allocate memory in getCoordinateValue.\n");
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in getCoordinateValue.\n");
     exit(1);
   }
 
@@ -416,7 +418,7 @@ ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char *pointPath,
   }
   else {
     if (!ignoreError) {
-      fprintf(stderr,
+      printMsg(MESSAGETYPE_ERROR,
               "Internal Error: point element \"%s\" has no %s-coordinate.\n", pointPath, name);
     }
     error = COORDINATE_NOT_FOUND;
@@ -442,12 +444,12 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char *parentPath, con
   int nPointElements = 0;
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
   if (pointIndex < 1) {
-    fprintf(stderr, "Error: Invalid point index %d\n", pointIndex);
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid point index %d\n", pointIndex);
     return INDEX_OUT_OF_RANGE;
   }
 
@@ -477,12 +479,12 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char *parentPath, con
     }
 
     if (error == ELEMENT_NOT_FOUND) {
-      fprintf(stderr, "Error: No point element found in element \"%s\".\n", parentPath);
+      printMsg(MESSAGETYPE_ERROR, "Error: No point element found in element \"%s\".\n", parentPath);
       error = NO_POINT_FOUND;
     }
     else if (!error) {
       if (pointIndex > nPointElements) {
-        fprintf(stderr, "Error: Index (%d) larger than number of point elements.\n", pointIndex);
+        printMsg(MESSAGETYPE_ERROR, "Error: Index (%d) larger than number of point elements.\n", pointIndex);
         error = INDEX_OUT_OF_RANGE;
       }
       else {
@@ -599,13 +601,13 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
     /* Get node set for externaldata nodes */
     xpathContext = xmlXPathNewContext(aTixiDocument->docPtr);
     if (!xpathContext) {
-        fprintf(stderr, "Error: unable to create new XPath context\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: unable to create new XPath context\n");
         return FAILED;
     }
 
     xpathObject = xmlXPathEvalExpression((xmlChar *) "//externaldata", xpathContext);
     if (!xpathObject) {
-        fprintf(stderr, "Error: unable to to find externaldata nodes.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: unable to to find externaldata nodes.\n");
         xmlXPathFreeContext(xpathContext);
         return INVALID_XPATH;
     }
@@ -636,13 +638,13 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             strcat(externalDataDirectoryPath, EXTERNAL_DATA_NODE_NAME_PATH);
             error = tixiGetTextElement(handle, externalDataDirectoryPath, &externalDataDirectory);
             if (error) {
-                fprintf(stderr, "Error: openExternalFiles returns %d when reading subpath.\n", error);
+                printMsg(MESSAGETYPE_ERROR, "Error: openExternalFiles returns %d when reading subpath.\n", error);
                 return FAILED;
             }
 
             /* now get number and names of all external files */
             if (tixiGetNamedChildrenCount(handle, externalDataNodePath, EXTERNAL_DATA_NODE_NAME_FILENAME, &externalFileCount) != SUCCESS) {
-                fprintf(stderr, "Error: openExternalFiles could not get number of 'filename' children.\n");
+                printMsg(MESSAGETYPE_ERROR, "Error: openExternalFiles could not get number of 'filename' children.\n");
                 return FAILED;
             }
 
@@ -661,7 +663,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
                 /* open files */
                 newDocumentString = curlGetURLInMemory(externalFullFileName);
                 if (newDocumentString == NULL) {
-                    fprintf(stderr, "\nError in fetching url \"%s\".\n", externalFullFileName);
+                    printMsg(MESSAGETYPE_ERROR, "\nError in fetching url \"%s\".\n", externalFullFileName);
                     return OPEN_FAILED;
                 }
                 xmlDocument = xmlReadMemory(newDocumentString, (int) strlen(newDocumentString), "urlResource", NULL, 0);
@@ -752,7 +754,7 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 			/* create new document */
 			xmlDocument = xmlNewDoc((xmlChar *) "1.0");
 			if (!xmlDocument) {
-				fprintf(stderr, "Error in TIXI::saveExternalFiles ==> Could not create new document.\n");
+				printMsg(MESSAGETYPE_ERROR, "Error in TIXI::saveExternalFiles ==> Could not create new document.\n");
 				return FAILED;
 			}
 			xmlDocSetRootElement(xmlDocument, copiedNode);
@@ -811,7 +813,7 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPa
 
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return parent;
   }
 
@@ -821,7 +823,7 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPa
   xpathContext = xmlXPathNewContext(xmlDocument);
 
   if (!xpathContext) {
-    fprintf(stderr, "Error: unable to create new XPath context\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to create new XPath context\n");
     xmlXPathFreeContext(xpathContext);
     return parent;
   }
@@ -829,13 +831,13 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPa
   xpathObject = xmlXPathEvalExpression((xmlChar *) elementPath, xpathContext);
 
   if (!xpathObject) {
-    fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
     xmlXPathFreeContext(xpathContext);
     return parent;
   }
 
   if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-    fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", elementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", elementPath);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return parent;
@@ -846,7 +848,7 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPa
   assert(nodes);
 
   if (nodes->nodeNr > 1) {
-    fprintf(stderr,
+    printMsg(MESSAGETYPE_ERROR,
             "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
@@ -866,12 +868,12 @@ ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char *elementPat
   xmlAttrPtr attributePtr = NULL;
 
   if (!attributeName) {
-    fprintf(stderr, "Error:  No attribute name specified.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error:  No attribute name specified.\n");
     return NO_ATTRIBUTE_NAME;
   }
 
   if (!xmlValidateNameValue((xmlChar *) attributeName)) {
-	  fprintf(stderr, "Error: Invalid element name \"%s\"\n", attributeName);
+	  printMsg(MESSAGETYPE_ERROR, "Error: Invalid element name \"%s\"\n", attributeName);
 	  return INVALID_XML_NAME;
   }
 
@@ -880,7 +882,7 @@ ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char *elementPat
 	  attributePtr = xmlSetProp(parent, (xmlChar *) attributeName, (xmlChar *) attributeValue);
 
 	  if (!attributePtr) {
-		  fprintf(stderr,
+		  printMsg(MESSAGETYPE_ERROR,
 			  "Error: Failed to add attribute \"%s\" to element \"%s\".\n",
 			  attributeName, attributeValue);
 		  xmlXPathFreeObject(xpathObject);
@@ -905,7 +907,7 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char *elem
   xmlNodeSetPtr nodes = NULL;
 
   if (!document) {
-    fprintf(stderr, "Error: Invalid document handle.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
 
@@ -914,7 +916,7 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char *elem
   xpathContext = xmlXPathNewContext(xmlDocument);
 
   if (!xpathContext) {
-    fprintf(stderr, "Error: unable to create new XPath context\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to create new XPath context\n");
     xmlXPathFreeContext(xpathContext);
     return FAILED;
   }
@@ -922,13 +924,13 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char *elem
   xpathObject = xmlXPathEvalExpression((xmlChar *) elementPath, xpathContext);
 
   if (!xpathObject) {
-    fprintf(stderr, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
     xmlXPathFreeContext(xpathContext);
     return INVALID_XPATH;
   }
 
   if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-    fprintf(stderr, "Error: No element found at XPath expression \"%s\"\n", elementPath);
+    printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", elementPath);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return ELEMENT_NOT_FOUND;
@@ -939,7 +941,7 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char *elem
   assert(nodes);
 
   if (nodes->nodeNr > 1) {
-    fprintf(stderr,
+    printMsg(MESSAGETYPE_ERROR,
             "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
@@ -962,7 +964,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
     xmlNodePtr rootNode = NULL;
 
     if (!srcDocument) {
-        fprintf(stderr, "Error in TIXI::copyDocument => Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error in TIXI::copyDocument => Invalid document handle.\n");
         return FAILED;
     }
 
@@ -970,13 +972,13 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
     xmlDocument = xmlCopyDoc(srcDocument->docPtr, 1);
 
     if (!xmlDocument) {
-        fprintf(stderr, "Error in TIXI::copyDocument => Could not copy document.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error in TIXI::copyDocument => Could not copy document.\n");
         return FAILED;
     }
 
     rootNode = xmlDocGetRootElement(xmlDocument);
     if (!rootNode) {
-        fprintf(stderr, "Error in TIXI::copyDocument => Could not get root node in source document.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error in TIXI::copyDocument => Could not get root node in source document.\n");
         return EROROR_CREATE_ROOT_NODE;
     }
 
@@ -1021,7 +1023,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
     dstDocument->hasIncludedExternalFiles = srcDocument->hasIncludedExternalFiles;
 
     if (addDocumentToList(dstDocument, &(dstDocument->handle)) != SUCESS) {
-        fprintf(stderr, "Error in TIXI::copyDocument => Failed  adding document to document list.");
+        printMsg(MESSAGETYPE_ERROR, "Error in TIXI::copyDocument => Failed  adding document to document list.");
         return FAILED;
     }
 
@@ -1038,18 +1040,18 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char *xmlFilename, Int
     TixiDocumentHandle newHandle;
 
     if (!xmlFilename) {
-        fprintf(stderr, "Error: No filename given.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: No filename given.\n");
         return FAILED;
     }
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return INVALID_HANDLE;
     }
 
     if (saveMode == COMPLETE) {
         if (xmlSaveFormatFileEnc(xmlFilename, document->docPtr, "utf-8", document->usePrettyPrint) == -1) {
-            fprintf(stderr, "Error: Failed in writing document to file.\n");
+            printMsg(MESSAGETYPE_ERROR, "Error: Failed in writing document to file.\n");
             return FAILED;
         };
 
@@ -1062,7 +1064,7 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char *xmlFilename, Int
         saveExternalFiles(rootNode, cpyDoc);
 
         if (xmlSaveFormatFileEnc(xmlFilename, cpyDoc->docPtr, "utf-8", document->usePrettyPrint) == -1) {
-            fprintf(stderr, "Error: Failed in writing document to file.\n");
+            printMsg(MESSAGETYPE_ERROR, "Error: Failed in writing document to file.\n");
             return FAILED;
         };
         removeDocumentFromList(newHandle);
@@ -1073,7 +1075,7 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char *xmlFilename, Int
         saveExternalFiles(rootNode, document);
 
         if (xmlSaveFormatFileEnc(xmlFilename, document->docPtr, "utf-8", document->usePrettyPrint) == -1) {
-            fprintf(stderr, "Error: Failed in writing document to file.\n");
+            printMsg(MESSAGETYPE_ERROR, "Error: Failed in writing document to file.\n");
             return FAILED;
         };
 
@@ -1105,20 +1107,20 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr *schema_doc
     }
     parser_ctxt = xmlSchemaNewDocParserCtxt(*schema_doc);
     if (parser_ctxt == NULL) {
-        fprintf(stderr, "Error: validateSchema: unable to create a parser context for the schema.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: validateSchema: unable to create a parser context for the schema.\n");
         xmlFreeDoc(*schema_doc);
         return FAILED;
     }
     schema = xmlSchemaParse(parser_ctxt);
     if (schema == NULL) {
-        fprintf(stderr, "Error: validateSchema: the schema itself is not valid.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: validateSchema: the schema itself is not valid.\n");
         xmlSchemaFreeParserCtxt(parser_ctxt);
         xmlFreeDoc(*schema_doc);
         return FAILED;
     }
     valid_ctxt = xmlSchemaNewValidCtxt(schema);
     if (valid_ctxt == NULL) {
-        fprintf(stderr, "Error: validateSchema: unable to create a validation context for the schema.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: validateSchema: unable to create a validation context for the schema.\n");
         xmlSchemaFree(schema);
         xmlSchemaFreeParserCtxt(parser_ctxt);
         xmlFreeDoc(*schema_doc);
@@ -1150,7 +1152,7 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
     generatedXPath[0] = '\0';
 
     if (!document) {
-        fprintf(stderr, "Error: Invalid document handle.\n");
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
         return NULL;
     }
 

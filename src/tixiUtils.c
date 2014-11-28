@@ -35,6 +35,7 @@
   #include <unistd.h>
 #endif
 
+extern TixiPrintMsgFnc printMsg;
 
 int my_strncasecmp (const char *a, const char *b, size_t len)
 {
@@ -58,7 +59,7 @@ int create_local_directory(const char *dirname) {
 		return SUCCESS;
 	}
 	else {
-		printf("Problems creating directory \"%s\")\n", dirname);
+		printMsg(MESSAGETYPE_ERROR, "Problems creating directory \"%s\")\n", dirname);
 		return FAILED;
 	}
 }
@@ -191,7 +192,7 @@ char* string_stripLeft(const char* string, int len)
 
     stringLength = strlen(string);
     if (stringLength < (size_t) len) {
-        fprintf(stderr, "Error: could not strip %d bytes from string \"%s\"", len, string);
+        printMsg(MESSAGETYPE_ERROR, "Error: could not strip %d bytes from string \"%s\"", len, string);
         return NULL;
     }
 

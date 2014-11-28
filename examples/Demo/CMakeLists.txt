@@ -39,17 +39,18 @@ IF(WIN32)
 ENDIF(WIN32)
 
 #--------------------------------------------------------------------------------
+
+# directories to look for dependencies
+SET(DIRS ${ADD_LIB_PATH} ${XML_INCLUDE_DIR} ${XSLT_INCLUDE_DIR} ${CURL_INCLUDE_DIR})
+
+if (WIN32 OR APPLE)
+
 # Install the tixiDemo application, on Apple, the bundle is at the root of the
 # install tree, and on other platforms it'll go into the bin directory.
 INSTALL(TARGETS tixiDemo 
     BUNDLE DESTINATION . COMPONENT Runtime
     RUNTIME DESTINATION bin COMPONENT Runtime
     )
-
-# directories to look for dependencies
-SET(DIRS ${ADD_LIB_PATH} ${XML_INCLUDE_DIR} ${XSLT_INCLUDE_DIR} ${CURL_INCLUDE_DIR})
-
-if (WIN32 OR APPLE)
 
 # Now the work of copying dependencies into the bundle/package
 # The quotes are escaped and variables to use at install time have their $ escaped
