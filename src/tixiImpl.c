@@ -59,13 +59,28 @@ int _initialized = 0;
 
 void xmlErrorHandler(void * ctx, const char *message, ...) {
     char buffer[2048];
+    char* extra = NULL;
+    int len = 0;
+
     va_list varArgs;
     va_start(varArgs, message);
-    vsnprintf(buffer, 2048, message, varArgs);
-    printMsg(MESSAGETYPE_ERROR, buffer);
+    if ((len = vsnprintf(buffer, 2048, message, varArgs)) >= 2048) {
+        // message is longer than 2048 bytes,
+        // we must allocate
+        extra = (char*) malloc((len+1) * sizeof(char));
+
+        vsnprintf(extra, len+1, message, varArgs);
+        printMsg(MESSAGETYPE_ERROR, extra);
+
+        if (extra) {
+            free(extra);
+        }
+    }
+    else {
+        printMsg(MESSAGETYPE_ERROR, buffer);
+    }
+
     va_end(varArgs);
-    // just silence unused warning
-    (void*) ctx;
 }
 
 static void tixiInit(void)
@@ -73,6 +88,7 @@ static void tixiInit(void)
     if (!_initialized) {
         printMsg(MESSAGETYPE_STATUS, "TiXI initialized\n");
         xmlSetGenericErrorFunc(NULL, xmlErrorHandler);
+        xsltSetGenericErrorFunc(NULL, xmlErrorHandler);
         _initialized = 1;
     }
 }
