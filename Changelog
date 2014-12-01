@@ -1,3 +1,26 @@
+Version 2.1.1
+---------------
+
+-General Changes:
+	- Rerouting mechanism for error and warning messages 
+	  (a custom message handler can be installed)
+	- Added Python 3 support
+
+
+-API Changes:
+	- tixiAddFloatVector now has an additional precision parameter to control
+	  e.g. the number of digits after the decimal point
+
+-New Functions:
+	- tixiUpdateFloatVector to change the data of an already existing vector
+	- tixiSetPrintMsgFunc to install a custom message handler
+
+-Fixes:
+	- tixiGetNumberOfChilds and tixiGetChildNodeName now ignore DTD nodes
+	- MATLAB specific: reverted tixiCheckElement, tixiCheckAttribute, 
+	  tixiCheckDocumentHandle, tixiCheckUIDExists to old behavior
+
+
 Version 2.1.0
 ---------------
 
