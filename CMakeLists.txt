@@ -15,7 +15,7 @@ OPTION(ENABLE_COVERAGE "Enable GCov coverage analysis (defines a 'coverage' targ
 
 set(TIXI_VERSION_MAJOR 2)
 set(TIXI_VERSION_MINOR 1)
-set(TIXI_VERSION_PATCH 0)
+set(TIXI_VERSION_PATCH 1pre)
 set(TIXI_VERSION "${TIXI_VERSION_MAJOR}.${TIXI_VERSION_MINOR}.${TIXI_VERSION_PATCH}")
 
 set(ADD_INCLUDE_PATH "" CACHE PATH "Additional include path for package search")
