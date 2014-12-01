@@ -380,7 +380,7 @@ typedef int TixiDocumentHandle;
    {
      MESSAGETYPE_ERROR,                 /*!< The message is an error      */
      MESSAGETYPE_WARNING,               /*!< The message is a warning     */
-     MESSAGETYPE_STATUS,                /*!< A status message             */
+     MESSAGETYPE_STATUS                 /*!< A status message             */
    };
  
  
