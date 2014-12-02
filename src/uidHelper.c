@@ -120,7 +120,7 @@ int uid_checkForDuplicates(TixiDocument *document)
 					continue;
 				} if (!strcmp("", currentEntry->uIDName)) {
 					// if we found an emtpy uid, we only warn about that.
-					if (alreadyDisplayed) printMsg(MESSAGETYPE_ERROR, "Warning: Empty uID found! This might lead to unknown errors!\n");
+					if (alreadyDisplayed) printMsg(MESSAGETYPE_WARNING, "Warning: Empty uID found! This might lead to unknown errors!\n");
 					alreadyDisplayed=0; 
 				} else if (!strcmp(compareElement->uIDName, currentEntry->uIDName)) {
 					printMsg(MESSAGETYPE_ERROR, "Error: duplicated uID '%s' found!\n", currentEntry->uIDName);

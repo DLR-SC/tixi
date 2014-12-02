@@ -1938,6 +1938,7 @@ DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrett
 
 DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func)
 {
+    tixiInit();
     if (func) {
         printMsg = func;
         return SUCCESS;
@@ -2656,7 +2657,7 @@ DLL_EXPORT ReturnCode tixiUIDGetXPath(TixiDocumentHandle handle, const char *uID
 
 	error = tixiUIDCheckDuplicates(handle);
 	if (error != SUCCESS) {
-		printMsg(MESSAGETYPE_ERROR, "Warning: There are duplicated UID's in the data set!");
+		printMsg(MESSAGETYPE_WARNING, "Warning: There are duplicated UID's in the data set!");
 	}
 
     textPtr = (char *) uid_getXpath(document, uID);
