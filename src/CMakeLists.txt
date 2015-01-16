@@ -31,20 +31,38 @@ set_target_properties( TIXI PROPERTIES SOVERSION "${TIXI_VERSION_MAJOR}")
 add_library(TIXI_static ${TIXI_SRC} ${TIXI_HDR})
 target_link_libraries (TIXI_static  ${TIXI_LIBS})
 
-install (TARGETS TIXI 
-		 EXPORT tixi-targets
+set(CMAKE_INSTALL_INCLUDE_DIR "include")
+set(CONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/tixi")
+
+install (TARGETS TIXI EXPORT tixi-targets
 		 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 		 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		 )
 		 
 install (FILES tixi.h ${CMAKE_CURRENT_BINARY_DIR}/tixi_version.h
-		 DESTINATION include
+		 DESTINATION ${CMAKE_INSTALL_INCLUDE_DIR}
 		 COMPONENT headers)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/tixi-config-version.cmake"
+  VERSION ${TIXI_VERSION}
+  COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file (${PROJECT_SOURCE_DIR}/contrib/tixi-config.cmake.in 
+    "${CMAKE_CURRENT_BINARY_DIR}/tixi-config.cmake"
+	INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
+	PATH_VARS CMAKE_INSTALL_INCLUDE_DIR CONFIG_INSTALL_DIR
+)
 		 
-install (EXPORT tixi-targets DESTINATION ${CMAKE_INSTALL_LIBDIR}/tixi)	 
+export (EXPORT tixi-targets
+  NAMESPACE tixi::
+)
+install (EXPORT tixi-targets DESTINATION ${CONFIG_INSTALL_DIR})	 
 
 install (FILES
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config.cmake"
-  "${PROJECT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/tixi-config-version.cmake"
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/tixi)
+  "${CMAKE_CURRENT_BINARY_DIR}/tixi-config.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/tixi-config-version.cmake"
+  DESTINATION ${CONFIG_INSTALL_DIR})

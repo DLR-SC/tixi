@@ -3,9 +3,11 @@
 #  TIXI_INCLUDE_DIRS - include directories for TiXI
 #  TIXI_LIBRARIES    - libraries to link against
 
+@PACKAGE_INIT@
+
 # Compute paths
-get_filename_component(TIXI_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-set(TIXI_INCLUDE_DIRS "${TIXI_CMAKE_DIR}/../../include/")
+set_and_check(TIXI_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDE_DIR@")
+set_and_check(TIXI_CMAKE_DIR "@PACKAGE_CONFIG_INSTALL_DIR@")
  
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET TIXI)

@@ -11,6 +11,11 @@ endif()
 
 project (TIXI)
 
+# convert path to absolute (required for some scripts)
+if (NOT IS_ABSOLUTE ${CMAKE_INSTALL_PREFIX})
+   set (CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX})
+endif()
+
 OPTION(ENABLE_COVERAGE "Enable GCov coverage analysis (defines a 'coverage' target and enforces static build of tixi)" ON)
 
 set(TIXI_VERSION_MAJOR 2)
@@ -34,6 +39,10 @@ endif(NOT DEFINED CMAKE_INSTALL_LIBDIR)
 if(NOT DEFINED CMAKE_INSTALL_BINDIR)
     set(CMAKE_INSTALL_BINDIR "bin")
 endif(NOT DEFINED CMAKE_INSTALL_BINDIR)
+
+if(NOT DEFINED CMAKE_INSTALL_INCLUDE_DIR)
+    set(CMAKE_INSTALL_BINDIR "include")
+endif(NOT DEFINED CMAKE_INSTALL_INCLUDE_DIR)
 
 find_package(CURL REQUIRED)
 find_package(XSLT REQUIRED)
@@ -68,16 +77,6 @@ if(WIN32)
     endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif(WIN32)
 
-configure_file(contrib/tixi-config-version.cmake.in 
-    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config-version.cmake" @ONLY)
-configure_file(contrib/tixi-config.cmake.in 
-    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config.cmake" @ONLY)
-
-configure_file(contrib/tixi-config-version.cmake.in 
-    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config-version.cmake" @ONLY)
-configure_file(contrib/tixi-config.cmake.in 
-    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tixi-config.cmake" @ONLY)
-
 #create tixi library
 add_subdirectory(src)
 
@@ -88,6 +87,7 @@ add_subdirectory(bindings)
 #create gtests, override gtest standard setting
 option(TIXI_BUILD_TESTS "Build TIXI Testsuite" OFF)
 if(TIXI_BUILD_TESTS)
+  enable_testing() 
   option(gtest_force_shared_crt "" ON)
   mark_as_advanced(gtest_force_shared_crt)
   set (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
