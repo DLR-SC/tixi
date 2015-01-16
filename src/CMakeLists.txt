@@ -56,10 +56,7 @@ configure_package_config_file (${PROJECT_SOURCE_DIR}/contrib/tixi-config.cmake.i
 	INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
 	PATH_VARS CMAKE_INSTALL_INCLUDE_DIR CONFIG_INSTALL_DIR
 )
-		 
-export (EXPORT tixi-targets
-  NAMESPACE tixi::
-)
+
 install (EXPORT tixi-targets DESTINATION ${CONFIG_INSTALL_DIR})	 
 
 install (FILES
