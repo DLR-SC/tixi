@@ -1,3 +1,10 @@
+TIXI
+====
+
+Library for accessing XML content
+
+CONTENT
+-------
 The lib directory contains the TIXI library and the library and its interfaces 
 to fortran, matlab, python and java.
 
@@ -5,13 +12,15 @@ The Demo contains examples how to use the TIXI library together
 with a makefile showing how to compile and link programs
 equipped with calls to the TIXI library. 
 
-==PREREQUISITES==
+PREREQUISITES
+-------------
 
 Tixi depends on following software/libraries to build properly:
-1. cmake (http://www.cmake.org/)
-2. libxml2 (http://xmlsoft.org/)
-3. libxslt (http://xmlsoft.org/XSLT/)
-4. libcurl (http://curl.haxx.se/libcurl/)
+
+1. [cmake](http://www.cmake.org/)
+2. [libxml2](http://xmlsoft.org/)
+3. [libxslt](http://xmlsoft.org/XSLT/)
+4. [libcurl](http://curl.haxx.se/libcurl/)
 
 For windows systems, the precompiled libraries (2 - 4) for the 32 and 
 64 bit architecture can be downloaded from our project page.
@@ -19,15 +28,19 @@ For windows systems, the precompiled libraries (2 - 4) for the 32 and
 Under linux, these libraries can be usually installed with the 
 package manager of the linux distribution.
 
-On Mac Systems, we advise to use homebrew (http://mxcl.github.com/homebrew/)
+On Mac Systems, we advise to use [homebrew](http://mxcl.github.com/homebrew/)
 which allows an uncomplicated way of installing/compiling external software.
-For example libxslt can be installed via "brew install libxslt".
+For example libxslt can be installed via 
+
+    brew install libxslt
 
 
-==BUILD INSTRUCTIONS==
+BUILD INSTRUCTIONS
+------------------
+
 Tixi uses the cmake build system, which can generate build scripts for e.g. 
 MS Visual Studio, Apple XCode, Eclipse CDT, GNU Makefiles and many more. In 
-order to use cmake, it has to be downloaded first from http://www.cmake.org/. 
+order to use cmake, it has to be downloaded first from [here](http://www.cmake.org/). 
 Under linux we advise to install the packages cmake and cmake-qt-gui.
 
 Cmake is able to create out-of-source builds, i.e. it uses a different build 
@@ -47,21 +60,30 @@ the build directory and type "make".
 After a succesful compilation, the compiled TIXI library and its interfaces can be 
 found in the "lib" directory of the build tree.
 
-==MATLAB INTERFACE==
+MATLAB INTERFACE
+----------------
+
 In order to create the matlab interface, MATLAB has to be installed on the build 
 system. MATLAB is currently not found automatically, thus the MATLAB installation
 directory has to be specified with the cmake variable "MATLAB_DIR". After pressing 
 "Configure" again, cmake should find all required includes files and library files
 for the generation of the matlab interface.
 
-==FORTRAN INTERFACE==
+FORTRAN INTERFACE
+-----------------
+
 A fortran compiler is not required to build the fortran interface. However, as different
 fortran compilers have different name manglings, it has to be specified for which
 fortran system the tixi interface should be build. This is done by specifying 
-the variable "CMAKE_Fortran_COMPILER". Valid options are:
-  ifort (Intel fortran compiler)
-  gfortran
-  g77
-  g77_irix
-  f90
-  
+the variable 
+
+    CMAKE_Fortran_COMPILER
+
+Valid options are:
+
+    ifort (Intel fortran compiler)
+    gfortran
+    g77
+    g77_irix
+    f90
+
