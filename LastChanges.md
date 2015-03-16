@@ -1,0 +1,125 @@
+## Version 2.1.1 ##
+Released: 12/02/2014
+
+  * General Changes
+    * Rerouting mechanism for error and warning messages (a custom message handler can be installed)
+    * Added Python 3 support
+
+
+  * API Changes
+    * `tixiAddFloatVector` now has an additional precision parameter to control e.g. the number of digits after the decimal point
+
+  * New Functions
+    * `tixiUpdateFloatVector` to change the data of an already existing vector
+    * `tixiSetPrintMsgFunc` to install a custom message handler
+
+  * Fixes
+    * `tixiGetNumberOfChilds` and `tixiGetChildNodeName` now ignore DTD nodes
+    * MATLAB specific: reverted `tixiCheckElement`, `tixiCheckAttribute`, `tixiCheckDocumentHandle`, `tixiCheckUIDExists` to old behavior
+
+
+## Version 2.1.0 ##
+Released: 01/17/2014
+
+  * General Changes
+    * Automatic generation of python and matlab bindings
+    * TiXI can now be used as an Android NDK native module
+    * TiXI installs cmake config files in order to be used by other projects
+
+
+  * API Changes
+    * Renamed `tixiGetChildElementName` to `tixiGetChildNodeName`. Its output is now consistent with DOM standard.
+    * Removed `tixiGetRawInterface`
+    * Changed arguments in `tixiAddPoint` MATLAB binding
+    * Removed all matrix related functions
+
+  * New Functions
+    * `tixiGetNodeType`, returns the type of an XML node accoring to DOM standard.
+
+
+  * Fixes
+    * Fixed incorrect return value of `tixiGetFloatVector`, if number of elements read is smaller than expected
+    * TiXI can now be built with clang also on windows
+    * Fixed wrong formatting of the result XML, when inserting an XML element using `tixiCreateElementAtIndex`
+
+
+## Version 2.0.4 ##
+Released: 03/28/2013
+
+  * New Functions
+    * `tixiGetChildElementName` - Returns the name of a child element beneath a given path.
+    * `tixiGetAttributeName` - Returns the name of an attribute of a given node.
+    * `tixiGetNumberOfChilds` - Returns the number of childs elements of a given path.
+    * `tixiGetNumberOfAttributes` - Returns the number of attributes of a given node.
+    * `tixiGetBooleanAttribute`
+  * Changes:
+    * Switched the API to const char strings. This should produce much less warnings but should not break the current API/ABI.
+    * Added file tixi\_version.h including all version information.
+    * Added support for visual leak detector
+    * Added check for python version < 3.0 and python version > 2.5
+  * Fixes:
+    * Fixed `tixiUpdateTextElement` not updating the text, if the node was empty before
+    * Fixed element retrieving of root node
+    * Fixed uIDCheckExists behaviour of python wrapper
+
+
+## Version 2.0.3 ##
+Released: 11/09/2012
+
+  * Changed UnitTesting Framework to google-test
+  * Added coverage with gcov (gcc only) to project
+  * Added check that the number of elements in an array is the same as the specified array size
+  * Fixed null-pointer bug in tixiGetTextAttribute
+  * tixiAddCpacsHeader now creates also a CPACS version tag
+  * Documentation overhaul
+  * New functions
+    * `tixiUpdateIntegerElement`
+    * `tixiUpdateBooleanElement`
+
+## Version 2.0.2 ##
+Released: 10/25/2012
+
+  * Fixed lots of memory leaks
+  * Improved usability of uIDCheckExists (python)
+  * Changed unit testing framework to google test (gtest-1.6.0)
+  * Added more unit tests
+
+## Version 2.0.1 ##
+Released: 10/09/2012
+
+  * Installer for 64-bit Windows
+  * All-In-One installer with 3rd party dependencies for Windows
+  * Added MATLAB interface
+
+## Version 2.0 ##
+  * Changes to fit CPACS-2.0 and TIGL-2.0.
+
+## Version 1.1 ##
+  * Using a more recent version of MSVC (2008)
+  * Adding a JAVA (OSGi) Bundle that allows easy usage of TIXI functions from java code to repository. Right now the most important functions are implemented
+  * New functions
+    * `tixiUpdateDoubleElement` replaces an double element of a node
+    * `tixiAddTextElementAtIndex` could create a new element at a given position
+
+## Version 1.0 ##
+  * Fixes
+    * `tixiRemoveAttribute` does not remove an attribute
+    * `tixiCheckAttribute` does no longer write an error message when not finding attributes
+  * New fuctions
+    * `tixiUIDCheckLinks` (new function) performs a check over all nodes with the uID _"isLink"_ and checks if the corresponding uid exists in that data set
+  * Many functions now print more informative error messages
+  * Added a Python wrapper for the C-code and DLL handling (no need to manually convert cpython variables to python)
+
+
+## Version 0.9 ##
+  * New function `tixiUsePrettyPrint` to make pretty print optional
+  * New UID helper functions:
+    * `tixiUIDCheckDuplicates` checks if all uID are unique
+    * `tixiUIDGetXPath gives` the XPath to a given uID
+    * `tixiUIDCheckExists` checks if a uID exists
+    * `tixiUIDSetToXPath` sets a uID to a given node
+    * `tixiXPathEvaluateNodeNumber` Evaluates a XPath expression and returns the number of result nodes matching this xpath expression.
+    * `tixiXPathExpressionGetTextByIndex` Evaluates a XPath expression and returns the text content of the resultnode matching this xpath expression.
+  * Bugfix in `tixiAddTextAttributes`. The function does now replace a attribute if there is already one with the same name.
+  * Bugfix in `tixiRemoveAttribute`. The function does deletes a attribute from a node correctly.
+  * TIXI 64-Bit libs are available for linux.
