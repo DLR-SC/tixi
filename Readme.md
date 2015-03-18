@@ -15,4 +15,4 @@ tixiGetDoubleElement( handle, elementPath, &x );
 ```
 
 ## Multi Language Support ##
-The TIXI library is written in C, but there are interfaces and wrappers for C++, Fortran, Python, JAVA and Matlab. Take a look at our [usage examples](https://github.com/DLR-SC/tixi/wiki/UsageExamples) for specific examples.
+The TIXI library is written in C, but there are interfaces and wrappers for C++, Fortran, Python, JAVA and Matlab. Take a look at our examples for [Python](https://github.com/DLR-SC/tixi/wiki/PythonExamples), [C](https://github.com/DLR-SC/tixi/wiki/CExamples) and [Fortran](https://github.com/DLR-SC/tixi/wiki/Fortran Examples).
