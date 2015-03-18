@@ -1,4 +1,4 @@
-### TIXI ###
+# TIXI #
 
  - Binary Downloads:  https://github.com/DLR-SC/tixi/wiki/Downloads
  - API Documentation: http://tixi.sourceforge.net/Doc/index.html
