@@ -387,6 +387,26 @@ DLL_EXPORT ReturnCode tixiCreateDocument(const char *rootElementName, TixiDocume
   return SUCCESS;
 }
 
+DLL_EXPORT ReturnCode tixiGetDocumentPath(TixiDocumentHandle handle, char** documentPath)
+{
+    TixiDocument *document = NULL;
+    
+    if (!documentPath) {
+        printMsg(MESSAGETYPE_ERROR, "Error: Null Pointer in tixiGetDocumentPath.\n");
+        return FAILED;
+    }
+    
+    document = getDocument(handle);
+    if (!document) {
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle in tixiGetDocumentPath.\n");
+        return INVALID_HANDLE;
+    }
+    
+    *documentPath = document->xmlFilename;
+    
+    return SUCCESS;
+}
+
 /*
 Distinguish internal/user/fatal errors!!!
 */
@@ -523,10 +543,8 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
   if (xmlDocument) {
 
     document = (TixiDocument *) malloc(sizeof(TixiDocument));
-    document->xmlFilename = (char *) malloc(strlen(tixiFileName) * sizeof(char) + 1);
-    strcpy(document->xmlFilename, tixiFileName);
-    document->dirname = (char *) malloc(strlen(relativDirPath) * sizeof(char) + 1);
-    strcpy(document->dirname, relativDirPath);
+    document->xmlFilename = NULL;
+    document->dirname = NULL; 
 	document->filename = NULL;
     document->validationFilename = NULL;
     document->docPtr = xmlDocument;

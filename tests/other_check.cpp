@@ -166,6 +166,12 @@ TEST_F(OtherTests, exportAsString){
     ASSERT_EQ(FAILED, tixiExportDocumentAsString(inDocumentHandle, NULL));
 }
 
+TEST_F(OtherTests, getDocumentPath){
+    char * text  = NULL;
+    ASSERT_EQ(SUCCESS, tixiGetDocumentPath(inDocumentHandle, &text));
+    ASSERT_STREQ("TestData/in.xml", text);
+}
+
 TEST(VersionTests, get_Version_notNull) {
 	char *version = tixiGetVersion();
 	ASSERT_TRUE(version != NULL);
@@ -179,6 +185,21 @@ TEST(OtherTests2, importFromString){
     TixiDocumentHandle handle;
     ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
     tixiCloseDocument(handle);
+}
+
+TEST(OtherTests2, getDocumentPathNoPath){
+    const char * s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root/>";
+    TixiDocumentHandle handle, handle2;
+    char* path = NULL;
+    ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
+    ASSERT_EQ(SUCCESS, tixiGetDocumentPath(handle, &path));
+    ASSERT_EQ(NULL, path);
+    tixiCloseDocument(handle);
+    
+    tixiCreateDocument("root", &handle2);
+    ASSERT_EQ(SUCCESS, tixiGetDocumentPath(handle2, &path));
+    ASSERT_EQ(NULL, path);
+    tixiCloseDocument(handle2);
 }
 
 TEST(OtherTests2, importFromString_invalidxml){

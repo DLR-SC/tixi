@@ -541,7 +541,23 @@ typedef int TixiDocumentHandle;
 
   DLL_EXPORT ReturnCode tixiCreateDocument (const char *rootElementName, TixiDocumentHandle * handle);
 
-/**
+  /**
+    @brief Returns the file path to the document.
+    
+    The path is empty, if the document was not opened, but created by ::tixiCreateDocument.
+    
+    @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+    @param documentPath (out) Path to the file, opened by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP
+                              The path is a null pointer, if the document was created by ::tixiCreateDocument or ::tixiImportFromString
+    
+    @return
+      - SUCCESS in case of no errors.
+      - FAILED if documentPath is a null pointer.
+      - INVALID_HANDLE if the document handle is invalid.
+  */
+  DLL_EXPORT ReturnCode tixiGetDocumentPath (TixiDocumentHandle handle, char** documentPath);
+
+  /**
     @brief Write XML-document to disk.
 
     The document is written into a file specified by xmlFilename. The
