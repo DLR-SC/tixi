@@ -204,7 +204,7 @@ TEST(OtherTests2, getDocumentPathNoPath){
 
 TEST(OtherTests2, importFromString_invalidxml){
     const char * s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root></notmatch>";
-    TixiDocumentHandle handle;
+    TixiDocumentHandle handle = -1;
     ASSERT_EQ(NOT_WELL_FORMED, tixiImportFromString(s, &handle));
     tixiCloseDocument(handle);
 }

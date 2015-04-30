@@ -15,5 +15,7 @@ void tixiSilentMessage(MessageType , const char *, ...){}
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   tixiSetPrintMsgFunc(tixiSilentMessage);
-  return RUN_ALL_TESTS();
+  int ret =  RUN_ALL_TESTS();
+  tixiCleanup();
+  return ret;
 }

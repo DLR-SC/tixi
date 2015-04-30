@@ -1815,6 +1815,10 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
   }
 
   error = checkElement(xmlDocument, parentPath, &parent, &xpathObject);
+  if (xpathObject) {
+      xmlXPathFreeObject(xpathObject);
+      xpathObject = NULL;
+  }
 
   if (!error) {
 
@@ -1835,7 +1839,6 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
       if (!child) {
         printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "x");
         xmlFreeNode(pointNode);
-        xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
     }
@@ -1856,7 +1859,6 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
       if (!child) {
         printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "y");
         xmlFreeNode(pointNode);
-        xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
     }
@@ -1878,7 +1880,6 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
       if (!child) {
         printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "z");
         xmlFreeNode(pointNode);
-        xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
     }

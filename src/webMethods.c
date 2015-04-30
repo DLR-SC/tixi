@@ -91,6 +91,7 @@ char* curlGetURLInMemory(const char *url)
 
     /* cleanup curl stuff */
     curl_easy_cleanup(curl_handle);
+    curl_global_cleanup();
 
     if (res != CURLE_OK)
     {
@@ -120,6 +121,7 @@ int curlGetFileToLocalDisk(const char* url, const char* local)
 
         /* always cleanup */
         curl_easy_cleanup(curl);
+        curl_global_cleanup();
 
         if (res != CURLE_OK){
             return -1;
@@ -129,6 +131,7 @@ int curlGetFileToLocalDisk(const char* url, const char* local)
         return 0;
     }
     else {
+        curl_global_cleanup();
         return -1;
     }
 }

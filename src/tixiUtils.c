@@ -196,7 +196,7 @@ char* string_stripLeft(const char* string, int len)
         return NULL;
     }
 
-    resultString = (char *) malloc(sizeof(char) * strlen(string) - len);
+    resultString = (char *) malloc(sizeof(char) * (strlen(string) - len + 3));
 
     for(x = len; x < stringLength; x++) {
             resultString[y] = string[x];
