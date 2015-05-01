@@ -918,6 +918,8 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
     xmlDocument = document->docPtr;
 
     error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+    xmlXPathFreeObject(xpathObject);
+
     if (!error) {
         newElement = xmlNewText((xmlChar*) text);
         if(element->children)
@@ -959,11 +961,14 @@ DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, 
     textBuffer = buildString(format, number);
 
     error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+    xmlXPathFreeObject(xpathObject);
     if (!error) {
         newElement = xmlNewText((xmlChar*) textBuffer);
+        free(textBuffer);
         xmlReplaceNode(element->children, newElement);
         return SUCCESS;
     }
+    free(textBuffer);
     return FAILED;
 }
 
@@ -997,11 +1002,14 @@ DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle,
     textBuffer = buildString(format, number);
 
     error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+    xmlXPathFreeObject(xpathObject);
     if (!error) {
         newElement = xmlNewText((xmlChar*) textBuffer);
+        free(textBuffer);
         xmlReplaceNode(element->children, newElement);
         return SUCCESS;
     }
+    free(textBuffer);
     return FAILED;
 }
 
@@ -1240,7 +1248,7 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
     }
     else {
         /* insert at the end of the list */
-        xmlNewTextChild(parent, NULL, (xmlChar *) elementName, (xmlChar *) text);
+        xmlNewTextChild(parent, NULL, (const xmlChar *) elementName, (const xmlChar *) text);
     }
 
     xmlXPathFreeContext(xpathContext);
@@ -1594,6 +1602,8 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
     xmlXPathFreeObject(xpathObject);
     xmlXPathFreeContext(xpathContext);
+    free(childElementPath);
+    free(allChildren);
     return ELEMENT_NOT_FOUND;
   }
 
@@ -1605,6 +1615,8 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
             "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
     free(childElementPath);
     free(allChildren);
+    xmlXPathFreeObject(xpathObject);
+    xmlXPathFreeContext(xpathContext);
     return ELEMENT_PATH_NOT_UNIQUE;
   }
 
@@ -2779,6 +2791,7 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
     }
     
     error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+    xmlXPathFreeObject(xpathObject);
 
     if(!error){
         xmlNodePtr child = element->children;
@@ -2836,6 +2849,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
 
  
   error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+  xmlXPathFreeObject(xpathObject);
 
   if (!error) {
     xmlNodePtr children = element->children;
@@ -2868,6 +2882,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle,
   xmlDocument = document->docPtr;
  
   error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+  xmlXPathFreeObject(xpathObject);
 
   if (!error) {
     xmlAttrPtr attr = element->properties;
@@ -2902,6 +2917,7 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
   }
  
   error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
+  xmlXPathFreeObject(xpathObject);
 
   if (!error) {
     xmlAttrPtr attr = element->properties;
@@ -2941,6 +2957,7 @@ DLL_EXPORT ReturnCode tixiGetNodeType(const TixiDocumentHandle handle, const cha
 
     xmlDocument = document->docPtr;
     error = checkElement(xmlDocument, nodePath, &element, &xpathObject);
+    xmlXPathFreeObject(xpathObject);
 
     if (!error) {
         switch (element->type) {

@@ -49,6 +49,7 @@ xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char *xPathExpres
 	  return NULL;
 	}
 
+	xmlXPathFreeContext(xpathContext);
 	return xpathObject;
 }
 
@@ -59,6 +60,7 @@ int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression)
 	xmlDocPtr doc;
     xmlXPathObjectPtr xpathObject;
     xmlNodeSetPtr nodes = NULL;
+    int nodeNr = 0;
 
     /* Load XML document */
     doc = tixiDocument->docPtr;
@@ -68,7 +70,9 @@ int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression)
     }
 
     nodes = xpathObject->nodesetval;
-    return nodes->nodeNr;
+    nodeNr = nodes->nodeNr;
+    xmlXPathFreeObject(xpathObject);
+    return nodeNr;
 }
 
 
@@ -96,16 +100,19 @@ char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpres
 	size = (nodes) ? nodes->nodeNr : 0;
 	if (size == 0) {
 		printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
+		xmlXPathFreeObject(xpathObject);
 		return NULL;
 	}
 
 	if (size < index) {
 		printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
+        xmlXPathFreeObject(xpathObject);
 		return NULL;
 	}
 
 	if (index <= 0) {
 		printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
+		xmlXPathFreeObject(xpathObject);
 		return NULL;
 	}
 
@@ -118,10 +125,12 @@ char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpres
 		if (cur->children) {
 			text = (char*) cur->children->content;
 		} else {
+			xmlXPathFreeObject(xpathObject);
 			return NULL;
 		}
 	}
 
+	xmlXPathFreeObject(xpathObject);
 	return text;
 }
 
@@ -147,26 +156,32 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
     size = (nodes) ? nodes->nodeNr : 0;
     if (size == 0) {
         printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
+        xmlXPathFreeObject(xpathObject);
         return NULL;
     }
 
     if (size < index) {
         printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
+        xmlXPathFreeObject(xpathObject);
         return NULL;
     }
 
     if (index <= 0) {
         printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
+        xmlXPathFreeObject(xpathObject);
         return NULL;
     }
 
     cur = nodes->nodeTab[--index];
 
     if (cur->type == XML_ELEMENT_NODE) {
+        xmlXPathFreeObject(xpathObject);
         return (char*)cur->name;
     } else if (cur->type == XML_ATTRIBUTE_NODE) {
+        xmlXPathFreeObject(xpathObject);
         return NULL;
     }
+    xmlXPathFreeObject(xpathObject);
     return NULL;
 }
 

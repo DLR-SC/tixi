@@ -37,9 +37,10 @@ class UtilsTest : public ::testing::Test {
 
 TEST_F(UtilsTest, string_stripLeft){
     const char * mystring = "    my new string";
-    const char * newstring = NULL;
+    char * newstring = NULL;
     newstring = string_stripLeft(mystring, 4);
     ASSERT_STREQ("my new string", newstring);
+    free(newstring);
 }
 
 TEST_F(UtilsTest, string_stripLeft_error){

@@ -29,6 +29,7 @@ TEST(WebMethods, curlGetURLInMemory){
     ASSERT_STREQ("hello world", text);
 
     remove ("mytmpfile.sh");
+    free(text);
 }
 
 TEST(WebMethods, myrealloc)
@@ -41,5 +42,7 @@ TEST(WebMethods, myrealloc)
 
     b = (char*) myrealloc((void*)b, 20);
     ASSERT_TRUE(b != NULL);
+    free(a);
+    free(b);
 }
 

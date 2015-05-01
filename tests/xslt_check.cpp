@@ -81,8 +81,9 @@ TEST_F(XsltChecks, xslTransformationToString)
 {
     TixiDocument *document = getDocument(documentHandle);
 
-    const char * string = xsltTransformToString(document->docPtr, stylesheetFilename);
+    char * string = xsltTransformToString(document->docPtr, stylesheetFilename);
     ASSERT_STRNE("", string);
+    free(string);
 }
 
 TEST_F(XsltChecks, xslTransformationToString_invalidStylesheet)

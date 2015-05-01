@@ -41,11 +41,13 @@ char* xsltTransformToString(xmlDocPtr doc, const char *xslFilename) {
     res = xsltApplyStylesheet(style, doc, NULL);
     if(res == NULL) {
         printMsg(MESSAGETYPE_ERROR, "xsltTransformToString: Problem applying stylesheet");
+        xsltFreeStylesheet(style);
         return NULL;
     }
 
     xsltSaveResultToString(&string, &len, res, style);
     xmlFreeDoc(res);
+    xsltFreeStylesheet(style);
     return (char *) string;
 }
 
@@ -68,6 +70,7 @@ ReturnCode xsltTransformToFile(xmlDocPtr doc, const char *xslFilename, const cha
     res = xsltApplyStylesheet(style, doc, NULL);
     if(res == NULL){
         printMsg(MESSAGETYPE_ERROR, "xsltTransformToFile: Problem applying stylesheet");
+        xsltFreeStylesheet(style);
         return FAILED;
     }
 

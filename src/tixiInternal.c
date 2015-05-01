@@ -1175,6 +1175,7 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
 
     if (!document) {
         printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+        free(generatedXPath);
         return NULL;
     }
 

@@ -78,6 +78,7 @@ TEST_F(XPathChecks, XPathEvaluateExpression){
 
     xmlXPathObjectPtr res = XPathEvaluateExpression(document->docPtr, elementPathExists);
     ASSERT_TRUE(res != NULL);
+    xmlXPathFreeObject(res);
 }
 
 TEST_F(XPathChecks, XPathEvaluateExpression_invalidDoc){
@@ -95,6 +96,7 @@ TEST_F(XPathChecks, getText){
     TixiDocument *document = getDocument(documentHandle);
     char * text = XPathExpressionGetText(document, elementPathExists, 1);
     ASSERT_STREQ("Blupp", text);
+    xmlFree(text);
 }
 TEST_F(XPathChecks, getText_invalidIndex){
     TixiDocument *document = getDocument(documentHandle);
