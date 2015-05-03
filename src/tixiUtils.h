@@ -104,6 +104,26 @@ ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname);
 int isPathRelative(const char *dirname);
 
 
+
+/**
+  @brief Checks if a local directory is relative or absolute.
+
+ @param char dirname (in) The directory name
+ @return
+    - 0 if path is realtive
+    - != 0 if path seems to be absolute
+ */
+int isLocalPathRelative(const char *dirname);
+
+/**
+ * @brief Checks if a path is a URI (instead of a local path)
+ * @param path The file/directory path
+ * @return 
+ *   - 0, if is URI
+ *   - != 0, if local path
+ */
+int isURIPath(const char* path);
+
 /**
   @brief Converts all chars of a string to lower case.
 

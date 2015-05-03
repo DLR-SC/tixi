@@ -284,9 +284,11 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
             returnValue = openExternalFiles(document, &count);
             if (returnValue != SUCCESS){
                 printMsg(MESSAGETYPE_ERROR, "Error %d in including external files into tixiDoument.\n", returnValue);
+                removeDocumentFromList(*handle);
                 freeTixiDocument(document);
                 document = NULL;
                 count = 0;
+                return returnValue;
             }
         }
     }

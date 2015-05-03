@@ -573,7 +573,16 @@ char *buildString(const char *format, ...)
 }
 
 
-
+// @todo: this function has to be rewritten, because
+//   1) An XPath object is created to identify nodes of external files
+//   2) Inserting a node into the document changes the tree and invalidates the XPath object
+//   3) We have to change is as follows:
+//       a: loop
+//            evaluate xpath object
+//            if (xpath object empty) stop
+//            get path and exchange node
+//
+//   Also, curl can not be used for local relative paths (except the current path) -> new implementation for local paths (file://)
 ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
 {
 	ReturnCode error = 0;
@@ -640,14 +649,23 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             free(externalDataDirectoryPath);
             if (error) {
                 printMsg(MESSAGETYPE_ERROR, "Error: openExternalFiles returns %d when reading subpath.\n", error);
+                xmlXPathFreeContext(xpathContext);
+                xmlFree(externalDataNodePath);
+                xmlXPathFreeObject(xpathObject);
                 return FAILED;
             }
 
             /* now get number and names of all external files */
             if (tixiGetNamedChildrenCount(handle, externalDataNodePath, EXTERNAL_DATA_NODE_NAME_FILENAME, &externalFileCount) != SUCCESS) {
                 printMsg(MESSAGETYPE_ERROR, "Error: openExternalFiles could not get number of 'filename' children.\n");
+                xmlXPathFreeContext(xpathContext);
+                xmlXPathFreeObject(xpathObject);
+                xmlFree(externalDataNodePath);
                 return FAILED;
             }
+            
+            /* if externalDataDirectory is relative, make it relative to the current executable */
+            
 
             /* iterate through all "filename" nodes */
              for (i = 1; i <= externalFileCount; i++) {
@@ -667,6 +685,9 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
                 if (newDocumentString == NULL) {
                     printMsg(MESSAGETYPE_ERROR, "\nError in fetching url \"%s\".\n", externalFullFileName);
                     free(externalFullFileName);
+                    xmlFree(externalDataNodePath);
+                    xmlXPathFreeContext(xpathContext);
+                    xmlXPathFreeObject(xpathObject);
                     return OPEN_FAILED;
                 }
                 free(externalFullFileName);
@@ -702,6 +723,9 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
                     /* merge trees */
                     xmlAddChildList(getParentNodeToXPath(handle, externalDataNodePath), nodeToInsert);
                 } else {
+                    xmlXPathFreeContext(xpathContext);
+                    xmlXPathFreeObject(xpathObject);
+                    xmlFree(externalDataNodePath);
                     return FAILED;
                 }
             }

@@ -112,6 +112,37 @@ TEST_F(UtilsTest, isPathRelative){
     ASSERT_NE(0, isPathRelative("usr/local"));
 }
 
+TEST_F(UtilsTest, isLocalPathRelative){
+    ASSERT_EQ(0, isLocalPathRelative("./test.txt"));
+    
+    ASSERT_EQ(0, isLocalPathRelative("test.txt"));
+    
+    ASSERT_EQ(0, isLocalPathRelative("../test.txt"));
+    
+    // check absolute paths
+#ifdef WIN32
+    ASSERT_NE(0, isLocalPathRelative("d:/data/test.txt"));
+#else
+    ASSERT_NE(0, isLocalPathRelative("/usr/bin/test.txt"));
+#endif
+}
+
+TEST_F(UtilsTest, isURIPath) {
+    ASSERT_EQ(0, isURIPath("file://test.txt"));
+    ASSERT_EQ(0, isURIPath("file:///data/test.txt"));
+    ASSERT_EQ(0, isURIPath("file:///c:/data/test.txt"));
+    ASSERT_EQ(0, isURIPath("https://www.data.com/test.txt"));
+    ASSERT_EQ(0, isURIPath("http://www.data.com/test.txt"));
+    ASSERT_EQ(0, isURIPath("ftp://www.data.com/test.txt"));
+    ASSERT_EQ(0, isURIPath("ssh://www.data.com/test.txt"));
+    
+    ASSERT_EQ(1, isURIPath("c:/data.txt"));
+    ASSERT_EQ(1, isURIPath("./data.txt"));
+    ASSERT_EQ(1, isURIPath("../data.txt"));
+    ASSERT_EQ(1, isURIPath("data/data.txt"));
+    ASSERT_EQ(1, isURIPath("/home/user/data.txt"));
+}
+
 TEST_F(UtilsTest, isPathRelative_invalidPath){
     ASSERT_NE(0, isPathRelative(NULL));
 }

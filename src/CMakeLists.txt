@@ -23,6 +23,10 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 
 set(TIXI_LIBS ${CURL_LIBRARIES} ${XSLT_LIBRARIES} ${XML_LIBRARIES} ${VLD_LIBRARIES})
+if(WIN32)
+  set(TIXI_LIBS ${TIXI_LIBS} Shlwapi)
+endif(WIN32)
+
 add_library(TIXI SHARED ${TIXI_SRC} ${TIXI_HDR})
 target_link_libraries (TIXI  ${TIXI_LIBS})
 set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})

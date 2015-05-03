@@ -28,6 +28,7 @@
 #include <ctype.h>
 #ifdef _WIN32
   #include <direct.h>
+  #include <Shlwapi.h>
   #define mkdir(dir, attr) _mkdir((dir))
   #define rmdir(dir) _rmdir((dir))
 #else
@@ -169,6 +170,46 @@ int isPathRelative(const char *dirname)
     return returnCode;
 }
 
+int isLocalPathRelative(const char* dirname)
+{
+#ifdef _WIN32
+    if (PathIsRelative(dirname) == 1) {
+        return 0;
+    }
+    else {
+        return 1;
+    }
+#else
+    if (string_startsWith(dirname, "/") == 0) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+#endif
+}
+
+int isURIPath(const char* path)
+{
+    // qualifier to detect if url or not
+    const char * types[] = {
+        "file://",
+        "http://",
+        "https://",
+        "ftp://",
+        "ssh://"
+    };
+    int ntypes = sizeof (types) / sizeof (const char *);
+    int i;
+
+    for (i = 0; i < ntypes; ++i) {
+        if (string_startsWith(path, types[i]) == 0) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
 
 char* stringToLower(char* string)
 {
