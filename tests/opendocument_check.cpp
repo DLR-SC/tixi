@@ -88,7 +88,6 @@ TEST(opendocument_checks, DISABLED_external_data)
 
     ASSERT_EQ(SUCCESS,  tixiOpenDocumentRecursive( file, &documentHandle, OPENMODE_RECURSIVE));
     ASSERT_GE(documentHandle, 0);
-
     tixiCloseDocument( documentHandle );
 }
 

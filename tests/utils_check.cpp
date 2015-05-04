@@ -146,3 +146,33 @@ TEST_F(UtilsTest, isURIPath) {
 TEST_F(UtilsTest, isPathRelative_invalidPath){
     ASSERT_NE(0, isPathRelative(NULL));
 }
+
+TEST_F(UtilsTest, uriToLocalPath) {
+    char* result = NULL;
+
+    // a relative path
+    result = uriToLocalPath("file://data/test.txt");
+    ASSERT_STREQ("data/test.txt", result);
+    free(result);
+
+    // an absolute path
+#ifdef _WIN32
+    result = uriToLocalPath("file:///c:/data/test.txt");
+    ASSERT_STREQ("c:/data/test.txt", result);
+#else
+    result = uriToLocalPath("file:///data/test.txt");
+    ASSERT_STREQ("/data/test.txt", result);
+#endif
+    free(result);
+
+    // an non local URI
+    result = uriToLocalPath("ssh:///c:/data/test.txt");
+    ASSERT_EQ(NULL, result);
+}
+
+TEST_F(UtilsTest, loadFileToString) {
+    const char* expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root/>\n";
+    char* string = loadFileToString("TestData/out.xml");
+    ASSERT_STREQ(expected, string);
+    free(string);
+}

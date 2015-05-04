@@ -125,6 +125,23 @@ int isLocalPathRelative(const char *dirname);
 int isURIPath(const char* path);
 
 /**
+ * @brief uriToLocalPath converts a local URI (e.g. file://data.txt) to a local path (data.txt)
+ * @param uri URI to convert
+ * @return
+ *   local Path or zero, if the URI is a remote path and can't be converted
+ */
+char* uriToLocalPath(const char* uri);
+
+
+/**
+ * @brief loadFileToString Loads a file from disk and returns it as a string.
+ * @param path The local path to the file (no URI). E.g. /data/myfile.txt. The path may be relative as well.
+ * @return
+ *   The file as a string or a NULL pointer, if the file could not be loaded.
+ */
+char* loadFileToString(const char* path);
+
+/**
   @brief Converts all chars of a string to lower case.
 
  @param char string (in) the string to be converted

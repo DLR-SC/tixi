@@ -572,6 +572,28 @@ char *buildString(const char *format, ...)
   return buffer;
 }
 
+char* loadExternalFileToString(const char* filename)
+{
+    if (isURIPath(filename) != 0) {
+        // local file
+        return loadFileToString(filename);
+    }
+    else if (string_startsWith(filename, "file://") == 0) {
+        char* localPath = uriToLocalPath(filename);
+        char* result = NULL;
+        if (!localPath) {
+            return NULL;
+        }
+        result = loadFileToString(localPath);
+
+        free(localPath);
+        return result;
+    }
+    else {
+        return curlGetURLInMemory(filename);
+    }
+}
+
 
 // @todo: this function has to be rewritten, because
 //   1) An XPath object is created to identify nodes of external files
@@ -681,9 +703,9 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
                 sprintf(externalFullFileName, "%s%s", externalDataDirectory, externalFileName);
 
                 /* open files */
-                newDocumentString = curlGetURLInMemory(externalFullFileName);
+                newDocumentString = loadExternalFileToString(externalFullFileName);
                 if (newDocumentString == NULL) {
-                    printMsg(MESSAGETYPE_ERROR, "\nError in fetching url \"%s\".\n", externalFullFileName);
+                    printMsg(MESSAGETYPE_ERROR, "\nError in fetching external file \"%s\".\n", externalFullFileName);
                     free(externalFullFileName);
                     xmlFree(externalDataNodePath);
                     xmlXPathFreeContext(xpathContext);

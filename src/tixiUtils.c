@@ -211,6 +211,59 @@ int isURIPath(const char* path)
     return 1;
 }
 
+char* uriToLocalPath(const char* URI)
+{
+    //we can only resolve the URI, if it starts with file://
+    if (string_startsWith(URI, "file://") != 0) {
+        return 0;
+    }
+
+    if (isPathRelative(URI) == 0) {
+        // relative path, strip file://
+        char* localPath = string_stripLeft(URI, 7);
+        return localPath;
+    }
+    else {
+        // absolute path,
+        // on windows file:///c:/data/file.txt -> c:/data/file.txt
+        // on linux   file:///data/file.txt -> /data/file.txt
+#if _WIN32
+        char* localPath = string_stripLeft(URI, 8);
+        return localPath;
+#else
+        char* localPath = string_stripLeft(URI, 7);
+        return localPath;
+#endif
+    }
+
+}
+
+char* loadFileToString(const char* path)
+{
+    char * buffer = 0;
+    long length;
+    FILE * f = fopen (path, "rb");
+    if (f)
+    {
+      fseek (f, 0, SEEK_END);
+      length = ftell (f);
+      fseek (f, 0, SEEK_SET);
+      buffer = malloc (length + sizeof(char)*3);
+      if (buffer)
+      {
+        fread (buffer, 1, length, f);
+      }
+      fclose (f);
+
+      // null terminate the string
+      buffer[length] = '\0';
+      return buffer;
+    }
+    else {
+        return NULL;
+    }
+}
+
 char* stringToLower(char* string)
 {
     int i;
