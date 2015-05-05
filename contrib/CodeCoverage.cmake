@@ -57,63 +57,43 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
         IF(NOT GENHTML_PATH)
                 MESSAGE(FATAL_ERROR "genhtml not found! Aborting...")
         ENDIF() # NOT GENHTML_PATH
+
+        IF(NOT GCOVR_PATH)
+                MESSAGE(FATAL_ERROR "gcovr not found! Aborting...")
+        ENDIF() # NOT GCOVR_PATH
         
-        # copy testdata
-        file(COPY ${PROJECT_SOURCE_DIR}/tests/TestData DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
         # Setup target
         ADD_CUSTOM_TARGET(${_targetname}
         
                 # Cleanup lcov
-                ${LCOV_PATH} --directory . --zerocounters
+                ${LCOV_PATH} --directory ${PROJECT_BINARY_DIR}  --zerocounters
 
                 # Run tests
                 COMMAND ${_testrunner} ${ARGV3}
 
                 # Capturing lcov counters and generating report
-                COMMAND ${LCOV_PATH} --directory ./src --capture --output-file ${_outputname}.info
-                COMMAND ${LCOV_PATH} --remove ${_outputname}.info 'tests/*' 'thirdparty/*' '/usr/*' '/tools/*' --output-file ${_outputname}.info.cleaned
-                COMMAND ${GENHTML_PATH} -o ${_outputname} ${_outputname}.info.cleaned
+                COMMAND ${LCOV_PATH} --directory ${PROJECT_BINARY_DIR} --base-directory ${PROJECT_SOURCE_DIR} --quiet --no-external --capture --output-file ${_outputname}.info
+                COMMAND ${LCOV_PATH} --remove ${_outputname}.info 'tests/*' 'thirdparty/*' --output-file ${_outputname}.info.cleaned
+                COMMAND ${GENHTML_PATH} -o ${PROJECT_BINARY_DIR}/${_outputname} ${_outputname}.info.cleaned
                 COMMAND ${CMAKE_COMMAND} -E remove ${_outputname}.info ${_outputname}.info.cleaned
 
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests
                 COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters and generating report."
         )
 
+	# create cobertura output
+        ADD_CUSTOM_COMMAND(TARGET ${_targetname} POST_BUILD
+                # Running gcovr
+                COMMAND ${GCOVR_PATH} -x -r ${CMAKE_SOURCE_DIR} -e '${CMAKE_SOURCE_DIR}/thirdparty/' -e '${CMAKE_SOURCE_DIR}/tests/' -e '${CMAKE_SOURCE_DIR}/build/' -o ${_outputname}.xml
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                COMMENT "Running gcovr to produce Cobertura code coverage report. ${_testrunner} ${ARGV3}"
+        )
+
         # Show info where to find the report
         ADD_CUSTOM_COMMAND(TARGET ${_targetname} POST_BUILD
                 COMMAND ;
-                COMMENT "Open ./${_outputname}/index.html in your browser to view the coverage report."
+                COMMENT "Open ./${_outputname}/index.html in your browser to view the coverage report.\nThe cobertura coverage is stored in ${_outputname}.xml."
         )
 
 ENDFUNCTION() # SETUP_TARGET_FOR_COVERAGE
-
-# Param _targetname     The name of new the custom make target
-# Param _testrunner     The name of the target which runs the tests
-# Param _outputname     cobertura output is generated as _outputname.xml
-# Optional fourth parameter is passed as arguments to _testrunner
-#   Pass them in list form, e.g.: "-j;2" for -j 2
-FUNCTION(SETUP_TARGET_FOR_COVERAGE_COBERTURA _targetname _testrunner _outputname)
-
-        IF(NOT GCOVR_PATH)
-                MESSAGE(FATAL_ERROR "gcovr not found! Aborting...")
-        ENDIF() # NOT GCOVR_PATH
-
-        ADD_CUSTOM_TARGET(${_targetname}
-
-                # Run tests
-                ${_testrunner} ${ARGV3}
-
-                # Running gcovr
-                COMMAND ${GCOVR_PATH} -x -r ${CMAKE_SOURCE_DIR}/src/ -e '${CMAKE_SOURCE_DIR}/thirdparty/' -e '${CMAKE_SOURCE_DIR}/tests/'  -o ${_outputname}.xml
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                COMMENT "Running gcovr to produce Cobertura code coverage report."
-        )
-
-        # Show info where to find the report
-        ADD_CUSTOM_COMMAND(TARGET ${_targetname} POST_BUILD
-                COMMAND ;
-                COMMENT "Cobertura code coverage report saved in ${_outputname}.xml."
-        )
-
-ENDFUNCTION() # SETUP_TARGET_FOR_COVERAGE_COBERTURA 
