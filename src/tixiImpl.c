@@ -722,7 +722,7 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader(const TixiDocumentHandle handle,
 
 		descriptionElement = xmlNewTextChild(headerElement, nameSpace,
 				(xmlChar *) "description", (xmlChar *) description);
-		if (!creatorElement) {
+		if (!descriptionElement) {
 			printMsg(MESSAGETYPE_ERROR,
 					"Error:  Failed to create \"description\" element.\n");
 			return FAILED;

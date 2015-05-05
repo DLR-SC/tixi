@@ -101,7 +101,7 @@ TEST(uid_checks, tixiUIDCheck_setToXpath)
 {
     TixiDocumentHandle documentHandle = -1;
     char *text = NULL;
-    char *new_uid_text = "new_uid_text";
+    const char *new_uid_text = "new_uid_text";
 
     ASSERT_TRUE( tixiOpenDocument( filename_uid_correct, &documentHandle ) == SUCCESS );
     ASSERT_TRUE( tixiUIDSetToXPath(documentHandle, "/root/a[2]/b[1]", new_uid_text) == SUCCESS );
