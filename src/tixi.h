@@ -2692,11 +2692,24 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
           @param xPathExpression (in) The XPath Expression to evaluate.
           @param number (out) The number of nodes matching this xpath expression.
           @return
-           - SUCCESS if successfully retrieve the text content of a single element.
-           - FAILED  is an internal error occured.
+           - SUCCESS if successfully retrieved the number of the xPath search.
+           - FAILED  if an internal error occured.
        */
       DLL_EXPORT ReturnCode tixiXPathEvaluateNodeNumber(TixiDocumentHandle handle, const char *xPathExpression, int *number);
 
+      /**
+            @brief Evaluates a XPath expression and the xPath for the i-th result.
+
+            @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+            @param xPathExpression (in) The XPath Expression to evaluate.
+            @param index (in) The index of the result to query, with 1 <= index <= number, and number queried with ::tixiXPathEvaluateNodeNumber
+            @param xPath (out) The xPath of the search result.
+            @return
+             - SUCCESS if successfully retrieve the xPath of the search.
+             - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist.
+             - FAILED  if an internal error occured.
+      */
+      DLL_EXPORT ReturnCode tixiXPathExpressionGetXPath(TixiDocumentHandle handle, const char *xPathExpression, int index, char** xPath);
 
       /**
             @brief Evaluates a XPath expression and returns the text content of the resultnode matching this xpath expression.

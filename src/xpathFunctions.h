@@ -41,7 +41,19 @@ int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression);
 
 char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpression, int index);
 
+/**
+ * @brief XPathExpressionGetElementPath Returns the name of the i-th element matching the xPathExpression
+ * @return
+ *   Name of the element. Null in case if an error. The String must not be freed by the user.
+ */
 char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPathExpression, int index);
+
+/**
+ * @brief XPathExpressionGetElementPath Returns the XPath to the i-th element matching the xPathExpression
+ * @return
+ *   XPath String. Null in case if an error.
+ */
+char* XPathExpressionGetElementPath(TixiDocument *tixiDocument, const char *xPathExpression, int index);
 
 #ifdef __cplusplus
 }

@@ -2749,6 +2749,31 @@ DLL_EXPORT ReturnCode tixiXPathEvaluateNodeNumber(TixiDocumentHandle handle, con
 	return error;
 }
 
+DLL_EXPORT ReturnCode tixiXPathExpressionGetXPath(TixiDocumentHandle handle, const char *xPathExpression, int index, char** xPath)
+{
+    TixiDocument *document = getDocument(handle);
+    char* tmpXPath = NULL;
+    int error = SUCCESS;
+
+    if (!document) {
+        printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+        return INVALID_HANDLE;
+    }
+
+    tmpXPath = XPathExpressionGetElementPath(document, xPathExpression, index);
+    if (!tmpXPath) {
+        *xPath = NULL;
+        error = FAILED;
+    }
+
+    // copy to output
+    *xPath = buildString("%s", tmpXPath);
+    free(tmpXPath);
+    addToMemoryList(document, (void*) *xPath);
+
+    return error;
+}
+
 DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handle, const char *xPathExpression, int elementNumber, char **text)
 {
 	TixiDocument *document = getDocument(handle);

@@ -185,3 +185,47 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
     return NULL;
 }
 
+char* XPathExpressionGetElementPath(TixiDocument *tixiDocument, const char *xPathExpression, int index)
+{
+
+    xmlDocPtr doc;
+    xmlXPathObjectPtr xpathObject;
+    xmlNodeSetPtr nodes = NULL;
+    xmlNodePtr cur;
+    int size = 0;
+
+    /* Load XML document */
+    doc = tixiDocument->docPtr;
+
+    xpathObject = XPathEvaluateExpression(doc, xPathExpression);
+    if (xpathObject == NULL) {
+        return NULL;
+    }
+
+    nodes = xpathObject->nodesetval;
+
+    size = (nodes) ? nodes->nodeNr : 0;
+    if (size == 0) {
+        printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
+        xmlXPathFreeObject(xpathObject);
+        return NULL;
+    }
+
+    if (size < index) {
+        printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
+        xmlXPathFreeObject(xpathObject);
+        return NULL;
+    }
+
+    if (index <= 0) {
+        printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
+        xmlXPathFreeObject(xpathObject);
+        return NULL;
+    }
+
+    cur = nodes->nodeTab[--index];
+    xmlXPathFreeObject(xpathObject);
+
+    return (char*) xmlGetNodePath(cur);
+}
+

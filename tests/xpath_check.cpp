@@ -175,3 +175,44 @@ TEST_F(XPathChecks, generateXPathFromNodePtr_invalidNode){
     ASSERT_STREQ("", xpath);
 }
 
+TEST_F(XPathChecks, xPathExpressionGetElementPath)
+{
+    char * xpath = NULL;
+    int number = 0;
+    TixiDocument *document = getDocument(documentHandle);
+
+    tixiXPathEvaluateNodeNumber(documentHandle, "//a", &number);
+    ASSERT_EQ(2, number);
+    xpath = XPathExpressionGetElementPath(document, "//a", 1);
+    ASSERT_STREQ("/root/a[1]", xpath);
+    free(xpath);
+    xpath = XPathExpressionGetElementPath(document, "//a", 2);
+    ASSERT_STREQ("/root/a[2]", xpath);
+    free(xpath);
+}
+
+// same test but api
+TEST_F(XPathChecks, tixiXPathExpressionGetXPath)
+{
+    char * xpath = NULL;
+    int number = 0;
+
+    tixiXPathEvaluateNodeNumber(documentHandle, "//a", &number);
+    ASSERT_EQ(2, number);
+
+    ASSERT_EQ(SUCCESS, tixiXPathExpressionGetXPath(documentHandle, "//a", 1, &xpath));
+    ASSERT_STREQ("/root/a[1]", xpath);
+
+    ASSERT_EQ(SUCCESS, tixiXPathExpressionGetXPath(documentHandle, "//a", 2, &xpath));
+    ASSERT_STREQ("/root/a[2]", xpath);
+
+    // invalid indices
+    ASSERT_EQ(FAILED, tixiXPathExpressionGetXPath(documentHandle, "//a", 3, &xpath));
+    ASSERT_EQ(FAILED, tixiXPathExpressionGetXPath(documentHandle, "//a", 0, &xpath));
+    ASSERT_EQ(FAILED, tixiXPathExpressionGetXPath(documentHandle, "//c", 1, &xpath));
+
+    // invalid handle
+    ASSERT_EQ(INVALID_HANDLE, tixiXPathExpressionGetXPath(-1, "//a", 1, &xpath));
+
+}
+
