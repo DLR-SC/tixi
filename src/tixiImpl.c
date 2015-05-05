@@ -919,8 +919,11 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
 
     if (!error) {
         newElement = xmlNewText((xmlChar*) text);
-        if(element->children)
-            xmlReplaceNode(element->children, newElement);
+        if(element->children) {
+            xmlNodePtr nodeToReplace = element->children;
+            xmlReplaceNode(nodeToReplace, newElement);
+            xmlFreeNode(nodeToReplace);
+        }
         else 
             xmlAddChild(element, newElement);
         return SUCCESS;
@@ -960,9 +963,11 @@ DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, 
     error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
     xmlXPathFreeObject(xpathObject);
     if (!error) {
+        xmlNodePtr nodeToReplace = element->children;
         newElement = xmlNewText((xmlChar*) textBuffer);
         free(textBuffer);
-        xmlReplaceNode(element->children, newElement);
+        xmlReplaceNode(nodeToReplace, newElement);
+        xmlFreeNode(nodeToReplace);
         return SUCCESS;
     }
     free(textBuffer);
@@ -1001,9 +1006,11 @@ DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle,
     error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
     xmlXPathFreeObject(xpathObject);
     if (!error) {
+        xmlNodePtr nodeToReplace = element->children;
         newElement = xmlNewText((xmlChar*) textBuffer);
         free(textBuffer);
-        xmlReplaceNode(element->children, newElement);
+        xmlReplaceNode(nodeToReplace, newElement);
+        xmlFreeNode(nodeToReplace);
         return SUCCESS;
     }
     free(textBuffer);
