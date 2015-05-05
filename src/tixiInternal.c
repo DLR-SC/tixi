@@ -598,23 +598,29 @@ char* loadExternalFileToString(const char* filename)
 
 ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
 {
-    assert(aTixiDocument != NULL);
-
-    *number = 0;
     int iNode = 0;
     int handle = aTixiDocument->handle;
     xmlNodePtr cur = NULL;
+    ReturnCode error = SUCCESS;
+
+    assert(aTixiDocument != NULL);
+    *number = 0;
 
     while(1) {
         // loop until there are no externaldata nodes included
 
         xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument->docPtr, "//externaldata");
+        xmlNodeSetPtr nodeset = NULL;
+        char *externalDataNodeXPath, *externalDataDirectoryXPath, 
+             *externalDataDirectoryTmp, *externalDataDirectory;
+        int externalFileCount = 0;
+        
         if (!xpathObject) {
             // no more external data, stop
             break;
         }
 
-        xmlNodeSetPtr nodeset = xpathObject->nodesetval;
+        nodeset = xpathObject->nodesetval;
         if (!nodeset || nodeset->nodeNr < 1) {
             break;
         }
@@ -636,14 +642,13 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
         xmlXPathFreeObject(xpathObject);
 
         /* get nodes XPath */
-        char* externalDataNodeXPath = (char *) xmlGetNodePath(cur);
+        externalDataNodeXPath = (char *) xmlGetNodePath(cur);
 
 
         /* now get the subdirectory */
-        char* externalDataDirectoryXPath = buildString("%s/%s", externalDataNodeXPath, EXTERNAL_DATA_NODE_NAME_PATH);
+        externalDataDirectoryXPath = buildString("%s/%s", externalDataNodeXPath, EXTERNAL_DATA_NODE_NAME_PATH);
 
-        char* externalDataDirectoryTmp;
-        ReturnCode error = tixiGetTextElement(handle, externalDataDirectoryXPath, &externalDataDirectoryTmp);
+        error = tixiGetTextElement(handle, externalDataDirectoryXPath, &externalDataDirectoryTmp);
         free(externalDataDirectoryXPath);
         if (error) {
             printMsg(MESSAGETYPE_ERROR, "Error: openExternalFiles returns %d. No path defined in externaldata node!\n", error);
@@ -652,7 +657,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
         }
 
         // copy directory path
-        char* externalDataDirectory = buildString("%s", externalDataDirectoryTmp);
+        externalDataDirectory = buildString("%s", externalDataDirectoryTmp);
 
         /* in case of a relative path, make it relative to the xml file */
         if (isLocalPathRelative(externalDataDirectory)==0 || isPathRelative(externalDataDirectory)==0) {
@@ -685,7 +690,6 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
         }
 
         /* now get number and names of all external files */
-        int externalFileCount = 0;
         if (tixiGetNamedChildrenCount(handle, externalDataNodeXPath, EXTERNAL_DATA_NODE_NAME_FILENAME, &externalFileCount) != SUCCESS) {
             printMsg(MESSAGETYPE_ERROR, "Error: openExternalFiles could not get number of 'filename' children.\n");
             xmlFree(externalDataNodeXPath);
@@ -694,14 +698,15 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
         }
 
         for (iNode = 1; iNode <= externalFileCount; iNode++) {
-            char* fileNameXPath = buildString("%s/filename[%d]", externalDataNodeXPath, iNode);
-
-            char* externalFileName;
+            char* externalFileName, *externalFullFileName, *newDocumentString, *fileNameXPath;
+            xmlDocPtr xmlDocument = NULL;
+            
+            fileNameXPath = buildString("%s/filename[%d]", externalDataNodeXPath, iNode);
+            
             tixiGetTextElement(handle, fileNameXPath, &externalFileName);
             free(fileNameXPath);
 
             /* Build complete filename */
-            char * externalFullFileName;
             if (strlen(externalDataDirectory) > 0) {
                 externalFullFileName = buildString("%s%s", externalDataDirectory, externalFileName);
             }
@@ -710,7 +715,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             }
 
             /* open files */
-            char * newDocumentString = loadExternalFileToString(externalFullFileName);
+            newDocumentString = loadExternalFileToString(externalFullFileName);
             if (newDocumentString == NULL) {
                 printMsg(MESSAGETYPE_ERROR, "\nError in fetching external file \"%s\".\n", externalFullFileName);
                 free(externalFullFileName);
@@ -720,7 +725,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             }
 
             /* now parse the file to DOM */
-            xmlDocPtr xmlDocument = xmlReadMemory(newDocumentString, (int) strlen(newDocumentString), "urlResource", NULL, 0);
+            xmlDocument = xmlReadMemory(newDocumentString, (int) strlen(newDocumentString), "urlResource", NULL, 0);
             free(newDocumentString);
 
             if (xmlDocument) {
@@ -728,6 +733,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
 
                 xmlNodePtr parent = cur->parent;
                 if (parent) {
+                    xmlChar* nodePathNew = NULL;
                     xmlNodePtr nodeToInsert = xmlDocCopyNode(rootToInsert, aTixiDocument->docPtr, 1);
 
                     /* add metadata to node, to allow saving external node data */
@@ -737,7 +743,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
                     xmlSetProp(nodeToInsert, (xmlChar *) EXTERNAL_DATA_XML_ATTR_DIRECTORY, (xmlChar *) externalDataDirectory);
 
                     /* save the external data node position */
-                    xmlChar* nodePathNew = xmlGetNodePath(parent);
+                    nodePathNew = xmlGetNodePath(parent);
                     xmlSetProp(nodeToInsert, (xmlChar *) EXTERNAL_DATA_XML_ATTR_NODEPATH, nodePathNew);
                     xmlFree(nodePathNew);
 
