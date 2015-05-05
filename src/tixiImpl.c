@@ -235,7 +235,6 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
   xmlDocPtr xmlDocument = NULL;
   FILE *file = NULL;
   ReturnCode returnValue = -1;
-  int count;
 
   tixiInit();
   checkLibxml2Version();
@@ -277,19 +276,15 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
     returnValue = SUCCESS; /*?*/
 
     if (oMode == OPENMODE_RECURSIVE) {
+        int count = 0;
         document->hasIncludedExternalFiles = 1;
 
-        count = 1;
-        while(count != 0) { /* open as long as there where externalfile-statements */
-            returnValue = openExternalFiles(document, &count);
-            if (returnValue != SUCCESS){
-                printMsg(MESSAGETYPE_ERROR, "Error %d in including external files into tixiDoument.\n", returnValue);
-                removeDocumentFromList(*handle);
-                freeTixiDocument(document);
-                document = NULL;
-                count = 0;
-                return returnValue;
-            }
+        returnValue = openExternalFiles(document, &count);
+        if (returnValue != SUCCESS){
+            printMsg(MESSAGETYPE_ERROR, "Error %d in including external files into tixiDoument.\n", returnValue);
+            removeDocumentFromList(*handle);
+            freeTixiDocument(document);
+            document = NULL;
         }
     }
   }

@@ -77,6 +77,20 @@ int string_startsWith(const char *string, const char *subString)
     return (-1);
 }
 
+int string_endsWith(const char *string, const char *subString)
+{
+    size_t lensub = strlen(subString);
+    size_t len = strlen(string);
+    if (len < lensub) {
+        return -1;
+    }
+
+    if (my_strncasecmp(&string[len-lensub], subString, lensub) == 0) {
+            return (0);
+    }
+    return (-1);
+}
+
 
 ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname)
 {
@@ -124,12 +138,15 @@ ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname)
         sprintf(tmpString, "%s", xmlFilename);
 
         /* build full file name */
-        length = strlen(basename(tmpString));
         fileBuffer = (char *) malloc(sizeof(char) * (length + 4));
         sprintf(fileBuffer,"%s",basename(tmpString));
+        free(tmpString);
+
+        // allocate again beacuse basename modified tmpString
+        tmpString = (char*) malloc(sizeof(char)   * (length + 4));
+        sprintf(tmpString, "%s", xmlFilename);
 
         /* build full directory path */
-        length = strlen(dirname(tmpString));
         dirBuffer = (char *) malloc(sizeof(char)  * (length + 4));
         sprintf(dirBuffer,"%s/",dirname(tmpString));
 
@@ -172,6 +189,9 @@ int isPathRelative(const char *dirname)
 
 int isLocalPathRelative(const char* dirname)
 {
+    if (isURIPath(dirname)==0) {
+        return 1;
+    }
 #ifdef _WIN32
     if (PathIsRelative(dirname) == 1) {
         return 0;

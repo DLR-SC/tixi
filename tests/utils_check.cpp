@@ -100,6 +100,17 @@ TEST_F(UtilsTest, string_startsWith){
     ASSERT_EQ(-1, string_startsWith(a, c));
 }
 
+TEST_F(UtilsTest, string_endsWith){
+    ASSERT_EQ( 0, string_endsWith("string1", "ing1"));
+    ASSERT_EQ( 0, string_endsWith("string1", "1"));
+    ASSERT_EQ( 0, string_endsWith("string1", "string1"));
+
+
+    ASSERT_EQ(-1, string_endsWith("string1", "ing2"));
+    ASSERT_EQ(-1, string_endsWith("string1", "bla"));
+}
+
+
 TEST_F(UtilsTest, isPathRelative){
     // check relative path
     ASSERT_EQ(0, isPathRelative("file://tmp"));

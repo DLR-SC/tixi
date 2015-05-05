@@ -81,7 +81,7 @@ TEST(opendocument_checks, open_http_url_not_valid)
 }
 
 // @todo: reenable the test if decided about the function
-TEST(opendocument_checks, DISABLED_external_data)
+TEST(opendocument_checks, external_data)
 {
     TixiDocumentHandle documentHandle = -1;
     const char* file = "TestData/externaldata-main.xml";

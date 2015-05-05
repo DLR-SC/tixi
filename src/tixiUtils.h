@@ -69,12 +69,20 @@ int create_local_directory(const char *dirname);
 /**
   @brief Checks if a string starts with substring .
 
- @param char dirname (in) The directory name to create
  @return
     - 0 if string starts with substring
     - -1 if string does not start with substring or an error occured
  */
 int string_startsWith(const char *string, const char *subString);
+
+/**
+  @brief Checks if a string ends with substring .
+
+ @return
+    - 0 if string ends with substring
+    - -1 if string does not end with substring or an error occured
+ */
+int string_endsWith(const char *string, const char *subString);
 
 
 /**
