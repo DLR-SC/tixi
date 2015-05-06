@@ -168,6 +168,25 @@ char* stringToLower(char* string);
  */
 char* string_stripLeft(const char *string, int len);
 
+/**
+ * @brief If inDirectory is a relative path,
+ *        the function perpends the current working directory.
+ * 
+ *        E.g. if inDirectory is data/TestData and the working directory
+ *        is ./tests/, the function returns file://./tests/data/TestData/
+ * 
+ *        If inDirectory is an absolute path, the working directory
+ *        is not prepended.
+ * 
+ *        Also, this function converts the path into a uri, i.e.
+ *        it prepends 'file://'
+ * 
+ * @param The working directory must end with a "/"
+ * 
+ * @return The corrected path
+ */
+char* resolveDirectory(const char* workingDirectory, const char* inDirectory);
+
 #ifdef __cplusplus
 } /* extern C */
 #endif

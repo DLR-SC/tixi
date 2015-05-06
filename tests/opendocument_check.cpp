@@ -91,7 +91,31 @@ TEST(opendocument_checks, external_data)
     tixiCloseDocument( documentHandle );
 }
 
+TEST(opendocument_checks, external_data_nofiles)
+{
+    TixiDocumentHandle documentHandle = -1;
+    const char* file = "TestData/externaldata-nofiles.xml";
+    ASSERT_EQ(OPEN_FAILED,  tixiOpenDocumentRecursive( file, &documentHandle, OPENMODE_RECURSIVE));
+}
 
+TEST(opendocument_checks, external_data_nopath)
+{
+    TixiDocumentHandle documentHandle = -1;
+    const char* file = "TestData/externaldata-nopath.xml";
+    ASSERT_EQ(OPEN_FAILED,  tixiOpenDocumentRecursive( file, &documentHandle, OPENMODE_RECURSIVE));
+}
 
+TEST(opendocument_checks, external_data_invalidfile)
+{
+    TixiDocumentHandle documentHandle = -1;
+    const char* file = "TestData/externaldata-invalidfile.xml";
+    ASSERT_EQ(OPEN_FAILED,  tixiOpenDocumentRecursive( file, &documentHandle, OPENMODE_RECURSIVE));
+}
 
-
+TEST(opendocument_checks, external_data_noextnodes)
+{
+    TixiDocumentHandle documentHandle = -1;
+    const char* file = "TestData/externaldata-noextnodes.xml";
+    ASSERT_EQ(SUCCESS,  tixiOpenDocumentRecursive( file, &documentHandle, OPENMODE_RECURSIVE));
+    tixiCloseDocument(documentHandle);
+}

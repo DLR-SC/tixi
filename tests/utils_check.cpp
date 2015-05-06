@@ -249,3 +249,39 @@ TEST_F(UtilsTest, stripDirName) {
     free(file);
 #endif
 }
+
+TEST_F(UtilsTest, resolveDirectory) {
+    char * dir = NULL;
+    dir = resolveDirectory("TestData/", "file://Data");
+    ASSERT_STREQ("file://TestData/Data/", dir);
+    free(dir);
+
+    dir = resolveDirectory("TestData2/", "Data2/");
+    ASSERT_STREQ("file://TestData2/Data2/", dir);
+    free(dir);
+
+    // check some absolute paths
+#ifdef _WIN32
+    dir = resolveDirectory("TestData2/", "c:\\daten");
+    ASSERT_STREQ("file:///c:\\daten/", dir);
+    free(dir);
+
+    dir = resolveDirectory("TestData3/", "d:/daten/");
+    ASSERT_STREQ("file:///d:/daten/", dir);
+    free(dir);
+#else
+    dir = resolveDirectory("TestData4/", "/usr/local");
+    ASSERT_STREQ("file:///usr/local/", dir);
+    free(dir);
+#endif
+
+    // check some remote URIs
+    dir = resolveDirectory("TestData5", "ssh://my.server.com");
+    ASSERT_STREQ("ssh://my.server.com/", dir);
+    free(dir);
+
+    // check some remote URIs
+    dir = resolveDirectory("TestData5", "ftp://my.server.de/");
+    ASSERT_STREQ("ftp://my.server.de/", dir);
+    free(dir);
+}

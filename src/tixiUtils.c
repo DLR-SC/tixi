@@ -321,3 +321,56 @@ char* string_stripLeft(const char* string, int len)
     resultString[y]='\0';
     return resultString;
 }
+
+char* resolveDirectory(const char* workingDirectory, const char* inDirectory)
+{
+    /* copy directory path */
+    char* externalDataDirectory = buildString("%s", inDirectory);
+
+    /* in case of a relative path, make it relative to the xml file */
+    if (isLocalPathRelative(externalDataDirectory)==0 || isPathRelative(externalDataDirectory)==0) {
+
+        /* convert to local path if necessary */
+        if (isURIPath(externalDataDirectory) == 0) {
+            char* localPath = uriToLocalPath(externalDataDirectory);
+            free(externalDataDirectory);
+            externalDataDirectory = localPath;
+        }
+
+        if (workingDirectory != NULL &&
+            strlen(workingDirectory) > 0 &&
+            strcmp(workingDirectory, "./") != 0) {
+            char* newPath = buildString("%s%s",workingDirectory, externalDataDirectory);
+            free(externalDataDirectory);
+            externalDataDirectory = newPath;
+        }
+
+        /* prepend file:// */
+        char* newPath = buildString("file://%s", externalDataDirectory);
+        free(externalDataDirectory);
+        externalDataDirectory = newPath;
+    }
+    else if (isURIPath(externalDataDirectory) != 0) {
+        /* must be absolute or an uri */
+        char* newPath = NULL;
+        if (string_startsWith(externalDataDirectory, "/") == 0) {
+            newPath = buildString("file://%s", externalDataDirectory);
+        }
+        else {
+            /* This should be only necessary on WIN32 */
+            newPath = buildString("file:///%s", externalDataDirectory);
+        }
+
+        free(externalDataDirectory);
+        externalDataDirectory = newPath;
+    }
+
+    /* add trailing "/" */
+    if (string_endsWith(externalDataDirectory, "/") != 0) {
+        char* tmp = buildString("%s/", externalDataDirectory);
+        free(externalDataDirectory);
+        externalDataDirectory = tmp;
+    }
+
+    return externalDataDirectory;
+}

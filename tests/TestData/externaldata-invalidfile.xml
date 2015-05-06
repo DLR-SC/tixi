@@ -33,11 +33,7 @@
 	
   <externaldata>
 		<path></path>
-		<filename>externaldata-included-1.xml</filename>
-  </externaldata>
-  <externaldata>
-		<path>file://../TestData</path>
-		<filename>textfile.txt</filename>
+		<filename>thisfiledoesnotexist.xml</filename>
   </externaldata>
 
  <two_by_three_matrix>

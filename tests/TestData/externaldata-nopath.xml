@@ -32,12 +32,7 @@
 	</coordinateOrigin>
 	
   <externaldata>
-		<path></path>
 		<filename>externaldata-included-1.xml</filename>
-  </externaldata>
-  <externaldata>
-		<path>file://../TestData</path>
-		<filename>textfile.txt</filename>
   </externaldata>
 
  <two_by_three_matrix>
