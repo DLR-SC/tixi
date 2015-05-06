@@ -187,3 +187,65 @@ TEST_F(UtilsTest, loadFileToString) {
     ASSERT_STREQ(expected, string);
     free(string);
 }
+
+
+TEST_F(UtilsTest, stripDirName) {
+    char *dir, *file;
+#ifdef _WIN32
+    strip_dirname("c:\\daten\\data.txt", &dir, &file);
+    ASSERT_STREQ("c:\\daten/", dir);
+    ASSERT_STREQ("data.txt", file);
+
+    free(dir);
+    free(file);
+
+    strip_dirname("c:/daten/datanew.txt", &dir, &file);
+    ASSERT_STREQ("c:/daten/", dir);
+    ASSERT_STREQ("datanew.txt", file);
+
+    free(dir);
+    free(file);
+
+    strip_dirname("data/text.txt", &dir, &file);
+    ASSERT_STREQ("data/", dir);
+    ASSERT_STREQ("text.txt", file);
+
+    free(dir);
+    free(file);
+
+    strip_dirname("datanew\\textnew.txt", &dir, &file);
+    ASSERT_STREQ("datanew/", dir);
+    ASSERT_STREQ("textnew.txt", file);
+
+    free(dir);
+    free(file);
+
+    strip_dirname("file.txt", &dir, &file);
+    ASSERT_STREQ("./", dir);
+    ASSERT_STREQ("file.txt", file);
+
+    free(dir);
+    free(file);
+#else
+    strip_dirname("/usr/local/data.txt", &dir, &file);
+    ASSERT_STREQ("/usr/local/", dir);
+    ASSERT_STREQ("data.txt", file);
+
+    free(dir);
+    free(file);
+
+    strip_dirname("data/text.txt", &dir, &file);
+    ASSERT_STREQ("data/", dir);
+    ASSERT_STREQ("text.txt", file);
+
+    free(dir);
+    free(file);
+
+    strip_dirname("file.txt", &dir, &file);
+    ASSERT_STREQ("./", dir);
+    ASSERT_STREQ("file.txt", file);
+
+    free(dir);
+    free(file);
+#endif
+}

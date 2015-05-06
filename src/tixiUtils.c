@@ -112,14 +112,16 @@ ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname)
 
         /* build full directory path */
         if(strlen(dir) == 0) {
-            dirBuffer = (char *) malloc(sizeof(char) * strlen(drive) + strlen(dir) + 1);
-            dirBuffer[0] = '\0';
+            dirBuffer = buildString("./");
         } else {
-            dirBuffer = (char *) malloc(sizeof(char) * strlen(drive) + strlen(dir) + 3);
-            dirBuffer[0] = '\0';
-            strcat(dirBuffer, drive);
-            strcat(dirBuffer, dir);
-            strcat(dirBuffer, "/");
+            // remove trailing back slash or slash
+            if (string_endsWith(dir, "\\") == 0) {
+                dir[strlen(dir) - 1] = '\0';
+            }
+            else if (string_endsWith(dir, "/") == 0) {
+                    dir[strlen(dir) - 1] = '\0';
+                }
+            dirBuffer = buildString("%s%s/", drive, dir);
         }
 
 
