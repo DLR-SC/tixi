@@ -329,6 +329,7 @@ char* resolveDirectory(const char* workingDirectory, const char* inDirectory)
 
     /* in case of a relative path, make it relative to the xml file */
     if (isLocalPathRelative(externalDataDirectory)==0 || isPathRelative(externalDataDirectory)==0) {
+        char* newPath = NULL;
 
         /* convert to local path if necessary */
         if (isURIPath(externalDataDirectory) == 0) {
@@ -346,7 +347,7 @@ char* resolveDirectory(const char* workingDirectory, const char* inDirectory)
         }
 
         /* prepend file:// */
-        char* newPath = buildString("file://%s", externalDataDirectory);
+        newPath = buildString("file://%s", externalDataDirectory);
         free(externalDataDirectory);
         externalDataDirectory = newPath;
     }
