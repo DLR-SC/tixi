@@ -260,6 +260,27 @@ char* uriToLocalPath(const char* URI)
 
 }
 
+char* localPathToURI(const char* path)
+{
+    if (isURIPath(path) == 0) {
+        // copy string and return it
+        return buildString("%s", path);
+    }
+    else {
+#ifdef _WIN32
+        if (isLocalPathRelative(path) != 0) {
+            // absolute path has to be prefixed with 3 slashes
+            return buildString("file:///%s", path);
+        }
+        else {
+            return buildString("file://%s", path);
+        }
+#else
+        return buildString("file://%s", path);
+#endif
+    }
+}
+
 char* loadFileToString(const char* path)
 {
     char * buffer = 0;
@@ -324,53 +345,36 @@ char* string_stripLeft(const char* string, int len)
 
 char* resolveDirectory(const char* workingDirectory, const char* inDirectory)
 {
+    char* tmpStr = NULL;
     /* copy directory path */
     char* externalDataDirectory = buildString("%s", inDirectory);
 
     /* in case of a relative path, make it relative to the xml file */
     if (isLocalPathRelative(externalDataDirectory)==0 || isPathRelative(externalDataDirectory)==0) {
-        char* newPath = NULL;
-
         /* convert to local path if necessary */
         if (isURIPath(externalDataDirectory) == 0) {
-            char* localPath = uriToLocalPath(externalDataDirectory);
+            tmpStr = uriToLocalPath(externalDataDirectory);
             free(externalDataDirectory);
-            externalDataDirectory = localPath;
+            externalDataDirectory = tmpStr;
         }
 
         if (workingDirectory != NULL &&
             strlen(workingDirectory) > 0 &&
             strcmp(workingDirectory, "./") != 0) {
-            char* newPath = buildString("%s%s",workingDirectory, externalDataDirectory);
+            tmpStr = buildString("%s%s",workingDirectory, externalDataDirectory);
             free(externalDataDirectory);
-            externalDataDirectory = newPath;
+            externalDataDirectory = tmpStr;
         }
-
-        /* prepend file:// */
-        newPath = buildString("file://%s", externalDataDirectory);
-        free(externalDataDirectory);
-        externalDataDirectory = newPath;
     }
-    else if (isURIPath(externalDataDirectory) != 0) {
-        /* must be absolute or an uri */
-        char* newPath = NULL;
-        if (string_startsWith(externalDataDirectory, "/") == 0) {
-            newPath = buildString("file://%s", externalDataDirectory);
-        }
-        else {
-            /* This should be only necessary on WIN32 */
-            newPath = buildString("file:///%s", externalDataDirectory);
-        }
-
-        free(externalDataDirectory);
-        externalDataDirectory = newPath;
-    }
+    tmpStr = localPathToURI(externalDataDirectory);
+    free(externalDataDirectory);
+    externalDataDirectory = tmpStr;
 
     /* add trailing "/" */
     if (string_endsWith(externalDataDirectory, "/") != 0) {
-        char* tmp = buildString("%s/", externalDataDirectory);
+        tmpStr = buildString("%s/", externalDataDirectory);
         free(externalDataDirectory);
-        externalDataDirectory = tmp;
+        externalDataDirectory = tmpStr;
     }
 
     return externalDataDirectory;

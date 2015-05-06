@@ -611,7 +611,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
 
         xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument->docPtr, "//externaldata");
         xmlNodeSetPtr nodeset = NULL;
-        char *externalDataNodeXPath, *externalDataDirectoryXPath, *externalDataDirectory;
+        char *externalDataNodeXPath, *externalDataDirectoryXPath, *externalDataDirectory, *resolvedDirectory;
         int externalFileCount = 0;
         
         if (!xpathObject) {
@@ -656,14 +656,14 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
         }
 
         // resolv data directory (in case of relative paths)
-        externalDataDirectory = resolveDirectory(aTixiDocument->dirname, externalDataDirectory);
+        resolvedDirectory = resolveDirectory(aTixiDocument->dirname, externalDataDirectory);
 
         /* now get number and names of all external files */
         tixiGetNamedChildrenCount(handle, externalDataNodeXPath, EXTERNAL_DATA_NODE_NAME_FILENAME, &externalFileCount);
         if (externalFileCount == 0) {
             printMsg(MESSAGETYPE_ERROR, "Error: no filename nodes defined in externalData node.\n");
             xmlFree(externalDataNodeXPath);
-            free(externalDataDirectory);
+            free(resolvedDirectory);
             return OPEN_FAILED;
         }
 
@@ -677,7 +677,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             free(fileNameXPath);
 
             /* Build complete filename */
-            externalFullFileName = buildString("%s%s", externalDataDirectory, externalFileName);
+            externalFullFileName = buildString("%s%s", resolvedDirectory, externalFileName);
 
             /* open files */
             newDocumentString = loadExternalFileToString(externalFullFileName);
@@ -685,7 +685,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
                 printMsg(MESSAGETYPE_ERROR, "\nError in fetching external file \"%s\".\n", externalFullFileName);
                 free(externalFullFileName);
                 xmlFree(externalDataNodeXPath);
-                free(externalDataDirectory);
+                free(resolvedDirectory);
                 return OPEN_FAILED;
             }
 
@@ -699,13 +699,15 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
                 xmlNodePtr parent = cur->parent;
                 if (parent) {
                     xmlChar* nodePathNew = NULL;
+                    char* dataURI = localPathToURI(externalDataDirectory);
                     xmlNodePtr nodeToInsert = xmlDocCopyNode(rootToInsert, aTixiDocument->docPtr, 1);
 
                     /* add metadata to node, to allow saving external node data */
                     xmlSetProp(nodeToInsert, (xmlChar *) EXTERNAL_DATA_XML_ATTR_FILENAME, (xmlChar *) externalFileName);
 
                     /* save the sub-directory */
-                    xmlSetProp(nodeToInsert, (xmlChar *) EXTERNAL_DATA_XML_ATTR_DIRECTORY, (xmlChar *) externalDataDirectory);
+                    xmlSetProp(nodeToInsert, (xmlChar *) EXTERNAL_DATA_XML_ATTR_DIRECTORY, (xmlChar *) dataURI);
+                    free(dataURI);
 
                     /* save the external data node position */
                     nodePathNew = xmlGetNodePath(parent);
@@ -732,7 +734,7 @@ ReturnCode openExternalFiles(TixiDocument *aTixiDocument, int *number)
             free(externalFullFileName);
         } /* end for files */
 
-        free(externalDataDirectory);
+        free(resolvedDirectory);
         free(externalDataNodeXPath);
         xmlFreeNode(cur);
     }
@@ -751,13 +753,11 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 	TixiDocumentHandle handle = aTixiDocument->handle;
 	xmlNodePtr cur_node = NULL;
 	xmlNodePtr copiedNode = NULL;
-	char *includetNodeName = NULL;
 	char *externalDataDirectory = NULL;
 	char *externalFileName = NULL;
 	char *fullExternalFileName = NULL;
 	char *externalDataNodePath = NULL;
 	char *fullExternalDataNodePath = NULL;
-	char *externalDataDirectoryNotUrl = NULL;
 	xmlDocPtr xmlDocument = NULL;
 
 	/* find external data nodes */
@@ -771,12 +771,11 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 		}
 
 		if ( cur_node->type == XML_ELEMENT_NODE ){
-			includetNodeName = (char *) malloc(sizeof(char) * strlen((char *) xmlGetNodePath(cur_node)) + 2);
-			includetNodeName[0] = '\0';
-			strcat(includetNodeName, (char *) xmlGetNodePath(cur_node));
+			char* dirResolved = NULL;
+			char* includetNodeName = (char*) xmlGetNodePath(cur_node);
 
 			/* collect node information - externalFileName */
-			tixiGetTextAttribute(handle, (char *) xmlGetNodePath(cur_node),
+			tixiGetTextAttribute(handle, includetNodeName,
 								 EXTERNAL_DATA_XML_ATTR_FILENAME, &externalFileName);
 
 			/* collect node information - externalDataDirectory */
@@ -787,14 +786,14 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 			tixiGetTextAttribute(handle, includetNodeName,
 								 EXTERNAL_DATA_XML_ATTR_NODEPATH, &externalDataNodePath);
 
+			free(includetNodeName);
+
 
 			/* remove attributes */
 			xmlUnsetProp(cur_node, (xmlChar *) EXTERNAL_DATA_XML_ATTR_FILENAME);
 			xmlUnsetProp(cur_node, (xmlChar *) EXTERNAL_DATA_XML_ATTR_DIRECTORY);
 			xmlUnsetProp(cur_node, (xmlChar *) EXTERNAL_DATA_XML_ATTR_NODEPATH);
 
-			/* deep copy of nodes from external files */
-			copiedNode = xmlCopyNodeList(cur_node);
 
 			/* create new document */
 			xmlDocument = xmlNewDoc((xmlChar *) "1.0");
@@ -802,28 +801,30 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 				printMsg(MESSAGETYPE_ERROR, "Error in TIXI::saveExternalFiles ==> Could not create new document.\n");
 				return FAILED;
 			}
+
+			/* deep copy of nodes from external files */
+			copiedNode = xmlDocCopyNode(cur_node, xmlDocument, 1);
+
 			xmlDocSetRootElement(xmlDocument, copiedNode);
 
-			/* save external file is it is not absolute*/
-			if(isPathRelative(externalDataDirectory) == 0)
+			dirResolved = resolveDirectory(aTixiDocument->dirname, externalDataDirectory);
+
+			/* only save to local paths */
+			if(string_startsWith(dirResolved, "file://") == 0)
 			{
-			    /* strip "file://" from the beginning of the string to get the relative path */
-			    externalDataDirectoryNotUrl = string_stripLeft(externalDataDirectory, 7);
-			    if(strlen(externalDataDirectoryNotUrl)>1) {
-                    create_local_directory(externalDataDirectoryNotUrl);
-			    }
-				fullExternalFileName = (char *) malloc(sizeof(char) * strlen(externalFileName) + strlen(externalDataDirectoryNotUrl) + 1);
-				sprintf(fullExternalFileName, "%s%s", externalDataDirectoryNotUrl, externalFileName);
+				char *externalDataDirectoryNotUrl = uriToLocalPath(dirResolved);
+				assert(externalDataDirectoryNotUrl);
+
+				fullExternalFileName = buildString("%s%s", externalDataDirectoryNotUrl, externalFileName);
 				xmlSaveFormatFileEnc(fullExternalFileName, xmlDocument, "utf-8", 1);
 				free(fullExternalFileName);
+				free(externalDataDirectoryNotUrl);
 			}
+			free(dirResolved);
+			xmlFreeDoc(xmlDocument);
 
 			/* create external data node structure */
-			fullExternalDataNodePath = (char *) malloc(sizeof(char) * strlen(externalDataNodePath) + strlen(EXTERNAL_DATA_NODE_NAME) + 3);
-			fullExternalDataNodePath[0] = '\0';
-			strcat(fullExternalDataNodePath, externalDataNodePath);
-			strcat(fullExternalDataNodePath, "/");
-			strcat(fullExternalDataNodePath, EXTERNAL_DATA_NODE_NAME);
+			fullExternalDataNodePath = buildString("%s/%s", externalDataNodePath, EXTERNAL_DATA_NODE_NAME);
 
 			/* add parent node if not exists */
 			if(tixiCheckElement(handle, fullExternalDataNodePath) != SUCCESS) {
@@ -838,12 +839,34 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
 			copiedNode = cur_node->prev;
 			xmlUnlinkNode(cur_node);
 			xmlFreeNode(cur_node);
+			free(fullExternalDataNodePath);
 			cur_node = copiedNode;
 		}
 	}
 	return SUCCESS;
 }
 
+void removeExternalNodes(xmlNodePtr aNodePtr, TixiDocument *aTixiDocument)
+{
+    xmlNodePtr cur_node = NULL;
+
+    /* find external data nodes */
+    cur_node = aNodePtr;
+    while (cur_node) {
+        /* recurse down with the next element */
+        removeExternalNodes(cur_node->children, aTixiDocument);
+
+        if ( checkExternalNode( cur_node ) == SUCCESS && cur_node->type == XML_ELEMENT_NODE ){
+            xmlNodePtr next = cur_node->next;
+            xmlUnlinkNode(cur_node);
+            xmlFreeNode(cur_node);
+            cur_node = next;
+        }
+        else {
+            cur_node = cur_node->next;
+        }
+    }
+}
 
 
 xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char *elementPath)
@@ -1070,6 +1093,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
     dstDocument->memoryListTail = NULL;
     dstDocument->uidListHead = NULL;
     dstDocument->hasIncludedExternalFiles = srcDocument->hasIncludedExternalFiles;
+    dstDocument->usePrettyPrint = srcDocument->usePrettyPrint;
 
     if (addDocumentToList(dstDocument, &(dstDocument->handle)) != SUCESS) {
         printMsg(MESSAGETYPE_ERROR, "Error in TIXI::copyDocument => Failed  adding document to document list.");
@@ -1109,6 +1133,16 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char *xmlFilename, Int
         /* first create a copy and don't chance the original document */
         copyDocument(handle, &newHandle);
         cpyDoc = getDocument(newHandle);
+
+        // update directory and file name
+        if (cpyDoc->dirname) {
+            free(cpyDoc->dirname);
+        }
+        if (cpyDoc->filename) {
+            free(cpyDoc->filename);
+        }
+        strip_dirname(xmlFilename, &cpyDoc->dirname, &cpyDoc->filename);
+
         rootNode = xmlDocGetRootElement(cpyDoc->docPtr);
         saveExternalFiles(rootNode, cpyDoc);
 
@@ -1120,10 +1154,13 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char *xmlFilename, Int
         freeTixiDocument(cpyDoc);
 
     } else if (saveMode == REMOVED) {
-        rootNode = xmlDocGetRootElement(document->docPtr);
-        saveExternalFiles(rootNode, document);
+        copyDocument(handle, &newHandle);
+        cpyDoc = getDocument(newHandle);
+        
+        rootNode = xmlDocGetRootElement(cpyDoc->docPtr);
+        removeExternalNodes(rootNode, cpyDoc);
 
-        if (xmlSaveFormatFileEnc(xmlFilename, document->docPtr, "utf-8", document->usePrettyPrint) == -1) {
+        if (xmlSaveFormatFileEnc(xmlFilename, cpyDoc->docPtr, "utf-8", cpyDoc->usePrettyPrint) == -1) {
             printMsg(MESSAGETYPE_ERROR, "Error: Failed in writing document to file.\n");
             return FAILED;
         };

@@ -140,6 +140,14 @@ int isURIPath(const char* path);
  */
 char* uriToLocalPath(const char* uri);
 
+/**
+ * @brief localPathToURI converts a local path (e.g. ./data.txt) to an URI (file://data.txt)
+ * @param path Path to convert
+ * @return
+ *   The URI of the path
+ */
+char* localPathToURI(const char* path);
+
 
 /**
  * @brief loadFileToString Loads a file from disk and returns it as a string.
