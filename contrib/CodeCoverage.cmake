@@ -85,7 +85,7 @@ FUNCTION(SETUP_TARGET_FOR_COVERAGE _targetname _testrunner _outputname)
 	# create cobertura output
         ADD_CUSTOM_COMMAND(TARGET ${_targetname} POST_BUILD
                 # Running gcovr
-                COMMAND ${GCOVR_PATH} -x -r ${CMAKE_SOURCE_DIR} -e '${CMAKE_SOURCE_DIR}/thirdparty/' -e '${CMAKE_SOURCE_DIR}/tests/' -e '${CMAKE_SOURCE_DIR}/build/' -o ${_outputname}.xml
+                COMMAND ${GCOVR_PATH} -x -r ${CMAKE_SOURCE_DIR} -e '${CMAKE_SOURCE_DIR}/thirdparty/' -e '${CMAKE_SOURCE_DIR}/tests/' -e '${CMAKE_SOURCE_DIR}/build/' -e '${CMAKE_SOURCE_DIR}/examples/' -e '${CMAKE_SOURCE_DIR}/bindings/' -o ${_outputname}.xml
                 WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                 COMMENT "Running gcovr to produce Cobertura code coverage report. ${_testrunner} ${ARGV3}"
         )
