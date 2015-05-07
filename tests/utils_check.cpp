@@ -290,6 +290,8 @@ TEST_F(UtilsTest, stripDirName)
   free(dir);
   free(file);
 #endif
+
+  strip_dirname(NULL, &dir, &file);
 }
 
 TEST_F(UtilsTest, resolveDirectory)
@@ -326,5 +328,22 @@ TEST_F(UtilsTest, resolveDirectory)
   // check some remote URIs
   dir = resolveDirectory("TestData5", "ftp://my.server.de/");
   ASSERT_STREQ("ftp://my.server.de/", dir);
+  free(dir);
+
+  // test nullptr directory
+  dir = resolveDirectory(NULL, "file://Data");
+  ASSERT_STREQ("file://Data/", dir);
+  free(dir);
+
+  dir = resolveDirectory(NULL, "file:///Data");
+  ASSERT_STREQ("file:///Data/", dir);
+  free(dir);
+
+  dir = resolveDirectory(NULL, "Data");
+  ASSERT_STREQ("file://Data/", dir);
+  free(dir);
+
+  dir = resolveDirectory(NULL, "/Data");
+  ASSERT_STREQ("file:///Data/", dir);
   free(dir);
 }

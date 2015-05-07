@@ -105,6 +105,10 @@ ReturnCode strip_dirname(const char* xmlFilename, char** dname, char** fname)
   char flename[_MAX_FNAME];
   char ext[_MAX_EXT];
 
+  if (!xmlFilename) {
+    return FAILED;
+  }
+
   _splitpath( xmlFilename, drive, dir, flename, ext );
 
   /* build full directory path */
@@ -131,10 +135,17 @@ ReturnCode strip_dirname(const char* xmlFilename, char** dname, char** fname)
 
 #else
   /* use posix functions */
+  int length = 0;
+  char* tmpString = NULL;
+
+  if (!xmlFilename) {
+    return FAILED;
+  }
 
   /* copy string */
-  int length = strlen(xmlFilename);
-  char* tmpString = (char*) malloc(sizeof(char)   * (length + 4));
+  length = strlen(xmlFilename);
+  tmpString = (char*) malloc(sizeof(char)   * (length + 4));
+
   sprintf(tmpString, "%s", xmlFilename);
 
   /* build full file name */
