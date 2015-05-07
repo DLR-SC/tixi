@@ -22,32 +22,32 @@
 class SaveDocumentCheck : public ::testing::Test
 {
 protected:
-    virtual void SetUp()
-    {
-        ASSERT_EQ(SUCCESS, tixiOpenDocument  ( "TestData/externaldata-save.xml", &handle));
-        ASSERT_EQ(SUCCESS, tixiUsePrettyPrint(handle, 1));
-    }
+  virtual void SetUp()
+  {
+    ASSERT_EQ(SUCCESS, tixiOpenDocument ( "TestData/externaldata-save.xml", &handle));
+    ASSERT_EQ(SUCCESS, tixiUsePrettyPrint(handle, 1));
+  }
 
-    virtual void TearDown()
-    {
-        ASSERT_EQ (SUCCESS, tixiCloseDocument( handle ));
-    }
+  virtual void TearDown()
+  {
+    ASSERT_EQ (SUCCESS, tixiCloseDocument( handle ));
+  }
 
-    TixiDocumentHandle handle;
+  TixiDocumentHandle handle;
 };
 
 TEST_F(SaveDocumentCheck, saveSplitted)
 {
-    ASSERT_EQ(SUCCESS, tixiSaveDocument(handle, "save-splitted.xml"));
+  ASSERT_EQ(SUCCESS, tixiSaveDocument(handle, "save-splitted.xml"));
 }
 
 TEST_F(SaveDocumentCheck, saveComplete)
 {
-    ASSERT_EQ(SUCCESS, tixiSaveCompleteDocument(handle, "save-complete.xml"));
+  ASSERT_EQ(SUCCESS, tixiSaveCompleteDocument(handle, "save-complete.xml"));
 }
 
 TEST_F(SaveDocumentCheck, saveRemove)
 {
-    ASSERT_EQ(SUCCESS, tixiSaveAndRemoveDocument(handle, "save-remove.xml"));
+  ASSERT_EQ(SUCCESS, tixiSaveAndRemoveDocument(handle, "save-remove.xml"));
 }
 

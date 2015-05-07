@@ -1,16 +1,13 @@
-/* 
-* Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
+/*
+* Copyright (C) 2015 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id$ 
-*
-* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-* � � http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,7 +18,6 @@
 /**
    @brief Implementation of wrappers of tixi public interface functions to be called from Fortran77/90 code.
 */
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -913,7 +909,7 @@ void tixiAddFloatVector_f(const TixiDocumentHandle *handle,
     if (formatLength > 0) {
       cFormat = makeCString(format, formatLength);
     }
-    
+
     *error = tixiAddFloatVector(*handle, cParentPath, cElementName, vector, *numElements, cFormat);
 
     free(cParentPath);
@@ -1340,7 +1336,7 @@ void tixiGetAttributeName_f(const TixiDocumentHandle* handle,
                             ReturnCode* error,
                             int lengthString1,
                             int lengthString2) {
-    
+
     char *cElementPath;
     char *cText = NULL;
 
@@ -1362,7 +1358,7 @@ void tixiGetNumberOfChilds_f(const TixiDocumentHandle* handle,
                                         int * nChilds,
                                         ReturnCode* error,
                                         int lengthString1){
-    
+
     char *cElementPath = makeCString(elementPath, lengthString1);
     *error = tixiGetNumberOfChilds(*handle, cElementPath, nChilds);
     free(cElementPath);
@@ -1373,7 +1369,7 @@ void tixiGetNumberOfAttributes_f(const TixiDocumentHandle* handle,
                                         int * nAttributes,
                                         ReturnCode* error,
                                         int lengthString1){
-    
+
     char *cElementPath = makeCString(elementPath, lengthString1);
     *error = tixiGetNumberOfAttributes(*handle, cElementPath, nAttributes);
     free(cElementPath);

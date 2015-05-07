@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007-2013 German Aerospace Center (DLR/SC)
+ * Copyright (C) 2015 German Aerospace Center (DLR/SC)
  *
  * Created: 2013-02-10 Martin Siggel <martin.siggel@dlr.de>
  *
@@ -23,8 +23,9 @@
 #ifndef TIXI_VERSION_H
 #define TIXI_VERSION_H
 
-/** @name Version Number
- *  Printable format: "%d.%d.%d", MAJOR, MINOR, PATCHLEVEL
+/**
+ * @name Version Number
+ * Printable format: "%d.%d.%d", MAJOR, MINOR, PATCHLEVEL
  */
 /*@{*/
 #define TIXI_MAJOR_VERSION       @TIXI_VERSION_MAJOR@

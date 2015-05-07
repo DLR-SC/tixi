@@ -1,10 +1,7 @@
-/* 
-* Copyright (C) 2007-2012 German Aerospace Center (DLR/SC)
+/*
+* Copyright (C) 2015 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id$ 
-*
-* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -24,35 +21,37 @@
 #include "tixi.h"
 
 
-/** 
-    @test Tests for addAttribute routines.
-*/   
+/**
+  @test Tests for addAttribute routines.
+*/
 
 static TixiDocumentHandle documentHandle = -1;
 
-class AttributeTest : public ::testing::Test {
- protected:
-  virtual void SetUp() {
+class AttributeTest : public ::testing::Test
+{
+protected:
+  virtual void SetUp()
+  {
     const char* rootElementName = "rootElement";
     const char* elementName = "element";
 
     tixiCreateDocument( rootElementName, &documentHandle );
     tixiAddTextElement( documentHandle, "/rootElement", elementName, "content" );
   }
-  
+
   // virtual void TearDown() {}
 };
 
-TEST_F(AttributeTest, add_text_attribute) 
+TEST_F(AttributeTest, add_text_attribute)
 {
-    const char* elementPath = "/rootElement/element";
-    const char* attributeName = "attribute";
+  const char* elementPath = "/rootElement/element";
+  const char* attributeName = "attribute";
 
-    ASSERT_TRUE( tixiAddTextAttribute( documentHandle, elementPath, attributeName, "attributeValue" ) == SUCCESS );
+  ASSERT_TRUE( tixiAddTextAttribute( documentHandle, elementPath, attributeName, "attributeValue" ) == SUCCESS );
 }
 
 
-TEST_F(AttributeTest, add_double_attribute) 
+TEST_F(AttributeTest, add_double_attribute)
 {
   char elementPath[] = "/rootElement/element";
   double value = 3.14159;
@@ -62,43 +61,40 @@ TEST_F(AttributeTest, add_double_attribute)
   ASSERT_TRUE( tixiAddDoubleAttribute( documentHandle, elementPath, "doubleAttribute_g", value, NULL ) == SUCCESS );
 }
 
-TEST_F(AttributeTest, add_integer_attribute) 
+TEST_F(AttributeTest, add_integer_attribute)
 {
   const char* elementPath = "/rootElement/element";
   int value = 4711;
   const char* format = "%5d";
-  
+
   ASSERT_TRUE( tixiAddIntegerAttribute( documentHandle, elementPath, "intAttribute", value, format ) == SUCCESS );
   ASSERT_TRUE( tixiAddIntegerAttribute( documentHandle, elementPath, "intAttribute_d", value, NULL ) == SUCCESS );
 }
 
 
 #if __unix__ || unix || __APPLE__
-TEST_F(AttributeTest, attribute_compare) 
+TEST_F(AttributeTest, attribute_compare)
 {
-    const char* elementPath = "/rootElement/element";
-    const char* attributeName = "attribute";
-    ASSERT_TRUE( tixiAddTextAttribute( documentHandle, elementPath, attributeName, "attributeValue" ) == SUCCESS );
+  const char* elementPath = "/rootElement/element";
+  const char* attributeName = "attribute";
+  ASSERT_TRUE( tixiAddTextAttribute( documentHandle, elementPath, attributeName, "attributeValue" ) == SUCCESS );
 
-    const char* elementPath2 = "/rootElement/element";
-    double value2 = 3.14159;
-    const char* format2 = "%10.6f";
-    ASSERT_TRUE( tixiAddDoubleAttribute( documentHandle, elementPath2, "doubleAttribute", value2, format2 ) == SUCCESS );
-    ASSERT_TRUE( tixiAddDoubleAttribute( documentHandle, elementPath2, "doubleAttribute_g", value2, NULL ) == SUCCESS );
+  const char* elementPath2 = "/rootElement/element";
+  double value2 = 3.14159;
+  const char* format2 = "%10.6f";
+  ASSERT_TRUE( tixiAddDoubleAttribute( documentHandle, elementPath2, "doubleAttribute", value2, format2 ) == SUCCESS );
+  ASSERT_TRUE( tixiAddDoubleAttribute( documentHandle, elementPath2, "doubleAttribute_g", value2, NULL ) == SUCCESS );
 
-    const char* elementPath3 = "/rootElement/element";
-    int value3 = 4711;
-    const char* format3 = "%5d";
-    ASSERT_TRUE( tixiAddIntegerAttribute( documentHandle, elementPath3, "intAttribute", value3, format3 ) == SUCCESS );
-    ASSERT_TRUE( tixiAddIntegerAttribute( documentHandle, elementPath3, "intAttribute_d", value3, NULL ) == SUCCESS );
+  const char* elementPath3 = "/rootElement/element";
+  int value3 = 4711;
+  const char* format3 = "%5d";
+  ASSERT_TRUE( tixiAddIntegerAttribute( documentHandle, elementPath3, "intAttribute", value3, format3 ) == SUCCESS );
+  ASSERT_TRUE( tixiAddIntegerAttribute( documentHandle, elementPath3, "intAttribute_d", value3, NULL ) == SUCCESS );
 
-    
-    // check against a reference
-    ASSERT_TRUE( tixiSaveDocument( documentHandle, "addAttribute.xml" ) == SUCCESS );
-    ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
-    ASSERT_TRUE( system("diff -w addAttribute.xml TestData/addAttributeReference.xml" ) == 0 );
+
+  // check against a reference
+  ASSERT_TRUE( tixiSaveDocument( documentHandle, "addAttribute.xml" ) == SUCCESS );
+  ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
+  ASSERT_TRUE( system("diff -w addAttribute.xml TestData/addAttributeReference.xml" ) == 0 );
 }
 #endif /* __unix__ */
-
-
-

@@ -1,8 +1,8 @@
-/* 
+/*
 * Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Hans-Peter Kersken <Hans-Peter.Kersken@dlr.de>
-* Changed: $Id$ 
+* Changed: $Id$
 *
 * Version: $Revision$
 *
@@ -31,21 +31,21 @@
 #include "libxml/xmlreader.h"
 
 #ifndef TIXI_VERSION
-#define TIXI_VERSION  "2.0"
+#define TIXI_VERSION  "2.2"
 #endif
 
-#define CPACS_UID_ATTRIBUTE_STRING 		"uID"
-#define CPACS_UID_XPATH 				"//@uID"
-#define CPACS_UID_LINK_XPATH			"//@isLink"
-#define CPACS_UID_LINK_ATTRIBUTE_STRING	"isLink"
+#define CPACS_UID_ATTRIBUTE_STRING     "uID"
+#define CPACS_UID_XPATH                 "//@uID"
+#define CPACS_UID_LINK_XPATH            "//@isLink"
+#define CPACS_UID_LINK_ATTRIBUTE_STRING "isLink"
 
-#define EXTERNAL_DATA_NODE_NAME				"externaldata"
-#define EXTERNAL_DATA_NODE_NAME_PATH		"path"
-#define EXTERNAL_DATA_NODE_NAME_FILENAME	"filename"
+#define EXTERNAL_DATA_NODE_NAME          "externaldata"
+#define EXTERNAL_DATA_NODE_NAME_PATH     "path"
+#define EXTERNAL_DATA_NODE_NAME_FILENAME "filename"
 
-#define EXTERNAL_DATA_XML_ATTR_NODEPATH		 "externalDataNodePath"
-#define EXTERNAL_DATA_XML_ATTR_FILENAME		 "externalFileName"
-#define EXTERNAL_DATA_XML_ATTR_DIRECTORY	 "externalDataDirectory"
+#define EXTERNAL_DATA_XML_ATTR_NODEPATH   "externalDataNodePath"
+#define EXTERNAL_DATA_XML_ATTR_FILENAME   "externalFileName"
+#define EXTERNAL_DATA_XML_ATTR_DIRECTORY  "externalDataDirectory"
 
 
 /**
@@ -83,13 +83,13 @@
  */
 typedef enum ValidationStatusType
 {
-   INVALID,   /*!< Document not DTD or schema compliant */
-   UNDEFINED, /*!< Document has not been checked        */
-   VALID      /*!< Document is DTD or schema compliant */
+  INVALID,   /*!< Document not DTD or schema compliant */
+  UNDEFINED, /*!< Document has not been checked        */
+  VALID      /*!< Document is DTD or schema compliant */
 } ValidationStatus;
 
 /**
-	Truth values.
+  Truth values.
 */
 
 /**
@@ -97,11 +97,11 @@ typedef enum ValidationStatusType
  */
 typedef  enum DocumentStatusType
 {
-   OPENED,   /**< The document was created by tixiCreateDocument or
+  OPENED,   /**< The document was created by tixiCreateDocument or
                 tixiOpenDocument and has been neither saved nor closed
                 so far.*/
-   SAVED,   /**< The document has been saved by tixiSaveDocument      */
-   CLOSED   /**< The document has been closed by tixiCloseDocument     */
+  SAVED,   /**< The document has been saved by tixiSaveDocument      */
+  CLOSED   /**< The document has been closed by tixiCloseDocument     */
 } DocumentStatus;
 
 
@@ -112,8 +112,8 @@ typedef  enum DocumentStatusType
 typedef struct TixiMemoryListEntry TixiMemoryListEntry;
 struct TixiMemoryListEntry
 {
-      void* memory;                        /**< Pointer to memory area allocated by libxml */
-      TixiMemoryListEntry* next;    /**< Pointer to next entry in the list */
+  void* memory;                        /**< Pointer to memory area allocated by libxml */
+  TixiMemoryListEntry* next;    /**< Pointer to next entry in the list */
 };
 
 
@@ -124,9 +124,9 @@ struct TixiMemoryListEntry
 typedef struct TixiUIDListEntry TixiUIDListEntry;
 struct TixiUIDListEntry
 {
-    xmlNodePtr nodePtr;						/**< Pointer to the node with the UID */
-    char* uIDName;							/**< Name of this uID */
-    TixiUIDListEntry* next;    		/**< Pointer to next entry in the list */
+  xmlNodePtr nodePtr;            /**< Pointer to the node with the UID */
+  char* uIDName;              /**< Name of this uID */
+  TixiUIDListEntry* next;        /**< Pointer to next entry in the list */
 };
 
 /**
@@ -135,27 +135,27 @@ struct TixiUIDListEntry
  */
 typedef struct
 {
-      char* xmlFilename;            /**< Full Name of the file associated with the document */
-	  char* dirname;				/**< The name of the directory in which this master-cpacs-file is */
-	  char* filename;				/**< The filename with(!) file extension */
-      xmlDocPtr docPtr;             /**< libxml-pointer to document */
-      xmlNodePtr currentNode;       /**< libxml-pointer to the current node */
-      ValidationStatus isValid;     /**< Holds informations if and how the document has been validated */
-      char* validationFilename;     /**< Name of the file the document is validate against */
-      DocumentStatus status;        /**< Status of the document: opened/saved/closed */
-      TixiDocumentHandle handle;
-      TixiMemoryListEntry* memoryListHead; /**< Pointer to the head of the list of memory location */
-      TixiMemoryListEntry* memoryListTail; /**< Pointer to the tail of the list of memory location */
-      int hasIncludedExternalFiles;        /**< Flag to indicate if the master file includes external files */
-      int usePrettyPrint;                  /**< if pretty print should used when saving a file */
-      TixiUIDListEntry* uidListHead;			   /**< Pointer to the head of the list of uids */
+  char* xmlFilename;    /**< Full Name of the file associated with the document */
+  char* dirname;        /**< The name of the directory in which this master-cpacs-file is */
+  char* filename;       /**< The filename with(!) file extension */
+  xmlDocPtr docPtr;             /**< libxml-pointer to document */
+  xmlNodePtr currentNode;       /**< libxml-pointer to the current node */
+  ValidationStatus isValid;     /**< Holds informations if and how the document has been validated */
+  char* validationFilename;     /**< Name of the file the document is validate against */
+  DocumentStatus status;        /**< Status of the document: opened/saved/closed */
+  TixiDocumentHandle handle;
+  TixiMemoryListEntry* memoryListHead; /**< Pointer to the head of the list of memory location */
+  TixiMemoryListEntry* memoryListTail; /**< Pointer to the tail of the list of memory location */
+  int hasIncludedExternalFiles;        /**< Flag to indicate if the master file includes external files */
+  int usePrettyPrint;                  /**< if pretty print should used when saving a file */
+  TixiUIDListEntry* uidListHead;       /**< Pointer to the head of the list of uids */
 } TixiDocument;
 
 typedef struct TixiDocumentListEntry TixiDocumentListEntry;
 struct TixiDocumentListEntry
 {
-    TixiDocument* document; /**< Document meta data */
-    TixiDocumentListEntry* next;    /**< Pointer to next document in the list */
+  TixiDocument* document; /**< Document meta data */
+  TixiDocumentListEntry* next;    /**< Pointer to next document in the list */
 };
 
 /**
@@ -168,9 +168,9 @@ extern TixiDocumentListEntry* documentListHead;
  */
 typedef enum InternalSaveModeType
 {
-   COMPLETE,   /**< The complete Document, with all external nodes is saved in one xml file. */
-   SPLITTED,   /**< The document will be splitted in separated files. */
-   REMOVED   /**< All external nodes are removed from the main document and only the reduced main file is saved. */
+  COMPLETE, /**< The complete Document, with all external nodes is saved in one xml file. */
+  SPLITTED, /**< The document will be splitted in separated files. */
+  REMOVED   /**< All external nodes are removed from the main document and only the reduced main file is saved. */
 } InternalSaveMode;
 
 

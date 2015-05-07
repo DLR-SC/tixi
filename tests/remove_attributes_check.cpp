@@ -1,10 +1,7 @@
 /*
-* Copyright (C) 2007-2012 German Aerospace Center (DLR/SC)
+* Copyright (C) 2015 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id: add_attribute_check.cpp 176 2012-10-08 21:20:23Z markus.litz $
-*
-* Version: $Revision: 176 $
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -20,36 +17,38 @@
 */
 
 #include "test.h" // Brings in the GTest framework
-
 #include "tixi.h"
 
 
 /**
-    @test Tests for removing attributes routines.
+  @test Tests for removing attributes routines.
 */
 
 static TixiDocumentHandle documentHandle = -1;
 
-class RemoveAttributesTests : public ::testing::Test {
- protected:
-  virtual void SetUp() {
-     const char* xmlFilename = "TestData/in.xml";
-     ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS);
+class RemoveAttributesTests : public ::testing::Test
+{
+protected:
+  virtual void SetUp()
+  {
+    const char* xmlFilename = "TestData/in.xml";
+    ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS);
   }
 
-  virtual void TearDown() {
-      ASSERT_TRUE ( tixiCloseDocument( documentHandle ) == SUCCESS );
+  virtual void TearDown()
+  {
+    ASSERT_TRUE ( tixiCloseDocument( documentHandle ) == SUCCESS );
   }
 };
 
 TEST_F(RemoveAttributesTests, removeSingleAttribute)
 {
-    const char* elementPath = "/plane/wings";
-    const char* attributeName = "numberOfWings";
-    const char* fullElementPath = "/plane/wings[@numberOfWings]";
-    char* text = NULL;
+  const char* elementPath = "/plane/wings";
+  const char* attributeName = "numberOfWings";
+  const char* fullElementPath = "/plane/wings[@numberOfWings]";
+  char* text = NULL;
 
-    ASSERT_TRUE( tixiCheckElement( documentHandle, fullElementPath ) == SUCCESS);
-    ASSERT_TRUE( tixiRemoveAttribute( documentHandle, elementPath, attributeName ) == SUCCESS );
-    ASSERT_TRUE( tixiCheckElement( documentHandle, fullElementPath ) != SUCCESS);
+  ASSERT_TRUE( tixiCheckElement( documentHandle, fullElementPath ) == SUCCESS);
+  ASSERT_TRUE( tixiRemoveAttribute( documentHandle, elementPath, attributeName ) == SUCCESS );
+  ASSERT_TRUE( tixiCheckElement( documentHandle, fullElementPath ) != SUCCESS);
 }

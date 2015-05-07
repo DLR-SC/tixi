@@ -1,5 +1,5 @@
-/* 
-* Copyright (C) 2007-2012 German Aerospace Center (DLR/SC)
+/*
+* Copyright (C) 2015 German Aerospace Center (DLR/SC)
 *
 * Created: 2014-06-16 Martin Siggel <martin.siggel@dlr.de>
 *
@@ -17,37 +17,39 @@
 */
 
 #include "test.h" // Brings in the GTest framework
-
 #include "tixi.h"
 
-class GetNodeType : public ::testing::Test {
- protected:
-  virtual void SetUp() {
-      ASSERT_TRUE( tixiOpenDocument  ( "TestData/doctype.xml",   &inDocumentHandle)  == SUCCESS);
+class GetNodeType : public ::testing::Test
+{
+protected:
+  virtual void SetUp()
+  {
+    ASSERT_TRUE( tixiOpenDocument  ( "TestData/doctype.xml",   &inDocumentHandle)  == SUCCESS);
   }
 
-  virtual void TearDown() {
-      ASSERT_TRUE ( tixiCloseDocument( inDocumentHandle ) == SUCCESS );
+  virtual void TearDown()
+  {
+    ASSERT_TRUE ( tixiCloseDocument( inDocumentHandle ) == SUCCESS );
   }
-    
- protected:
+
+protected:
   TixiDocumentHandle inDocumentHandle;
 };
 
 TEST_F(GetNodeType, doctype_node)
 {
-    char* type = NULL;
-    ASSERT_EQ(SUCCESS, tixiGetNodeType(inDocumentHandle, "/DAVEfunc[1]", &type));
-    ASSERT_STREQ("ELEMENT_NODE", type);
-    
-    int childs = 0;
-    ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(inDocumentHandle, "/", &childs));
-    ASSERT_EQ(1, childs);
-    ASSERT_EQ(SUCCESS, tixiGetNamedChildrenCount(inDocumentHandle, "/", "DAVEfunc", &childs));
-    ASSERT_EQ(1, childs);
-    
-    char * childname;
-    ASSERT_EQ(SUCCESS, tixiGetChildNodeName(inDocumentHandle, "/", 1, &childname));
-    ASSERT_STREQ("DAVEfunc", childname);
+  char* type = NULL;
+  ASSERT_EQ(SUCCESS, tixiGetNodeType(inDocumentHandle, "/DAVEfunc[1]", &type));
+  ASSERT_STREQ("ELEMENT_NODE", type);
+
+  int childs = 0;
+  ASSERT_EQ(SUCCESS, tixiGetNumberOfChilds(inDocumentHandle, "/", &childs));
+  ASSERT_EQ(1, childs);
+  ASSERT_EQ(SUCCESS, tixiGetNamedChildrenCount(inDocumentHandle, "/", "DAVEfunc", &childs));
+  ASSERT_EQ(1, childs);
+
+  char* childname;
+  ASSERT_EQ(SUCCESS, tixiGetChildNodeName(inDocumentHandle, "/", 1, &childname));
+  ASSERT_STREQ("DAVEfunc", childname);
 }
 

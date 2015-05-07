@@ -1,10 +1,7 @@
-/* 
-* Copyright (C) 2007-2011 German Aerospace Center (DLR/SC)
+/*
+* Copyright (C) 2015 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id$ 
-*
-* Version: $Revision$
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,6 +15,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 /**
  * @file   xslTransformation.h
  * @author Markus Litz <Markus.Litz@dlr.de>
@@ -45,23 +43,26 @@ extern "C" {
 
 
 /**
-    @brief Performs XSL transformation to a document and returns the result doc as string.
+  @brief Performs XSL transformation to a document and returns the result doc as string.
 
-    @param xmlDocPtr doc (in) The document on which the transformation should be performed
-    @param char *xslFilename (in) Filename of the stylesheet file
-    @return char* The resulting document as string
+  @param xmlDocPtr doc (in) The document on which the transformation should be performed
+  @param char *xslFilename (in) Filename of the stylesheet file
+
+  @return char*
+    The resulting document as string
  */
 char* xsltTransformToString(xmlDocPtr doc, const char *xslFilename);
 
 /**
-    @brief Performs XSL transformation to a document and saves the resulting doc in a local file.
+  @brief Performs XSL transformation to a document and saves the resulting doc in a local file.
 
-    @param xmlDocPtr doc (in) The document on which the transformation should be performed
-    @param char *xslFilename (in) Filename of the stylesheet file
-    @param char *outputFilename (in) Filename of the file in whoch the result should be saved
-    @return ReturnCode
-     - SUCCESS              if the document is successfully validated
-     - FAILED                  for all internal errors
+  @param xmlDocPtr doc (in) The document on which the transformation should be performed
+  @param char *xslFilename (in) Filename of the stylesheet file
+  @param char *outputFilename (in) Filename of the file in whoch the result should be saved
+
+  @return ReturnCode
+    - SUCCESS              if the document is successfully validated
+    - FAILED               for all internal errors
  */
 ReturnCode xsltTransformToFile(xmlDocPtr doc, const char *xslFilename, const char *outputFilename);
 

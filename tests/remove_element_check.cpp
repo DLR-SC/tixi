@@ -1,16 +1,13 @@
 /*
-* Copyright (C) 2007-2012 German Aerospace Center (DLR/SC)
+* Copyright (C) 2015 German Aerospace Center (DLR/SC)
 *
 * Created: 2010-08-13 Markus Litz <Markus.Litz@dlr.de>
-* Changed: $Id: add_attribute_check.cpp 176 2012-10-08 21:20:23Z markus.litz $
-*
-* Version: $Revision: 176 $
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*   http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,12 +17,11 @@
 */
 
 #include "test.h" // Brings in the GTest framework
-
 #include "tixi.h"
 
 
 /**
-    @test Tests for removing element routines.
+  @test Tests for removing element routines.
 */
 
 static TixiDocumentHandle documentHandle = -1;
