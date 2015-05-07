@@ -385,9 +385,9 @@ typedef enum MessageType MessageType;
 
 /**
  * TixiPrintMsgFnc:
- * @param type The message type (error, warning, status)
- * @param msg The message
- * @param ... extra arguments
+ * @param[in]  type The message type (error, warning, status)
+ * @param[in]  msg The message
+ * @param[in]  ... extra arguments
  *
  * Signature of a callback function to handle messages (errors, warnings ...)
  * To be used in conjuction with ::tixiSetPrintMsgFunc.
@@ -424,9 +424,9 @@ DLL_EXPORT char* tixiGetVersion();
 
   tixi_open_document( character*n xml_filename, integer handle, integer error )
 
-  @param xmlFilename (in) name of the XML-file to be opened
-  @param handle (out) handle to the XML-document. This handle is used in
-                calls to other TIXI functions.
+  @param[in]  xmlFilename name of the XML-file to be opened
+  @param[out] handle  handle to the XML-document. This handle is used in
+                      calls to other TIXI functions.
   @return
 
     - SUCCESS if successfully opened the XML-file
@@ -477,10 +477,10 @@ DLL_EXPORT ReturnCode tixiOpenDocument (const char *xmlFilename, TixiDocumentHan
 
   tixi_open_document_recursive( character*n xml_filename, integer handle, integer openmode, integer error )
 
-  @param xmlFilename (in) name of the XML-file to be opened
-  @param handle (out)     handle to the XML-document. This handle is used in
+  @param[in]  xmlFilename name of the XML-file to be opened
+  @param[out] handle      handle to the XML-document. This handle is used in
                           calls to other TIXI functions.
-  @param oMode (in)       Enum of the mode to open (OPENMODE_PLAIN / OPENMODE_RECURSIVE).
+  @param[in]  oMode       Enum of the mode to open (OPENMODE_PLAIN / OPENMODE_RECURSIVE).
 
   @return
     - SUCCESS if successfully opened the XML-file
@@ -503,9 +503,9 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive (const char *xmlFilename, TixiDo
 
   tixi_open_document_from_http( character*n xml_httpurl, integer handle, integer error )
 
-  @param httpURL (in) url of the XML-file to be opened
-  @param handle (out) handle to the XML-document. This handle is used in
-                calls to other TIXI functions.
+  @param[in]  httpURL url of the XML-file to be opened
+  @param[out] handle  handle to the XML-document. This handle is used in
+                      calls to other TIXI functions.
 
   @return
     - SUCCESS if successfully opened the XML-file
@@ -525,8 +525,8 @@ DLL_EXPORT ReturnCode tixiOpenDocumentFromHTTP (const char *httpURL, TixiDocumen
 
   tixi_create_document( character*n root_element_name, integer handle, integer error )
 
-  @param rootElementName (in)  name of the root element of the XML-document
-  @param handle          (out) handle to an XML-document. This handle is
+  @param[in]  rootElementName  name of the root element of the XML-document
+  @param[out] handle           handle to an XML-document. This handle is
                                used in calls to other TIXI functions.
 
   @return
@@ -540,8 +540,8 @@ DLL_EXPORT ReturnCode tixiCreateDocument (const char *rootElementName, TixiDocum
 
   The path is empty, if the document was not opened, but created by ::tixiCreateDocument.
 
-  @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param documentPath (out) Path to the file, opened by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP
+  @param[in]  handle document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[out] documentPath  Path to the file, opened by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP
                             The path is a null pointer, if the document was created by ::tixiCreateDocument or ::tixiImportFromString
 
   @return
@@ -568,8 +568,8 @@ DLL_EXPORT ReturnCode tixiGetDocumentPath (TixiDocumentHandle handle, char** doc
   tixi_save_document( integer  handle, character*n xml_filename, integer error )
 
 
-  @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xmlFilename (in) name of the file to be created.
+  @param[in]  handle document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xmlFilename name of the file to be created.
 
   @return
     - SUCCESS        if the file is successfully written and validated
@@ -596,8 +596,8 @@ DLL_EXPORT ReturnCode tixiSaveDocument (TixiDocumentHandle handle, const char *x
   tixi_save_complete_document( integer  handle, character*n xml_filename, integer error )
 
 
-  @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xmlFilename (in) name of the file to be created.
+  @param[in]  handle document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xmlFilename name of the file to be created.
 
   @return
     - SUCCESS              if the file is successfully written and validated
@@ -625,8 +625,8 @@ DLL_EXPORT ReturnCode tixiSaveCompleteDocument (TixiDocumentHandle handle, const
   tixi_save_and_remove_document( integer  handle, character*n xml_filename, integer error )
 
 
-  @param handle (in) document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xmlFilename (in) name of the file to be created.
+  @param[in]  handle document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xmlFilename name of the file to be created.
 
   @return
     - SUCCESS              if the file is successfully written and validated
@@ -648,7 +648,7 @@ DLL_EXPORT ReturnCode tixiSaveAndRemoveDocument (TixiDocumentHandle handle, cons
 
   tixi_close_document( integer  handle, integer error )
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  handle file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
   @return
     - SUCCESS if successfully closed the XML-file
@@ -697,9 +697,9 @@ DLL_EXPORT ReturnCode tixiCleanup ();
 
   tixi_export_document_as_string( integer handle, character*n text, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
-  @param text (out) text content of the document
+  @param[out] text text content of the document
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -719,8 +719,8 @@ DLL_EXPORT ReturnCode tixiExportDocumentAsString (const TixiDocumentHandle handl
 
   tixi_import_from_string( character*n xmlImportString, integer handle, integer error )
 
-  @param xmlImportString (in) the string with the xml-content
-  @param handle (out) handle to the XML-document. This handle is used in
+  @param[in]  xmlImportString the string with the xml-content
+  @param[out] handle  handle to the XML-document. This handle is used in
                       calls to other TIXI functions.
 
   @return
@@ -751,9 +751,9 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
 
   tixi_schema_validate_from_file( integer  handle, character*n xsd_filename, integer error )
 
-  @param xsdFilename (in) name of the XML-schema-file to be used.
+  @param[in]  xsdFilename name of the XML-schema-file to be used.
 
-  @param handle (in) handle to the XML-document.
+  @param[in]  handle handle to the XML-document.
 
   @return
     - SUCCESS              if the document is successfully validated
@@ -780,9 +780,9 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromFile (const TixiDocumentHandle handl
 
   tixi_schema_validate_from_string( integer  handle, character*n xsd_string, integer error )
 
-  @param xsdString (in) char array witch is holding a schema.
+  @param[in]  xsdString char array witch is holding a schema.
 
-  @param handle (in) handle to the XML-document.
+  @param[in]  handle handle to the XML-document.
 
   @return
     - SUCCESS              if the document is successfully validated
@@ -808,9 +808,9 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromString (const TixiDocumentHandle han
 
   tixi_dtd_validate( integer  handle, character*n dtd_filename, integer error )
 
-  @param DTDFilename (in) name of the DTD-file to be used
+  @param[in]  DTDFilename name of the DTD-file to be used
 
-  @param handle (in) handle to the XML-document to be validated.
+  @param[in]  handle handle to the XML-document to be validated.
 
   @return
     - SUCCESS              if the document is successfully validated
@@ -847,12 +847,12 @@ DLL_EXPORT ReturnCode tixiDTDValidate (const TixiDocumentHandle handle, const ch
 
   tixi_get_text_element( integer handle, character*n element_path,  character*n text, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                     specified by handle (see section \ref XPathExamples above).
 
-  @param text (out) text content of the element specified by elementPath
+  @param[out] text text content of the element specified by elementPath
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -880,12 +880,12 @@ DLL_EXPORT ReturnCode tixiGetTextElement (const TixiDocumentHandle handle,
 
   tixi_get_integer_element( integer  handle, character*n element_path, int* number, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                     specified by handle (see section \ref XPathExamples above).
 
-  @param number (out)  content of the element specified by elementPath interpreted as an integer number
+  @param[out] number  content of the element specified by elementPath interpreted as an integer number
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -910,12 +910,12 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement (const TixiDocumentHandle handle, co
 
   tixi_get_double_element( integer  handle, character*n element_path, real number, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                     specified by handle (see section \ref XPathExamples above).
 
-  @param number (out)  content of the element specified by elementPath interpreted as a floating point number
+  @param[out] number  content of the element specified by elementPath interpreted as a floating point number
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -942,12 +942,12 @@ DLL_EXPORT ReturnCode tixiGetDoubleElement (const TixiDocumentHandle handle, con
 
   tixi_get_boolean_element( integer  handle, character*n element_path, integer boolean, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param boolean (out)  content of the element specified by elementPath interpreted as a integer containing
+  @param[out] boolean   content of the element specified by elementPath interpreted as a integer containing
                         boolean values.
 
   @return
@@ -972,12 +972,12 @@ DLL_EXPORT ReturnCode tixiGetBooleanElement (const TixiDocumentHandle handle, co
 
   tixi_update_text_element( integer handle, character*n element_path,  character*n text, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                     specified by handle (see section \ref XPathExamples above).
 
-  @param text (in) text content of the element to update the element specified by elementPath
+  @param[in]  text text content of the element to update the element specified by elementPath
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -1002,13 +1002,13 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
 
   tixi_update_double_element( integer handle, character*n element_path,  real number, character*n format, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param number (in) double content of the element to update the element specified by elementPath
-  @param format (in) format string used to convert number into a string.
+  @param[in]  number double content of the element to update the element specified by elementPath
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1034,13 +1034,13 @@ DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, 
 
   tixi_update_integer_element( integer handle, character*n element_path,  integer number, character*n format, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param number (in) integer content of the element to update the element specified by elementPath
-  @param format (in) format string used to convert number into a string.
+  @param[in]  number integer content of the element to update the element specified by elementPath
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1066,12 +1066,12 @@ DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle,
 
   tixi_update_boolean_element( integer handle, character*n element_path,  integer boolean, character*n format, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                     specified by handle (see section \ref XPathExamples above).
 
-  @param boolean (in) boolean content of the element to update the element specified by elementPath. The value of boolean has to be "0" or "1".
+  @param[in]  boolean boolean content of the element to update the element specified by elementPath. The value of boolean has to be "0" or "1".
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -1095,16 +1095,16 @@ DLL_EXPORT ReturnCode tixiUpdateBooleanElement (const TixiDocumentHandle handle,
 
   tixi_add_text_element( integer  handle, character*n parent_path, character*n element_name, character*n text, integer error )
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above)
                          into which the new element is to be inserted. The parent
                          element has to exist already.
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
-  @param text (in) text to be placed inside the element pointed to by elementPath. If
+  @param[in]  text text to be placed inside the element pointed to by elementPath. If
                    text is NULL an empty element will be created.
 
   @return
@@ -1131,19 +1131,19 @@ DLL_EXPORT ReturnCode tixiAddTextElement (const TixiDocumentHandle handle, const
 
   tixi_add_text_element_at_index( integer  handle, character*n parent_path, character*n element_name, character*n text, integer index, integer error )
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above)
                          into which the new element is to be inserted. The parent
                          element has to exist already.
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
-  @param text (in) text to be placed inside the element pointed to by elementPath. If
+  @param[in]  text text to be placed inside the element pointed to by elementPath. If
                    text is NULL an empty element will be created.
 
-  @param index (in) the position index where the new node should be created.
+  @param[in]  index the position index where the new node should be created.
 
   @return
     - SUCCESS if successfully added the text element
@@ -1169,16 +1169,16 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex (const TixiDocumentHandle handle
 
   tixi_add_boolean_element( integer  handle, character*n parent_path, character*n element_name, integer boolean, integer error )
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above)
                          into which the new element is to be inserted. The parent
                          element has to exist already.
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
-  @param boolean (in) boolean value to be placed inside the element pointed to by elementPath. The
+  @param[in]  boolean boolean value to be placed inside the element pointed to by elementPath. The
                       value of boolean has to be "0" or "1".
 
   @return
@@ -1203,17 +1203,17 @@ DLL_EXPORT ReturnCode tixiAddBooleanElement (const TixiDocumentHandle handle, co
 
   tixi_add_double_element( integer  handle, character*n parent_path, character*n element_name, real number, character*n format, integer error )
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above).
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
-  @param number (in) floating point number to be placed inside the element pointed to by
+  @param[in]  number floating point number to be placed inside the element pointed to by
                      elementPath. If number is NULL an empty element will be created.
 
-  @param format (in) format string used to convert number into a string.
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1238,17 +1238,17 @@ DLL_EXPORT ReturnCode tixiAddDoubleElement (const TixiDocumentHandle handle,
 
   tixi_add_integer_element( integer  handle, character*n parent_path, character*n element_name, integer number, character*n format, integer error )
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above).
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
-  @param number (in) integer number to be placed inside the element pointed to by
+  @param[in]  number integer number to be placed inside the element pointed to by
                      elementPath. If number is NULL an empty element will be created.
 
-  @param format (in) format string used to convert number into a string.
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1280,21 +1280,21 @@ DLL_EXPORT ReturnCode tixiAddIntegerElement (const TixiDocumentHandle handle,
   #annotate in: 3A(4)#
   @endcond
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above)
                          into which the new element is to be inserted. The parent
                          element has to exist already.
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
-  @param vector (in) The Vector to be placed inside the element pointed to by elementPath. If
+  @param[in]  vector The Vector to be placed inside the element pointed to by elementPath. If
                      Vector is NULL an empty element will be created.
 
-  @param numElements (in) the Number of vector-elements to be inserted in the new element.
+  @param[in]  numElements the Number of vector-elements to be inserted in the new element.
 
-  @param format (in) format string used to convert number into a string.
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1323,17 +1323,17 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
   #annotate in: 2A(3)#
   @endcond
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param path   (in) an XPath compliant path to an element in the document
+  @param[in]  path   an XPath compliant path to an element in the document
                      specified by handle (see section \ref XPathExamples above).
 
-  @param vector (in) The new Vector data replacing the old data at path. If
+  @param[in]  vector The new Vector data replacing the old data at path. If
                      Vector is NULL an empty element will be created.
 
-  @param numElements (in) the Number of vector-elements to be inserted in the new element.
+  @param[in]  numElements the Number of vector-elements to be inserted in the new element.
 
-  @param format (in) format string used to convert number into a string.
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1360,14 +1360,14 @@ DLL_EXPORT ReturnCode tixiUpdateFloatVector (const TixiDocumentHandle handle, co
 
   tixi_create_element( integer  handle, character*n parent_path, character*n element_name, integer error )
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above)
                          into which the new element is to be inserted. The parent
                          element has to exist already.
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
   @return
     - SUCCESS if successfully added the text element
@@ -1392,16 +1392,16 @@ DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, const 
 
   tixi_create_element_at_index( integer  handle, character*n parent_path, character*n element_name, integer index, integer error )
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the document
+  @param[in]  parentPath an XPath compliant path to an element in the document
                          specified by handle (see section \ref XPathExamples above)
                          into which the new element is to be inserted. The parent
                          element has to exist already.
 
-  @param elementName (in) name of the element to be inserted into the parent element
+  @param[in]  elementName name of the element to be inserted into the parent element
 
-  @param index       (in) position of the new created element
+  @param[in]  index       position of the new created element
 
   @return
     - SUCCESS if successfully added the text element
@@ -1425,9 +1425,9 @@ DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle,
 
   tixi_remove_element( integer  handle, character*n element_path, integer error )
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the
+  @param[in]  elementPath an XPath compliant path to an element in the
                      document specified by handle (see section \ref XPathExamples above).
 
   @return
@@ -1448,12 +1448,12 @@ DLL_EXPORT ReturnCode tixiRemoveElement (const TixiDocumentHandle handle, const 
 
   tixi_get_node_type( integer handle, character*n element_path, integer error )
 
-  @param handle   (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param nodePath (in) an XPath compliant path to an element or node in the document
+  @param[in]  handle   handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  nodePath an XPath compliant path to an element or node in the document
                        specified by handle (see section \ref XPathExamples above).
-  @param nodeType (out) String containing the type of the node. The nodes types are named according to
-                    the xml standard, defined on http://www.w3schools.com/dom/dom_nodetype.asp under
-                    the section NodeTypes - Named Constants.
+  @param[out] nodeType String containing the type of the node. The nodes types are named according to
+                       the xml standard, defined on http://www.w3schools.com/dom/dom_nodetype.asp under
+                       the section NodeTypes - Named Constants.
 
   @return
     - SUCCESS if the type is obtained
@@ -1474,13 +1474,13 @@ DLL_EXPORT ReturnCode tixiGetNodeType (const TixiDocumentHandle handle,
 
   tixi_get_named_children_count( integer handle, character*n element_path, character*n child_name, int* count, integer error )
 
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath (in) the path to an element in the document
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  elementPath the path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
-  @param childName (in) name of children to be counted
-  @param count (out) number of children with name childName.
+  @param[in]  childName name of children to be counted
+  @param[out] count  number of children with name childName.
                      0 is returned if either the element specified by elementPath has no
-             children at all or has no children with name childName.
+                     children at all or has no children with name childName.
 
   @return
     - SUCCESS if a count is computed
@@ -1502,11 +1502,11 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount (const TixiDocumentHandle handle
 
   tixi_get_child_node_name( integer handle, character*n element_path, int* index, character*n child_name_array, integer error )
 
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param parentElementPath (in) the path to the parent element in the document
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  parentElementPath the path to the parent element in the document
                                 specified by handle (see section \ref XPathExamples above).
-  @param index (in) number index of the child-element of the given path.
-  @param name (out) String containing the name of the child node. If the node is not a normal node, the name variable will contain:
+  @param[in]  index number index of the child-element of the given path.
+  @param[out] name  String containing the name of the child node. If the node is not a normal node, the name variable will contain:
                      - \#text - in case of a text node
                      - \#comment - in case of a comment node
                      - \#cdata-section - in case of a CDATA section node
@@ -1529,10 +1529,10 @@ DLL_EXPORT ReturnCode tixiGetChildNodeName (const TixiDocumentHandle handle,
 
   tixi_get_number_of_childs( integer handle, character*n element_path, int* nchilds, integer error )
 
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
-  @param nChilds (out) Number of child elements beneath the given elementPath.
+  @param[out] nChilds Number of child elements beneath the given elementPath.
 
   @return
     - SUCCESS if a count is computed
@@ -1568,14 +1568,14 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
 
   tixi_get_text_attribute( integer  handle, character*n element_path, character*n attribute_name, character*n text, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be get from the element
+  @param[in]  attributeName name of the attribute to be get from the element
 
-  @param text (out) value of the specified attribute as a string
+  @param[out] text value of the specified attribute as a string
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -1602,14 +1602,14 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute (const TixiDocumentHandle handle,
 
   tixi_get_integer_attribute( integer  handle, character*n element_path, character*n attribute_name, integer *number, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
-  @param number (out)  value of the specified attribute as an integer value
+  @param[out] number  value of the specified attribute as an integer value
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -1636,14 +1636,14 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute (const TixiDocumentHandle handle,
 
   tixi_get_boolean_attribute( integer  handle, character*n element_path, character*n attribute_name, integer boolean, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
-  @param boolean (out)  value of the specified attribute as an boolean value
+  @param[out] boolean  value of the specified attribute as an boolean value
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -1670,14 +1670,14 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
 
   tixi_get_double_attribute( integer  handle, character*n element_path, character*n attribute_name, real *number, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
-  @param number (out) value of the specified attribute as a floating point value
+  @param[out] number value of the specified attribute as a floating point value
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -1705,14 +1705,14 @@ DLL_EXPORT ReturnCode tixiGetDoubleAttribute (const TixiDocumentHandle handle,
 
   tixi_add_text_attribute( integer  handle, character*n element_path, character*n attribute_name, character*n attribute_value, integer error )
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
-  @param attributeValue (in) text to assigned to the attribute. If attributeValue is
+  @param[in]  attributeValue text to assigned to the attribute. If attributeValue is
                              NULL the empty string will be assigned to the attribute.
 
   @return
@@ -1743,18 +1743,18 @@ DLL_EXPORT ReturnCode tixiAddTextAttribute (const TixiDocumentHandle handle,
 
   tixi_add_double_attribute( integer  handle, character*n element_path, character*n attribute_name, real number, character*n format, integer error )
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
-  @param number (in) floating point value to be assigned to the attribute. If
+  @param[in]  number floating point value to be assigned to the attribute. If
                      number is NULL an error is return and the attribute
                      is not created.
 
-  @param format (in) format string used to convert number into a string.
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1784,18 +1784,18 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute (const TixiDocumentHandle handle,
 
   tixi_add_integer_attribute( integer  handle, character*n element_path, character*n attribute_name, integer number, character*n format, integer error )
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the
+  @param[in]  elementPath an XPath compliant path to an element in the
                           document specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
-  @param number (in) integer value to be assigned to the attribute. If
+  @param[in]  number integer value to be assigned to the attribute. If
                      number is NULL an error is return and the attribute
                      is not created.
 
-  @param format (in) format string used to convert number into a string.
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -1823,12 +1823,12 @@ DLL_EXPORT ReturnCode tixiAddIntegerAttribute (const TixiDocumentHandle handle,
 
   tixi_remove_attribute( integer handle, character*n element_path, character*n attribute_name, integer error )
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
 
-  @param elementPath (in) an XPath compliant path to an element in the
+  @param[in]  elementPath an XPath compliant path to an element in the
                           document specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
   @return
     - SUCCESS if successfully removed the attribute
@@ -1850,10 +1850,10 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute (const TixiDocumentHandle handle,
 
   tixi_get_number_of_attributes( integer handle, character*n element_path, int* nattr, integer error )
 
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
-  @param nAttributes (out) Number of attributes of a given node.
+  @param[out] nAttributes Number of attributes of a given node.
 
   @return
     - SUCCESS if a count is computed
@@ -1873,11 +1873,11 @@ DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle,
 
   tixi_get_attribute_name( integer handle, character*n element_path, int* index, character*n attr_name_array, integer error )
 
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
-  @param attrIndex (in) number index of the attribute of the given path (counting from 1...tixiGetNumberOfAttributes)
-  @param attrName (out) String containing the attribute name.
+  @param[in]  attrIndex number index of the attribute of the given path (counting from 1...tixiGetNumberOfAttributes)
+  @param[out] attrName  String containing the attribute name.
 
   @return
     - SUCCESS if a count is computed
@@ -1906,11 +1906,11 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
 
   tixi_add_external_link( integer  handle, character*n parent_path, character*n url, character*n file_format, integer error )
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param parentPath (in) path to the element into which the element holding the url
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  parentPath path to the element into which the element holding the url
                          should be inserted.
-  @param url (in) an url to specify an additional output file not in XML-format
-  @param fileFormat (in) an optional attribute (may be NULL) to specify a file format,
+  @param[in]  url an url to specify an additional output file not in XML-format
+  @param[in]  fileFormat an optional attribute (may be NULL) to specify a file format,
                          e.g. CNGS, netcdf, ...
 
   @return
@@ -1935,10 +1935,10 @@ DLL_EXPORT ReturnCode tixiAddExternalLink (const TixiDocumentHandle handle, cons
 
   tixi_add_header( integer handle, character*n tool_name, character*n version, character*n author_name, integer error )
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param toolName (in) name of the tool used to write the file
-  @param authorName (in) string to identify the creator of the file
-  @param version (in) string to identify the version of the tool
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  toolName name of the tool used to write the file
+  @param[in]  authorName string to identify the creator of the file
+  @param[in]  version string to identify the version of the tool
 
   @return
     - SUCCESS if successfully added the header
@@ -1962,12 +1962,12 @@ DLL_EXPORT ReturnCode tixiAddHeader (const TixiDocumentHandle handle, const char
 
   tixi_add_cpacs_header( integer handle, character*n name, character*n creator, character*n version, character*n descripton, character*n cpacs_version, integer error )
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param name (in)   name of the data set
-  @param creator (in) string to identify the creator of the file
-  @param version (in) string to identify the version of the file
-  @param description  (in) optional string to set a description to the file
-  @param cpacsVersion (in) CPACS version number
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  name   name of the data set
+  @param[in]  creator string to identify the creator of the file
+  @param[in]  version string to identify the version of the file
+  @param[in]  description  optional string to set a description to the file
+  @param[in]  cpacsVersion CPACS version number
 
   @return
     - SUCCESS if successfully added the header
@@ -1982,8 +1982,8 @@ DLL_EXPORT ReturnCode tixiAddCpacsHeader (const TixiDocumentHandle handle, const
 /**
   @brief Checks if the given element exists.
 
-  @param handle (in) handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
   @return
@@ -2003,7 +2003,7 @@ DLL_EXPORT ReturnCode tixiCheckElement (const TixiDocumentHandle handle, const c
 
   tixi_check_handle( integer handle )
 
-  @param handle (in)  handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  handle  handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
 
   @return
     - SUCCESS if handle is valid
@@ -2023,8 +2023,8 @@ DLL_EXPORT ReturnCode tixiCheckDocumentHandle (const TixiDocumentHandle handle);
 
   tixi_use_pretty_print( integer  handle, integer use_pretty_print, integer error )
 
-  @param handle  (in) handle as returned by ::tixiOpenDocument
-  @param usePrettyPrint (in) flag if output should be pretty printed
+  @param[in]  handle  handle as returned by ::tixiOpenDocument
+  @param[in]  usePrettyPrint flag if output should be pretty printed
 
   @return
     - SUCCESS if a count is computed
@@ -2048,7 +2048,7 @@ DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrett
   tixiSetPrintMsgFunc(tixiSilentMessage);
   @endcode
 
-  @param func (in) The new message receiver function
+  @param[in]  func The new message receiver function
 
   @return
     - SUCCESS if func is valid
@@ -2075,26 +2075,26 @@ DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func);
 
   tixi_add_double_list_with_attributes( integer  handle, character*n parent_path, character*n list_name, character*n child_name, character*n child_attribute_name, real values, character*n format, character*n attributes, integer n_values, integer error )
 
-  @param handle (in) file handle as returned by ::tixiCreateDocument
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
 
-  @param parentPath (in) an XPath compliant path to an element in the
+  @param[in]  parentPath an XPath compliant path to an element in the
                          document specified by handle (see section \ref XPathExamples above).
 
-  @param listName (in) name of the element containing the list
+  @param[in]  listName name of the element containing the list
 
-  @param childName (in) name of the child elements of the element listName
+  @param[in]  childName name of the child elements of the element listName
 
-  @param childAttributeName (in) name of the attribute to be assigned to each child
+  @param[in]  childAttributeName name of the attribute to be assigned to each child
 
-  @param values (in) array of double holding the element values to be added ("text" content between the tags)
+  @param[in]  values array of double holding the element values to be added ("text" content between the tags)
 
-  @param format (in) format string used to convert number into a string.
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
-  @param attributes (in) array of pointers to strings holding the attribute values (vs. attribute name which is the same for each list entry)
+  @param[in]  attributes array of pointers to strings holding the attribute values (vs. attribute name which is the same for each list entry)
 
-  @param nValues (in) number of values in the list
+  @param[in]  nValues number of values in the list
 
   @return
     - SUCCESS if the list has been added successfully
@@ -2119,10 +2119,10 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes (const TixiDocumentHandle 
 
   tixi_get_vector_size( integer  handle,  character*n vectorPath, integer nElements, integer error)
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param vectorPath (in) an XPath compliant path to an element holding the vector in
+  @param[in]  handle file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  vectorPath an XPath compliant path to an element holding the vector in
                          the document specified by handle (see section \ref XPathExamples).
-  @param nElements (out) number of vector elements
+  @param[out] nElements  number of vector elements
 
   @return
     - SUCCESS if successfully read the matrix element
@@ -2145,11 +2145,11 @@ DLL_EXPORT ReturnCode tixiGetVectorSize (const TixiDocumentHandle handle,
 
   tixi_get_float_vector( integer handle, character*n vectorPath, real array, integer eNumber)
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param vectorPath (in) an XPath compliant path to an element holding the vector in
+  @param[in]  handle file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  vectorPath an XPath compliant path to an element holding the vector in
                          the document specified by handle (see section \ref XPathExamples).
-  @param vectorArray (out) a pointer address for an array that should hold the vector elements
-  @param eNumber (in) maximal number of elements that shout be read from this vector.
+  @param[out] vectorArray a pointer address for an array that should hold the vector elements
+  @param[in]  eNumber maximal number of elements that shout be read from this vector.
 
   @return
     - SUCCESS if successfully read the vector
@@ -2200,10 +2200,10 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
 
   tixi_get_array_dimensions( integer handle, character*n arrayPath, integer* dimensions )
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param arrayPath (in) an XPath-compliant path to an element holding the sub elements that define the dimensions in
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  arrayPath an XPath-compliant path to an element holding the sub elements that define the dimensions in
                         the document specified by the handle (see section \ref XPathExamples).
-  @param dimensions (out) number of array dimensions
+  @param[out] dimensions number of array dimensions
 
   @return
     - SUCCESS if the dimensions have been successfully read
@@ -2226,11 +2226,11 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensions (const TixiDocumentHandle handle,
 
   tixi_get_array_dimension_sizes ( integer handle, character*n arrayPath, int*n sizes, int* arraySizes )
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param arrayPath (in) an XPath-compliant path to the top XML element holding the sub-tags of the array definition in
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  arrayPath an XPath-compliant path to the top XML element holding the sub-tags of the array definition in
                         the document specified by the handle (see section \ref XPathExamples).
-  @param sizes (out) an integer array containing the size of each dimension
-  @param linearArraySize (out) product over all sizes (for complete array size)
+  @param[out] sizes an integer array containing the size of each dimension
+  @param[out] linearArraySize product over all sizes (for complete array size)
 
   @return
     - SUCCESS if the dimensions have been successfully read
@@ -2257,10 +2257,10 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handl
 
   tixi_get_array_dimension_names ( integer handle, character*n arrayPath, char*n*m dimensionNames)
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
+  @param[in]  handle file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  arrayPath an XPath compliant path to an element holding the sub-tags of the array definition in
                         the document specified by handle (see section \ref XPathExamples).
-  @param dimensionNames (out) array of strings
+  @param[out] dimensionNames array of strings
 
   @return
     - SUCCESS if successfully read the matrix element
@@ -2286,11 +2286,11 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handl
 
   tixi_get_array_dimension_values ( integer handle, character*n arrayPath, int* dimension, double *dimensionValues)
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
+  @param[in]  handle file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  arrayPath an XPath compliant path to an element holding the sub-tags of the array definition in
                         the document specified by handle (see section \ref XPathExamples).
-  @param dimension (in) which dimension to return meaning values for
-  @param dimensionValues (out) all values for this dimension. The return array's Size should be determined by a prior call to tixiGetArrayDimensionSizes()
+  @param[in]  dimension which dimension to return meaning values for
+  @param[out] dimensionValues all values for this dimension. The return array's Size should be determined by a prior call to tixiGetArrayDimensionSizes()
 
   @return
     - SUCCESS if successfully read the matrix element
@@ -2316,10 +2316,10 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
 
   tixi_get_array_parameters( integer handle, character*n arrayPath, integer* parameters )
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param arrayPath (in) an XPath compliant path to an element holding the sub elements that define the dimensions in
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  arrayPath an XPath compliant path to an element holding the sub elements that define the dimensions in
                         the document specified by handle (see section \ref XPathExamples).
-  @param parameters (out) number of array parameters
+  @param[out] parameters number of array parameters
 
   @return
     - SUCCESS if successfully read the dimensions
@@ -2341,10 +2341,10 @@ DLL_EXPORT ReturnCode tixiGetArrayParameters (const TixiDocumentHandle handle, c
 
   tixi_get_array_parameter_names ( integer handle, character*n arrayPath, character*n*m parameterNames)
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  arrayPath an XPath compliant path to an element holding the sub-tags of the array definition in
                         the document specified by handle (see section \ref XPathExamples).
-  @param parameterNames (out) string array containing names of each parameter
+  @param[out] parameterNames string array containing names of each parameter
 
   @return
     - SUCCESS if successfully read the matrix element
@@ -2367,13 +2367,13 @@ DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handl
 
   tixi_get_array ( integer handle, character*n arrayPath, character*n element, double *values)
 
-  @param handle (in) file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param arrayPath (in) an XPath compliant path to an element holding the sub-tags of the array definition in
+  @param[in]  handle file handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  arrayPath an XPath compliant path to an element holding the sub-tags of the array definition in
                         the document specified by handle (see section \ref XPathExamples).
-  @param elementName (in) name of the sub tag that contains the array
-  @param arraySize (in) Total size of the array. Size must be determined by calling ::tixiGetArrayDimensionSizes and must equal
+  @param[in]  elementName name of the sub tag that contains the array
+  @param[in]  arraySize Total size of the array. Size must be determined by calling ::tixiGetArrayDimensionSizes and must equal
                         the product of all dimensions' sizes
-  @param values (out) Pointer to a double array, containg all values for this dimension. The array is allocated and freed
+  @param[out] values Pointer to a double array, containg all values for this dimension. The array is allocated and freed
                       by tixi. The size of the array corresponds to the parameter arraySize
 
   @return
@@ -2403,10 +2403,10 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
   tixi_get_array_value ( double*n array, integer*n dimSize, integer*n dimPos, integer *dims)
 
-  @param array (in) the array as returned by ::tixiGetArray()
-  @param dimSize (in) the array of dimensions' sizes as returned by ::tixiGetArrayDimensionSizes()
-  @param dimPos (in) the index of each dimension to fetch from the array
-  @param dims (in) the number of dimensions of the array as returned by ::tixiGetArrayDimensions()
+  @param[in]  array the array as returned by ::tixiGetArray()
+  @param[in]  dimSize the array of dimensions' sizes as returned by ::tixiGetArrayDimensionSizes()
+  @param[in]  dimPos the index of each dimension to fetch from the array
+  @param[in]  dims the number of dimensions of the array as returned by ::tixiGetArrayDimensions()
 
   @return The element fetched
 */
@@ -2424,11 +2424,11 @@ DLL_EXPORT double tixiGetArrayValue(const double *array, const int *dimSize, con
 
   tixi_get_array_element_count( integer handle, character*n arrayPath, character*n elementName, integer* elements )
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param arrayPath (in) an XPath compliant path to an element holding the sub elements that define the dimensions in
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  arrayPath an XPath compliant path to an element holding the sub elements that define the dimensions in
                         the document specified by handle (see section \ref XPathExamples).
-  @param elementName (in) The name of the sub element under the given xpath.
-  @param elements (out) number of array parameters (separated by ";")
+  @param[in]  elementName The name of the sub element under the given xpath.
+  @param[out] elements number of array parameters (separated by ";")
 
   @return
     - SUCCESS if successfully read the dimensions
@@ -2453,11 +2453,11 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
 
   tixi_get_array_element_names( integer handle, character*n arrayPath, character*n elementName, character*n*m elementNames)
 
-  @param handle (in) as returned by ::tixiCreateDocument
-  @param arrayPath (in) an XPath compliant path to an element holding the sub elements that define the dimensions in
+  @param[in]  handle as returned by ::tixiCreateDocument
+  @param[in]  arrayPath an XPath compliant path to an element holding the sub elements that define the dimensions in
                         the document specified by handle (see section \ref XPathExamples).
-  @param elementType (in) mapType to get names for (either "vector" for a dimension or "array" for the data field)
-  @param elementNames (out) string names of all tags found for the given type.
+  @param[in]  elementType mapType to get names for (either "vector" for a dimension or "array" for the data field)
+  @param[out] elementNames string names of all tags found for the given type.
 
   @return
     - SUCCESS if successfully read the dimensions
@@ -2487,14 +2487,14 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
   tixi_add_point( integer  handle,  character*n pointParentPath,
                   real x, real y, real z, character*n format, integer error )
 
-  @param handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param pointParentPath (in) an XPath compliant path to an element into
+  @param[in]  handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  pointParentPath an XPath compliant path to an element into
                              which the point elements are to be inserted in the document
                              specified by handle (see section \ref XPathExamples).
-  @param x (in) x coordinate of the point
-  @param y (in) y coordinate of the point
-  @param z (in) z coordinate of the point
-  @param format (in) format string used to convert number into a string.
+  @param[in]  x x coordinate of the point
+  @param[in]  y y coordinate of the point
+  @param[in]  z z coordinate of the point
+  @param[in]  format format string used to convert number into a string.
                      The format string usage is identical to format strings in printf.
                      If format is NULL "%g" will be used to format the string.
 
@@ -2535,12 +2535,12 @@ DLL_EXPORT ReturnCode tixiAddPoint (const TixiDocumentHandle handle, const char 
   tixi_get_point(  integer  handle,  character*n pointParentPath, integer index,
                    real x, real y, real z, integer error )
 
-  @param handle (in) as returned by ::tixiOpenDocument
-  @param pointParentPath (in) an XPath compliant path to an element containing point elements
+  @param[in]  handle as returned by ::tixiOpenDocument
+  @param[in]  pointParentPath an XPath compliant path to an element containing point elements
                               in the document specified by handle (see section \ref XPathExamples).
-  @param x (out) x coordinate of the point
-  @param y (out) y coordinate of the point
-  @param z (out) z coordinate of the point
+  @param[out] x x coordinate of the point
+  @param[out] y y coordinate of the point
+  @param[out] z z coordinate of the point
 
   @return
      - SUCCESS if the content of the point element is retrieved successfully
@@ -2562,12 +2562,12 @@ DLL_EXPORT ReturnCode tixiGetPoint (const TixiDocumentHandle handle,
 
   tixi_check_attribute( integer  handle, character*n element_path, character*n attribute_name, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
-  @param elementPath (in) an XPath compliant path to an element in the document
+  @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param attributeName (in) name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element
@@ -2594,9 +2594,9 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
 
   tixi_xsl_transformation_to_file( integer  handle, character*n xslFilename, character*n resultFilename, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xslFilename (in) The name of a local file with XSL mapping informations.
-  @param resultFilename (in) The name of a local file to store the resulting XML document in.
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xslFilename The name of a local file with XSL mapping informations.
+  @param[in]  resultFilename The name of a local file to store the resulting XML document in.
   @return
     - SUCCESS if successfully retrieve the text content of a single element
     - FAILED  is something went wrong, i.e. opening of files
@@ -2621,9 +2621,9 @@ DLL_EXPORT ReturnCode tixiXSLTransformationToFile(TixiDocumentHandle handle, con
 
   tixi_xpath_evaluate_node_number( integer handle, character*n xpathExpression, integer number, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xPathExpression (in) The XPath Expression to evaluate.
-  @param number (out) The number of nodes matching this xpath expression.
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xPathExpression The XPath Expression to evaluate.
+  @param[out] number The number of nodes matching this xpath expression.
 
   @return
     - SUCCESS if successfully retrieved the number of the xPath search.
@@ -2634,10 +2634,10 @@ DLL_EXPORT ReturnCode tixiXPathEvaluateNodeNumber(TixiDocumentHandle handle, con
 /**
   @brief Evaluates a XPath expression and the xPath for the i-th result.
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xPathExpression (in) The XPath Expression to evaluate.
-  @param index (in) The index of the result to query, with 1 <= index <= number, and number queried with ::tixiXPathEvaluateNodeNumber
-  @param xPath (out) The xPath of the search result.
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xPathExpression The XPath Expression to evaluate.
+  @param[in]  index The index of the result to query, with 1 <= index <= number, and number queried with ::tixiXPathEvaluateNodeNumber
+  @param[out] xPath The xPath of the search result.
 
   @return
     - SUCCESS if successfully retrieve the xPath of the search.
@@ -2658,11 +2658,11 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetXPath(TixiDocumentHandle handle, con
 
   tixi_xpath_expression_get_text_by_index( integer handle, character*n xpathERxpression, integer index, character*n text, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xPathExpression (in) The XPath Expression to evaluate.
-  @param elementNumber (in) The (index)-number to get. Needed if the XPath expression catches more than one node. Index must
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xPathExpression The XPath Expression to evaluate.
+  @param[in]  elementNumber The (index)-number to get. Needed if the XPath expression catches more than one node. Index must
                             be between 1 and 'tixiXPathEvaluateNodeNumber()', inclusively.
-  @param text (out) the text content of the node-value. Works for xml-elements and attributes. NULL if an error occured.
+  @param[out] text the text content of the node-value. Works for xml-elements and attributes. NULL if an error occured.
 
   @return
     - SUCCESS if successfully retrieve the text content of a single element.
@@ -2687,7 +2687,7 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handl
 
   tixi_uid_check_duplicates( integer  handle, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
   @return
     - SUCCESS if all UIDs are unique
@@ -2704,7 +2704,7 @@ DLL_EXPORT ReturnCode tixiUIDCheckDuplicates(TixiDocumentHandle handle);
 
   tixi_uid_check_links( integer  handle, integer error )
 
-  @param handle (in) handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
 
   @return
     - SUCCESS if all links are valid
@@ -2725,9 +2725,9 @@ DLL_EXPORT ReturnCode tixiUIDCheckLinks(TixiDocumentHandle handle);
 
   tixi_uid_get_xpath( integer  handle, character*n uid, character*n text, integer error )
 
-  @param handle (in)    handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param uID    (in)    The uid of which the xpath should be returned
-  @param xPath  (out)   The XPath of the element with the right uid. Empty string if uid does not exist.
+  @param[in]  handle    handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  uID       The uid of which the xpath should be returned
+  @param[out] xPath     The XPath of the element with the right uid. Empty string if uid does not exist.
 
   @return
     - SUCCESS if all UIDs are unique
@@ -2744,8 +2744,8 @@ DLL_EXPORT ReturnCode tixiUIDGetXPath(TixiDocumentHandle handle, const char *uID
 
   tixi_uid_check_exists( integer  handle, character*n uid, integer error )
 
-  @param handle (in)    handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param uID (in)       The uid which should be checked
+  @param[in]  handle    handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  uID       The uid which should be checked
 
   @return
     - SUCCESS if all UIDs are unique
@@ -2763,9 +2763,9 @@ DLL_EXPORT ReturnCode tixiUIDCheckExists(TixiDocumentHandle handle, const char *
 
   tixi_uid_set_to_xpath( integer  handle, character*n xpath, character*n uid, integer error )
 
-  @param handle (in)    handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param xPath (in)     The XPath to the node which should become the uid-attribute
-  @param uID (in)       The uid which should be checked
+  @param[in]  handle    handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xPath     The XPath to the node which should become the uid-attribute
+  @param[in]  uID       The uid which should be checked
 
   @return
     - SUCCESS if all UIDs are unique
