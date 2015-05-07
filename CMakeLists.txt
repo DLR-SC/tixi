@@ -20,7 +20,7 @@ OPTION(ENABLE_COVERAGE "Enable GCov coverage analysis (defines a 'coverage' targ
 
 set(TIXI_VERSION_MAJOR 2)
 set(TIXI_VERSION_MINOR 1)
-set(TIXI_VERSION_PATCH 1)
+set(TIXI_VERSION_PATCH 2)
 set(TIXI_VERSION "${TIXI_VERSION_MAJOR}.${TIXI_VERSION_MINOR}.${TIXI_VERSION_PATCH}")
 
 set(ADD_INCLUDE_PATH "" CACHE PATH "Additional include path for package search")
@@ -74,6 +74,10 @@ if(WIN32)
             include_directories(${VLD_INCLUDE_DIRS})
         endif(TIXI_USE_VLD)
     endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+endif(WIN32)
+
+if(WIN32)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif(WIN32)
 
 #create tixi library

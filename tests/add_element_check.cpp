@@ -165,7 +165,6 @@ TEST_F(AddElementTests, addElement_addTextElementAtIndex)
 
 TEST_F(AddElementTests, removeElement)
 {
-  char* text = NULL;
   int count = 0;
 
   ASSERT_TRUE( tixiAddTextElement( documentHandle, "/rootElement", "level1", "level1" ) == SUCCESS );

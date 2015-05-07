@@ -158,10 +158,8 @@ TEST_F(ArrayTests, array_test_negative)
 {
   // define vars
   int dims, dim = 0;
-  int pars,par = 0;
   int arraySize = 4;
   int sizes[] = {0, 0, 0, 0};
-  int pos[] = {0, 0, 0, 0};
   double* values = NULL;
   char* names[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
 
