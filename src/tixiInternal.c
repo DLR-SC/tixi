@@ -43,7 +43,7 @@
 #endif
 
 
-extern TixiPrintMsgFnc printMsg;
+extern void printMsg(MessageType type, const char* message, ...);
 
 InternalReturnCode clearMemoryList(TixiDocument* document)
 {

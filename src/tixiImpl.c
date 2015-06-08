@@ -43,14 +43,48 @@
 
 static xmlNsPtr nameSpace = NULL;
 
-void tixiDefaultMessage(MessageType type, const char* msg, ...);
+void tixiDefaultMessageHandler(MessageType type, const char* msg);
 
 /**
   Pointer to the head of the list of documents managed by TIXI
 */
 TixiDocumentListEntry *documentListHead = NULL;
 
-TixiPrintMsgFnc printMsg = tixiDefaultMessage;
+TixiPrintMsgFnc tixiMessageHandler = tixiDefaultMessageHandler;
+
+/**
+  Route all messages to the internal message handler
+ */
+void printMsg(MessageType type, const char* message, ...)
+{
+  char buffer[2048];
+  char* extra = NULL;
+  int len = 0;
+
+  va_list varArgs;
+  va_start(varArgs, message);
+  if ((len = vsnprintf(buffer, 2048, message, varArgs)) >= 2048) {
+    // message is longer than 2048 bytes,
+    // we must allocate
+    extra = (char*) malloc((len+1) * sizeof(char));
+
+    vsnprintf(extra, len+1, message, varArgs);
+    if (tixiMessageHandler) {
+      tixiMessageHandler(type, extra);
+    }
+
+    if (extra) {
+      free(extra);
+    }
+  }
+  else {
+    if (tixiMessageHandler) {
+      tixiMessageHandler(type, buffer);
+    }
+  }
+
+  va_end(varArgs);
+}
 
 int _initialized = 0;
 
@@ -67,14 +101,14 @@ void xmlErrorHandler(void * ctx, const char *message, ...) {
     extra = (char*) malloc((len+1) * sizeof(char));
 
     vsnprintf(extra, len+1, message, varArgs);
-    printMsg(MESSAGETYPE_ERROR, extra);
+    tixiMessageHandler(MESSAGETYPE_ERROR, extra);
 
     if (extra) {
       free(extra);
     }
   }
   else {
-    printMsg(MESSAGETYPE_ERROR, buffer);
+    tixiMessageHandler(MESSAGETYPE_ERROR, buffer);
   }
 
   va_end(varArgs);
@@ -1962,12 +1996,19 @@ DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func)
 {
   tixiInit();
   if (func) {
-    printMsg = func;
+    tixiMessageHandler = func;
     return SUCCESS;
   }
   else {
     return FAILED;
   }
+}
+
+DLL_EXPORT TixiPrintMsgFnc tixiGetPrintMsgFunc()
+{
+    tixiInit();
+
+    return tixiMessageHandler;
 }
 
 
@@ -3048,13 +3089,10 @@ DLL_EXPORT ReturnCode tixiGetNodeType(const TixiDocumentHandle handle, const cha
   return error;
 }
 
-void tixiDefaultMessage(MessageType type, const char *message, ...)
+void tixiDefaultMessageHandler(MessageType type, const char *message)
 {
-  va_list varArgs;
-  va_start(varArgs, message);
   // only show errors and warnings by default
   if (type < MESSAGETYPE_STATUS) {
-    vfprintf(stderr, message, varArgs);
+    fprintf(stderr, message);
   }
-  va_end(varArgs);
 }

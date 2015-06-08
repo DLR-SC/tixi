@@ -21,7 +21,7 @@
 
 #include "xslTransformation.h"
 
-extern TixiPrintMsgFnc printMsg;
+extern void printMsg(MessageType type, const char* message, ...);
 
 char* xsltTransformToString(xmlDocPtr doc, const char* xslFilename)
 {

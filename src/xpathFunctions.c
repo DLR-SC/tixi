@@ -18,7 +18,7 @@
 #include "xpathFunctions.h"
 #include "tixiInternal.h"
 
-extern TixiPrintMsgFnc printMsg;
+extern void printMsg(MessageType type, const char* message, ...);
 
 xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char* xPathExpression)
 {

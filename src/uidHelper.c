@@ -18,7 +18,7 @@
 #include "uidHelper.h"
 #include "tixiInternal.h"
 
-extern TixiPrintMsgFnc printMsg;
+extern void printMsg(MessageType type, const char* message, ...);
 
 int uid_readDocumentUIDs(TixiDocument* tixiDocument)
 {

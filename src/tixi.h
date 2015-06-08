@@ -392,7 +392,7 @@ typedef enum MessageType MessageType;
  * Signature of a callback function to handle messages (errors, warnings ...)
  * To be used in conjuction with ::tixiSetPrintMsgFunc.
  */
-typedef void (*TixiPrintMsgFnc) (MessageType type, const char *msg, ...);
+typedef void (*TixiPrintMsgFnc) (MessageType type, const char *msg);
 
 /**
   @brief Returns the version number of this TIXI version.
@@ -2055,6 +2055,14 @@ DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrett
     - FAILED  if func is a null pointer
  */
 DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func);
+
+/**
+  @brief Returns the currently registered message handler function
+  
+  @return:
+    - Function pointer to the message handler
+ */
+DLL_EXPORT TixiPrintMsgFnc tixiGetPrintMsgFunc();
 
 /*@}*/
 

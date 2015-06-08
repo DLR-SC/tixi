@@ -33,7 +33,7 @@
   #include <unistd.h>
 #endif
 
-extern TixiPrintMsgFnc printMsg;
+extern void printMsg(MessageType type, const char* message, ...);
 
 int my_strncasecmp (const char* a, const char* b, size_t len)
 {

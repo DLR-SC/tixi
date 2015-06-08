@@ -25,7 +25,7 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
 
-extern TixiPrintMsgFnc printMsg;
+extern void printMsg(MessageType type, const char* message, ...);
 
 void* myrealloc(void* ptr, size_t size)
 {
