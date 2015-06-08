@@ -1,3 +1,14 @@
+Version 2.2.1
+---------------
+
+-API Changes:
+	- Removed ellipsis argument for error message handler. This
+	  change affects code calling tixiSetPrintMsgFunc.
+
+-New Functions:
+	- tixiGetPrintMsgFunc to return the internal message handler.
+
+
 Version 2.2.0
 ---------------
 
