@@ -960,87 +960,34 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
 
 DLL_EXPORT ReturnCode tixiUpdateDoubleElement (const TixiDocumentHandle handle, const char *elementPath, double number, const char *format)
 {
-  TixiDocument *document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
-  xmlXPathObjectPtr xpathObject = NULL;
-  xmlNodePtr element = NULL;
-  xmlNodePtr newElement = NULL;
+
   ReturnCode error = SUCCESS;
   char *textBuffer = NULL;
-
-  if (!document) {
-    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
-    return INVALID_HANDLE;
-  }
-
-  if (document->status == SAVED) {
-    printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
-    return ALREADY_SAVED;
-  }
-
-  xmlDocument = document->docPtr;
 
   if (!format) {
     format = "%g";
   };
 
   textBuffer = buildString(format, number);
-
-  error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
-  if (!error) {
-    xmlNodePtr nodeToReplace = element->children;
-    newElement = xmlNewText((xmlChar*) textBuffer);
-    free(textBuffer);
-    xmlReplaceNode(nodeToReplace, newElement);
-    xmlFreeNode(nodeToReplace);
-    return SUCCESS;
-  }
+  error = tixiUpdateTextElement(handle, elementPath, textBuffer);
   free(textBuffer);
-  return FAILED;
+  return error;
 }
 
 
 DLL_EXPORT ReturnCode tixiUpdateIntegerElement (const TixiDocumentHandle handle, const char *elementPath, int number, const char *format)
 {
-  TixiDocument *document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
-  xmlXPathObjectPtr xpathObject = NULL;
-  xmlNodePtr element = NULL;
-  xmlNodePtr newElement = NULL;
   ReturnCode error = SUCCESS;
   char *textBuffer = NULL;
-
-  if (!document) {
-    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
-    return INVALID_HANDLE;
-  }
-
-  if (document->status == SAVED) {
-    printMsg(MESSAGETYPE_ERROR, "Error:  Can not add element to document. Document already saved.\n");
-    return ALREADY_SAVED;
-  }
-
-  xmlDocument = document->docPtr;
-
+  
   if (!format) {
     format = "%g";
   };
 
   textBuffer = buildString(format, number);
-
-  error = checkElement(xmlDocument, elementPath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
-  if (!error) {
-    xmlNodePtr nodeToReplace = element->children;
-    newElement = xmlNewText((xmlChar*) textBuffer);
-    free(textBuffer);
-    xmlReplaceNode(nodeToReplace, newElement);
-    xmlFreeNode(nodeToReplace);
-    return SUCCESS;
-  }
+  error = tixiUpdateTextElement(handle, elementPath, textBuffer);
   free(textBuffer);
-  return FAILED;
+  return error;
 }
 
 
@@ -3093,6 +3040,6 @@ void tixiDefaultMessageHandler(MessageType type, const char *message)
 {
   // only show errors and warnings by default
   if (type < MESSAGETYPE_STATUS) {
-    fprintf(stderr, message);
+    fputs(message, stderr);
   }
 }

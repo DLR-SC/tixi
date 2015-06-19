@@ -84,7 +84,7 @@ TEST_F(UpdateElementTests, updateDoubleElement_path_not_exists)
   const char* parentPath = "/rootElement/wring_path";
   double val = 666.666;
 
-  ASSERT_TRUE( tixiUpdateDoubleElement( documentHandle, parentPath, val, formatDbl ) == FAILED );
+  ASSERT_TRUE( tixiUpdateDoubleElement( documentHandle, parentPath, val, formatDbl ) == ELEMENT_NOT_FOUND );
 }
 
 TEST_F(UpdateElementTests, updateIntegerElement_success)
