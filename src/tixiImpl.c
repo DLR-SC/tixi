@@ -864,7 +864,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, con
   error = tixiGetTextElement(handle, elementPath, &text);
 
   if (error) {
-    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextElement returns %d in tixiGetIntegerElement.\n", error);
+    printMsg(MESSAGETYPE_STATUS, "Error: tixiGetTextElement returns %d in tixiGetIntegerElement.\n", error);
     return error;
   }
 
@@ -881,7 +881,7 @@ DLL_EXPORT ReturnCode tixiGetDoubleElement(const TixiDocumentHandle handle, cons
   error = tixiGetTextElement(handle, elementPath, &text);
 
   if (error) {
-    printError(error, "tixiGetDoubleElement");
+    printMsg(MESSAGETYPE_STATUS, "Error: tixiGetTextElement returns %d in tixiGetDoubleElement.\n", error);
     return error;
   }
 
@@ -900,7 +900,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanElement(const TixiDocumentHandle handle, con
   error = tixiGetTextElement(handle, elementPath, &text);
 
   if (error) {
-    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextElement returns %d in tixiGetBooleanElement.\n", error);
+    printMsg(MESSAGETYPE_STATUS, "Error: tixiGetTextElement returns %d in tixiGetBooleanElement.\n", error);
     return error;
   }
 
@@ -1090,7 +1090,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute(const TixiDocumentHandle handle,
   error = tixiGetTextAttribute(handle, elementPath, attributeName, &text);
 
   if (error) {
-    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
+    printMsg(MESSAGETYPE_STATUS, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
     return error;
   }
 
@@ -1113,7 +1113,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute(const TixiDocumentHandle handle,
   error = tixiGetTextAttribute(handle, elementPath, attributeName, &text);
 
   if (error) {
-    printMsg(MESSAGETYPE_ERROR, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
+    printMsg(MESSAGETYPE_STATUS, "Error: tixiGetTextAttribute returns %d in tixiGetIntegerAttribute.\n", error);
     return error;
   }
 

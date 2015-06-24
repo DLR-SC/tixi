@@ -338,9 +338,13 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elementPathDirt
   }
 
   if (xmlXPathNodeSetIsEmpty((*xpathObject)->nodesetval)) {
+    char * errorStr = buildString("Error: element %s not found!", elementPath);
     xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(*xpathObject);
     *xpathObject = NULL;
+
+    printMsg(MESSAGETYPE_STATUS, errorStr);
+    free(errorStr);
     return ELEMENT_NOT_FOUND;
   }
 
