@@ -1,3 +1,14 @@
+Version 2.2.2
+---------------
+
+-General Changes:
+	- Less messages in case of errors to reduce clutter
+
+-Fixes:
+	- Fixed tixiUpdateDoubleElement and tixiUpdateIntegerElement not updating
+	  the element content, if the element was empty before
+
+
 Version 2.2.1
 ---------------
 
