@@ -2,7 +2,6 @@
 """
 Created on Wed Sep 16 10:58:02 2015
 
-@author: Martin Siggel <martin.siggel@dlr.de>
 @author: Melven Roehrig-Zoellner <Melven.Roehrig-Zoellner@DLR.de>
 """
 
@@ -16,7 +15,7 @@ import bindings_generator.cheader_parser      as CP
 
 apache = \
 '''#############################################################################
-# Copyright (C) 2007-2013 German Aerospace Center (DLR/SC)
+# Copyright (C) 2015 German Aerospace Center (DLR/SC)
 #
 # Created: 2015-09-16 Melven Roehrig-Zoellner <Melven.Roehrig-Zoellner@DLR.de>
 #
@@ -39,75 +38,86 @@ apache += \
     % date.today() + \
 '# If you experience any bugs please contact the authors\n\n'
 
-#userfunctions = \
-#'''def open(self, xmlInputFilename, recursive = False):
-    #if recursive:
-        #self.openDocumentRecursive(xmlInputFilename, OpenMode.OPENMODE_RECURSIVE)
-    #else:
-        #self.openDocument(xmlInputFilename)
+userdeclarations = \
+'''
+abstract interface
+    subroutine TixiPrintMsgFnc(messageType, msg) bind(C)
+        use, intrinsic :: iso_c_binding
+        integer(kind=C_INT), value :: messageType
+        character(kind=C_CHAR), intent(in) :: msg(*)
+    end subroutine
+end interface
+'''
 
-#def close(self):
-    #if self._handle.value >= 0:
-        #ret = self.lib.tixiCloseDocument(self._handle)
-        #self._handle.value = -1
-        #catch_error(ret)
+userfunctions = \
+'''
+function tixiGetVersion() result(res)
+  use, intrinsic :: iso_c_binding
+  implicit none
+  interface
+    function tixiGetVersion_c() result(ret) bind(C,name='tixiGetVersion')
+      use, intrinsic :: iso_c_binding
+      type(C_PTR) :: ret
+    end function
+  end interface
+  character(kind=C_CHAR,len=200) :: res
+  character(kind=C_CHAR),pointer :: str(:)
+  type(C_PTR) :: str_c
+  integer :: i
 
-#def save(self, fileName, recursive = False, remove = False):
-    #\'\'\' Save the main tixi document.
-        #If the document was opened recursively,
-         #* 'recursive' tells to save linked nodes to their respecitve files, too.
-         #* 'remove' tells to remove the links to external files after saving the complete CPACS inclusively all linked content to the main file.
-        #You cannot have 'remove' without 'recursive'.
-    #\'\'\'
-    #if recursive and remove:
-        #self.saveAndRemoveDocument(fileName)
-    #elif recursive:
-        #self.saveCompleteDocument(fileName)
-    #else:
-        #self.saveDocument(fileName)
+  str_c = tixiGetVersion_c()
+  res = ' '
+  do i = 1, 200
+    call c_f_pointer(str_c,str,(/i/))
+    if( str(i) .eq. C_NULL_CHAR ) exit
+    res(i:i) = str(i)
+  end do
 
-#def checkElement(self, elementPath):
-    #\'\'\' boolean return values from special return code is coded manually here \'\'\'
-    #_c_elementPath = ctypes.c_char_p()
-    #_c_elementPath.value = str.encode(elementPath)
-    #tixiReturn = self.lib.tixiCheckElement(self._handle, _c_elementPath)
-    #if tixiReturn == ReturnCode.SUCCESS:
-        #return True
-    #if tixiReturn == ReturnCode.ELEMENT_NOT_FOUND:
-        #return False
-    #catch_error(tixiReturn, elementPath)
-    
-#def uIDCheckExists(self, uID):
-    #_c_uID = ctypes.c_char_p()
-    #_c_uID.value = str.encode(uID)
-    #tixiReturn = self.lib.tixiUIDCheckExists(self._handle, _c_uID)
-    #if tixiReturn == ReturnCode.SUCCESS:
-        #return True
-    #else:
-        #return False
-    #catch_error(tixiReturn, uID) 
-    
-#def checkAttribute(self, elementPath, attributeName):
-    #\'\'\' boolean return values from special return code is coded manually here \'\'\'
-    #_c_elementPath = ctypes.c_char_p()
-    #_c_elementPath.value = str.encode(elementPath)
-    #_c_attributeName = ctypes.c_char_p()
-    #_c_attributeName.value = str.encode(attributeName)
-    #tixiReturn = self.lib.tixiCheckAttribute(self._handle, _c_elementPath, _c_attributeName)
-    #if tixiReturn == ReturnCode.SUCCESS:
-        #return True
-    #if tixiReturn == ReturnCode.ATTRIBUTE_NOT_FOUND:
-        #return False
-    #catch_error(tixiReturn, elementPath, attributeName)
-    
-    
-#'''
+end function
+
+
+function tixiGetPrintMsgFunc() result(fnc)
+  use, intrinsic :: iso_c_binding
+  implicit none
+  interface
+    function tixiGetPrintMsgFunc_c() result(ret) bind(C,name='tixiGetPrintMsgFunc')
+      use, intrinsic :: iso_c_binding
+      type(C_FUNPTR) :: ret
+    end function
+  end interface
+  procedure(TixiPrintMsgFnc), pointer :: fnc
+  type(C_FUNPTR) :: fnc_c
+
+  fnc_c = tixiGetPrintMsgFunc_c()
+  call c_f_procpointer(fnc_c,fnc)
+end function
+
+
+function tixiSetPrintMsgFunc(fnc) result(ret)
+  use, intrinsic :: iso_c_binding
+  implicit none
+  interface
+    function tixiSetPrintMsgFunc_c(func) result(ret) bind(C,name='tixiSetPrintMsgFunc')
+      use, intrinsic :: iso_c_binding
+      type(C_FUNPTR), intent(in) :: func
+      integer(kind=C_INT) :: ret
+    end function
+  end interface
+  procedure(TixiPrintMsgFnc), pointer, intent(in) :: fnc
+  integer(kind=C_INT) :: ret
+  type(C_FUNPTR) :: fnc_c
+
+  fnc_c = c_funloc(fnc)
+  ret = tixiSetPrintMsgFunc_c(fnc_c)
+end function
+'''
 
 #postconstr = '''
 #self.version = self.getVersion()
 #'''
 
-#blacklist = ['tixiCheckElement', 'tixiUIDCheckExists', 'tixiCheckAttribute', 'tixiCloseDocument', 'tixiGetRawInterface', 'tixiSetPrintMsgFunc']
+
+blacklist = ['tixiGetVersion','tixiGetPrintMsgFunc','tixiSetPrintMsgFunc']
 
 if __name__ == '__main__':
     # parse the file
@@ -119,26 +129,22 @@ if __name__ == '__main__':
     # set the handle string that the parser can identify the handles
     parser.handle_str = 'TixiDocumentHandle'
     parser.returncode_str  ='ReturnCode'
-    parser.typedefs = {'TixiPrintMsgFnc': 'void'}
+    parser.typedefs = {'TixiPrintMsgFnc': 'void*'}
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper
     fg = FG.Fortran03Generator()
     fg.license = apache
-    #fg.userfunctions = userfunctions
-    #fg.blacklist = blacklist
-    #fg.postconstr = postconstr
-    #fg.closefunction = 'close'
-    #fg.add_alias('tixiOpenDocumentFromHTTP', 'openHttp')
-    #fg.add_alias('tixiCreateDocument', 'create')
-    #fg.add_alias('tixiImportFromString', 'openString')
+    fg.userdeclarations = userdeclarations
+    fg.userfunctions = userfunctions
+    fg.blacklist = blacklist
     
     print 'Creating python interface... ',
     wrapper = fg.create_wrapper(parser)
     print 'done'
     
     # write file
-    filename = 'tixi_f03.h'
+    filename = 'tixi.f90'
     print 'Write tixi Fortran 2003 interface to file "%s" ... ' % filename, 
     fop = open(filename, 'w')
     fop.write(wrapper)

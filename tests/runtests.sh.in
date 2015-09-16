@@ -14,3 +14,8 @@ export PYTHONPATH=$PYTHONPATH:@LIBRARY_OUTPUT_PATH@
 python wrappertests.py
 
 
+# now run the Fortran tests
+echo $DYLD_LIBRARY_PATH
+echo "Running Fortran 2003 API tests..."
+
+./wrappertestsF03

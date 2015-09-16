@@ -22,7 +22,7 @@ class GeneratorException(Exception):
         self.value = msg
         
     def __str__(self):
-        return repr(self.value)
+        return self.value
 
 
 indent = 2*' '
@@ -34,11 +34,9 @@ class Fortran03Generator(object):
 
     def __init__(self):
         self.license = None
+        self.userdeclarations = None
         self.userfunctions = None
-        self.postconstr = None
-        self.closefunction = None
         self.blacklist = []
-        self.aliases = {}
         self.integer_types = {'int':'C_INT','long':'C_LONG'}
         self.real_types = {'float':'C_FLOAT','double':'C_DOUBLE'}
             
@@ -53,14 +51,23 @@ class Fortran03Generator(object):
             for line in self.license.splitlines():
                 string += '! ' + line + '\n'
         
+        # module declaration
+        string += '\n\n'
+        string += 'module tixi\n'
+        string += indent + 'implicit none\n'
+        string += indent + 'public\n'
+
+        # enum declarations
         string += '\n\n'
         for enumname, values in cparser.enums.iteritems():
             string += self.create_enum(enumname, values) + '\n\n'
 
-        if self.userfunctions:
-            for line in self.userfunctions.splitlines():
-                string += indent + line + '\n'
-        
+        # additional declarations
+        if self.userdeclarations:
+            string += '\n\n'
+            string += self.userdeclarations
+            string += '\n\n'
+
         string += '\n\n'
         # start interface block
         string += 'interface\n'
@@ -72,7 +79,18 @@ class Fortran03Generator(object):
         # end interface block
         string += 'end interface\n'
 
+        # functions for internal conversions
+        if self.userfunctions:
+            string += '\n\n'
+            string += 'contains\n'
+            string += '\n\n'
+            for line in self.userfunctions.splitlines():
+                string += indent + line + '\n'
+            string += '\n\n'
+        
+        # end of module
         string += '\n\n'
+        string += 'end module\n'
 
         return string
         
@@ -84,10 +102,8 @@ class Fortran03Generator(object):
         string = '! enum ' + enumname + '\n'
         string += 'enum, bind(C)\n'
 
-        val_key = list()
         for index, val in values.iteritems():
-            val_key.append('%s = %d' % (val, index))
-        string += indent + 'enumerator :: ' + ', '.join(val_key) + '\n'
+            string += indent + 'enumerator :: %s = %d\n' % (val, index)
         string += 'end enum'
         
         return string
@@ -113,12 +129,12 @@ class Fortran03Generator(object):
         else:
             string += indent + 'subroutine ' + fun_dec.method_name
         # argument names
-        string += '(' + ', '.join((arg.name for arg in fun_dec.arguments)) + ')'
+        string += '(' + (', &\n'+4*indent).join((arg.name for arg in fun_dec.arguments)) + ')'
         # return value name
         if fun_dec.return_value:
-            string += ' result(%s)' % fun_dec.return_value.name
+            string += ' &\n' + 3*indent + 'result(%s)' % fun_dec.return_value.name
         # bind C
-        string += ' bind(C,name=\'%s\')\n' % fun_dec.method_name
+        string += ' &\n' + 3*indent + 'bind(C,name=\'%s\')\n' % fun_dec.method_name
 
         # use iso_c_binding
         string += 2*indent + 'use, intrinsic :: iso_c_binding\n'
@@ -147,20 +163,26 @@ class Fortran03Generator(object):
 
         string = ''
         # basic argument type
-        if arg_dec.type in self.integer_types:
+        if arg_dec.npointer > 1:
+            string += 'type(C_PTR)'
+        elif arg_dec.type in self.integer_types:
             string += 'integer(kind=%s)' % self.integer_types[arg_dec.type]
-        if arg_dec.type in self.real_types:
+        elif arg_dec.type in self.real_types:
             string += 'real(kind=%s)' % self.real_types[arg_dec.type]
         elif arg_dec.is_string:
             string += 'character(kind=C_CHAR)'
+        else:
+            raise GeneratorException('Unhandled argument type', arg_dec)
 
         # additional qualifiers
-        if not function_result:
-            if arg_dec.npointer == 0:
+        if arg_dec.npointer == 0:
+            if not function_result:
                 string += ', value'
-            elif arg_dec.is_outarg:
+        elif arg_dec.is_outarg:
+            if not function_result:
                 string += ', intent(out)'
-            else:
+        else:
+            if not function_result:
                 string += ', intent(in)'
 
         # argument name
