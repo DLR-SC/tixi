@@ -947,9 +947,9 @@ void tixiGetFloatVector_f(const TixiDocumentHandle *handle,
     cVectorPath = makeCString(vectorPath, vectorPathLength);
     *error = tixiGetFloatVector(*handle, cVectorPath, &points, *eNumber);
     for (i = 0; i < *eNumber; i ++) {
-        vectorArray[i] = points[i]; // copy from allocated to fortran pre-allocated mem
+        vectorArray[i] = points[i]; /* copy from allocated to fortran pre-allocated mem */
     }
-    // don't free points, it's in the TIXI mem list
+    /* don't free points, it's in the TIXI mem list */
     free(cVectorPath);
 }
 
@@ -1208,7 +1208,7 @@ void tixiUIDCheckDuplicates_f(TixiDocumentHandle *handle,
 void tixiUIDCheckLinks_f(TixiDocumentHandle *handle,
 								int *error)
 {
-//    *error = tixiUIDCheckLinks(*handle);
+    *error = tixiUIDCheckLinks(*handle);
 }
 
 void tixiUIDGetXPath_f(TixiDocumentHandle *handle,
@@ -1244,7 +1244,7 @@ void tixiUIDCheckExists_f(TixiDocumentHandle *handle,
 	char *cUID;
 
 	cUID = makeCString(uID, lengthString1);
-//	*error = tixiUIDCheckExists(*handle, cUID);
+	*error = tixiUIDCheckExists(*handle, cUID);
 }
 
 
@@ -1261,7 +1261,7 @@ void tixiUIDSetToXPath_f(const TixiDocumentHandle* handle,
 	  cElementPath = makeCString(elementPath, lengthString1);
 	  cText = makeCString(uID, lengthString2);
 
-//	  *error = tixiUIDSetToXPath(*handle, cElementPath, cText);
+	  *error = tixiUIDSetToXPath(*handle, cElementPath, cText);
 
 	  free(cElementPath);
 }
@@ -1276,7 +1276,7 @@ void tixiXPathEvaluateNodeNumber_f(const TixiDocumentHandle* handle,
 	char *cElementPath;
 
 	cElementPath = makeCString(xpathExpression, lengthString1);
-//	*error = tixiXPathEvaluateNodeNumber(*handle, cElementPath, number);
+	*error = tixiXPathEvaluateNodeNumber(*handle, cElementPath, number);
 }
 
 
@@ -1293,7 +1293,7 @@ void tixiXPathExpressionGetTextByIndex_F(const TixiDocumentHandle* handle,
 
 	cElementPath = makeCString(xpathExpression, lengthString1);
 
-//	*error = tixiXPathExpressionGetTextByIndex(*handle, cElementPath, *index, &cText);
+	*error = tixiXPathExpressionGetTextByIndex(*handle, cElementPath, *index, &cText);
 
 	if (*error == SUCCESS) {
 		copyToFortranString(cText, lengthString2, text);

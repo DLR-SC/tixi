@@ -44,7 +44,7 @@
 	#define FORTRAN_NAME(a) a##__
 #elif defined F90_HPUX
 	#define FORTRAN_NAME(a) a
-#elif defined F90_IRIX || defined GFORTRAN
+#elif defined F90_IRIX || defined GFORTRAN || defined IFORT_UNIX
 	#define FORTRAN_NAME(a) a##_
 #else
 	#define FORTRAN_NAME(a) a
