@@ -745,11 +745,6 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
     xmlFreeNode(cur);
   }
 
-
-  if (*number == 0) {
-    printMsg(MESSAGETYPE_WARNING, "WARNING: Unable to load any externaldata files.\n");
-  }
-
   return SUCCESS;
 }
 
