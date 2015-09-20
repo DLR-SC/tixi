@@ -63,7 +63,7 @@ contains
   subroutine test_version
     character, pointer :: version(:)
     write(*,*) 'test_version'
-    version => tixiGetVersion()
+    call tixiGetVersion(version)
     VERIFY( str_array_eq(version, TIXI_VERSION) )
     write(*,*) 'ok'
   end subroutine

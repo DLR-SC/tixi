@@ -51,6 +51,18 @@ end interface
 
 userfunctions = \
 '''
+subroutine tixiGetVersion(str)
+  use, intrinsic :: iso_c_binding
+  implicit none
+  character(kind=C_CHAR), pointer, intent(out) :: str(:)
+  type(C_PTR) :: str_c
+
+  str_c = tixiGetVersion_c()
+  call c_f_stringptr(str_c,str)
+
+end subroutine
+
+
 function tixiGetPrintMsgFunc() result(fnc)
   use, intrinsic :: iso_c_binding
   implicit none
@@ -80,7 +92,7 @@ function tixiSetPrintMsgFunc(fnc) result(ret)
 end function
 '''
 
-blacklist = ['tixiGetPrintMsgFunc','tixiSetPrintMsgFunc']
+blacklist = ['tixiGetPrintMsgFunc','tixiSetPrintMsgFunc','tixiGetVersion']
 
 if __name__ == '__main__':
     # parse the file
