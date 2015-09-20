@@ -39,6 +39,7 @@ class Fortran03Generator(object):
         self.blacklist = []
         self.integer_types = {'int':'C_INT','long':'C_LONG'}
         self.real_types = {'float':'C_FLOAT','double':'C_DOUBLE'}
+        self.internal_suffix = '_c'
             
 
     def add_alias(self, oldname, newname):
@@ -72,22 +73,54 @@ class Fortran03Generator(object):
         # start interface block
         string += 'interface\n'
 
+        # add all declarations, some of them private (that require additional wrapper code)
+        private_methods = list()
         for dec in cparser.declarations:
-            if dec.method_name not in self.blacklist:
-                string += self.create_method_wrapper(dec) + '\n\n'
+            method_name = dec.method_name
+            if self.requires_method_wrapper(dec):
+                method_name = method_name + self.internal_suffix
+                private_methods.append(method_name)
+            if not method_name in self.blacklist:
+                try:
+                    header, footer = self.create_method_declaration(method_name, dec, 'C')
+                    string += header + footer + '\n\n'
+                except GeneratorException as e:
+                    e.value += 'Function was: %s\n' % dec.method_name
+                    raise
             
         # end interface block
         string += 'end interface\n'
 
-        # functions for internal conversions
-        if self.userfunctions:
+        # mark private methods
+        string += '\n\n'
+        for method_name in private_methods:
+            string += indent + 'private :: %s\n' % method_name
+
+        # do we need method implementations?
+        if private_methods or self.userfunctions:
             string += '\n\n'
             string += 'contains\n'
+
+        # functions for internal conversions
+        if self.userfunctions:
             string += '\n\n'
             for line in self.userfunctions.splitlines():
                 string += indent + line + '\n'
             string += '\n\n'
         
+        # wrapper functions for more complicated cases
+        for dec in cparser.declarations:
+            if self.requires_method_wrapper(dec):
+                method_name = dec.method_name
+                if not method_name in self.blacklist:
+                    string += '\n\n'
+                    try:
+                        string += self.create_method_wrapper(method_name, dec)
+                    except GeneratorException as e:
+                        e.value += 'Function was: %s\n' % dec.method_name
+                        raise
+
+
         # end of module
         string += '\n\n'
         string += 'end module\n'
@@ -109,89 +142,251 @@ class Fortran03Generator(object):
         return string
     
     
-    def create_method_wrapper(self, fun_dec):
+    def create_method_declaration(self, method_name, fun_dec, language_binding):
+        '''
+        Generates the Fortran 2003 interface of a c function
+        '''
+        
+        header = ''
+        # raw C code
+        for line in fun_dec.raw_string.splitlines():
+            header += '! ' + line + '\n'
+        # raw annotation
+        if fun_dec.raw_annotation:
+            for line in fun_dec.raw_annotation.splitlines():
+                header += '! ' + line + '\n'
+
+        # begin subroutine/function block
+        if fun_dec.return_value:
+            header += indent + 'function %s'   % method_name
+        else:
+            header += indent + 'subroutine %s' % method_name
+        # argument names
+        header += '(' + (', &\n'+4*indent).join((arg.name for arg in fun_dec.arguments)) + ')'
+        # return value name
+        if fun_dec.return_value:
+            header += ' &\n' + 3*indent + 'result(%s)' % fun_dec.return_value.name
+
+        # bind C
+        if language_binding == 'C':
+            header += ' &\n' + 3*indent + 'bind(C,name=\'%s\')' % fun_dec.method_name
+        header += '\n'
+
+        # use iso_c_binding
+        header += 2*indent + 'use, intrinsic :: iso_c_binding\n'
+
+        # return value declaration
+        if fun_dec.return_value:
+            header += 2*indent + self.create_argument_decl(fun_dec.return_value, language_binding, function_result=True) + '\n'
+
+        # argument declarations
+        for arg in fun_dec.arguments:
+            header += 2*indent + self.create_argument_decl(arg, language_binding, function_result=False) + '\n'
+
+        # end subroutine/function block
+        if fun_dec.return_value:
+            footer = indent + 'end function %s\n'   % method_name
+        else:
+            footer = indent + 'end subroutine %s\n' % method_name
+
+        return header, footer
+
+
+    def requires_method_wrapper(self, fun_dec):
+        '''
+        Checks wether there are subroutine/function arguments (or return values) that require a wrapper function
+        '''
+
+        for arg in fun_dec.arguments:
+            if arg.is_string:
+                return True
+            if arg.type == 'void' and arg.npointer > 0:
+                return True
+
+        if fun_dec.return_value:
+            if fun_dec.return_value.is_string:
+                return True
+            if fun_dec.return_value.arrayinfos['is_array']:
+                return True
+            if fun_dec.return_value.type == 'void' and fun_dec.return_value.npointer > 0:
+                return True
+
+        return False
+
+
+    def create_method_wrapper(self, method_name, fun_dec):
         '''
         Generates the Fortran 2003 wrapper code around a c function call
         '''
         
         string = ''
-        # raw C code
-        for line in fun_dec.raw_string.splitlines():
-            string += '! ' + line + '\n'
-        # raw annotation
-        if fun_dec.raw_annotation:
-            for line in fun_dec.raw_annotation.splitlines():
-                string += '! ' + line + '\n'
+        header, footer = self.create_method_declaration(method_name, fun_dec, 'F')
 
-        # begin subroutine/function block
+        # generate conversion stuff
+        var_alias = dict()
+        declarations = list()
+        pre_code = list()
+        post_code = list()
+        # return value
         if fun_dec.return_value:
-            string += indent + 'function ' + fun_dec.method_name
-        else:
-            string += indent + 'subroutine ' + fun_dec.method_name
-        # argument names
-        string += '(' + (', &\n'+4*indent).join((arg.name for arg in fun_dec.arguments)) + ')'
-        # return value name
-        if fun_dec.return_value:
-            string += ' &\n' + 3*indent + 'result(%s)' % fun_dec.return_value.name
-        # bind C
-        string += ' &\n' + 3*indent + 'bind(C,name=\'%s\')\n' % fun_dec.method_name
-
-        # use iso_c_binding
-        string += 2*indent + 'use, intrinsic :: iso_c_binding\n'
-
-        # return value declaration
-        if fun_dec.return_value:
-            string += 2*indent + self.create_argument_decl(fun_dec.return_value, function_result=True) + '\n'
-
-        # argument declarations
+            var, decl, pre, post = self.create_variable_wrapper(fun_dec.return_value, True)
+            if var :
+                var_alias[fun_dec.return_value.name] = var
+                declarations.append(decl)
+                pre_code.append(pre)
+                post_code.append(post)
+            else:
+                var_alias[fun_dec.return_value.name] = fun_dec.return_value.name
+        # arguments
         for arg in fun_dec.arguments:
-            string += 2*indent + self.create_argument_decl(arg, function_result=False) + '\n'
+            var, decl, pre, post = self.create_variable_wrapper(arg, False)
+            if var :
+                var_alias[arg.name] = var
+                declarations.append(decl)
+                pre_code.append(pre)
+                post_code.append(post)
+            else:
+                var_alias[arg.name] = arg.name
 
-        # end subroutine/function block
+
+        # declarations
+        string += header
+        for decl in declarations:
+            if decl:
+                string += '\n' + decl
+
+        # pre conversion
+        for pre in pre_code:
+            if pre:
+                string += '\n' + pre
+
+        # call the C function
+        string += '\n'
         if fun_dec.return_value:
-            string += indent + 'end function\n'
+            string += 2*indent + '%s = ' % var_alias[fun_dec.return_value.name]
         else:
-            string += indent + 'end subroutine\n'
+            string += 2*indent + 'call '
+        string += '%s(' % (method_name+self.internal_suffix)
+        string += (', &\n'+4*indent).join((var_alias[arg.name] for arg in fun_dec.arguments)) + ')\n'
+        string += '\n'
+
+        # post conversion
+        for post in post_code:
+            if post:
+                string += '\n' + post
+
+        # end of block
+        string += footer
 
         return string
 
 
-    def create_argument_decl(self, arg_dec, function_result):
+    def create_variable_wrapper(self, arg_dec, function_result):
+        '''
+        Generates code for the conversion from C arguments to Fortran and vice vers
+        '''
+
+        # generate both C and F declarations
+        C_decl = self.create_argument_decl(arg_dec, 'C', function_result, dummy_arg=False)
+        F_decl = self.create_argument_decl(arg_dec, 'F', function_result, dummy_arg=False)
+
+        # nothing to do, if they match
+        if C_decl == F_decl:
+            return None, None, None, None
+
+        # so we need a C declaration with a different name
+        var = arg_dec.name + self.internal_suffix
+        decl = 2*indent + self.create_argument_decl(arg_dec, 'C',
+                                                    function_result, 
+                                                    arg_name=var, 
+                                                    dummy_arg=False) + '\n'
+        # handle strings
+        if arg_dec.is_string:
+            if function_result or arg_dec.is_outarg:
+                pre = None
+                if arg_dec.arrayinfos['is_array']:
+                    post = 2*indent + 'call c_f_array_strpointer(%s, %s)\n' % (var, arg_dec.name)
+                else:
+                    post = 2*indent + 'call c_f_strpointer(%s, %s)\n' % (var, arg_dec.name)
+            else:
+                if arg_dec.arrayinfos['is_array']:
+                    pre = 2*indent + 'call f_c_array_strpointer(%s, %s)\n' % (var, arg_dec.name)
+                else:
+                    pre = None
+                    var = arg_dec.name + ' // C_NULL_CHAR'
+                    decl = None
+                post = None
+        else:
+            pre = None
+            post = None
+
+        return var, decl, pre, post
+
+
+    def create_argument_decl(self, arg_dec, language_binding, function_result, arg_name=None, dummy_arg=True):
         '''
         Generates the Fortran 2003 declaration for an argument of a function/subroutine call
         '''
+        # TODO: this code isn't optimal, we should probably just use a predefined set of conversions
+        if not language_binding in ('C','F'):
+            raise ValueError('language_binding must be "C" or "F"')
 
         string = ''
         # basic argument type
-        if arg_dec.npointer > 1:
-            string += 'type(C_PTR)'
-        elif arg_dec.type in self.integer_types:
-            string += 'integer(kind=%s)' % self.integer_types[arg_dec.type]
-        elif arg_dec.type in self.real_types:
-            string += 'real(kind=%s)' % self.real_types[arg_dec.type]
-        elif arg_dec.is_string:
-            string += 'character(kind=C_CHAR)'
-        else:
-            raise GeneratorException('Unhandled argument type', arg_dec)
+        if language_binding == 'C':
+            if function_result and arg_dec.npointer > 0:
+                string += 'type(C_PTR)'
+            elif arg_dec.type == 'void' and arg_dec.npointer > 0:
+                string += 'type(C_PTR)'
+            elif arg_dec.npointer > 1:
+                string += 'type(C_PTR)'
+            elif arg_dec.type in self.integer_types:
+                string += 'integer(kind=%s)' % self.integer_types[arg_dec.type]
+            elif arg_dec.type in self.real_types:
+                string += 'real(kind=%s)' % self.real_types[arg_dec.type]
+            elif arg_dec.is_string:
+                string += 'character(kind=C_CHAR)'
+            else:
+                raise GeneratorException('Unhandled argument type', arg_dec)
+        else: #language_binding == 'F'
+            if arg_dec.type in self.integer_types:
+                string += 'integer(kind=%s)' % self.integer_types[arg_dec.type]
+            elif arg_dec.type in self.real_types:
+                string += 'real(kind=%s)' % self.real_types[arg_dec.type]
+            elif arg_dec.is_string:
+                if function_result or arg_dec.is_outarg:
+                    string += 'character(kind=C_CHAR), pointer'
+                else:
+                    string += 'character(kind=C_CHAR,len=*)'
+            else:
+                raise GeneratorException('Unhandled argument type', arg_dec)
 
         # additional qualifiers
-        if arg_dec.npointer == 0:
-            if not function_result:
-                string += ', value'
-        elif arg_dec.is_outarg:
-            if not function_result:
+        if dummy_arg and not function_result:
+            if arg_dec.npointer == 0:
+                if language_binding == 'C':
+                    string += ', value'
+            elif arg_dec.is_outarg:
                 string += ', intent(out)'
-        else:
-            if not function_result:
+            else:
                 string += ', intent(in)'
 
         # argument name
-        string += ' :: ' + arg_dec.name
+        if arg_name:
+            string += ' :: ' + arg_name
+        else:
+            string += ' :: ' + arg_dec.name
 
         # array dimensions
-        if arg_dec.is_string:
-            string += '(*)'
-        elif arg_dec.arrayinfos['is_array']:
-            string += '(*)'
+        if language_binding == 'C':
+            if not function_result:
+                if arg_dec.arrayinfos['is_array'] and arg_dec.npointer == 1:
+                    string += '(*)'
+        else: #language_binding == 'F'
+            if not function_result:
+                if arg_dec.arrayinfos['is_array']:
+                    string += '(*)'
+                elif arg_dec.is_string and (function_result or arg_dec.is_outarg):
+                    string += '(:)'
 
         return string

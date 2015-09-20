@@ -47,48 +47,39 @@ abstract interface
         character(kind=C_CHAR), intent(in) :: msg(*)
     end subroutine
 end interface
+
+private :: c_f_stringptr
 '''
 
 userfunctions = \
 '''
-function tixiGetVersion() result(res)
+function c_f_stringptr(str_c) result(str_f)
   use, intrinsic :: iso_c_binding
-  implicit none
-  interface
-    function tixiGetVersion_c() result(ret) bind(C,name='tixiGetVersion')
-      use, intrinsic :: iso_c_binding
-      type(C_PTR) :: ret
-    end function
-  end interface
-  character(kind=C_CHAR,len=200) :: res
-  character(kind=C_CHAR),pointer :: str(:)
-  type(C_PTR) :: str_c
+  type(C_PTR), value :: str_c
+  character(kind=C_CHAR), pointer :: str_f(:)
   integer :: i
 
-  str_c = tixiGetVersion_c()
-  res = ' '
-  do i = 1, 200
-    call c_f_pointer(str_c,str,(/i/))
-    if( str(i) .eq. C_NULL_CHAR ) exit
-    res(i:i) = str(i)
+  i = 1
+  call c_f_pointer(str_c,str_f,(/i/))
+  do while(str_f(i) .ne. C_NULL_CHAR)
+    i = i + 1
+    call c_f_pointer(str_c,str_f,(/i/))
   end do
+  call c_f_pointer(str_c,str_f,(/i-1/))
 
-end function
+end function c_f_stringptr
 
 
 function tixiGetPrintMsgFunc() result(fnc)
   use, intrinsic :: iso_c_binding
   implicit none
-  interface
-    function tixiGetPrintMsgFunc_c() result(ret) bind(C,name='tixiGetPrintMsgFunc')
-      use, intrinsic :: iso_c_binding
-      type(C_FUNPTR) :: ret
-    end function
-  end interface
   procedure(TixiPrintMsgFnc), pointer :: fnc
   type(C_FUNPTR) :: fnc_c
+  type(C_PTR) :: fnc_c_
 
-  fnc_c = tixiGetPrintMsgFunc_c()
+  fnc_c_ = tixiGetPrintMsgFunc_c()
+  ! ugly conversion from C_PTR to C_FUNPTR
+  call transfer(fnc_c_, fnc_c)
   call c_f_procpointer(fnc_c,fnc)
 end function
 
@@ -96,28 +87,19 @@ end function
 function tixiSetPrintMsgFunc(fnc) result(ret)
   use, intrinsic :: iso_c_binding
   implicit none
-  interface
-    function tixiSetPrintMsgFunc_c(func) result(ret) bind(C,name='tixiSetPrintMsgFunc')
-      use, intrinsic :: iso_c_binding
-      type(C_FUNPTR), intent(in) :: func
-      integer(kind=C_INT) :: ret
-    end function
-  end interface
   procedure(TixiPrintMsgFnc), pointer, intent(in) :: fnc
   integer(kind=C_INT) :: ret
   type(C_FUNPTR) :: fnc_c
+  type(C_PTR) :: fnc_c_
 
   fnc_c = c_funloc(fnc)
-  ret = tixiSetPrintMsgFunc_c(fnc_c)
+  ! ugly conversion from C_FUNPTR to C_PTR
+  call transfer(fnc_c,fnc_c_)
+  ret = tixiSetPrintMsgFunc_c(fnc_c_)
 end function
 '''
 
-#postconstr = '''
-#self.version = self.getVersion()
-#'''
-
-
-blacklist = ['tixiGetVersion','tixiGetPrintMsgFunc','tixiSetPrintMsgFunc']
+blacklist = ['tixiGetPrintMsgFunc','tixiSetPrintMsgFunc']
 
 if __name__ == '__main__':
     # parse the file
@@ -130,6 +112,7 @@ if __name__ == '__main__':
     parser.handle_str = 'TixiDocumentHandle'
     parser.returncode_str  ='ReturnCode'
     parser.typedefs = {'TixiPrintMsgFnc': 'void*'}
+    #parser.typedefs = {'TixiPrintMsgFnc': 'void(*)(int,const char*)'}
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper
