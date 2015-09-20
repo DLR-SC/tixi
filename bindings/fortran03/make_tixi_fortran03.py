@@ -60,7 +60,7 @@ function tixiGetPrintMsgFunc() result(fnc)
 
   fnc_c_ = tixiGetPrintMsgFunc_c()
   ! ugly conversion from C_PTR to C_FUNPTR
-  call transfer(fnc_c_, fnc_c)
+  fnc_c = transfer(fnc_c_, fnc_c)
   call c_f_procpointer(fnc_c,fnc)
 end function
 
@@ -75,7 +75,7 @@ function tixiSetPrintMsgFunc(fnc) result(ret)
 
   fnc_c = c_funloc(fnc)
   ! ugly conversion from C_FUNPTR to C_PTR
-  call transfer(fnc_c,fnc_c_)
+  fnc_c_ = transfer(fnc_c, fnc_c_)
   ret = tixiSetPrintMsgFunc_c(fnc_c_)
 end function
 '''
@@ -93,7 +93,6 @@ if __name__ == '__main__':
     parser.handle_str = 'TixiDocumentHandle'
     parser.returncode_str  ='ReturnCode'
     parser.typedefs = {'TixiPrintMsgFnc': 'void*'}
-    #parser.typedefs = {'TixiPrintMsgFnc': 'void(*)(int,const char*)'}
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper

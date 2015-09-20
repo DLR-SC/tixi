@@ -204,13 +204,19 @@ end subroutine c_f_stringptr
         # use iso_c_binding
         header += 2*indent + 'use, intrinsic :: iso_c_binding\n'
 
+        # argument declarations of non-arrays (before arrays, as these may use non-arrays as dimensions)
+        for arg in fun_dec.arguments:
+            if not arg.arrayinfos['is_array']:
+                header += 2*indent + self.create_argument_decl(arg, language_binding, False, fun_dec) + '\n'
+
+        # argument declarations of non-arrays (before arrays, as these may use non-arrays as dimensions)
+        for arg in fun_dec.arguments:
+            if arg.arrayinfos['is_array']:
+                header += 2*indent + self.create_argument_decl(arg, language_binding, False, fun_dec) + '\n'
+
         # return value declaration
         if fun_dec.return_value:
-            header += 2*indent + self.create_argument_decl(fun_dec.return_value, language_binding, function_result=True) + '\n'
-
-        # argument declarations
-        for arg in fun_dec.arguments:
-            header += 2*indent + self.create_argument_decl(arg, language_binding, function_result=False) + '\n'
+            header += 2*indent + self.create_argument_decl(fun_dec.return_value, language_binding, True, fun_dec) + '\n'
 
         # end subroutine/function block
         if fun_dec.return_value:
@@ -258,7 +264,7 @@ end subroutine c_f_stringptr
         post_code = list()
         # return value
         if fun_dec.return_value:
-            var, decl, pre, post = self.create_variable_wrapper(fun_dec.return_value, True)
+            var, decl, pre, post = self.create_variable_wrapper(fun_dec.return_value, True, fun_dec)
             if var :
                 var_alias[fun_dec.return_value.name] = var
                 declarations.append(decl)
@@ -268,7 +274,7 @@ end subroutine c_f_stringptr
                 var_alias[fun_dec.return_value.name] = fun_dec.return_value.name
         # arguments
         for arg in fun_dec.arguments:
-            var, decl, pre, post = self.create_variable_wrapper(arg, False)
+            var, decl, pre, post = self.create_variable_wrapper(arg, False, fun_dec)
             if var :
                 var_alias[arg.name] = var
                 declarations.append(decl)
@@ -310,14 +316,14 @@ end subroutine c_f_stringptr
         return string
 
 
-    def create_variable_wrapper(self, arg_dec, function_result):
+    def create_variable_wrapper(self, arg_dec, function_result, fun_dec):
         '''
         Generates code for the conversion from C arguments to Fortran and vice vers
         '''
 
         # generate both C and F declarations
-        C_decl = self.create_argument_decl(arg_dec, 'C', function_result, dummy_arg=True)
-        F_decl = self.create_argument_decl(arg_dec, 'F', function_result, dummy_arg=True)
+        C_decl = self.create_argument_decl(arg_dec, 'C', function_result, fun_dec, dummy_arg=True)
+        F_decl = self.create_argument_decl(arg_dec, 'F', function_result, fun_dec, dummy_arg=True)
 
         # nothing to do, if they match
         if C_decl == F_decl:
@@ -325,10 +331,14 @@ end subroutine c_f_stringptr
 
         # so we need a C declaration with a different name
         var = arg_dec.name + self.internal_suffix
-        decl = 2*indent + self.create_argument_decl(arg_dec, 'C',
-                                                    function_result, 
-                                                    arg_name=var, 
-                                                    dummy_arg=False) + '\n'
+        try:
+            decl = 2*indent + self.create_argument_decl(arg_dec, 'C',
+                                                        function_result, 
+                                                        fun_dec,
+                                                        arg_name=var, 
+                                                        dummy_arg=False) + '\n'
+        except:
+            decl = None
         # handle strings
         if arg_dec.is_string:
             if function_result or arg_dec.is_outarg:
@@ -345,19 +355,23 @@ end subroutine c_f_stringptr
                     var = arg_dec.name + ' // C_NULL_CHAR'
                     decl = None
                 post = None
-        else:
+        elif arg_dec.type in self.basic_types:
+            if not arg_dec.is_outarg:
+                raise NotImplementedError;
             pre = None
-            post = None
+            dim_name = fun_dec.arguments[arg_dec.arrayinfos['arraysizes'][0]].name
+            post = 2*indent + 'call c_f_pointer(%s, %s, (/%s/))\n' % (var, arg_dec.name, dim_name)
+        else:
             raise GeneratorException('Unhandled argument type', arg_dec)
 
         return var, decl, pre, post
 
 
-    def create_argument_decl(self, arg_dec, language_binding, function_result, arg_name=None, dummy_arg=True):
+    def create_argument_decl(self, arg_dec, language_binding, function_result, fun_dec, arg_name=None, dummy_arg=True):
         '''
         Generates the Fortran 2003 declaration for an argument of a function/subroutine call
         '''
-        # TODO: this code isn't optimal, we should probably just use a predefined set of conversions
+
         if not language_binding in ('C','F'):
             raise ValueError('language_binding must be "C" or "F"')
         if not arg_name:
@@ -368,7 +382,28 @@ end subroutine c_f_stringptr
         string = ''
         if arg_dec.is_string:
             if arg_dec.arrayinfos['is_array']:
-                raise GeneratorException('Unhandled argument type', arg_dec)
+                if arg_dec.npointer > 2:
+                    raise GeneratorException('Unhandled argument type', arg_dec)
+                if function_result or arg_dec.is_outarg:
+                    pass
+                    #raise GeneratorException('Unhandled argument type', arg_dec)
+                if language_binding == 'C':
+                    if dummy_arg:
+                        string = 'type(C_PTR), intent(in) :: ' + arg_name
+                    else:
+                        string = 'type(C_PTR) :: ' + arg_name
+                else: #language_binding == 'F':
+                    if dummy_arg:
+                        string = 'character(kind=C_CHAR,len=*), intent(in) :: ' + arg_name
+                    else:
+                        raise RuntimeError('Shouldnt trigger this situation')
+
+                if not arg_dec.arrayinfos['arraysizes']:
+                    if language_binding == 'F':
+                        string += '(:)'
+                else: # arraysizes given
+                    string += '(%s)' %','.join((fun_dec.arguments[i].name for i in reversed(arg_dec.arrayinfos['arraysizes'])))
+
             else:
                 if language_binding == 'C':
                     if function_result:
@@ -387,9 +422,41 @@ end subroutine c_f_stringptr
                         string = 'character(kind=C_CHAR,len=*), intent(in) :: %s' % arg_name
                     else:
                         raise RuntimeError('Shouldnt trigger this situation')
+
         elif arg_dec.type in self.basic_types:
             if arg_dec.arrayinfos['is_array']:
-                raise GeneratorException('Unhandled argument type', arg_dec)
+                if arg_dec.npointer > 2:
+                    raise GeneratorException('Unhandled argument type', arg_dec)
+                if arg_dec.npointer == 2 and not arg_dec.is_outarg:
+                    raise GeneratorException('Unhandled argument type', arg_dec)
+
+                if arg_dec.npointer > 1:
+                    if language_binding == 'C':
+                        string = 'type(C_PTR)'
+                    else:
+                        string = self.basic_types[arg_dec.type] + ', pointer'
+                else:
+                    string = self.basic_types[arg_dec.type]
+
+                if dummy_arg:
+                    if arg_dec.is_const:
+                        string += ', intent(in)'
+                    elif arg_dec.is_outarg:
+                        string += ', intent(out)'
+                string += ' :: ' + arg_name
+
+                if not arg_dec.arrayinfos['arraysizes']:
+                    if not dummy_arg:
+                        raise GeneratorException('Unhandled argument type', arg_dec)
+                    #if language_binding == 'C':
+                    #    string += '(*)'
+                    #else:
+                        string += '(:)'
+                elif arg_dec.npointer == 1:
+                    string += '(%s)' %','.join((fun_dec.arguments[i].name for i in reversed(arg_dec.arrayinfos['arraysizes'])))
+                elif language_binding == 'F':
+                    string += '(:)'
+
             else:
                 string = self.basic_types[arg_dec.type]
                 if dummy_arg:
@@ -400,6 +467,7 @@ end subroutine c_f_stringptr
                     else:
                         string += ', value'
                 string += ' :: ' + arg_name
+
         elif arg_dec.type == 'void' and arg_dec.npointer > 0 and language_binding == 'C':
             string = 'type(C_PTR)'
             if dummy_arg:

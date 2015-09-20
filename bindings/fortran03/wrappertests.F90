@@ -42,105 +42,6 @@ contains
   end subroutine
 #define VERIFY(x) if( .not. x ) call print_error_and_exit(__LINE__)
 
-  subroutine test_version
-    character(len=20) :: version
-    write(*,*) 'test_version'
-    version = tixiGetVersion()
-    VERIFY( version .eq. TIXI_VERSION )
-    write(*,*) 'ok'
-  end subroutine
-
-
-  subroutine test_open
-    character(len=*), parameter :: invalid_file = '____HOPEFULLY_THIS_FILE_NAME_DOES_NOT_EXIST'//C_NULL_CHAR
-    character(len=*), parameter :: illformed_file = 'TestData/illformed.xml'//C_NULL_CHAR
-    character(len=*), parameter :: working_file = 'TestData/in.xml'//C_NULL_CHAR
-    integer :: t_handle
-
-    write(*,*) 'test_open'
-
-    VERIFY( SUCCESS .ne. tixiOpenDocument(invalid_file,t_handle) )
-
-    VERIFY( SUCCESS .ne. tixiOpenDocument(illformed_file,t_handle) )
-
-    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t_handle) )
-    VERIFY( t_handle .ne. -1 )
-    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
-
-
-    write(*,*) 'ok'
-  end subroutine
-
-
-  subroutine test_open_http
-    character(len=*), parameter :: working_url = 'http://www.w3schools.com/XML/note.xml'//C_NULL_CHAR
-    integer :: t_handle
-    write(*,*) 'test_open_http'
-
-    VERIFY( SUCCESS .eq. tixiOpenDocumentFromHttp(working_url,t_handle) )
-    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
-
-    write(*,*) 'ok'
-  end subroutine
-
-
-  subroutine test_open_string
-    character(len=*), parameter :: cpacs = '<?xml version="1.0"?>&
-                                           <cpacs><header><version>1.2.3&
-                                           </version></header></cpacs>'//C_NULL_CHAR
-    integer :: t_handle
-    write(*,*) 'test_open_string'
-
-    VERIFY( SUCCESS .eq. tixiImportFromString(cpacs,t_handle) )
-    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
-
-    write(*,*) 'ok'
-  end subroutine
-
-
-  subroutine test_create
-    integer :: t_handle
-    write(*,*) 'test_create'
-
-    VERIFY( SUCCESS .eq. tixiCreateDocument('cpacs'//C_NULL_CHAR,t_handle) )
-    VERIFY( t_handle .ne. -1 )
-    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
-
-    write(*,*) 'ok'
-  end subroutine
-
-
-  subroutine test_multiple_tixis
-    integer :: t1_handle, t2_handle
-    character(len=*), parameter :: working_file = 'TestData/in.xml'//C_NULL_CHAR
-    write(*,*) 'test_multiple_tixis'
-
-    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t1_handle) )
-    VERIFY( t1_handle .ne. -1 )
-    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t2_handle) )
-    VERIFY( t2_handle .ne. -1 )
-    VERIFY( t1_handle .ne. t2_handle )
-    VERIFY( SUCCESS .eq. tixiCloseDocument(t1_handle) )
-    VERIFY( SUCCESS .eq. tixiCloseDocument(t2_handle) )
-
-    write(*,*) 'ok'
-  end subroutine
-
-
-  subroutine c_f_stringptr(c_str, f_str)
-    type(C_PTR), intent(in) :: c_str
-    character, pointer, intent(out) :: f_str(:)
-    integer :: i
-
-    i = 1
-    call c_f_pointer(c_str, f_str, (/i/))
-    do while( f_str(i) .ne. C_NULL_CHAR )
-      i = i + 1
-      call c_f_pointer(c_str, f_str, (/i/))
-    end do
-    call c_f_pointer(c_str, f_str, (/i-1/))
-  end subroutine c_f_stringptr
-
   function str_array_eq(str_a, str_b) result(eq)
     character, intent(in) :: str_a(:)
     character(len=*), intent(in) :: str_b
@@ -159,26 +60,109 @@ contains
   end function
 
 
+  subroutine test_version
+    character, pointer :: version(:)
+    write(*,*) 'test_version'
+    version => tixiGetVersion()
+    VERIFY( str_array_eq(version, TIXI_VERSION) )
+    write(*,*) 'ok'
+  end subroutine
+
+
+  subroutine test_open
+    character(len=*), parameter :: invalid_file = '____HOPEFULLY_THIS_FILE_NAME_DOES_NOT_EXIST'
+    character(len=*), parameter :: illformed_file = 'TestData/illformed.xml'
+    character(len=*), parameter :: working_file = 'TestData/in.xml'
+    integer :: t_handle
+
+    write(*,*) 'test_open'
+
+    VERIFY( SUCCESS .ne. tixiOpenDocument(invalid_file,t_handle) )
+
+    VERIFY( SUCCESS .ne. tixiOpenDocument(illformed_file,t_handle) )
+
+    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t_handle) )
+    VERIFY( t_handle .ne. -1 )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+
+    write(*,*) 'ok'
+  end subroutine
+
+
+  subroutine test_open_http
+    character(len=*), parameter :: working_url = 'http://www.w3schools.com/XML/note.xml'
+    integer :: t_handle
+    write(*,*) 'test_open_http'
+
+    VERIFY( SUCCESS .eq. tixiOpenDocumentFromHttp(working_url,t_handle) )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+    write(*,*) 'ok'
+  end subroutine
+
+
+  subroutine test_open_string
+    character(len=*), parameter :: cpacs = '<?xml version="1.0"?>&
+                                           <cpacs><header><version>1.2.3&
+                                           </version></header></cpacs>'
+    integer :: t_handle
+    write(*,*) 'test_open_string'
+
+    VERIFY( SUCCESS .eq. tixiImportFromString(cpacs,t_handle) )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+    write(*,*) 'ok'
+  end subroutine
+
+
+  subroutine test_create
+    integer :: t_handle
+    write(*,*) 'test_create'
+
+    VERIFY( SUCCESS .eq. tixiCreateDocument('cpacs',t_handle) )
+    VERIFY( t_handle .ne. -1 )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+    write(*,*) 'ok'
+  end subroutine
+
+
+  subroutine test_multiple_tixis
+    integer :: t1_handle, t2_handle
+    character(len=*), parameter :: working_file = 'TestData/in.xml'
+    write(*,*) 'test_multiple_tixis'
+
+    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t1_handle) )
+    VERIFY( t1_handle .ne. -1 )
+    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t2_handle) )
+    VERIFY( t2_handle .ne. -1 )
+    VERIFY( t1_handle .ne. t2_handle )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t1_handle) )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t2_handle) )
+
+    write(*,*) 'ok'
+  end subroutine
+
+
   subroutine test_validation_and_export
     use iso_c_binding
-    character(len=*), parameter :: valid_CPACS = 'TestData/valid_CPACS_dokumentiert.xml'//C_NULL_CHAR
+    character(len=*), parameter :: valid_CPACS = 'TestData/valid_CPACS_dokumentiert.xml'
     character(len=*), parameter :: header = '<?xml version="1.0" encoding="UTF-8"?>'
-    character(len=*), parameter :: valid_schema = 'TestData/valid_cpacs_schema.xsd'//C_NULL_CHAR
-    character(len=*), parameter :: invalid_schema = 'invalid'//C_NULL_CHAR
+    character(len=*), parameter :: valid_schema = 'TestData/valid_cpacs_schema.xsd'
+    character(len=*), parameter :: invalid_schema = 'invalid'
     character(len=*), parameter :: other_schema = '<?xml version="1.0" encoding="UTF-8"?>&
 <?xml-stylesheet href="xs3p.xsl" type="text/xsl"?>&
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/1999/xhtml"&
 targetNamespace="http://www.w3.org/1999/xhtml" elementFormDefault="qualified" attributeFormDefault="unqualified">&
-</xsd:schema>'//C_NULL_CHAR
+</xsd:schema>'
     integer :: i
     integer :: t_handle
-    type(C_PTR) :: c_str
     character, pointer :: str(:)
     write(*,*) 'test_validation_and_export'
 
     VERIFY( SUCCESS .eq. tixiOpenDocument(valid_CPACS,t_handle) )
-    VERIFY( SUCCESS .eq. tixiExportDocumentAsString(t_handle,c_str) )
-    call c_f_stringptr(c_str, str)
+    VERIFY( SUCCESS .eq. tixiExportDocumentAsString(t_handle,str) )
     VERIFY( size(str) .ge. len(header) )
     VERIFY( str_array_eq(str(1:len(header)),header) )
     VERIFY( SUCCESS .eq. tixiSchemaValidateFromFile(t_handle,valid_schema) )
@@ -191,32 +175,28 @@ targetNamespace="http://www.w3.org/1999/xhtml" elementFormDefault="qualified" at
 
 
   subroutine test_elements
-    character(len=*), parameter :: working_file = 'TestData/in.xml'//C_NULL_CHAR
-    character(len=*), parameter :: plane_name = '/plane/name'//C_NULL_CHAR
-    character(len=*), parameter :: plane_name2 = '/plane/name[2]'//C_NULL_CHAR
-    character(len=*), parameter :: plane = '/plane'//C_NULL_CHAR
-    character(len=*), parameter :: name = 'name'//C_NULL_CHAR
-    character(len=*), parameter :: plane_passengers = '/plane/numberOfPassengers'//C_NULL_CHAR
-    type(C_PTR) :: c_str
+    character(len=*), parameter :: working_file = 'TestData/in.xml'
+    character(len=*), parameter :: plane_name = '/plane/name'
+    character(len=*), parameter :: plane_name2 = '/plane/name[2]'
+    character(len=*), parameter :: plane = '/plane'
+    character(len=*), parameter :: name = 'name'
+    character(len=*), parameter :: plane_passengers = '/plane/numberOfPassengers'
     character, pointer :: str(:)
     integer :: t_handle
     integer :: n
     write(*,*) 'test_elements'
 
     VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t_handle) )
-    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name,c_str) )
-    call c_f_stringptr(c_str,str)
+    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name,str) )
     VERIFY( str_array_eq(str,'Junkers JU 52'))
 
-    VERIFY( SUCCESS .eq. tixiUpdateTextElement(t_handle,plane_name,'D150'//C_NULL_CHAR) )
+    VERIFY( SUCCESS .eq. tixiUpdateTextElement(t_handle,plane_name,'D150') )
 
-    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name,c_str) )
-    call c_f_stringptr(c_str,str)
+    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name,str) )
     VERIFY( str_array_eq(str,'D150'))
 
-    VERIFY( SUCCESS .eq. tixiAddTextElement(t_handle,plane,name,'B747'//C_NULL_CHAR) )
-    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name2,c_str) )
-    call c_f_stringptr(c_str,str)
+    VERIFY( SUCCESS .eq. tixiAddTextElement(t_handle,plane,name,'B747') )
+    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name2,str) )
     VERIFY( str_array_eq(str,'B747'))
 
     VERIFY( SUCCESS .eq. tixiGetIntegerElement(t_handle,plane_passengers,n) )
