@@ -47,29 +47,10 @@ abstract interface
         character(kind=C_CHAR), intent(in) :: msg(*)
     end subroutine
 end interface
-
-private :: c_f_stringptr
 '''
 
 userfunctions = \
 '''
-function c_f_stringptr(str_c) result(str_f)
-  use, intrinsic :: iso_c_binding
-  type(C_PTR), value :: str_c
-  character(kind=C_CHAR), pointer :: str_f(:)
-  integer :: i
-
-  i = 1
-  call c_f_pointer(str_c,str_f,(/i/))
-  do while(str_f(i) .ne. C_NULL_CHAR)
-    i = i + 1
-    call c_f_pointer(str_c,str_f,(/i/))
-  end do
-  call c_f_pointer(str_c,str_f,(/i-1/))
-
-end function c_f_stringptr
-
-
 function tixiGetPrintMsgFunc() result(fnc)
   use, intrinsic :: iso_c_binding
   implicit none

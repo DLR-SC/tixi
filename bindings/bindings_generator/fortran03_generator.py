@@ -37,10 +37,34 @@ class Fortran03Generator(object):
         self.userdeclarations = None
         self.userfunctions = None
         self.blacklist = []
-        self.integer_types = {'int':'C_INT','long':'C_LONG'}
-        self.real_types = {'float':'C_FLOAT','double':'C_DOUBLE'}
+        self.basic_types = {
+                'int'    : 'integer(kind=C_INT)',
+                'long'   : 'integer(kind=C_LONG)',
+                'float'  : 'real(kind=C_FLOAT)',
+                'double' : 'real(kind=C_DOUBLE)',
+                'char'   : 'character(kind=C_CHAR,len=1)'}
         self.internal_suffix = '_c'
-            
+        self.helper_methods = {
+'c_f_stringptr':
+'''
+subroutine c_f_stringptr(str_c, str_f)
+  use, intrinsic :: iso_c_binding
+  type(C_PTR), value :: str_c
+  character(kind=C_CHAR), pointer, intent(out) :: str_f(:)
+  integer :: i
+
+  i = 1
+  call c_f_pointer(str_c,str_f,(/i/))
+  do while(str_f(i) .ne. C_NULL_CHAR)
+    i = i + 1
+    call c_f_pointer(str_c,str_f,(/i/))
+  end do
+  call c_f_pointer(str_c,str_f,(/i-1/))
+
+end subroutine c_f_stringptr
+''',}
+
+
 
     def add_alias(self, oldname, newname):
         self.aliases[oldname] = newname
@@ -95,11 +119,16 @@ class Fortran03Generator(object):
         string += '\n\n'
         for method_name in private_methods:
             string += indent + 'private :: %s\n' % method_name
+        string += '\n'
+        for method_name in self.helper_methods:
+            string += indent + 'private :: %s\n' % method_name
 
-        # do we need method implementations?
-        if private_methods or self.userfunctions:
-            string += '\n\n'
-            string += 'contains\n'
+        string += '\n\n'
+        string += 'contains\n'
+        for method_code in self.helper_methods.values():
+            for line in method_code.splitlines():
+                string += indent + line + '\n'
+        string += '\n\n'
 
         # functions for internal conversions
         if self.userfunctions:
@@ -253,12 +282,12 @@ class Fortran03Generator(object):
         string += header
         for decl in declarations:
             if decl:
-                string += '\n' + decl
+                string += decl + '\n'
 
         # pre conversion
         for pre in pre_code:
             if pre:
-                string += '\n' + pre
+                string += pre + '\n'
 
         # call the C function
         string += '\n'
@@ -273,7 +302,7 @@ class Fortran03Generator(object):
         # post conversion
         for post in post_code:
             if post:
-                string += '\n' + post
+                string += post + '\n'
 
         # end of block
         string += footer
@@ -287,8 +316,8 @@ class Fortran03Generator(object):
         '''
 
         # generate both C and F declarations
-        C_decl = self.create_argument_decl(arg_dec, 'C', function_result, dummy_arg=False)
-        F_decl = self.create_argument_decl(arg_dec, 'F', function_result, dummy_arg=False)
+        C_decl = self.create_argument_decl(arg_dec, 'C', function_result, dummy_arg=True)
+        F_decl = self.create_argument_decl(arg_dec, 'F', function_result, dummy_arg=True)
 
         # nothing to do, if they match
         if C_decl == F_decl:
@@ -305,12 +334,12 @@ class Fortran03Generator(object):
             if function_result or arg_dec.is_outarg:
                 pre = None
                 if arg_dec.arrayinfos['is_array']:
-                    post = 2*indent + 'call c_f_array_strpointer(%s, %s)\n' % (var, arg_dec.name)
+                    post = None
                 else:
-                    post = 2*indent + 'call c_f_strpointer(%s, %s)\n' % (var, arg_dec.name)
+                    post = 2*indent + 'call c_f_stringptr(%s, %s)\n' % (var, arg_dec.name)
             else:
                 if arg_dec.arrayinfos['is_array']:
-                    pre = 2*indent + 'call f_c_array_strpointer(%s, %s)\n' % (var, arg_dec.name)
+                    pre = None
                 else:
                     pre = None
                     var = arg_dec.name + ' // C_NULL_CHAR'
@@ -319,6 +348,7 @@ class Fortran03Generator(object):
         else:
             pre = None
             post = None
+            raise GeneratorException('Unhandled argument type', arg_dec)
 
         return var, decl, pre, post
 
@@ -330,63 +360,58 @@ class Fortran03Generator(object):
         # TODO: this code isn't optimal, we should probably just use a predefined set of conversions
         if not language_binding in ('C','F'):
             raise ValueError('language_binding must be "C" or "F"')
+        if not arg_name:
+            arg_name = arg_dec.name
+        if function_result:
+            dummy_arg = False
 
         string = ''
-        # basic argument type
-        if language_binding == 'C':
-            if function_result and arg_dec.npointer > 0:
-                string += 'type(C_PTR)'
-            elif arg_dec.type == 'void' and arg_dec.npointer > 0:
-                string += 'type(C_PTR)'
-            elif arg_dec.npointer > 1:
-                string += 'type(C_PTR)'
-            elif arg_dec.type in self.integer_types:
-                string += 'integer(kind=%s)' % self.integer_types[arg_dec.type]
-            elif arg_dec.type in self.real_types:
-                string += 'real(kind=%s)' % self.real_types[arg_dec.type]
-            elif arg_dec.is_string:
-                string += 'character(kind=C_CHAR)'
-            else:
+        if arg_dec.is_string:
+            if arg_dec.arrayinfos['is_array']:
                 raise GeneratorException('Unhandled argument type', arg_dec)
-        else: #language_binding == 'F'
-            if arg_dec.type in self.integer_types:
-                string += 'integer(kind=%s)' % self.integer_types[arg_dec.type]
-            elif arg_dec.type in self.real_types:
-                string += 'real(kind=%s)' % self.real_types[arg_dec.type]
-            elif arg_dec.is_string:
-                if function_result or arg_dec.is_outarg:
-                    string += 'character(kind=C_CHAR), pointer'
-                else:
-                    string += 'character(kind=C_CHAR,len=*)'
             else:
-                raise GeneratorException('Unhandled argument type', arg_dec)
-
-        # additional qualifiers
-        if dummy_arg and not function_result:
-            if arg_dec.npointer == 0:
                 if language_binding == 'C':
-                    string += ', value'
-            elif arg_dec.is_outarg:
-                string += ', intent(out)'
+                    if function_result:
+                        string = 'type(C_PTR) :: %s' % arg_name
+                    elif dummy_arg:
+                        if arg_dec.is_outarg:
+                            string = 'type(C_PTR), intent(out) :: %s' % arg_name
+                        else:
+                            string = 'character(kind=C_CHAR), intent(in) :: %s(*)' % arg_name
+                    else:
+                        string = 'type(C_PTR) :: %s' % arg_name
+                else: #language_binding == 'F'
+                    if function_result or arg_dec.is_outarg:
+                        string = 'character(kind=C_CHAR), pointer :: %s(:)' % arg_name
+                    elif dummy_arg:
+                        string = 'character(kind=C_CHAR,len=*), intent(in) :: %s' % arg_name
+                    else:
+                        raise RuntimeError('Shouldnt trigger this situation')
+        elif arg_dec.type in self.basic_types:
+            if arg_dec.arrayinfos['is_array']:
+                raise GeneratorException('Unhandled argument type', arg_dec)
             else:
-                string += ', intent(in)'
-
-        # argument name
-        if arg_name:
+                string = self.basic_types[arg_dec.type]
+                if dummy_arg:
+                    if arg_dec.is_outarg:
+                        string += ', intent(out)'
+                    elif arg_dec.npointer > 0:
+                        string += ', intent(inout)'
+                    else:
+                        string += ', value'
+                string += ' :: ' + arg_name
+        elif arg_dec.type == 'void' and arg_dec.npointer > 0 and language_binding == 'C':
+            string = 'type(C_PTR)'
+            if dummy_arg:
+                if arg_dec.is_outarg:
+                    string += ', intent(out)'
+                elif arg_dec.npointer > 1:
+                    string += ', intent(inout)'
+                else:
+                    string += ', value'
             string += ' :: ' + arg_name
         else:
-            string += ' :: ' + arg_dec.name
+            raise GeneratorException('Unhandled argument type', arg_dec)
 
-        # array dimensions
-        if language_binding == 'C':
-            if not function_result:
-                if arg_dec.arrayinfos['is_array'] and arg_dec.npointer == 1:
-                    string += '(*)'
-        else: #language_binding == 'F'
-            if not function_result:
-                if arg_dec.arrayinfos['is_array']:
-                    string += '(*)'
-                elif arg_dec.is_string and (function_result or arg_dec.is_outarg):
-                    string += '(:)'
 
         return string
