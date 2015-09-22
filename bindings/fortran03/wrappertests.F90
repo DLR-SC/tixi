@@ -154,7 +154,8 @@ contains
     character(len=*), parameter :: other_schema = '<?xml version="1.0" encoding="UTF-8"?>&
 <?xml-stylesheet href="xs3p.xsl" type="text/xsl"?>&
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/1999/xhtml"&
-targetNamespace="http://www.w3.org/1999/xhtml" elementFormDefault="qualified" attributeFormDefault="unqualified">&
+targetNamespace="http://www.w3.org/1999/xhtml" &
+elementFormDefault="qualified" attributeFormDefault="unqualified">&
 </xsd:schema>'
     integer :: i
     integer :: t_handle
@@ -176,159 +177,279 @@ targetNamespace="http://www.w3.org/1999/xhtml" elementFormDefault="qualified" at
 
   subroutine test_elements
     character(len=*), parameter :: working_file = 'TestData/in.xml'
-    character(len=*), parameter :: plane_name = '/plane/name'
-    character(len=*), parameter :: plane_name2 = '/plane/name[2]'
-    character(len=*), parameter :: plane = '/plane'
-    character(len=*), parameter :: name = 'name'
-    character(len=*), parameter :: plane_passengers = '/plane/numberOfPassengers'
+    character(len=*), parameter :: plane_wing_x = &
+      &                            '/plane/wings[1]/wing[1]/centerOfGravity/x'
+    character(len=*), parameter :: wing1 = '/plane/wings/wing[1]'
     character, pointer :: str(:)
     integer :: t_handle
     integer :: n
+    real(kind=8) :: x
     write(*,*) 'test_elements'
 
     VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t_handle) )
-    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name,str) )
+    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,'/plane/name',str) )
     VERIFY( str_array_eq(str,'Junkers JU 52'))
 
-    VERIFY( SUCCESS .eq. tixiUpdateTextElement(t_handle,plane_name,'D150') )
+    VERIFY( SUCCESS .eq. tixiUpdateTextElement(t_handle,'/plane/name','D150') )
 
-    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name,str) )
+    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,'/plane/name',str) )
     VERIFY( str_array_eq(str,'D150'))
 
-    VERIFY( SUCCESS .eq. tixiAddTextElement(t_handle,plane,name,'B747') )
-    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,plane_name2,str) )
+    VERIFY( SUCCESS .eq. tixiAddTextElement(t_handle,'/plane','name','B747') )
+    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,'/plane/name[2]',str) )
     VERIFY( str_array_eq(str,'B747'))
 
-    VERIFY( SUCCESS .eq. tixiGetIntegerElement(t_handle,plane_passengers,n) )
+    VERIFY( SUCCESS .eq. tixiGetIntegerElement(t_handle,'/plane/numberOfPassengers',n) )
     VERIFY( n .eq. 57 )
 
-    !t.addIntegerElement("/plane", "nop", 123456, None)
-    !self.assertEqual(t.getIntegerElement("/plane/nop"), 123456)
-    !self.assertEqual(t.getDoubleElement("/plane/wings[1]/wing[1]/centerOfGravity/x"), 30.0)
-    !t.addDoubleElement("/plane/wings/wing[1]", "cog", 123.456, None)
-    !self.assertEqual(t.getDoubleElement("/plane/wings/wing[1]/cog"), 123.456)
-    !self.assertFalse(t.getBooleanElement("/plane/bool/aBool2"))
-    !self.assertTrue(t.getBooleanElement("/plane/bool/aBool1b"))
-    !self.assertFalse(t.checkElement("/plane/xx")) #ELEMENT_NOT_FOUND
-    !t.createElement("/plane", "xx")
-    !t.checkElement("/plane/xx")
-    !self.assertEquals(t.getTextElement("/plane/xx"), "")
-    !t.updateTextElement("/plane/xx", "value")
-    !self.assertEquals(t.getTextElement("/plane/xx"), "value")
-    !t.removeElement("/plane/xx")
-    !self.assertEqual(t.checkElement("/plane/xx"),False)
-    !self.assertRaises(TixiException, t.getTextElement, "/plane/xx") #ELEMENT_NOT_FOUND
+    VERIFY( SUCCESS .eq. tixiAddIntegerElement(t_handle,'/plane','nop',123456,'%d') )
+    VERIFY( SUCCESS .eq. tixiGetIntegerElement(t_handle,'/plane/nop',n) )
+    VERIFY( n .eq. 123456 )
+
+    VERIFY( SUCCESS .eq. tixiGetDoubleElement(t_handle,plane_wing_x, x) )
+    VERIFY( x .eq. 30.0 )
+
+    VERIFY( SUCCESS .eq. tixiAddDoubleElement(t_handle,wing1,'cog',123.456_8,'%g') )
+    VERIFY( SUCCESS .eq. tixiGetDoubleElement(t_handle,wing1//'/cog', x) )
+    VERIFY( abs(x - 123.456_8) .le. 2*epsilon(123.456_8) )
+
+    VERIFY( SUCCESS .eq. tixiGetBooleanElement(t_handle,'/plane/bool/aBool2',n) )
+    VERIFY( n .eq. 0 )
+
+    VERIFY( SUCCESS .eq. tixiGetBooleanElement(t_handle,'/plane/bool/aBool1b',n) )
+    VERIFY( n .eq. 1 )
+
+    VERIFY( ELEMENT_NOT_FOUND .eq. tixiCheckElement(t_handle,'/plane/xx') )
+    VERIFY( SUCCESS .eq. tixiCreateElement(t_handle,'/plane','xx') )
+    VERIFY( SUCCESS .eq. tixiCheckElement(t_handle,'/plane/xx') )
+    VERIFY( SUCCESS .eq. tixiUpdateTextElement(t_handle,'/plane/xx','value') )
+    VERIFY( SUCCESS .eq. tixiGetTextElement(t_handle,'/plane/xx',str) )
+    VERIFY( str_array_eq(str,'value') )
+    VERIFY( SUCCESS .eq. tixiRemoveElement(t_handle,'/plane/xx') )
+    VERIFY( ELEMENT_NOT_FOUND .eq. tixiCheckElement(t_handle,'/plane/xx') )
+    VERIFY( ELEMENT_NOT_FOUND .eq. tixiGetTextElement(t_handle,'/plane/xx',str) )
+
     write(*,*) 'ok'
   end subroutine
 
 
   subroutine test_attributes
+    character(len=*), parameter :: working_file = 'TestData/in.xml'
+    character(len=*), parameter :: wing1 = '/plane/wings/wing[1]'
+    character(len=*), parameter :: origin = '/plane/coordinateOrigin'
+    character, pointer :: str(:)
+    integer :: t_handle
+    integer :: n, err
+    real(kind=8) :: x
     write(*,*) 'test_attributes'
-    !t = Tixi()
-    !t.open(os.path.join("TestData", "in.xml"))
-    !self.assertEquals(t.getTextAttribute("/plane/wings/wing[1]", "position"), "left")
-    !self.assertEquals(t.getIntegerAttribute("/plane/wings", "numberOfWings"), 2)
-    !t.addIntegerAttribute("/plane", "intattr", 324, None)
-    !self.assertEquals(t.getIntegerAttribute("/plane", "intattr"), 324)
-    !t.removeAttribute("/plane", "intattr")
-    !self.assertEquals(t.getDoubleAttribute("/plane/coordinateOrigin", "scaling"), 1.3456)
-    !self.assertFalse(t.checkAttribute("/plane", "doubleattr")) # ATTRIBUTE_NOT_FOUND \n
-    !t.addDoubleAttribute("/plane", "doubleattr", 123.456, None)
-    !t.checkAttribute("/plane", "doubleattr")
-    !self.assertEquals(t.getDoubleAttribute("/plane", "doubleattr"), 123.456)
-    !t.removeAttribute("/plane", "doubleattr")
-    !t.addTextAttribute("/plane", "attr", "val")
-    !self.assertEquals(t.getTextAttribute("/plane", "attr"), "val")
-    !self.assertEquals(t.getNamedChildrenCount("/plane/wings", "wing"), 2)
-    !t.addDoubleListWithAttributes("/plane", "list", "elem", "attr", [1., 2., 3.], None, ["a", "b", "c"], 3)
-    !self.assertEquals(t.getTextAttribute("/plane/list/elem[1]", "attr"), "a")
-    !self.assertEquals(t.getDoubleElement("/plane/list/elem[3]"), 3.0)
+
+    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t_handle) )
+
+    VERIFY( SUCCESS .eq. tixiGetTextAttribute(t_handle,wing1,'position',str) )
+    VERIFY( str_array_eq(str, 'left') )
+
+    VERIFY( SUCCESS .eq. tixiGetIntegerAttribute(t_handle,'/plane/wings','numberOfWings',n) )
+    VERIFY( n .eq. 2 )
+
+    VERIFY( SUCCESS .eq. tixiAddIntegerAttribute(t_handle,'/plane','intattr',324,'%d') )
+    VERIFY( SUCCESS .eq. tixiGetIntegerAttribute(t_handle,'/plane','intattr',n) )
+    VERIFY( n .eq. 324 )
+    VERIFY( SUCCESS .eq. tixiRemoveAttribute(t_handle,'/plane','intattr') )
+    VERIFY( ATTRIBUTE_NOT_FOUND .eq. tixiCheckAttribute(t_handle,'/plane','intattr') )
+
+    VERIFY( SUCCESS .eq. tixiGetDoubleAttribute(t_handle,origin,'scaling',x) )
+    VERIFY( abs(x - 1.3456_8) .le. 2*epsilon(1.3456_8) )
+
+    VERIFY( ATTRIBUTE_NOT_FOUND .eq. tixiCheckAttribute(t_handle,'/plane','doubleattr') )
+    VERIFY( SUCCESS .eq. tixiAddDoubleAttribute(t_handle,'/plane','doubleattr',123.456_8,'%f') )
+    VERIFY( SUCCESS .eq. tixiCheckAttribute(t_handle,'/plane','doubleattr') )
+    VERIFY( SUCCESS .eq. tixiGetDoubleAttribute(t_handle,'/plane','doubleattr',x) )
+    VERIFY( abs(x - 123.456_8) .le. 2*epsilon(123.456_8) )
+    VERIFY( SUCCESS .eq. tixiRemoveAttribute(t_handle,'/plane','doubleattr') )
+
+    VERIFY( SUCCESS .eq. tixiAddTextAttribute(t_handle,'/plane','attr','val') )
+    VERIFY( SUCCESS .eq. tixiGetTextAttribute(t_handle,'/plane','attr',str) )
+    VERIFY( str_array_eq(str,'val') )
+
+    VERIFY( SUCCESS .eq. tixiGetNamedChildrenCount(t_handle,'/plane/wings','wing',n) )
+    VERIFY( n .eq. 2 )
+
+    err = tixiAddDoubleListWithAttributes(t_handle,'/plane','list','elem','attr', &
+      &   (/1.0_8,2.0_8,3.0_8/),'%f',(/'a','b','c'/),3)
+    VERIFY( SUCCESS .eq. err )
+    VERIFY( SUCCESS .eq. tixiGetTextAttribute(t_handle,'/plane/list/elem[1]','attr',str) )
+    VERIFY( str_array_eq(str,'a') )
+    VERIFY( SUCCESS .eq. tixiGetDoubleElement(t_handle,'/plane/list/elem[3]',x) )
+    VERIFY( abs(x-3.0_8) .le. 2*epsilon(3.0_8) )
     !t.close()
     write(*,*) 'ok'
   end subroutine
 
 
   subroutine test_vector_array
+    character(len=*), parameter :: vectorxml = 'TestData/vectorcount.xml'
+    character(len=*), parameter :: arrayxml = 'TestData/arraytests.xml'
+    character(len=*), parameter :: working_file = 'TestData/in.xml'
+    character(len=*), parameter :: uidcorrxml = 'TestData/uid_correct.xml'
+    character(len=*), parameter :: uiddupxml = 'TestData/uid_duplicated.xml'
+    character(len=*), parameter :: a_cfx = '/a/aeroPerformanceMap/cfx'
+    character(len=*), parameter :: perfmap = '/root/aeroPerformanceMap'
+    character(len=*), parameter :: plane_wing_x = &
+      &                            '/plane/wings[1]/wing[1]/centerOfGravity/x'
+    integer :: t_handle
+    integer :: n, i
+    real(kind=8) :: x, y, z
+    real(kind=8), pointer :: vec(:)
+    integer, allocatable :: dimSizes(:)
+    character, pointer :: str(:)
+    type(CStringPtr), allocatable :: strArr(:)
+    real(kind=8), parameter :: myvec(*) = (/(i, i = 100,129)/)
     write(*,*) 'test_vector_array'
-    !t = Tixi()
-    !t.open(os.path.join("TestData", "vectorcount.xml"))
-    !self.assertEquals(t.getVectorSize("/a/aeroPerformanceMap/cfx"), 32)
-    !#v = t.getFloatVector("/a/aeroPerformanceMap/cfx", 32)
-    !#print v[0], v[1], v[-1]
-    !#1 2 118
-    !t.close()
 
-    !# manual creation of vector
-    !t.create('doc')
-    !t.addFloatVector('/doc', 'myvec', range(100,130), 30, "%g")
 
-    !size = t.getVectorSize('/doc/myvec')  
-    !self.assertEquals(size, 30)
-    !v = t.getFloatVector('/doc/myvec', 30)
-    !self.assertEquals(v, tuple(range(100,130)))
+    ! vectorcount.xml
+    VERIFY( SUCCESS .eq. tixiOpenDocument(vectorxml,t_handle) )
 
-    !t.close()
+    VERIFY( SUCCESS .eq. tixiGetVectorSize(t_handle,a_cfx,n) )
+    VERIFY( n .eq. 32 )
 
-    !t.open(os.path.join("TestData", "arraytests.xml"))
-    !self.assertEquals(t.getArrayDimensions("/root/aeroPerformanceMap"), 4)
-    !self.assertEquals(t.getArrayDimensionSizes("/root/aeroPerformanceMap", 4), ((1, 2, 3, 8), 48))
-    !self.assertEquals(t.getArrayDimensionNames("/root/aeroPerformanceMap", 4), ("machNumber", "reynoldsNumber", "angleOfYaw", "angleOfAttack"))
-    !# print t.getArrayDimensionValues("/root/aeroPerformanceMap", 0) 1.0
-    !# print t.getArrayDimensionValues("/root/aeroPerformanceMap", 2)            0 5 10
-    !self.assertEquals(t.getArrayParameters("/root/aeroPerformanceMap"), 7)
-    !# print t.getArrayParameterNames("/root/aeroPerformanceMap")            ("cfx", "cfy", "cfz", "cmx", "cmy", "cmz", "def")
-    !# print t.getArray("/root/aeroPerformanceMap", "cmx")            None
-    !# print t.getArrayValue(arr, "/root/aeroPerformanceMap", "angleOfAttack")
-    !#8
-    !#print t.getArrayElementNames("/root/aeroPerformanceMap", "vector")
-    !#print t.getArrayElementNames("/root/aeroPerformanceMap", "array")
-    !t.getArrayElementCount("/root/aeroPerformanceMap","array")
-    !t.createElement("/root", "p1")
-    !t.addPoint("/root/p1", 1, 2, 3, None)
-    !self.assertEquals(t.getPoint("/root/p1"), (1.0, 2.0, 3.0))
-    !self.assertEquals(t.xPathEvaluateNodeNumber("/root/aeroPerformanceMap"), 1)
-    !t.close()
-    !t.open(os.path.join("TestData", "in.xml"))
-    !self.assertEquals(t.xPathExpressionGetTextByIndex("/plane/wings/wing/centerOfGravity/x", 2), "30.0")
-    !t.close()
-    !t.open(os.path.join("TestData", "uid_correct.xml"))
-    !t.uIDCheckDuplicates()
-    !t.uIDCheckExists("schlumpf")
-    !t.close()
-    !t.open(os.path.join("TestData", "uid_duplicated.xml"))
-    !self.assertRaises(TixiException, t.uIDCheckDuplicates) #UID_NOT_UNIQUE
+    VERIFY( SUCCESS .eq. tixiGetFloatVector(t_handle,a_cfx,vec,n) )
+    VERIFY( size(vec) .eq. 32 )
+    VERIFY( abs(1.0_8 - vec(1)) .le. 2*epsilon(1.0_8) )
+    VERIFY( abs(2.0_8 - vec(2)) .le. 2*epsilon(1.0_8) )
+    VERIFY( abs(3.0_8 - vec(3)) .le. 2*epsilon(1.0_8) )
+
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+
+    ! manual creation of vector
+    VERIFY( SUCCESS .eq. tixiCreateDocument('doc',t_handle) )
+    VERIFY( SUCCESS .eq. tixiAddFloatVector(t_handle,'/doc','myvec',myvec, size(myvec), '%g') )
+
+    VERIFY( SUCCESS .eq. tixiGetVectorSize(t_handle,'/doc/myvec',n) )
+    VERIFY( n .eq. size(myvec) )
+    VERIFY( SUCCESS .eq. tixiGetFloatVector(t_handle,'/doc/myvec',vec,n) )
+    VERIFY( associated(vec) )
+    VERIFY( size(vec) .eq. size(myvec) )
+    do i = 1, size(myvec), 1
+      VERIFY( abs(vec(i)-myvec(i)) .le. 2*epsilon(1.0_8) )
+    end do
+    vec=>null()
+
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+
+    ! arraytests.xml
+    VERIFY( SUCCESS .eq. tixiOpenDocument(arrayxml,t_handle) )
+    VERIFY( SUCCESS .eq. tixiGetArrayDimensions(t_handle,perfmap,n) )
+    VERIFY( n .eq. 4 )
+    allocate(dimSizes(4))
+    VERIFY( SUCCESS .eq. tixiGetArrayDimensionSizes(t_handle,perfmap,dimSizes,n) )
+    VERIFY( all(dimSizes .eq. (/1,2,3,8/)) )
+    VERIFY( n .eq. 48 )
+
+    allocate(strArr(4))
+    VERIFY( SUCCESS .eq. tixiGetArrayDimensionNames(t_handle,perfmap,strArr) )
+    VERIFY( str_array_eq(strArr(1)%str,'machNumber') )
+    VERIFY( str_array_eq(strArr(2)%str,'reynoldsNumber') )
+    VERIFY( str_array_eq(strArr(3)%str,'angleOfYaw') )
+    VERIFY( str_array_eq(strArr(4)%str,'angleOfAttack') )
+    deallocate(strArr)
+
+    allocate(vec(1))
+    VERIFY( SUCCESS .eq. tixiGetArrayDimensionValues(t_handle,perfmap,0,vec) )
+    VERIFY( abs(vec(1) - 1.0) .le. 2*epsilon(1.0_8) )
+    deallocate(vec);allocate(vec(3))
+    VERIFY( SUCCESS .eq. tixiGetArrayDimensionValues(t_handle,perfmap,2,vec) )
+    VERIFY( maxval(abs(vec - (/0,5,10/))) .le. 2*epsilon(1.0_8) )
+
+    VERIFY( SUCCESS .eq. tixiGetArrayParameters(t_handle,perfmap,n) )
+    VERIFY( n .eq. 7 )
+    allocate(strArr(7))
+    VERIFY( SUCCESS .eq. tixiGetArrayParameterNames(t_handle,perfmap,strArr) )
+    VERIFY( str_array_eq(strArr(1)%str,'cfx') )
+    VERIFY( str_array_eq(strArr(2)%str,'cfy') )
+    VERIFY( str_array_eq(strArr(3)%str,'cfz') )
+    VERIFY( str_array_eq(strArr(4)%str,'cmx') )
+    VERIFY( str_array_eq(strArr(5)%str,'cmy') )
+    VERIFY( str_array_eq(strArr(6)%str,'cmz') )
+    VERIFY( str_array_eq(strArr(7)%str,'def') )
+    deallocate(strArr)
+
+    VERIFY( SUCCESS .eq. tixiGetArray(t_handle,perfmap,'cmx',32,vec) ) ! 32 in xml
+    x = tixiGetArrayValue(vec,dimSizes,(/0,0,0,7/),4)
+    VERIFY( abs(x - 8.0_8) .le. 2*epsilon(1.0_8) )
+
+    ! TODO: check this
+    VERIFY( SUCCESS .eq. tixiGetArrayElementNames(t_handle,perfmap,'vector',str) )
+    ! this only returns 'machNumber'
+    VERIFY( SUCCESS .eq. tixiGetArrayElementNames(t_handle,perfmap,'array',str) )
+    ! ...
+
+    VERIFY( SUCCESS .eq. tixiGetArrayElementCount(t_handle,perfmap,'array',n) )
+    VERIFY( n .eq. 7 )
+
+    VERIFY( SUCCESS .eq. tixiCreateElement(t_handle,'/root','p1') )
+    VERIFY( SUCCESS .eq. tixiAddPoint(t_handle,'/root',1.0_8,2.0_8,3.0_8,'%g') )
+    VERIFY( SUCCESS .eq. tixiGetPoint(t_handle,'/root',x,y,z) )
+    VERIFY( maxval(abs( (/x,y,z/) - (/1.0_8,2.0_8,3.0_8/) )) .le. 2*epsilon(1.0_8) )
+
+    VERIFY( SUCCESS .eq. tixiXPathEvaluateNodeNumber(t_handle,perfmap,n) )
+    VERIFY( n .eq. 1 )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+    VERIFY( SUCCESS .eq. tixiOpenDocument(working_file,t_handle) )
+    VERIFY( SUCCESS .eq. tixiXPathExpressionGetTextByIndex(t_handle,plane_wing_x,1,str) )
+    VERIFY( str_array_eq(str,'30.0') )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+    VERIFY( SUCCESS .eq. tixiOpenDocument(uidcorrxml,t_handle) )
+    VERIFY( SUCCESS .eq. tixiUIDCheckDuplicates(t_handle) )
+    VERIFY( SUCCESS .eq. tixiUIDCheckExists(t_handle,'schlumpf') )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
+    VERIFY( SUCCESS .eq. tixiOpenDocument(uiddupxml,t_handle) )
+    VERIFY( UID_NOT_UNIQUE .eq. tixiUIDCheckDuplicates(t_handle) )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
     write(*,*) 'ok'
   end subroutine
 
 
   subroutine test_api
+    integer :: th
+    character(len=*), parameter :: r = '/root'
+    character(len=*), parameter :: cp_n = 'name'
+    character(len=*), parameter :: cp_c = 'create'
+    character(len=*), parameter :: cp_v = 'version'
+    character(len=*), parameter :: cp_d = 'description'
+    character(len=*), parameter :: cp_cv = 'cpacsVersion'
     write(*,*) 'test_api'
-    !t = Tixi()
-    !self.assertEquals(t.version, t.getVersion())
-    !t.create("root")
-    !t.addDoubleElement("/root","myDouble",3.2,0)
-    !t.addIntegerElement("/root","myInteger",6,None)
 
-    !# Here starts the rest
-    !t.addBooleanElement("/root","myBoolean",0)
-    !t.updateDoubleElement("/root/myDouble",3.14159262,0)
-    !t.updateIntegerElement("/root/myInteger",7,None)
-    !t.updateBooleanElement("/root/myBoolean",1)
-    !t.addTextElementAtIndex("/root","myNewTextElement","myText",2)
-    !t.createElementAtIndex("/root","array",0)
-    !t.addFloatVector("/root","myFloatVector",(0.0,1.1,2.2),3, "%g")
-    !t.addExternalLink("/root","/externalLink",".xml")
-    !t.addHeader("tool","version","author")
-    !t.addCpacsHeader("name","creator","version","description","cpacsVersion")
-    !t.usePrettyPrint(1)
-    !t.uIDCheckLinks()
-    !t.uIDSetToXPath("/root/myBoolean","booleanID")
-    !self.assertEqual(t.uIDGetXPath("booleanID"),"/root/myBoolean")
-    !#t.dTDValidate()
+    VERIFY( SUCCESS .eq. tixiCreateDocument('root',th) )
+    VERIFY( SUCCESS .eq. tixiAddDoubleElement(th,r,'myDouble',3.2_8,'%g') )
+    VERIFY( SUCCESS .eq. tixiAddIntegerElement(th,r,'myInteger',6,'%d') )
+
+    ! Here starts the rest
+    VERIFY( SUCCESS .eq. tixiAddBooleanElement(th,r,'myBoolean',0) )
+    VERIFY( SUCCESS .eq. tixiUpdateDoubleElement(th,r//'/myDouble',3.14159262_8,'%g') )
+    VERIFY( SUCCESS .eq. tixiUpdateIntegerElement(th,r//'/myInteger',7,'%d') )
+    VERIFY( SUCCESS .eq. tixiUpdateBooleanElement(th,r//'/myBoolean',1) )
+    VERIFY( SUCCESS .eq. tixiAddTextElementAtIndex(th,r,'myNewTextElement','myText',2) )
+    VERIFY( SUCCESS .eq. tixiCreateElementAtIndex(th,r,'array',0) )
+    VERIFY( SUCCESS .eq. tixiAddFloatVector(th,r,'myFloatVector',(/0.0_8,1.1_8,2.2_8/),3, '%g') )
+    VERIFY( SUCCESS .eq. tixiAddExternalLink(th,r,'/externalLink','.xml') )
+    VERIFY( SUCCESS .eq. tixiAddHeader(th,'tool','version','author') )
+    VERIFY( SUCCESS .eq. tixiAddCpacsHeader(th,cp_n,cp_c,cp_v,cp_d,cp_cv) )
+    VERIFY( SUCCESS .eq. tixiUsePrettyPrint(th,1) )
+    VERIFY( SUCCESS .eq. tixiUIDCheckLinks(th) )
+    VERIFY( SUCCESS .eq. tixiUIDSetToXPath(th,r//'/myBoolean','booleanID') )
+    !self.assertEqual(t.uIDGetXPath('booleanID'),r//'/myBoolean') )
+    !#t.dTDValidate() )
     !#t.xSLTransformationToFile()
-    !t.save(os.path.join("TestData", "test_save.xml"))
-    !t.close()
-    !t.cleanup()
+    VERIFY( SUCCESS .eq. tixiSaveDocument(th,'TestData/test_save.xml') )
+    VERIFY( SUCCESS .eq. tixiCloseDocument(th) )
+
     write(*,*) 'ok'
   end subroutine
 

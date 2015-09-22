@@ -49,10 +49,11 @@ class Fortran03Generator(object):
 '''
 subroutine c_f_stringptr(str_c, str_f)
   use, intrinsic :: iso_c_binding
-  type(C_PTR), value :: str_c
+  type(C_PTR), intent(in) :: str_c
   character(kind=C_CHAR), pointer, intent(out) :: str_f(:)
   integer :: i
 
+  if( .not. c_associated(str_c) ) return
   i = 1
   call c_f_pointer(str_c,str_f,(/i/))
   do while(str_f(i) .ne. C_NULL_CHAR)
@@ -62,8 +63,49 @@ subroutine c_f_stringptr(str_c, str_f)
   call c_f_pointer(str_c,str_f,(/i-1/))
 
 end subroutine c_f_stringptr
-''',}
+''',
+'f_c_strarrayptr':
+'''
+subroutine f_c_strarrayptr(strarray_f,tmp_str,tmp_ptr,strarray_c)
+  use, intrinsic :: iso_c_binding
+  character(kind=C_CHAR,len=*), intent(in) :: strarray_f(:)
+  character(kind=C_CHAR), target, allocatable, intent(out) :: tmp_str(:,:)
+  type(C_PTR), target, allocatable, intent(out) :: tmp_ptr(:)
+  type(C_PTR), intent(out) :: strarray_c
+  integer :: i, j
 
+  allocate(tmp_str(1+len(strarray_f),size(strarray_f)))
+  allocate(tmp_ptr(size(strarray_f)))
+  do i = 1, size(strarray_f), 1
+    do j = 1, len(strarray_f), 1
+      tmp_str(j,i) = strarray_f(i)(j:j)
+    end do
+    tmp_str(len(strarray_f)+1,i) = C_NULL_CHAR
+    tmp_ptr(i) = c_loc( tmp_str(1,i) )
+  end do
+
+  strarray_c = c_loc(tmp_ptr)
+end subroutine
+''',
+'c_f_strarrayptr':
+'''
+subroutine c_f_strarrayptr(strarray_c,strarray_f)
+  use, intrinsic :: iso_c_binding
+  type(C_PTR), intent(in) :: strarray_c(:)
+  type(CStringPtr), intent(out) :: strarray_f(:)
+  integer :: i
+
+  do i = 1, size(strarray_c), 1
+    call c_f_stringptr(strarray_c(i),strarray_f(i)%str)
+  end do
+end subroutine
+''',}
+        self.helper_classes = '''
+! we need a wrapper type to create arrays of C-strings as there is no pointer of a pointer in Fortran
+type CStringPtr
+  character(kind=C_CHAR), pointer :: str(:)
+end type
+'''
 
 
     def add_alias(self, oldname, newname):
@@ -79,6 +121,7 @@ end subroutine c_f_stringptr
         # module declaration
         string += '\n\n'
         string += 'module tixi\n'
+        string += indent + 'use, intrinsic :: iso_c_binding, only: C_CHAR\n'
         string += indent + 'implicit none\n'
         string += indent + 'public\n'
 
@@ -122,6 +165,9 @@ end subroutine c_f_stringptr
         string += '\n'
         for method_name in self.helper_methods:
             string += indent + 'private :: %s\n' % method_name
+
+        string += '\n'
+        string += self.helper_classes
 
         string += '\n\n'
         string += 'contains\n'
@@ -322,11 +368,15 @@ end subroutine c_f_stringptr
         '''
 
         # generate both C and F declarations
-        C_decl = self.create_argument_decl(arg_dec, 'C', function_result, fun_dec, dummy_arg=True)
-        F_decl = self.create_argument_decl(arg_dec, 'F', function_result, fun_dec, dummy_arg=True)
+        C_decl = self.create_argument_decl(arg_dec, 'C', function_result, fun_dec)#, dummy_arg=True)
+        F_decl = self.create_argument_decl(arg_dec, 'F', function_result, fun_dec)#, dummy_arg=True)
 
         # nothing to do, if they match
         if C_decl == F_decl:
+            return None, None, None, None
+        
+        # ignore if they only differ by value / intent(in)
+        if C_decl == F_decl.replace('intent(in)','value'):
             return None, None, None, None
 
         # so we need a C declaration with a different name
@@ -342,14 +392,20 @@ end subroutine c_f_stringptr
         # handle strings
         if arg_dec.is_string:
             if function_result or arg_dec.is_outarg:
-                pre = None
                 if arg_dec.arrayinfos['is_array']:
-                    post = None
+                    pre = 2*indent + 'allocate(%s(size(%s)))\n' % (var, arg_dec.name)
+                    post = 2*indent + 'call c_f_strarrayptr(%s, %s)\n' % (var, arg_dec.name)
                 else:
+                    pre = None
                     post = 2*indent + 'call c_f_stringptr(%s, %s)\n' % (var, arg_dec.name)
             else:
                 if arg_dec.arrayinfos['is_array']:
-                    pre = None
+                    var_tmp1 = var+'tmp1'
+                    decl += 2*indent + 'character(kind=C_CHAR), target, allocatable :: %s(:,:)\n' % var_tmp1
+                    var_tmp2 = var+'tmp2'
+                    decl += 2*indent + 'type(C_PTR), target, allocatable :: %s(:)\n' % var_tmp2
+                    pre = 2*indent + 'call f_c_strarrayptr(%s, %s, %s, %s)\n' % (
+                            arg_dec.name, var_tmp1, var_tmp2, var)
                 else:
                     pre = None
                     var = arg_dec.name + ' // C_NULL_CHAR'
@@ -384,25 +440,40 @@ end subroutine c_f_stringptr
             if arg_dec.arrayinfos['is_array']:
                 if arg_dec.npointer > 2:
                     raise GeneratorException('Unhandled argument type', arg_dec)
-                if function_result or arg_dec.is_outarg:
-                    pass
-                    #raise GeneratorException('Unhandled argument type', arg_dec)
-                if language_binding == 'C':
-                    if dummy_arg:
-                        string = 'type(C_PTR), intent(in) :: ' + arg_name
-                    else:
-                        string = 'type(C_PTR) :: ' + arg_name
-                else: #language_binding == 'F':
-                    if dummy_arg:
-                        string = 'character(kind=C_CHAR,len=*), intent(in) :: ' + arg_name
-                    else:
-                        raise RuntimeError('Shouldnt trigger this situation')
+                dim_name = None
+                if arg_dec.arrayinfos['arraysizes']:
+                    if len(arg_dec.arrayinfos['arraysizes']) > 1:
+                        raise GeneratorException('Unhandled argument type', arg_dec)
+                    if arg_dec.arrayinfos['arraysizes']:
+                        dim_name = fun_dec.arguments[arg_dec.arrayinfos['arraysizes']].name
 
-                if not arg_dec.arrayinfos['arraysizes']:
-                    if language_binding == 'F':
-                        string += '(:)'
-                else: # arraysizes given
-                    string += '(%s)' %','.join((fun_dec.arguments[i].name for i in reversed(arg_dec.arrayinfos['arraysizes'])))
+                if arg_dec.is_outarg:
+                    if arg_dec.arrayinfos['autoalloc']:
+                        raise GeneratorException('Unhandled argument type', arg_dec)
+                    if language_binding == 'C':
+                        if dummy_arg:
+                            string = 'type(C_PTR), intent(out) :: %s(%s)' % (
+                                    arg_name, dim_name if dim_name else '*' )
+                        else:
+                            string = 'type(C_PTR), allocatable :: %s(:)' % arg_name
+                    else: #language_binding == 'C':
+                        if dummy_arg:
+                            string = 'type(CStringPtr), intent(out) :: %s(%s)' % (
+                                    arg_name, dim_name if dim_name else ':')
+                        else:
+                            raise RuntimeError('Shouldnt trigger this situation')
+                else:
+                    if language_binding == 'C':
+                        if dummy_arg:
+                            string = 'type(C_PTR), value :: ' + arg_name
+                        else:
+                            string = 'type(C_PTR) :: ' + arg_name
+                    else: #language_binding == 'F':
+                        if dummy_arg:
+                            string = 'character(kind=C_CHAR,len=*), intent(in) :: %s(%s)' % (
+                                    arg_name, dim_name if dim_name else ':')
+                        else:
+                            raise RuntimeError('Shouldnt trigger this situation')
 
             else:
                 if language_binding == 'C':
@@ -410,11 +481,11 @@ end subroutine c_f_stringptr
                         string = 'type(C_PTR) :: %s' % arg_name
                     elif dummy_arg:
                         if arg_dec.is_outarg:
-                            string = 'type(C_PTR), intent(out) :: %s' % arg_name
+                            string = 'type(C_PTR), intent(inout) :: %s' % arg_name
                         else:
                             string = 'character(kind=C_CHAR), intent(in) :: %s(*)' % arg_name
                     else:
-                        string = 'type(C_PTR) :: %s' % arg_name
+                        string = 'type(C_PTR) :: %s = C_NULL_PTR' % arg_name
                 else: #language_binding == 'F'
                     if function_result or arg_dec.is_outarg:
                         string = 'character(kind=C_CHAR), pointer :: %s(:)' % arg_name
@@ -435,6 +506,8 @@ end subroutine c_f_stringptr
                         string = 'type(C_PTR)'
                     else:
                         string = self.basic_types[arg_dec.type] + ', pointer'
+                        #if arg_dec.arrayinfos['autoalloc']:
+                        #    string += ', pointer'
                 else:
                     string = self.basic_types[arg_dec.type]
 
@@ -449,9 +522,9 @@ end subroutine c_f_stringptr
                     if not dummy_arg:
                         raise GeneratorException('Unhandled argument type', arg_dec)
                     #if language_binding == 'C':
-                    #    string += '(*)'
+                    string += '(*)'
                     #else:
-                        string += '(:)'
+                    #    string += '(:)'
                 elif arg_dec.npointer == 1:
                     string += '(%s)' %','.join((fun_dec.arguments[i].name for i in reversed(arg_dec.arrayinfos['arraysizes'])))
                 elif language_binding == 'F':
@@ -465,7 +538,7 @@ end subroutine c_f_stringptr
                     elif arg_dec.npointer > 0:
                         string += ', intent(inout)'
                     else:
-                        string += ', value'
+                        string += ', value' if language_binding == 'C' else ', intent(in)'
                 string += ' :: ' + arg_name
 
         elif arg_dec.type == 'void' and arg_dec.npointer > 0 and language_binding == 'C':
