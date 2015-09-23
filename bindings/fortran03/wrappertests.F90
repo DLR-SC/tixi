@@ -30,8 +30,10 @@ program wrappertest
   call test_validation_and_export
   call test_elements
   call test_attributes
-  call  test_vector_array
+  call test_vector_array
   call test_api
+
+  call test_tixicleanup
 
 contains
 
@@ -229,6 +231,8 @@ elementFormDefault="qualified" attributeFormDefault="unqualified">&
     VERIFY( ELEMENT_NOT_FOUND .eq. tixiCheckElement(t_handle,'/plane/xx') )
     VERIFY( ELEMENT_NOT_FOUND .eq. tixiGetTextElement(t_handle,'/plane/xx',str) )
 
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
     write(*,*) 'ok'
   end subroutine
 
@@ -281,7 +285,9 @@ elementFormDefault="qualified" attributeFormDefault="unqualified">&
     VERIFY( str_array_eq(str,'a') )
     VERIFY( SUCCESS .eq. tixiGetDoubleElement(t_handle,'/plane/list/elem[3]',x) )
     VERIFY( abs(x-3.0_8) .le. 2*epsilon(3.0_8) )
-    !t.close()
+
+    VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
+
     write(*,*) 'ok'
   end subroutine
 
@@ -367,6 +373,7 @@ elementFormDefault="qualified" attributeFormDefault="unqualified">&
     deallocate(vec);allocate(vec(3))
     VERIFY( SUCCESS .eq. tixiGetArrayDimensionValues(t_handle,perfmap,2,vec) )
     VERIFY( maxval(abs(vec - (/0,5,10/))) .le. 2*epsilon(1.0_8) )
+    deallocate(vec)
 
     VERIFY( SUCCESS .eq. tixiGetArrayParameters(t_handle,perfmap,n) )
     VERIFY( n .eq. 7 )
@@ -464,5 +471,14 @@ elementFormDefault="qualified" attributeFormDefault="unqualified">&
 
     write(*,*) 'ok'
   end subroutine
+
+
+  subroutine test_tixicleanup
+    write(*,*) 'test_tixicleanup'
+
+    VERIFY( SUCCESS .eq. tixiCleanup() )
+
+    write(*,*) 'ok'
+  end subroutine test_tixicleanup
 
 end program

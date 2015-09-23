@@ -174,6 +174,8 @@ int uid_checkForBrokenLinks(TixiDocument *document)
   size = (nodes) ? nodes->nodeNr : 0;
 
   if (size == 0) {
+    xmlXPathFreeContext(xpathCtx);
+    xmlXPathFreeObject(xpathObj);
     return SUCCESS;
   }
 
