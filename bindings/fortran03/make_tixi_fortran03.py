@@ -62,37 +62,37 @@ subroutine tixiGetVersion(str)
 
 end subroutine
 
-
-function tixiGetPrintMsgFunc() result(fnc)
-  use, intrinsic :: iso_c_binding
-  implicit none
-  procedure(TixiPrintMsgFnc), pointer :: fnc
-  type(C_FUNPTR) :: fnc_c
-  type(C_PTR) :: fnc_c_
-
-  fnc_c_ = tixiGetPrintMsgFunc_c()
-  ! ugly conversion from C_PTR to C_FUNPTR
-  fnc_c = transfer(fnc_c_, fnc_c)
-  call c_f_procpointer(fnc_c,fnc)
-end function
-
-
-function tixiSetPrintMsgFunc(fnc) result(ret)
-  use, intrinsic :: iso_c_binding
-  implicit none
-  procedure(TixiPrintMsgFnc), pointer, intent(in) :: fnc
-  integer(kind=C_INT) :: ret
-  type(C_FUNPTR) :: fnc_c
-  type(C_PTR) :: fnc_c_
-
-  fnc_c = c_funloc(fnc)
-  ! ugly conversion from C_FUNPTR to C_PTR
-  fnc_c_ = transfer(fnc_c, fnc_c_)
-  ret = tixiSetPrintMsgFunc_c(fnc_c_)
-end function
+! commented out for gfortran <= 4.3 compatibility
+!function tixiGetPrintMsgFunc() result(fnc)
+!  use, intrinsic :: iso_c_binding
+!  implicit none
+!  procedure(TixiPrintMsgFnc), pointer :: fnc
+!  type(C_FUNPTR) :: fnc_c
+!  type(C_PTR) :: fnc_c_
+!
+!  fnc_c_ = tixiGetPrintMsgFunc_c()
+!  ! ugly conversion from C_PTR to C_FUNPTR
+!  fnc_c = transfer(fnc_c_, fnc_c)
+!  call c_f_procpointer(fnc_c,fnc)
+!end function
+!
+!
+!function tixiSetPrintMsgFunc(fnc) result(ret)
+!  use, intrinsic :: iso_c_binding
+!  implicit none
+!  procedure(TixiPrintMsgFnc), pointer, intent(in) :: fnc
+!  integer(kind=C_INT) :: ret
+!  type(C_FUNPTR) :: fnc_c
+!  type(C_PTR) :: fnc_c_
+!
+!  fnc_c = c_funloc(fnc)
+!  ! ugly conversion from C_FUNPTR to C_PTR
+!  fnc_c_ = transfer(fnc_c, fnc_c_)
+!  ret = tixiSetPrintMsgFunc_c(fnc_c_)
+!end function
 '''
 
-blacklist = ['tixiGetPrintMsgFunc','tixiSetPrintMsgFunc','tixiGetVersion']
+blacklist = ['tixiGetPrintMsgFunc','tixiSetPrintMsgFunc','tixiGetVersion','tixiGetArrayElementNames']
 
 if __name__ == '__main__':
     # parse the file

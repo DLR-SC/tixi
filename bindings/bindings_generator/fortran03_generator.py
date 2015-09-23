@@ -50,7 +50,7 @@ class Fortran03Generator(object):
 subroutine c_f_stringptr(str_c, str_f)
   use, intrinsic :: iso_c_binding
   type(C_PTR), intent(in) :: str_c
-  character(kind=C_CHAR), pointer, intent(out) :: str_f(:)
+  character(kind=C_CHAR), pointer, intent(inout) :: str_f(:)
   integer :: i
 
   if( .not. c_associated(str_c) ) return
@@ -69,9 +69,9 @@ end subroutine c_f_stringptr
 subroutine f_c_strarrayptr(strarray_f,tmp_str,tmp_ptr,strarray_c)
   use, intrinsic :: iso_c_binding
   character(kind=C_CHAR,len=*), intent(in) :: strarray_f(:)
-  character(kind=C_CHAR), target, allocatable, intent(out) :: tmp_str(:,:)
-  type(C_PTR), target, allocatable, intent(out) :: tmp_ptr(:)
-  type(C_PTR), intent(out) :: strarray_c
+  character(kind=C_CHAR), target, allocatable, intent(inout) :: tmp_str(:,:)
+  type(C_PTR), target, allocatable, intent(inout) :: tmp_ptr(:)
+  type(C_PTR), intent(inout) :: strarray_c
   integer :: i, j
 
   allocate(tmp_str(1+len(strarray_f),size(strarray_f)))
@@ -89,14 +89,19 @@ end subroutine
 ''',
 'c_f_strarrayptr':
 '''
-subroutine c_f_strarrayptr(strarray_c,strarray_f)
+! WARNING this function is written such that it
+!         circumvents triggering old GCC gfortran bugs
+subroutine c_f_strarrayptr(n,strarray_c,strarray_f)
   use, intrinsic :: iso_c_binding
-  type(C_PTR), intent(in) :: strarray_c(:)
-  type(CStringPtr), intent(out) :: strarray_f(:)
+  integer, intent(in) :: n
+  type(C_PTR), intent(in) :: strarray_c(n)
+  type(CStringPtr), target, intent(inout) :: strarray_f(n)
+  type(CStringPtr), pointer :: tmp => null()
   integer :: i
 
-  do i = 1, size(strarray_c), 1
-    call c_f_stringptr(strarray_c(i),strarray_f(i)%str)
+  do i = 1, n, 1
+    tmp => strarray_f(i)
+    call c_f_stringptr(strarray_c(i),tmp%str)
   end do
 end subroutine
 ''',}
@@ -394,7 +399,8 @@ end type
             if function_result or arg_dec.is_outarg:
                 if arg_dec.arrayinfos['is_array']:
                     pre = 2*indent + 'allocate(%s(size(%s)))\n' % (var, arg_dec.name)
-                    post = 2*indent + 'call c_f_strarrayptr(%s, %s)\n' % (var, arg_dec.name)
+                    pre += 2*indent + '%s = C_NULL_PTR\n' % var
+                    post = 2*indent + 'call c_f_strarrayptr(size(%s),%s, %s)\n' % (arg_dec.name, var, arg_dec.name)
                 else:
                     pre = None
                     post = 2*indent + 'call c_f_stringptr(%s, %s)\n' % (var, arg_dec.name)
