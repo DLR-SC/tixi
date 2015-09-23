@@ -2307,6 +2307,9 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handl
     - INVALID_XPATH if matrixPath is not a well-formed XPath-expression
     - ELEMENT_PATH_NOT_UNIQUE if matrixPath resolves not to a single element but to a list of elements
     - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
+  @cond
+  #annotate out: 3AM# the size of the array "dimensionValues" is determined by a prior call to tixiGetArrayDimensionSizes
+  @endcond
  */
 DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle handle, const char *arrayPath,
                                                    const int dimension, double *dimensionValues);
@@ -2361,6 +2364,9 @@ DLL_EXPORT ReturnCode tixiGetArrayParameters (const TixiDocumentHandle handle, c
     - INVALID_XPATH if matrixPath is not a well-formed XPath-expression
     - ELEMENT_PATH_NOT_UNIQUE if matrixPath resolves not to a single element but to a list of elements
     - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
+  @cond
+  #annotate out: 2AM# one user specified return array (of strings)
+  @endcond
  */
 DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handle,
                                                   const char *arrayPath, char **parameterNames);

@@ -2328,8 +2328,8 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
   //check if number of entries is the same as arraySize
   if(count != arraySize || token != NULL){
     printMsg(MESSAGETYPE_ERROR,
-             "Error: the number of elements of array \"%s\" does not match the specified size of %d!\n",
-             elementName, arraySize);
+             "Error: the number of elements of array \"%s\" does not match the specified size of %d (should be %d)!\n",
+             elementName, arraySize, count);
     free(tmpArray);
     return NON_MATCHING_SIZE;
   }
