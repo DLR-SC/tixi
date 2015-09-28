@@ -25,22 +25,22 @@ if(PYTHON_EXECUTABLE)
 endif(PYTHON_EXECUTABLE)
 
 if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
-	#run python to create the wrapper
-		add_custom_command(
-			OUTPUT ${LIBRARY_OUTPUT_PATH}/tixi.f90
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_fortran03.py
-              ${PROJECT_SOURCE_DIR}/src/tixi.h
-              ${PROJECT_SOURCE_DIR}/bindings/bindings_generator/cheader_parser.py
-              ${PROJECT_SOURCE_DIR}/bindings/bindings_generator/fortran03_generator.py
-			WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
-			COMMAND ${PYTHON_EXECUTABLE}
-			ARGS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_fortran03.py
-		)
+    #run python to create the wrapper
+    add_custom_command(
+        OUTPUT ${LIBRARY_OUTPUT_PATH}/tixi.f90
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_fortran03.py
+                ${PROJECT_SOURCE_DIR}/src/tixi.h
+                ${PROJECT_SOURCE_DIR}/bindings/bindings_generator/cheader_parser.py
+                ${PROJECT_SOURCE_DIR}/bindings/bindings_generator/fortran03_generator.py
+        WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+        COMMAND ${PYTHON_EXECUTABLE}
+        ARGS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_fortran03.py
+    )
 
     add_custom_target(tixiFortran03 ALL
-      COMMENT "Create Fortran 2003 interface for tixi" VERBATIM 
-			DEPENDS ${LIBRARY_OUTPUT_PATH}/tixi.f90
-		)
+        COMMENT "Create Fortran 2003 interface for tixi" VERBATIM
+        DEPENDS ${LIBRARY_OUTPUT_PATH}/tixi.f90
+    )
 
     if(TIXI_BUILD_TESTS)
       enable_language(Fortran)
@@ -50,10 +50,11 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
       add_executable(wrappertestsF03 wrappertests.F90 ${LIBRARY_OUTPUT_PATH}/tixi.f90)
       target_link_libraries(wrappertestsF03 TIXI_static)
     endif()
-		
-		install(FILES ${LIBRARY_OUTPUT_PATH}/tixi.f90
-				DESTINATION include/
-				COMPONENT interfaces)
+
+    install(FILES ${LIBRARY_OUTPUT_PATH}/tixi.f90
+            DESTINATION share/tixi/fortran03
+            COMPONENT interfaces
+    )
 else()
-    message(WARNING "Python could not be found or the python installation is too old ( < 2.5). Python bindings will not be build!")
+    message(WARNING "Python could not be found or the python installation is too old ( < 2.5). Fortran03 bindings will not be build!")
 endif()
