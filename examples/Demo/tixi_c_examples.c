@@ -10,7 +10,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*     http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -155,66 +155,6 @@ void readXML( char* inputFileName ) {
 
     printf("Position of wing #3 is \"%s\".\n", position );
  
-  }
-  
-  
-
-  {
-    /* read a 2x3 matrix */
-
-    int nRows = -1;
-    int nCols = -1;
-    double* array = NULL;
-    int i;
-    int j; 
-
-    printf("\nReading Matrix\n");
-
-    /* 
-       To allocate the correct amount of memory for the matrix first
-       get the matrix size.
-    */
-    error = tixiGetMatrixSize( handle, "/plane/two_by_three_matrix", "blub", "bla", 
-			       &nRows, &nCols );
-    CHECK_ERROR( error, "tixiGetMatrixSize" );
-
-    printf("\nSize of matrix \"two_by_three_matrix\" is %1dx%1d.\n\n", nRows, nCols );
-
-    array = (double*) malloc( sizeof(double) * nRows * nCols );
-
-    /* 
-       Now get the matrix entries and store them in row first order into
-       array. 
-    */
-    error = tixiGetFloatMatrix( handle, "/plane/two_by_three_matrix", "blub", "bla", 
-				nRows, nCols, ROW_WISE, array );
-
-    printf("Matrix entries row wise storage: \n\n");
-    printf("%3s    %3s\n", "Array", "Matrix" );
-    printf("%3s  %3s  %3s\n", "Index", "I", "J" );
-
-    for ( i = 0; i < nRows; i++ ) {
-      for ( j = 0; j < nCols; j++ ) {
-	printf("%3d    %3d  %3d %10.4f\n", i*nCols+j, i+1, j+1, array[i*nCols+j] );
-      }
-    }
-
-    /* 
-       Now get the matrix entries and store them in column first order into
-       array. 
-    */
-    error = tixiGetFloatMatrix( handle, "/plane/two_by_three_matrix", "blub", "bla", 
-				nRows, nCols, COLUMN_WISE, array );
-
-    printf("\nMatrix entries column wise storage: \n\n");
-    printf("%3s    %3s\n", "Array", "Matrix" );
-    printf("%3s  %3s  %3s\n", "Index", "I", "J" );
-
-    for ( j = 0; j < nCols; j++ ) {
-      for ( i = 0; i < nRows; i++ ) {
-   	printf("%3d    %3d  %3d %10.4f\n", j*nRows+i, i+1, j+1, array[j*nRows+i] );
-      }
-    }
   }
 
   /*
@@ -374,127 +314,6 @@ void writeXML( char* outputFileName ) {
       free(elementName);
     }
   }
-  {
-    /* write a 4x3 matrix */
-
-    int nRows = 4;
-    int nCols = 3;
-    double array[12];
-    int i;
-    int j; 
-
-    
-    for ( i = 0; i < nRows; i++ ) {
-      for ( j = 0; j < nCols; j++ ) {
-	array[i*nCols+j] = i * 10. + j;
-      }
-    }
-
-    /* Write array to matrix in row order. */
-
-    error = tixiAddFloatMatrix( handle, "/plane", "four_by_three", "rows", "columns", 
-				nRows, nCols, ROW_WISE, array, "%5.1f" );
-    CHECK_ERROR( error, "tixiAddFloatMatrix" );
-
-    printf("\n4x3 Matrix written\n");
-  
-    /* Now write the array to the matrix in column order */
-
-    error = tixiAddFloatMatrix( handle, "/plane", "four_by_three", "rows", "columns", 
-				nRows, nCols, COLUMN_WISE, array, "%5.1f" );
-
-    CHECK_ERROR( error, "tixiAddFloatMatrix" );
-    printf("\n3x4 Matrix written\n");
-
-    /* Write array to matrix in row order. */
-
-    error = tixiAddFloatMatrix( handle, "/plane", "four_by_three", "rows", "columns", 
-				nRows, nCols, ROW_WISE, array, "%5.1f" );
-    CHECK_ERROR( error, "tixiAddFloatMatrix" );
-
-  }
-
-  {
-    /* 
-       Create an empty 3x3 matrix and fill the entries with a composite element.
-    */
-
-  
-    int nRows = 3;
-    int nCols = 3;
-    int i;
-    int j; 
-
-    /* first create an empty matrix */
-    error = tixiCreateMatrix( handle, "/plane", "composite", "r", "c", nRows, nCols );
-    CHECK_ERROR( error, "tixiCreateMatrix" );
-
-    /* 
-       Path to a matrix entry is for example
-       /plane/composite/r[2]/c[3]
-    */
-    
-    char* basePath = "/plane/composite/r";
-    int basePathLength = strlen(basePath);
-
-    for ( i = 1; i <= nRows; i++ ) {
-      
-      /* build string for i-th the row element path */
-
-      int rowPathSize = 
-	basePathLength +                      /* length of base string */
-	ceil( log( (double) ( i + 1 ) ) + .1 ) +   /* number of digits of the index string */
-	2 +                                   /* opening and closing brackets  */
-	1;                                    /* trailing "\0"                 */
-      int rowPathLength;
-      
-      char* rowPath = (char*) malloc( sizeof(char) * rowPathSize );
-  
-      strcpy( rowPath, basePath );
-      sprintf( &(rowPath[basePathLength]), "[%1d]", i );
-      rowPathLength = strlen(rowPath);
-
-      for ( j = 1; j <= nCols; j++ ) {
-
-	/* build string for the path to matrix  entry (i,j) */
-
-	int entryNameSize = 
-	  rowPathLength +                        /* length of row element string  */
-	  2 +                                    /* length "/c"                   */
-	  ceil( log( (double) (  j + 1 ) ) ) +   /* number of digits of the index */
-	  2 +                                    /* opening and closing brackets  */
-	  1;                                     /* trailing "\0"                 */
-
-	char* entryName = (char*) malloc( sizeof(char) * entryNameSize );
-	char* wingPath =  (char*) malloc( sizeof(char) * entryNameSize + 5 );
-	char* position = (i*j)%2 == 0 ? "left" : "right";
-
-	strcpy( entryName, rowPath );
-	sprintf( &(entryName[rowPathLength]), "/c[%1d]", j );
-
-	/* Add an empty wing element to the matrix element (i,j) */
-	error = tixiAddTextElement( handle, entryName, "wing", NULL );
-	CHECK_ERROR( error, "tixiAddTextElement" );
-	
-	strcpy( wingPath, entryName );
-	strcat( wingPath, "/wing" );
-
-	/* Insert a position and a span element into the wing element */
-	error = tixiAddTextElement( handle, wingPath, "position", position );
-	CHECK_ERROR( error, "tixiAddTextElement" );
-
-	error = tixiAddDoubleElement( handle, wingPath, "span", (i+j) * 10., NULL );
-	CHECK_ERROR( error, "tixiAddDoubleElement" );
-
-	free(entryName);
-	free(wingPath);
-      }
-      
-      free( rowPath );
-    }
-
-   
-  }	
  
   /* After all elements have been added, save the document to file */
 
@@ -517,6 +336,8 @@ int main( int argc, char** argv ){
 
     readXML( xmlInputFilename );
     writeXML( xmlOutputFilename );
+
+    tixiCleanup();
 
     return (0);
 }

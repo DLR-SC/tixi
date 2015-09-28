@@ -20,6 +20,9 @@ endif()
 add_executable(tixiDemo ${DEMO_SRC})
 target_link_libraries (tixiDemo TIXI)
 
+add_executable(tixi_c_examples tixi_c_examples.c)
+target_link_libraries (tixi_c_examples TIXI)
+
 add_custom_command(
 	TARGET tixiDemo
 	POST_BUILD
