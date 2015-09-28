@@ -95,10 +95,7 @@ end subroutine
 blacklist = ['tixiGetPrintMsgFunc','tixiSetPrintMsgFunc','tixiGetVersion','tixiGetArrayElementNames']
 
 if __name__ == '__main__':
-    # parse the file
-    
-    #ann =   CP.Annotation('#annotate out: 3, 4A(3)')    
-    
+    # parse the file  
     parser = CP.CHeaderFileParser()
     
     # set the handle string that the parser can identify the handles
@@ -114,7 +111,7 @@ if __name__ == '__main__':
     fg.userfunctions = userfunctions
     fg.blacklist = blacklist
     
-    print 'Creating python interface... ',
+    print 'Creating fortran03 interface... ',
     wrapper = fg.create_wrapper(parser)
     print 'done'
     
