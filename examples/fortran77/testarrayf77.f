@@ -2,7 +2,6 @@
       program testarrayf77
 
       implicit none
-      include "tixif.h"
 
 
       character*100 xml_file_name
@@ -10,7 +9,7 @@
       integer error
       integer arrayDims
       integer arraySize
-      integer*4 sizes
+      integer*4 sizes(4)
       real*8 aray(8)
       integer i
 
@@ -29,9 +28,9 @@
       write(*,*) 'tixi_get_array_dimensions error=', error
 
       call tixi_get_array_dimension_sizes( handle,
-                                           '/root/aeroPerformanceMap',
-                                           sizes, arraySize, error )
-      write(*,*) 'Sizes=', sizes(0), sizes(1), sizes(2), sizes(3)
+     C                                      '/root/aeroPerformanceMap',
+     C                                     sizes, arraySize, error )
+      write(*,*) 'Sizes=', sizes(1), sizes(2), sizes(3), sizes(4)
       write(*,*) 'tixi_get_array_dimension_sizes error=', error
 
       call tixi_close_document( handle, error )

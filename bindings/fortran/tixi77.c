@@ -139,6 +139,12 @@ void tixiCloseDocument_f(TixiDocumentHandle *handle, ReturnCode *error)
   *error = tixiCloseDocument(*handle);
 }
 
+void tixiCleanup_f(ReturnCode *error)
+{
+  *error = tixiCleanup();
+}
+
+
 
 void tixiCreateDocument_f(char *rootElementName, TixiDocumentHandle *handle, ReturnCode *error,
                           int lengthString1)
@@ -643,6 +649,7 @@ void tixiAddTextAttribute_f(const TixiDocumentHandle *handle,
 
   free(cElementPath);
   free(cAttributeName);
+  free(cText);
 }
 
 

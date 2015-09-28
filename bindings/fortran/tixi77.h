@@ -62,6 +62,7 @@
 #define tixiSaveCompleteDocument_f TIXI_SAVE_COMPLETE_DOCUMENT
 #define tixiSaveAndRemoveDocument_f TIXI_SAVE_AND_REMOVE_DOCUMENT
 #define tixiCloseDocument_f TIXI_CLOSE_DOCUMENT
+#define tixiCleanup_f TIXI_CLEANUP
 #define tixiExportDocumentAsString_f TIXI_EXPORT_DOCUMENT_AS_STRING
 #define tixiImportFromString_f TIXI_IMPORT_FROM_STRING
 #define tixiSchemaValidateFromFile_f TIXI_SCHEMA_VALIDATE_FROM_FILE
@@ -136,6 +137,7 @@
 #define tixiSaveCompleteDocument_f FORTRAN_NAME(tixi_save_complete_document)
 #define tixiSaveAndRemoveDocument_F FORTRAN_NAME(tixi_save_and_remove_document)
 #define tixiCloseDocument_f FORTRAN_NAME(tixi_close_document)
+#define tixiCleanup_f FORTRAN_NAME(tixi_cleanup)
 #define tixiExportDocumentAsString_f FORTRAN_NAME(tixi_export_document_as_string)
 #define tixiImportFromString_f FORTRAN_NAME(tixi_import_from_string)
 #define tixiSchemaValidateFromFile_f FORTRAN_NAME(tixi_schema_validate_from_file)
@@ -243,6 +245,8 @@ void tixiSaveAndRemoveDocument_f(TixiDocumentHandle* handle,
 
 void tixiCloseDocument_f(TixiDocumentHandle* handle,
                          ReturnCode* error );
+
+void tixiCleanup_f(ReturnCode* error );
 
 void tixiExportDocumentAsString_f(TixiDocumentHandle* handle,
                                   char* text,

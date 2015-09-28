@@ -100,6 +100,7 @@ endif(TIXI_BUILD_TESTS)
 
 #demos
 add_subdirectory(examples/Demo)
+add_subdirectory(examples/fortran77)
 
 # create the doc
 include(createDoc)
