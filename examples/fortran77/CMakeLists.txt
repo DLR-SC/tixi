@@ -1,5 +1,5 @@
 # only build, if fortran compiler was found before
-if(CMAKE_Fortran_COMPILER)
+if(NOT CMAKE_Fortran_COMPILER STREQUAL CMAKE_Fortran_COMPILER-NOTFOUND)
   enable_language(Fortran)
 
   # copy xml files
@@ -16,4 +16,4 @@ if(CMAKE_Fortran_COMPILER)
   target_link_libraries(tixi_fortran_examples TIXIf TIXI)
 
 
-endif(CMAKE_Fortran_COMPILER)
+endif()
