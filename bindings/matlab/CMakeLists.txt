@@ -16,6 +16,11 @@ add_custom_command(
 	ARGS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_matlab.py
 )
 
+add_custom_target(tixi_mex_interface ALL
+	COMMENT "Create MATLAB mex source for tixi" VERBATIM
+	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
+)
+
 install(
 	CODE "file( GLOB MFILES ${CMAKE_CURRENT_BINARY_DIR}/*.m )"
 	CODE "file( INSTALL \${MFILES} DESTINATION \${CMAKE_INSTALL_PREFIX}/share/tixi/matlab )"
