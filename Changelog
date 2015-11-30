@@ -1,3 +1,14 @@
+Version 2.2.3
+---------------
+
+-General Changes:
+	- Removed warning in tixiOpenDocumentRecursive, if no external
+	  files are defined in the cpacs file
+	- Fixed problems with intel ifort in linux
+	- Added Fortran 03 interface. This has to be compiled by the user.
+	- The C-code of the matlab mex interface is now always shipped with tixi,
+	  if the user wants to build it by himself.
+
 Version 2.2.2
 ---------------
 
