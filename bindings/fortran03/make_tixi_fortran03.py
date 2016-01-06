@@ -5,6 +5,7 @@ Created on Wed Sep 16 10:58:02 2015
 @author: Melven Roehrig-Zoellner <Melven.Roehrig-Zoellner@DLR.de>
 """
 
+from __future__ import print_function
 import sys, os 
 from datetime import date
 
@@ -111,15 +112,15 @@ if __name__ == '__main__':
     fg.userfunctions = userfunctions
     fg.blacklist = blacklist
     
-    print 'Creating fortran03 interface... ',
+    print('Creating fortran03 interface... ', end=' ')
     wrapper = fg.create_wrapper(parser)
-    print 'done'
+    print('done')
     
     # write file
     filename = 'tixi.f90'
-    print 'Write tixi Fortran 2003 interface to file "%s" ... ' % filename, 
+    print('Write tixi Fortran 2003 interface to file "%s" ... ' % filename, end=' ') 
     fop = open(filename, 'w')
     fop.write(wrapper)
-    print 'done'
+    print('done')
     
     
