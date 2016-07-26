@@ -402,7 +402,7 @@ end type
                     pre += 2*indent + '%s = C_NULL_PTR\n' % var
                     post = 2*indent + 'call c_f_strarrayptr(size(%s),%s, %s)\n' % (arg_dec.name, var, arg_dec.name)
                 else:
-                    pre = None
+                    pre = 2*indent + '%s = C_NULL_PTR\n' % var
                     post = 2*indent + 'call c_f_stringptr(%s, %s)\n' % (var, arg_dec.name)
             else:
                 if arg_dec.arrayinfos['is_array']:
@@ -491,7 +491,7 @@ end type
                         else:
                             string = 'character(kind=C_CHAR), intent(in) :: %s(*)' % arg_name
                     else:
-                        string = 'type(C_PTR) :: %s = C_NULL_PTR' % arg_name
+                        string = 'type(C_PTR) :: %s' % arg_name
                 else: #language_binding == 'F'
                     if function_result or arg_dec.is_outarg:
                         string = 'character(kind=C_CHAR), pointer :: %s(:)' % arg_name
