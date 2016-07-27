@@ -1219,6 +1219,7 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc
     xmlFreeDoc(*schema_doc);
     return FAILED;
   }
+  xmlSchemaSetValidOptions(valid_ctxt, XML_SCHEMA_VAL_VC_I_CREATE); 
   is_valid = (xmlSchemaValidateDoc(valid_ctxt, document->docPtr) == 0);
   xmlSchemaFreeValidCtxt(valid_ctxt);
   xmlSchemaFree(schema);
