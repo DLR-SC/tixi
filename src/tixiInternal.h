@@ -332,6 +332,8 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char* xmlFilename, Int
 
   @param TixiDocument TixiDocumentHandle (in) The TIXIDocument
   @param xmlDocPtr *schema_doc (in) DocPtr with the schema to validate against
+  @param int withDefaults (in) a flag indicating that default elements/attributes in the schema
+                                                            should be added to the tixiDocument
   @return ReturnCode
     - SUCCESS              if the document is successfully validated
     - NOT_WELL_FORMED      if the XML-document is not well formed
@@ -340,7 +342,7 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char* xmlFilename, Int
     - OPEN_SCHEMA_FAILED   if opening of the XML-schema-file failed
     - FAILED               for all internal errors
  */
-ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc);
+ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc, int withDefaults);
 
 
 /**
