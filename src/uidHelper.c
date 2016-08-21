@@ -22,27 +22,12 @@ extern void printMsg(MessageType type, const char* message, ...);
 
 int uid_readDocumentUIDs(TixiDocument* tixiDocument)
 {
-  xmlDocPtr doc;
-  xmlXPathContextPtr xpathCtx;
   xmlXPathObjectPtr xpathObj;
 
-  /* Load XML document */
-  doc = tixiDocument->docPtr;
-
-  /* Create xpath evaluation context */
-  xpathCtx = xmlXPathNewContext(doc);
-  if (xpathCtx == NULL) {
-    printMsg(MESSAGETYPE_ERROR,"Error: unable to create new XPath context\n");
-    xmlFreeDoc(doc);
-    return(FAILED);
-  }
-
   /* Evaluate xpath expression */
-  xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_XPATH, xpathCtx);
+  xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_XPATH, tixiDocument->xpathContext);
   if (xpathObj == NULL) {
     printMsg(MESSAGETYPE_ERROR,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_XPATH);
-    xmlXPathFreeContext(xpathCtx);
-    xmlFreeDoc(doc);
     return(FAILED);
   }
 
@@ -53,7 +38,6 @@ int uid_readDocumentUIDs(TixiDocument* tixiDocument)
 
   /* Cleanup */
   xmlXPathFreeObject(xpathObj);
-  xmlXPathFreeContext(xpathCtx);
 
   return(SUCCESS);
 }
@@ -139,8 +123,6 @@ int uid_checkForDuplicates(TixiDocument *document)
 int uid_checkForBrokenLinks(TixiDocument *document)
 {
   TixiUIDListEntry* currentEntry;
-  xmlDocPtr doc;
-  xmlXPathContextPtr xpathCtx;
   xmlXPathObjectPtr xpathObj;
   xmlNodePtr cur;
   int size;
@@ -149,23 +131,10 @@ int uid_checkForBrokenLinks(TixiDocument *document)
   xmlNodeSetPtr nodes;
   ReturnCode foundUID = FAILED;
 
-  /* Load XML document */
-  doc = document->docPtr;
-
-  /* Create xpath evaluation context */
-  xpathCtx = xmlXPathNewContext(doc);
-  if (xpathCtx == NULL) {
-    printMsg(MESSAGETYPE_ERROR,"Error: unable to create new XPath context\n");
-    xmlFreeDoc(doc);
-    return(FAILED);
-  }
-
   /* Evaluate xpath expression */
-  xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_LINK_XPATH, xpathCtx);
+  xpathObj = xmlXPathEvalExpression((xmlChar*) CPACS_UID_LINK_XPATH, document->xpathContext);
   if (xpathObj == NULL) {
     printMsg(MESSAGETYPE_ERROR,"Error: unable to evaluate xpath expression \"%s\"\n", CPACS_UID_LINK_XPATH);
-    xmlXPathFreeContext(xpathCtx);
-    xmlFreeDoc(doc);
     return(FAILED);
   }
 
@@ -174,7 +143,6 @@ int uid_checkForBrokenLinks(TixiDocument *document)
   size = (nodes) ? nodes->nodeNr : 0;
 
   if (size == 0) {
-    xmlXPathFreeContext(xpathCtx);
     xmlXPathFreeObject(xpathObj);
     return SUCCESS;
   }
@@ -197,7 +165,6 @@ int uid_checkForBrokenLinks(TixiDocument *document)
     if (foundUID == FAILED) {
       printMsg(MESSAGETYPE_ERROR, "Error: Broken link, UID '%s' not found!", linkName);
       xmlXPathFreeObject(xpathObj);
-      xmlXPathFreeContext(xpathCtx);
       xmlFree(linkName);
       return UID_LINK_BROKEN;
     }
@@ -206,7 +173,6 @@ int uid_checkForBrokenLinks(TixiDocument *document)
 
   /* Cleanup */
   xmlXPathFreeObject(xpathObj);
-  xmlXPathFreeContext(xpathCtx);
 
   return SUCCESS;
 }

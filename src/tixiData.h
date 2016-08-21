@@ -29,6 +29,7 @@
 #include <stdio.h>
 
 #include "libxml/xmlreader.h"
+#include "libxml/xpath.h"
 
 #ifndef TIXI_VERSION
 #define TIXI_VERSION  "2.2"
@@ -149,6 +150,7 @@ typedef struct
   int hasIncludedExternalFiles;        /**< Flag to indicate if the master file includes external files */
   int usePrettyPrint;                  /**< if pretty print should used when saving a file */
   TixiUIDListEntry* uidListHead;       /**< Pointer to the head of the list of uids */
+  xmlXPathContextPtr xpathContext;     /**< Pointer to the XPath Context */
 } TixiDocument;
 
 typedef struct TixiDocumentListEntry TixiDocumentListEntry;

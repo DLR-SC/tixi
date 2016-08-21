@@ -36,7 +36,7 @@
 extern "C" {
 #endif
 
-xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr document, const char *xPathExpression);
+xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const char *xPathExpression);
 
 int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression);
 

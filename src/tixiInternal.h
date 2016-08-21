@@ -33,6 +33,7 @@ extern "C" {
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "libxml/xmlsave.h"
+#include "libxml/xpath.h"
 #include "tixi.h"
 #include "tixiData.h"
 
@@ -99,7 +100,7 @@ void freeTixiDocument(TixiDocument* document);
 /**
   @brief Checks if the given element path is valid
 
-  @param xmlDocument (in) pointer to an libxml2 document
+  @param xpathContext (in) pointer to an libxml2 xpath context
   @param elementPath (in) path to the element to be check
   @param element (out) pointer to the XML-node pointed to be element path
   @param xpathObject (out) libxml2 internal object pointer. Has to be freed by the calling routine.
@@ -110,14 +111,14 @@ void freeTixiDocument(TixiDocument* document);
     - ELEMENT_NOT_FOUND
     - NOT_AN_ELEMENT
  */
-DLL_EXPORT ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elementPath, xmlNodePtr* element,
+DLL_EXPORT ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* elementPath, xmlNodePtr* element,
                                    xmlXPathObjectPtr* xpathObject);
 
 
 /**
   @brief Checks if the given element or attribute path exists
 
-  @param xmlDocument (in) pointer to an libxml2 document
+  @param xpathContext (in) pointer to an xpath context
   @param nodePath (in) path to the element or attribute to be check
   @param node (out) pointer to the node pointed to by nodePath
   @param xpathObject (out) libxml2 internal object pointer. Has to be freed by the caller.
@@ -127,7 +128,7 @@ DLL_EXPORT ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elem
     - INVALID_XPATH
     - ELEMENT_NOT_FOUND
  */
-ReturnCode checkExistence(const xmlDocPtr xmlDocument, const char* nodePath, xmlXPathObjectPtr* xpathObject);
+ReturnCode checkExistence(const xmlXPathContextPtr xpathContext, const char* nodePath, xmlXPathObjectPtr* xpathObject);
 
 
 /* TODO: header! */
@@ -136,7 +137,7 @@ ReturnCode checkExternalNode(const xmlNodePtr element);
 /**
   @brief Retrieves coordinate value of a point element.
 
-  @param xmlDocument (in) libxml2 pointer to the document
+  @param document (in) Pointer to the TiXI document
   @param coordinatePath (in) variable used to construct the XPath to the coordinate element
   @param pointPath (in) path to the point element
   @param index (in) XML-index of the point element in its superelement
@@ -155,7 +156,7 @@ ReturnCode checkExternalNode(const xmlNodePtr element);
     - COORDINATE_NOT_FOUND
 */
 
-ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char* pointPath,
+ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
                               int pointIndex, char* name, int ignoreError, double* value);
 
 /**
@@ -267,7 +268,7 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
   to an element specified by the elementPath expression. If the
   attribute already exists its previous value is replaced by text.
 
-  @param xmlDocument (in) libxml2 pointer to the document.
+  @param xpathContext (in) libxml2 pointer to the xpath context.
   @param elementPath (in) a xpath to a xml element.
   @param attributeName (in) the name of the attribute to set.
   @param attributeValue (in) the value of the attribute to set.
@@ -276,7 +277,7 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
     - INVALID_XML_NAME
     - SUCCESS
  */
-ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char* elementPath,
+ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* elementPath,
                                    const char* attributeName, const char* attributeValue);
 
 
