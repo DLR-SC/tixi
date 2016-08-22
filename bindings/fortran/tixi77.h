@@ -125,6 +125,8 @@
 #define tixiGetNumberOfChilds_f TIXI_GET_NUMBER_OF_CHILDS
 #define tixiGetNumberOfAttributes_f TIXI_GET_NUMBER_OF_ATTRIBUTES
 #define tixiGetAttributeName_f TIXI_GET_ATTRIBUTE_NAME
+#define tixiRegisterNamespace_f TIXI_REGISTER_NAMESPACE
+#define tixiRegisterNamespacesFromDocument_f TIXI_REGISTER_NAMESPACES_FROM_DOCUMENT
 
 #else /* (not) IFORT_WIN32 */
 
@@ -200,6 +202,8 @@
 #define tixiGetNumberOfChilds_f FORTRAN_NAME(tixi_get_number_of_childs)
 #define tixiGetNumberOfAttributes_f FORTRAN_NAME(tixi_get_number_of_attributes)
 #define tixiGetAttributeName_f FORTRAN_NAME(tixi_get_attribute_name)
+#define tixiRegisterNamespace_f FORTRAN_NAME(tixi_register_namespace)
+#define tixiRegisterNamespacesFromDocument_f FORTRAN_NAME(tixi_register_namespaces_from_document)
 
 #endif /* IFORT_WIN32 */
 
@@ -772,4 +776,14 @@ void tixiGetAttributeName_f(const TixiDocumentHandle* handle,
                             ReturnCode* error,
                             int lengthString1,
                             int lengthString2);
+
+void tixiRegisterNamespace_f(const TixiDocumentHandle* handle,
+                             char* namespaceUri,
+                             char* prefix,
+                             ReturnCode* error,
+                             int lengthString1,
+                             int lengthString2);
+
+void tixiRegisterNamespacesFromDocument_f(const TixiDocumentHandle* handle,
+                                          ReturnCode* error);
 #endif /* TIXI77_H */

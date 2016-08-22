@@ -423,7 +423,6 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
   ReturnCode errorZ = -1;
 
   TixiDocument* document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
   xmlXPathObjectPtr xpathParentObject = NULL;
   xmlNodePtr parent = NULL;
   char* pointPath = NULL;
@@ -439,8 +438,6 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid point index %d\n", pointIndex);
     return INDEX_OUT_OF_RANGE;
   }
-
-  xmlDocument = document->docPtr;
 
   error = checkElement(document->xpathContext, parentPath, &parent, &xpathParentObject);
   xmlXPathFreeObject(xpathParentObject);
@@ -854,7 +851,6 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
 {
 
   TixiDocument* document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
   xmlXPathObjectPtr xpathObject = NULL;
   xmlNodeSetPtr nodes = NULL;
   xmlNodePtr parent = NULL;
@@ -864,8 +860,6 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return parent;
   }
-
-  xmlDocument = document->docPtr;
 
   xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, document->xpathContext);
 
@@ -940,7 +934,6 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
 ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elementPath, xmlNodePtr* pNodePrt)
 {
   TixiDocument* document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
   xmlXPathObjectPtr xpathObject = NULL;
   xmlNodeSetPtr nodes = NULL;
 
@@ -948,8 +941,6 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elem
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     return INVALID_HANDLE;
   }
-
-  xmlDocument = document->docPtr;
 
   xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, document->xpathContext);
 

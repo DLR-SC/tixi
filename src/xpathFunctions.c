@@ -214,7 +214,7 @@ char* XPathExpressionGetElementPath(TixiDocument* tixiDocument, const char* xPat
 
 int XPathRegisterNamespace(xmlXPathContextPtr xpathContext, const char *namespaceURI, const char *prefix)
 {
-  return xmlXPathRegisterNs(xpathContext, prefix, namespaceURI);
+  return xmlXPathRegisterNs(xpathContext, (xmlChar*) prefix, (xmlChar*) namespaceURI);
 }
 
 int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
@@ -227,7 +227,7 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
 
 
   /* Get all unique namespace declarations */
-  xpathObj = xmlXPathEvalExpression("//*/namespace::*[not(. = ../../namespace::*|preceding::*/namespace::*)]", xpathContext);
+  xpathObj = xmlXPathEvalExpression((xmlChar*) "//*/namespace::*[not(. = ../../namespace::*|preceding::*/namespace::*)]", xpathContext);
   if (xpathObj == NULL) {
     printMsg(MESSAGETYPE_ERROR, "Error: unable to retrieve all namespaces \n");
     return -1;
@@ -246,8 +246,8 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
       }
 
       /* ignore default xml prefix */
-      if (ns->prefix && strcmp(ns->prefix, "xml") != 0 ) {
-        if (XPathRegisterNamespace(xpathContext, ns->href, ns->prefix) != 0) {
+      if (ns->prefix && strcmp((char*)ns->prefix, "xml") != 0 ) {
+        if (XPathRegisterNamespace(xpathContext, (char*)ns->href, (char*) ns->prefix) != 0) {
           printMsg(MESSAGETYPE_ERROR, "Error: unable to register NS with prefix=\"%s\" and href=\"%s\"\n", ns->prefix, ns->href);
           error = -1;
         }
@@ -258,6 +258,8 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
 
     } /* is namespace */
   } /* for */
+
+  xmlXPathFreeObject(xpathObj);
 
   return error;
 }

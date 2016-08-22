@@ -2385,6 +2385,7 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
     strcpy(elementNames[elem], (char*)node->name);    /* copy tag name */
   }
   free(xpathSubElementsName);
+  xmlXPathFreeObject(xpathObject);
   return SUCCESS;
 }
 
