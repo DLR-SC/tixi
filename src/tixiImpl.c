@@ -1192,18 +1192,19 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
   while(targetNode != NULL && i++ < index)
     targetNode = targetNode->next;
 
-  if(targetNode != NULL && index > 0){
+  child = xmlNewNode(NULL, (xmlChar *) elementName);
+  if (text != NULL) {
+    xmlNodePtr headingChildNode = xmlNewText( (xmlChar *) text );
+    xmlAddChild( child, headingChildNode );
+  }
+
+  if (targetNode != NULL && index > 0) {
     /* insert at position index */
-    child = xmlNewNode(NULL, (xmlChar *) elementName);
-    if (text != NULL) {
-      xmlNodePtr headingChildNode = xmlNewText( (xmlChar *) text );
-      xmlAddChild( child, headingChildNode );
-    }
     xmlAddPrevSibling(targetNode, child);
   }
   else {
     /* insert at the end of the list */
-    xmlNewTextChild(parent, NULL, (const xmlChar *) elementName, (const xmlChar *) text);
+    xmlAddChild(parent, child);
   }
 
   xmlXPathFreeObject(xpathObject);
