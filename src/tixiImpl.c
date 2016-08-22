@@ -2940,3 +2940,41 @@ void tixiDefaultMessageHandler(MessageType type, const char *message)
     fputs(message, stderr);
   }
 }
+
+ReturnCode tixiRegisterNamespace(const TixiDocumentHandle handle, const char* namespaceURI, const char* prefix)
+{
+  TixiDocument *document = getDocument(handle);
+  int code = 0;
+
+  if (!document) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+
+  code = XPathRegisterNamespace(document->xpathContext, namespaceURI, prefix);
+  if (code == 0) {
+    return SUCCESS;
+  }
+  else {
+    return FAILED;
+  }
+}
+
+ReturnCode tixiRegisterNamespacesFromDocument(const TixiDocumentHandle handle)
+{
+    TixiDocument *document = getDocument(handle);
+    int code = 0;
+
+    if (!document) {
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+      return INVALID_HANDLE;
+    }
+
+    code = XPathRegisterDocumentNamespaces(document->xpathContext);
+    if (code == 0) {
+      return SUCCESS;
+    }
+    else {
+      return FAILED;
+    }
+}

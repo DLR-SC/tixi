@@ -1892,6 +1892,89 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
 /*@}*/
 
 /**
+  \defgroup Namespaces Namespace Support Functions
+
+  These functions are used, to register xml namespaces to the parser. Consider the following xml file
+
+  @verbatim
+  <root>
+    <h:table xmlns:h="http://www.w3.org/TR/html4/">
+      <h:tr>
+        <h:td>Apples</h:td>
+        <h:td>Bananas</h:td>
+      </h:tr>
+    </h:table>
+    <aircraft xmlns="http://www.dlr.de/cpacs">
+      <modelname>D150</modelname>
+    </aircraft>
+  </root>
+  @endverbatim
+
+  This file defines two namespaces - "http://www.w3.org/TR/html4/" and "http://www.dlr.de/cpacs".
+  A query for "/root/h:table" or "/root/aircraft" will result in an error, as no prefix was defined
+  for both namespaces. The prefix inside the xml file exists only in the file, but not in the parser.
+  To successfully query these paths, the namespaces must be registered with some (arbitrary) prefix using
+  ::tixiRegisterNamespace or ::tixiRegisterNamespacesFromDocument.
+
+  After calling ::tixiRegisterNamespace(handle, "http://www.w3.org/TR/html4/", "html") the query for
+  "/root/html:table" is now valid. After calling ::tixiRegisterNamespace(handle, "http://www.dlr.de/cpacs", "cpacs")
+  the query for "/root/cpacs:aircraft" becomes valid.
+
+ */
+/*@{*/
+
+
+/**
+  @brief Registers the given namespace and its prefix.
+
+  When dealing with xml namespaces, elements can only be accessed via xPath
+  when their namespace was registered with a prefix.
+
+  To automatically register all namespaces and prefixes in the current
+  document, use ::tixiRegisterNamespacesFromDocument.
+
+  <b>Fortran syntax:</b>
+
+  tixi_register_namespace( integer handle, character*n namespace_uri, character*n prefix, integer error )
+
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  namespaceURI The URI for the namespace (e.g. "http://www.w3.org/TR/html4/")
+  @param[in]  prefix The desired prefix of the namespace (e.g. "html")
+
+  @return
+    - SUCCESS if the namespace could be registered successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - FAILED In case of an error
+ */
+DLL_EXPORT ReturnCode tixiRegisterNamespace(const TixiDocumentHandle handle, const char* namespaceURI, const char* prefix);
+
+
+/**
+ @brief Registers all prefixed namespaces of the xml document to the parser.
+
+ Default (non-prefixed) namespaces must be still registered using ::tixiRegisterNamespace manually
+ to be accessible via xPath.
+
+ In the example above, the namespace "http://www.w3.org/TR/html4/" would be registered with
+ the prefix "h" and a query to "/root/h:table" becomes successful.
+
+  <b>Fortran syntax:</b>
+
+  tixi_register_namespaces_from_document( integer handle, integer error )
+
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+
+  @return
+    - SUCCESS if the namespace could be registered successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - FAILED In case of an error.
+ */
+DLL_EXPORT ReturnCode tixiRegisterNamespacesFromDocument(const TixiDocumentHandle handle);
+
+
+/*@}*/
+
+/**
   \defgroup MiscFunctions Miscellaneous Functions
 
   These function simply do not fit into one of the other categories.

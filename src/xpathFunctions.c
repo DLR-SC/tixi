@@ -7,7 +7,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*   http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,10 @@
 #include "xpathFunctions.h"
 #include "tixiInternal.h"
 
+#include "libxml/xpathInternals.h"
+
+#include <assert.h>
+
 extern void printMsg(MessageType type, const char* message, ...);
 
 xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const char* xPathExpression)
@@ -25,7 +29,7 @@ xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const
   xmlXPathObjectPtr xpathObject;
 
   if (!xpathContext) {
-      return NULL;
+    return NULL;
   }
 
   /* Evaluate Expression */
@@ -208,3 +212,52 @@ char* XPathExpressionGetElementPath(TixiDocument* tixiDocument, const char* xPat
   return (char*) xmlGetNodePath(cur);
 }
 
+int XPathRegisterNamespace(xmlXPathContextPtr xpathContext, const char *namespaceURI, const char *prefix)
+{
+  return xmlXPathRegisterNs(xpathContext, prefix, namespaceURI);
+}
+
+int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
+{
+  xmlXPathObjectPtr xpathObj;
+  xmlNodeSetPtr nodes;
+  int nodeCount = 0;
+  int inode = 0;
+  int error = 0;
+
+
+  /* Get all unique namespace declarations */
+  xpathObj = xmlXPathEvalExpression("//*/namespace::*[not(. = ../../namespace::*|preceding::*/namespace::*)]", xpathContext);
+  if (xpathObj == NULL) {
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to retrieve all namespaces \n");
+    return -1;
+  }
+
+  nodes = xpathObj->nodesetval;
+  nodeCount = (nodes) ? nodes->nodeNr : 0;
+
+  for (inode = 0; inode < nodeCount; ++inode) {
+
+    if (nodes->nodeTab[inode] && nodes->nodeTab[inode]->type == XML_NAMESPACE_DECL) {
+      xmlNsPtr ns = (xmlNsPtr)nodes->nodeTab[inode];
+
+      if (!ns) {
+        continue;
+      }
+
+      /* ignore default xml prefix */
+      if (ns->prefix && strcmp(ns->prefix, "xml") != 0 ) {
+        if (XPathRegisterNamespace(xpathContext, ns->href, ns->prefix) != 0) {
+          printMsg(MESSAGETYPE_ERROR, "Error: unable to register NS with prefix=\"%s\" and href=\"%s\"\n", ns->prefix, ns->href);
+          error = -1;
+        }
+      }
+      else if(!ns->prefix) {
+        printMsg(MESSAGETYPE_STATUS, "Skipping default namespace \"%s\"\n", ns->href);
+      }
+
+    } /* is namespace */
+  } /* for */
+
+  return error;
+}
