@@ -66,6 +66,7 @@
 #define tixiExportDocumentAsString_f TIXI_EXPORT_DOCUMENT_AS_STRING
 #define tixiImportFromString_f TIXI_IMPORT_FROM_STRING
 #define tixiSchemaValidateFromFile_f TIXI_SCHEMA_VALIDATE_FROM_FILE
+#define tixiSchemaValidateWithDefaultsFromFile_f TIXI_SCHEMA_VALIDATE_WITH_DEFAULTS_FROM_FILE
 #define tixiSchemaValidateFromString_f TIXI_SCHEMA_VALIDATE_FROM_STRING
 #define tixiDTDValidate_f TIXI_DTD_VALIDATE
 #define tixiGetTextElement_f TIXI_GET_TEXT_ELEMENT
@@ -141,6 +142,7 @@
 #define tixiExportDocumentAsString_f FORTRAN_NAME(tixi_export_document_as_string)
 #define tixiImportFromString_f FORTRAN_NAME(tixi_import_from_string)
 #define tixiSchemaValidateFromFile_f FORTRAN_NAME(tixi_schema_validate_from_file)
+#define tixiSchemaValidateWithDefaultsFromFile_f FORTRAN_NAME(tixi_schema_validate_with_defaults_from_file)
 #define tixiSchemaValidateFromString_f FORTRAN_NAME(tixi_schema_validate_from_string)
 #define tixiDTDValidate_f FORTRAN_NAME(tixi_dtd_validata)
 #define tixiGetTextElement_f FORTRAN_NAME(tixi_get_text_element)
@@ -259,6 +261,11 @@ void tixiImportFromString_f(const char* xmlImportString,
                             int lengthString1 );
 
 void tixiSchemaValidateFromFile_f(const TixiDocumentHandle* handle,
+                          char* xsdFilename,
+                          ReturnCode* error,
+                          int lengthString1 );
+
+void tixiSchemaValidateWithDefaultsFromFile_f(const TixiDocumentHandle* handle,
                           char* xsdFilename,
                           ReturnCode* error,
                           int lengthString1 );

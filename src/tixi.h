@@ -778,7 +778,7 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromFile (const TixiDocumentHandle handl
 
   <b>Fortran syntax:</b>
 
-  tixi_schema_validate_from_file( integer  handle, character*n xsd_filename, integer error )
+  tixi_schema_validate_with_defaults_from_file( integer  handle, character*n xsd_filename, integer error )
 
   @param[in]  xsdFilename name of the XML-schema-file to be used.
 
