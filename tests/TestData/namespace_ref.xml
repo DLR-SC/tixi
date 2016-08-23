@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <h:table xmlns:h="http://www.w3.org/TR/html4/">
+    <h:tr>
+      <h:td>Apples</h:td>
+      <h:td>Bananas</h:td>
+    </h:tr>
+  </h:table>
+  <aircraft xmlns="http://www.dlr.de/cpacs">
+    <modelname>D150</modelname>
+  </aircraft>
+</root>

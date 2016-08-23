@@ -1134,8 +1134,15 @@ DLL_EXPORT ReturnCode tixiAddTextElement(const TixiDocumentHandle handle, const 
 }
 
 
-DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle, const char *parentPath,
-                                                const char *elementName, const char *text, int index)
+DLL_EXPORT ReturnCode tixiAddTextElementNS(const TixiDocumentHandle handle, const char *parentPath,
+                                         const char *qualifiedName, const char* namespaceURI, const char *text)
+{
+  return tixiAddTextElementNSAtIndex(handle, parentPath, qualifiedName, namespaceURI, text, -1);
+}
+
+
+ReturnCode tixiAddTextElementNSAtIndexImpl(const TixiDocumentHandle handle, const char *parentPath,
+                                           const char *qualifiedName, const char* namespaceURI, const char *text, int index)
 {
   TixiDocument *document = getDocument(handle);
   xmlXPathObjectPtr xpathObject = NULL;
@@ -1143,6 +1150,9 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
   xmlNodePtr parent = NULL;
   xmlNodePtr child = NULL;
   xmlNodePtr targetNode = NULL;
+  char* nsPrefix = NULL;
+  char* elemName = NULL;
+  xmlNsPtr ns = NULL;
   int i = 1;
 
 
@@ -1156,8 +1166,19 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
     return ALREADY_SAVED;
   }
 
-  if (!xmlValidateNameValue((xmlChar *) elementName)) {
-    printMsg(MESSAGETYPE_ERROR, "Error: Invalid element name \"%s\"\n", elementName);
+  if (namespaceURI) {
+    extractPrefixAndName(qualifiedName, &nsPrefix, &elemName);
+  }
+  else {
+    elemName = substring(qualifiedName, 0, -1);
+  }
+
+  if (!xmlValidateNameValue((xmlChar *) elemName)) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid element name \"%s\"\n", elemName);
+    free(elemName);
+    if (nsPrefix) {
+      free(nsPrefix);
+    }
     return INVALID_XML_NAME;
   }
 
@@ -1166,12 +1187,20 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
 
   if (!xpathObject) {
     printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", parentPath);
+    free(elemName);
+    if (nsPrefix) {
+      free(nsPrefix);
+    }
     return INVALID_XPATH;
   }
 
   if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
     printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", parentPath);
     xmlXPathFreeObject(xpathObject);
+    free(elemName);
+    if (nsPrefix) {
+      free(nsPrefix);
+    }
     return ELEMENT_NOT_FOUND;
   }
 
@@ -1183,6 +1212,10 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
     printMsg(MESSAGETYPE_ERROR,
              "Error: Element chosen by XPath \"%s\" expression is not unique. \n", parentPath);
     xmlXPathFreeObject(xpathObject);
+    free(elemName);
+    if (nsPrefix) {
+      free(nsPrefix);
+    }
     return ELEMENT_PATH_NOT_UNIQUE;
   }
 
@@ -1192,10 +1225,21 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
   while(targetNode != NULL && i++ < index)
     targetNode = targetNode->next;
 
-  child = xmlNewNode(NULL, (xmlChar *) elementName);
+  child = xmlNewNode(NULL, (xmlChar *) elemName);
   if (text != NULL) {
     xmlNodePtr headingChildNode = xmlNewText( (xmlChar *) text );
     xmlAddChild( child, headingChildNode );
+  }
+
+  if (namespaceURI) {
+    // check if namespace already exists.
+    ns = findNamespace(document->docPtr, parent, namespaceURI);
+    if (!ns || (nsPrefix && (!ns->prefix || strcmp(nsPrefix, (char*)ns->prefix) != 0))) {
+      // create new namespace defintion, if the prefixes don't match or no namespace was found
+      ns = xmlNewNs(child, (xmlChar*)namespaceURI, (xmlChar*)nsPrefix);
+    }
+
+    xmlSetNs(child, ns);
   }
 
   if (targetNode != NULL && index > 0) {
@@ -1208,7 +1252,28 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle,
   }
 
   xmlXPathFreeObject(xpathObject);
+  free(elemName);
+  if (nsPrefix) {
+    free(nsPrefix);
+  }
   return SUCCESS;
+}
+
+DLL_EXPORT ReturnCode tixiAddTextElementNSAtIndex(const TixiDocumentHandle handle, const char *parentPath,
+                                                  const char *qualifiedName, const char* namespaceURI, const char *text, int index)
+{
+  if (!namespaceURI) {
+    printMsg(MESSAGETYPE_ERROR, "Error: null pointer for namespaceURI!\n");
+    return INVALID_NAMESPACE_URI;
+  }
+
+  return tixiAddTextElementNSAtIndexImpl(handle, parentPath, qualifiedName, namespaceURI, text, index);
+}
+
+DLL_EXPORT ReturnCode tixiAddTextElementAtIndex(const TixiDocumentHandle handle, const char *parentPath,
+                                               const char *elementName, const char *text, int index)
+{
+  return tixiAddTextElementNSAtIndexImpl(handle, parentPath, elementName, NULL, text, index);
 }
 
 
@@ -1216,11 +1281,26 @@ DLL_EXPORT ReturnCode tixiAddBooleanElement(const TixiDocumentHandle handle, con
                                             const char *elementName, int boolean)
 {
   if( boolean == 0 ) {
-    tixiAddTextElement(handle, parentPath, elementName, "false");
+    return tixiAddTextElement(handle, parentPath, elementName, "false");
   } else if( boolean == 1 ) {
-    tixiAddTextElement(handle, parentPath, elementName, "true");
+    return tixiAddTextElement(handle, parentPath, elementName, "true");
   } else {
     printMsg(MESSAGETYPE_ERROR, "Error: boolean is either 1 or 0 in tixiAddBooleanElement.\n");
+    return FAILED;
+  }
+  return SUCCESS;
+}
+
+
+DLL_EXPORT ReturnCode tixiAddBooleanElementNS(const TixiDocumentHandle handle, const char *parentPath,
+                                            const char *qualifiedName, const char* namespaceURI, int boolean)
+{
+  if( boolean == 0 ) {
+    return tixiAddTextElementNS(handle, parentPath, qualifiedName, namespaceURI, "false");
+  } else if( boolean == 1 ) {
+    return tixiAddTextElementNS(handle, parentPath, qualifiedName, namespaceURI, "true");
+  } else {
+    printMsg(MESSAGETYPE_ERROR, "Error: boolean is either 1 or 0 in tixiAddBooleanElementNS.\n");
     return FAILED;
   }
   return SUCCESS;
@@ -1252,6 +1332,34 @@ DLL_EXPORT ReturnCode tixiAddDoubleElement(const TixiDocumentHandle handle, cons
   return error;
 }
 
+
+DLL_EXPORT ReturnCode tixiAddDoubleElementNS(const TixiDocumentHandle handle, const char *parentPath,
+                                             const char *qualifiedName,const char* namespaceURI,
+                                             double number, const char *format)
+{
+  int error;
+  char *textBuffer = NULL;
+
+
+  if (!format) {
+    format = "%g";
+  };
+
+  textBuffer = buildString(format, number);
+
+  if (textBuffer) {
+    error = tixiAddTextElementNS(handle, parentPath, qualifiedName, namespaceURI, textBuffer);
+    free(textBuffer);
+  }
+  else {
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddDoubleElementNS.\n");
+    exit(1);
+  }
+
+  return error;
+}
+
+
 DLL_EXPORT ReturnCode tixiAddIntegerElement(const TixiDocumentHandle handle, const char *parentPath,
                                             const char *elementName, int number, const char *format)
 {
@@ -1277,6 +1385,34 @@ DLL_EXPORT ReturnCode tixiAddIntegerElement(const TixiDocumentHandle handle, con
 
   return error;
 }
+
+
+DLL_EXPORT ReturnCode tixiAddIntegerElementNS(const TixiDocumentHandle handle, const char *parentPath,
+                                              const char *qualifiedName, const char* namespaceURI, int number, const char *format)
+{
+  int error;
+  char *textBuffer = NULL;
+
+
+
+  if (!format) {
+    format = "%d";
+  };
+
+  textBuffer = buildString(format, number);
+
+  if (textBuffer) {
+    error = tixiAddTextElementNS(handle, parentPath, qualifiedName, namespaceURI, textBuffer);
+    free(textBuffer);
+  }
+  else {
+    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddIntegerElementNS.\n");
+    exit(1);
+  }
+
+  return error;
+}
+
 
 DLL_EXPORT ReturnCode tixiAddTextAttribute(const TixiDocumentHandle handle, const char *elementPath,
                                            const char *attributeName, const char *attributeValue)
@@ -2438,10 +2574,26 @@ DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, const 
   return tixiAddTextElement(handle, parentPath, elementName, text);
 }
 
+
+DLL_EXPORT ReturnCode tixiCreateElementNS (const TixiDocumentHandle handle, const char *parentPath, const char *qualifiedName, const char* namespaceURI)
+{
+  char *text = NULL;
+  return tixiAddTextElementNS(handle, parentPath, qualifiedName, namespaceURI, text);
+}
+
+
 DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, int index)
 {
   char *text = NULL;
   return tixiAddTextElementAtIndex(handle, parentPath, elementName, text,index);
+}
+
+
+DLL_EXPORT ReturnCode tixiCreateElementNSAtIndex (const TixiDocumentHandle handle, const char *parentPath,
+                                                  const char *qualifiedName, int index, const char* namespaceURI)
+{
+  char *text = NULL;
+  return tixiAddTextElementNSAtIndex(handle, parentPath, qualifiedName, namespaceURI, text,index);
 }
 
 

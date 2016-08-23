@@ -82,6 +82,21 @@ int string_startsWith(const char *string, const char *subString);
  */
 int string_endsWith(const char *string, const char *subString);
 
+/**
+ * @brief Creates a substring. The user has to free it
+ * @param str The input string
+ * @param start_pos Starting position.
+ * @param end_pos End position. -1 indicates the end of the string.
+ * @return
+ */
+char* substring(const char* str, int start_pos, int end_pos);
+
+/**
+ * @brief extractPrefixAndName Tokenizes the string into prefix and element name
+ *
+ * The user must free the memory after this call.
+ */
+void extractPrefixAndName(const char* qualifiedName, char** prefix, char** name);
 
 /**
   @brief Returns the directory- and filename. The dirname will always end
@@ -192,6 +207,15 @@ char* string_stripLeft(const char *string, int n);
   @return The corrected path
  */
 char* resolveDirectory(const char* workingDirectory, const char* inDirectory);
+
+/**
+ * @brief Searches in the given node and its parent nodes for a
+ * namespace definition defined by its URI.
+ *
+ * @return
+ *   The namespace, if it was found, otherwise a null pointer.
+ */
+xmlNsPtr findNamespace(const xmlDocPtr document, const xmlNodePtr node, const char* namespaceURI);
 
 #ifdef __cplusplus
 } /* extern C */

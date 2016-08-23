@@ -120,6 +120,55 @@ TEST_F(UtilsTest, string_endsWith)
   ASSERT_EQ(-1, string_endsWith("string1", "bla"));
 }
 
+TEST_F(UtilsTest, substring)
+{
+  const char* mystring = "Hallo Welt";
+  char* result = NULL;
+
+  result = substring(mystring,0, -1);
+  ASSERT_STREQ("Hallo Welt", result);
+  free(result);
+  result = NULL;
+
+  result = substring(mystring,0, 4);
+  ASSERT_STREQ("Hallo", result);
+  free(result);
+  result = NULL;
+
+  result = substring(mystring,6, -1);
+  ASSERT_STREQ("Welt", result);
+  free(result);
+  result = NULL;
+}
+
+TEST_F(UtilsTest, extractPrefixAndName)
+{
+  char* prefix = NULL;
+  char* name = NULL;
+
+  extractPrefixAndName("html:td", &prefix, &name);
+  ASSERT_STREQ("html", prefix);
+  ASSERT_STREQ("td", name);
+  free(prefix);
+  free(name);
+  prefix = NULL;
+  name = NULL;
+
+  extractPrefixAndName("mynewtag", &prefix, &name);
+  ASSERT_TRUE(prefix==NULL);
+  ASSERT_STREQ("mynewtag", name);
+  free(name);
+  name = NULL;
+
+  extractPrefixAndName("h:table", &prefix, &name);
+  ASSERT_STREQ("h", prefix);
+  ASSERT_STREQ("table", name);
+  free(prefix);
+  free(name);
+  name = NULL;
+  prefix = NULL;
+
+}
 
 TEST_F(UtilsTest, isPathRelative)
 {
