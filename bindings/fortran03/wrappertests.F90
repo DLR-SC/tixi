@@ -169,6 +169,7 @@ elementFormDefault="qualified" attributeFormDefault="unqualified">&
     VERIFY( size(str) .ge. len(header) )
     VERIFY( str_array_eq(str(1:len(header)),header) )
     VERIFY( SUCCESS .eq. tixiSchemaValidateFromFile(t_handle,valid_schema) )
+    VERIFY( SUCCESS .eq. tixiSchemaValidateWithDefaultsFromFile(t_handle,valid_schema) )
     VERIFY( OPEN_SCHEMA_FAILED .eq. tixiSchemaValidateFromString(t_handle,invalid_schema) )
     VERIFY( NOT_SCHEMA_COMPLIANT .eq. tixiSchemaValidateFromString(t_handle,other_schema) )
     VERIFY( SUCCESS .eq. tixiCloseDocument(t_handle) )
