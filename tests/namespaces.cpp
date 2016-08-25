@@ -18,6 +18,7 @@
 
 #include "test.h" // Brings in the GTest framework
 #include "tixi.h"
+#include "namespaceFunctions.h"
 
 class Namespaces : public ::testing::Test
 {
@@ -189,3 +190,80 @@ TEST_F(Namespaces, createRefDocument)
 #endif
 
 }
+
+TEST_F(Namespaces, setNamespace)
+{
+  TixiDocumentHandle handle = -1;
+  char* text = NULL;
+  const char* refText = "<?xml version=\"1.0\"?>\n<cpacs:root xmlns:cpacs=\"http://www.dlr.de/cpacs\"/>\n";
+
+  ASSERT_EQ(SUCCESS, tixiCreateDocument("root", &handle));
+  ASSERT_EQ(SUCCESS, tixiSetElementNamespace(handle, "/root", "http://www.dlr.de/cpacs", "cpacs"));
+  tixiRegisterNamespace(handle, "http://www.dlr.de/cpacs", "c");
+
+  ASSERT_EQ(SUCCESS, tixiCheckElement(handle, "/c:root"));
+
+  // check that we created the correct xml
+  tixiUsePrettyPrint(handle, 0);
+  tixiExportDocumentAsString(handle, &text);
+  ASSERT_STREQ(refText, text);
+
+  ASSERT_EQ(SUCCESS, tixiCloseDocument(handle));
+}
+
+TEST_F(Namespaces, addNamespaceAttribute)
+{
+  TixiDocumentHandle handle = -1;
+  char* text = NULL;
+  const char* refText = "<?xml version=\"1.0\"?>\n<root xmlns:cpacs=\"http://www.dlr.de/cpacs\"/>\n";
+
+  ASSERT_EQ(SUCCESS, tixiCreateDocument("root", &handle));
+  ASSERT_EQ(SUCCESS, tixiDeclareNamespace(handle, "/root", "http://www.dlr.de/cpacs", "cpacs"));
+  tixiRegisterNamespace(handle, "http://www.dlr.de/cpacs", "c");
+
+  ASSERT_EQ(SUCCESS, tixiCheckElement(handle, "/root"));
+  ASSERT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(handle, "/c:root"));
+
+  // check empty prefixes
+  ASSERT_EQ(FAILED, tixiDeclareNamespace(handle, "/root", "http://www.dlr.de/cpacs", NULL));
+  ASSERT_EQ(FAILED, tixiDeclareNamespace(handle, "/root", "http://www.dlr.de/cpacs", ""));
+  // check empty uri
+  ASSERT_EQ(INVALID_NAMESPACE_URI, tixiDeclareNamespace(handle, "/root", NULL, "cpacs2"));
+
+  // check that we created the correct xml
+  tixiUsePrettyPrint(handle, 0);
+  tixiExportDocumentAsString(handle, &text);
+  ASSERT_STREQ(refText, text);
+
+  ASSERT_EQ(SUCCESS, tixiCloseDocument(handle));
+}
+
+TEST(NamespaceFunctions, extractPrefixAndName)
+{
+  char* prefix = NULL;
+  char* name = NULL;
+
+  extractPrefixAndName("html:td", &prefix, &name);
+  ASSERT_STREQ("html", prefix);
+  ASSERT_STREQ("td", name);
+  free(prefix);
+  free(name);
+  prefix = NULL;
+  name = NULL;
+
+  extractPrefixAndName("mynewtag", &prefix, &name);
+  ASSERT_TRUE(prefix==NULL);
+  ASSERT_STREQ("mynewtag", name);
+  free(name);
+  name = NULL;
+
+  extractPrefixAndName("h:table", &prefix, &name);
+  ASSERT_STREQ("h", prefix);
+  ASSERT_STREQ("table", name);
+  free(prefix);
+  free(name);
+  name = NULL;
+  prefix = NULL;
+
+}
+

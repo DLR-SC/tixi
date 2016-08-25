@@ -2312,8 +2312,57 @@ DLL_EXPORT ReturnCode tixiRegisterNamespace(const TixiDocumentHandle handle, con
 DLL_EXPORT ReturnCode tixiRegisterNamespacesFromDocument(const TixiDocumentHandle handle);
 
 
-/*@}*/
+/**
+  @brief This function sets the namespace for the specified element.
 
+  This function can be used, after an element was created or read
+  from file to set the namespace of the element.
+  To set a default namespace for this element, add NULL as the prefix.
+
+  <b>Fortran syntax:</b>
+
+  tixi_set_element_namespace( integer handle, character*n element_path, character*n namespace_uri, character*n prefix, integer error )
+
+  @return
+    - SUCCESS if the namespace could be set successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_NAMESPACE_URI if the namespace URI is invalid
+    - ELEMENT_NOT_FOUND if the element at elementPath does not exist
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - FAILED If the namespace could not be set due to another error.
+ */
+DLL_EXPORT ReturnCode tixiSetElementNamespace(const TixiDocumentHandle handle, const char* elementPath,
+                                              const char* namespaceURI, const char* prefix);
+
+
+/**
+  @brief This function adds a namespace declaration inside the tag of specified element.
+
+  This function can be used, after an element was created or read
+  from file to set the namespace of the element.
+
+  The namespace is not applied to the element, but can be used from child nodes.
+
+  Different to ::tixiSetElementNamespace the namespace prefix may not be empty!
+
+  <b>Fortran syntax:</b>
+
+  tixi_add_namespace_attribute( integer handle, character*n element_path, character*n namespace_uri, character*n prefix, integer error )
+
+  @return
+    - SUCCESS if the namespace could be set successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_NAMESPACE_URI if the namespace URI is invalid
+    - ELEMENT_NOT_FOUND if the element at elementPath does not exist
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - FAILED If the prefix is empty or the namespace could not be set due to another error.
+ */
+DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, const char* elementPath,
+                                           const char* namespaceURI, const char* prefix);
+
+/*@}*/
 /**
   \defgroup MiscFunctions Miscellaneous Functions
 

@@ -387,43 +387,6 @@ char* resolveDirectory(const char* workingDirectory, const char* inDirectory)
   return externalDataDirectory;
 }
 
-
-xmlNsPtr findNamespace(const xmlDocPtr document, const xmlNodePtr node, const char *namespaceURI)
-{
-  xmlNsPtr* nsArray = NULL;
-
-  if (!document) {
-    printMsg(MESSAGETYPE_ERROR, "Null pointer for xml document!");
-    return NULL;
-  }
-
-  if (!node) {
-    printMsg(MESSAGETYPE_ERROR, "Null pointer for xml node!");
-    return NULL;
-  }
-
-  nsArray = xmlGetNsList(document, node);
-
-  if (!nsArray) {
-    return NULL;
-  }
-  else {
-    int iNS = 0;
-    xmlNsPtr ns = NULL;
-    for (iNS = 0; nsArray[iNS] != NULL; ++iNS) {
-      ns = nsArray[iNS];
-
-      if (strcmp(namespaceURI, (char*) ns->href)==0) {
-        /* namespace found */
-        return ns;
-      }
-    }
-
-    return NULL;
-  }
-}
-
-
 char *substring(const char *str, int start_pos, int end_pos)
 {
   char* substr = NULL;
@@ -442,21 +405,4 @@ char *substring(const char *str, int start_pos, int end_pos)
   substr[end - start_pos + 1] = '\0';
 
   return substr;
-}
-
-
-void extractPrefixAndName(const char *qualifiedName, char** prefix, char** name)
-{
-  char* chr = strchr(qualifiedName, ':');
-
-  if (!chr) {
-    // no prefix defined
-    *prefix = NULL;
-    *name = substring(qualifiedName, 0, -1);
-  }
-  else {
-    int pos = chr - qualifiedName;
-    *prefix = substring(qualifiedName, 0, pos-1);
-    *name = substring(qualifiedName, pos+1, -1);
-  }
 }

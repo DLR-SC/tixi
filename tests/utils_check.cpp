@@ -141,35 +141,6 @@ TEST_F(UtilsTest, substring)
   result = NULL;
 }
 
-TEST_F(UtilsTest, extractPrefixAndName)
-{
-  char* prefix = NULL;
-  char* name = NULL;
-
-  extractPrefixAndName("html:td", &prefix, &name);
-  ASSERT_STREQ("html", prefix);
-  ASSERT_STREQ("td", name);
-  free(prefix);
-  free(name);
-  prefix = NULL;
-  name = NULL;
-
-  extractPrefixAndName("mynewtag", &prefix, &name);
-  ASSERT_TRUE(prefix==NULL);
-  ASSERT_STREQ("mynewtag", name);
-  free(name);
-  name = NULL;
-
-  extractPrefixAndName("h:table", &prefix, &name);
-  ASSERT_STREQ("h", prefix);
-  ASSERT_STREQ("table", name);
-  free(prefix);
-  free(name);
-  name = NULL;
-  prefix = NULL;
-
-}
-
 TEST_F(UtilsTest, isPathRelative)
 {
   // check relative path

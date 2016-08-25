@@ -40,6 +40,7 @@
 #include "tixiUtils.h"
 #include "tixi.h"
 #include "tixi_version.h"
+#include "namespaceFunctions.h"
 
 static xmlNsPtr nameSpace = NULL;
 
@@ -1231,17 +1232,6 @@ ReturnCode tixiAddTextElementNSAtIndexImpl(const TixiDocumentHandle handle, cons
     xmlAddChild( child, headingChildNode );
   }
 
-  if (namespaceURI) {
-    // check if namespace already exists.
-    ns = findNamespace(document->docPtr, parent, namespaceURI);
-    if (!ns || (nsPrefix && (!ns->prefix || strcmp(nsPrefix, (char*)ns->prefix) != 0))) {
-      // create new namespace defintion, if the prefixes don't match or no namespace was found
-      ns = xmlNewNs(child, (xmlChar*)namespaceURI, (xmlChar*)nsPrefix);
-    }
-
-    xmlSetNs(child, ns);
-  }
-
   if (targetNode != NULL && index > 0) {
     /* insert at position index */
     xmlAddPrevSibling(targetNode, child);
@@ -1249,6 +1239,10 @@ ReturnCode tixiAddTextElementNSAtIndexImpl(const TixiDocumentHandle handle, cons
   else {
     /* insert at the end of the list */
     xmlAddChild(parent, child);
+  }
+
+  if (namespaceURI) {
+    nodeSetNamespace(document->docPtr, child, nsPrefix, namespaceURI);
   }
 
   xmlXPathFreeObject(xpathObject);
@@ -3095,7 +3089,7 @@ void tixiDefaultMessageHandler(MessageType type, const char *message)
   }
 }
 
-ReturnCode tixiRegisterNamespace(const TixiDocumentHandle handle, const char* namespaceURI, const char* prefix)
+DLL_EXPORT ReturnCode tixiRegisterNamespace(const TixiDocumentHandle handle, const char* namespaceURI, const char* prefix)
 {
   TixiDocument *document = getDocument(handle);
   int code = 0;
@@ -3114,21 +3108,95 @@ ReturnCode tixiRegisterNamespace(const TixiDocumentHandle handle, const char* na
   }
 }
 
-ReturnCode tixiRegisterNamespacesFromDocument(const TixiDocumentHandle handle)
+DLL_EXPORT ReturnCode tixiRegisterNamespacesFromDocument(const TixiDocumentHandle handle)
 {
-    TixiDocument *document = getDocument(handle);
-    int code = 0;
+  TixiDocument *document = getDocument(handle);
+  int code = 0;
 
-    if (!document) {
-      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
-      return INVALID_HANDLE;
-    }
+  if (!document) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
 
-    code = XPathRegisterDocumentNamespaces(document->xpathContext);
-    if (code == 0) {
-      return SUCCESS;
-    }
-    else {
-      return FAILED;
-    }
+  code = XPathRegisterDocumentNamespaces(document->xpathContext);
+  if (code == 0) {
+    return SUCCESS;
+  }
+  else {
+    return FAILED;
+  }
+}
+
+DLL_EXPORT ReturnCode tixiSetElementNamespace(const TixiDocumentHandle handle, const char* elementPath, const char* namespaceURI, const char* prefix)
+{
+  xmlNodePtr node = NULL;
+  ReturnCode retval = SUCCESS;
+
+  TixiDocument *document = getDocument(handle);
+
+  if (!document) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+
+  if (!namespaceURI) {
+      return INVALID_NAMESPACE_URI;
+  }
+
+  retval = getNodePtrFromElementPath(handle, elementPath, &node);
+
+  if (retval != SUCCESS) {
+    return retval;
+  }
+
+  if(node == NULL) {
+    return INVALID_XPATH;
+  }
+
+  if (!nodeSetNamespace(document->docPtr, node, prefix, namespaceURI)) {
+    return FAILED;
+  }
+  else {
+    return SUCCESS;
+  }
+}
+
+DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, const char* elementPath, const char* namespaceURI, const char* prefix)
+{
+  xmlNodePtr node = NULL;
+  ReturnCode retval = SUCCESS;
+
+  TixiDocument *document = getDocument(handle);
+
+  if (!document) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+
+  if (!namespaceURI) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid namespace URI.\n");
+    return INVALID_NAMESPACE_URI;
+  }
+
+  if (!prefix) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Empty namespace prefix.\n");
+    return FAILED;
+  }
+
+  retval = getNodePtrFromElementPath(handle, elementPath, &node);
+
+  if (retval != SUCCESS) {
+    return retval;
+  }
+
+  if(node == NULL) {
+    return INVALID_XPATH;
+  }
+
+  if (!nodeAddNamespace(document->docPtr, node, prefix, namespaceURI)) {
+    return FAILED;
+  }
+  else {
+    return SUCCESS;
+  }
 }
