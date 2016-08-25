@@ -1186,7 +1186,7 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char* xmlFilename, Int
 
 
 
-ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc)
+ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc, int withDefaults)
 {
   TixiDocument* document = getDocument(handle);
   xmlSchemaParserCtxtPtr parser_ctxt;
@@ -1218,6 +1218,9 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc
     xmlSchemaFreeParserCtxt(parser_ctxt);
     xmlFreeDoc(*schema_doc);
     return FAILED;
+  }
+  if (withDefaults) {
+    xmlSchemaSetValidOptions(valid_ctxt, XML_SCHEMA_VAL_VC_I_CREATE);
   }
   is_valid = (xmlSchemaValidateDoc(valid_ctxt, document->docPtr) == 0);
   xmlSchemaFreeValidCtxt(valid_ctxt);

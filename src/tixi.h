@@ -766,6 +766,35 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
 DLL_EXPORT ReturnCode tixiSchemaValidateFromFile (const TixiDocumentHandle handle, const char *xsdFilename);
 
 /**
+  @brief Validate XML-document against an XML-schema and insert missing default elements and attributes.
+
+  Validates an XML-document against an XML-schema specified by
+  xsdFilename. This routine should be called after opening a
+  document by ::tixiOpenDocument and before ::tixiSaveDocument if the
+  validation against an XML-schema is desired for the input file and
+  the output file, respectively.
+  If the schema contains default values, these are added to the
+  XML-document (which is not the case for tixiSchemaValidateFromFile).
+
+  <b>Fortran syntax:</b>
+
+  tixi_schema_validate_with_defaults_from_file( integer  handle, character*n xsd_filename, integer error )
+
+  @param[in]  xsdFilename name of the XML-schema-file to be used.
+
+  @param[in]  handle handle to the XML-document.
+
+  @return
+    - SUCCESS              if the document is successfully validated
+    - NOT_WELL_FORMED      if the XML-document is not well formed
+    - NOT_SCHEMA_COMPLIANT if the XML-document is well-formed
+                           but validating against the given XML-schema fails
+    - OPEN_SCHEMA_FAILED   if opening of the XML-schema-file failed
+    - FAILED               for all internal errors
+ */
+DLL_EXPORT ReturnCode tixiSchemaValidateWithDefaultsFromFile (const TixiDocumentHandle handle, const char *xsdFilename);
+
+/**
   @brief Validate XML-document against an XML-schema.
 
   Validates an XML-document against an XML-schema specified by

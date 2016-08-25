@@ -795,7 +795,15 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromFile(const TixiDocumentHandle handle
   xmlDocPtr schema_doc;
 
   schema_doc = xmlReadFile(xsdFilename, NULL, XML_PARSE_NONET);
-  return( validateSchema(handle, &schema_doc));
+  return( validateSchema(handle, &schema_doc, 0));
+}
+
+DLL_EXPORT ReturnCode tixiSchemaValidateWithDefaultsFromFile(const TixiDocumentHandle handle, const char *xsdFilename)
+{
+  xmlDocPtr schema_doc;
+
+  schema_doc = xmlReadFile(xsdFilename, NULL, XML_PARSE_NONET);
+  return( validateSchema(handle, &schema_doc, 1));
 }
 
 DLL_EXPORT ReturnCode tixiSchemaValidateFromString(const TixiDocumentHandle handle, const char *xsdString)
@@ -803,7 +811,7 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromString(const TixiDocumentHandle hand
   xmlDocPtr schema_doc;
 
   schema_doc = xmlReadMemory(xsdString, (int) strlen(xsdString), NULL, NULL, 0);
-  return(validateSchema(handle, &schema_doc));
+  return(validateSchema(handle, &schema_doc, 0));
 }
 
 

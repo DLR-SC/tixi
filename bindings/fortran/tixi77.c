@@ -235,6 +235,17 @@ void tixiSchemaValidateFromFile_f(const TixiDocumentHandle *handle,
   free(cString);
 }
 
+void tixiSchemaValidateWithDefaultsFromFile_f(const TixiDocumentHandle *handle,
+                          char *xsdFilename, ReturnCode *error, int lengthString1)
+{
+  char *cString;
+
+  cString = makeCString(xsdFilename, lengthString1);
+  *error = tixiSchemaValidateWithDefaultsFromFile(*handle, cString);
+
+  free(cString);
+}
+
 void tixiSchemaValidateFromString_f(const TixiDocumentHandle *handle,
                           char *xsdString, ReturnCode *error, int lengthString1)
 {
