@@ -63,6 +63,9 @@ configure_package_config_file (${PROJECT_SOURCE_DIR}/contrib/tixi-config.cmake.i
 
 install (EXPORT tixi-targets DESTINATION ${CONFIG_INSTALL_DIR})	 
 
+configure_file(${CMAKE_SOURCE_DIR}/contrib/PostInstall.cmake.in ${CMAKE_BINARY_DIR}/PostInstall.cmake @ONLY)
+install (SCRIPT ${CMAKE_BINARY_DIR}/PostInstall.cmake CONFIGURATIONS Release)
+
 install (FILES
   "${CMAKE_CURRENT_BINARY_DIR}/tixi-config.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/tixi-config-version.cmake"

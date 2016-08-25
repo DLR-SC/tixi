@@ -1,0 +1,20 @@
+message(STATUS "Performing post install steps")
+
+set (PYTHON_EXECUTABLE @PYTHON_EXECUTABLE@)
+
+# cleanup hard-coded links to libraries
+if (WIN32)
+
+    execute_process(
+      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_LIBDIR@/tixi/tixi-targets-release.cmake "@CURL_LIBRARIES@;"
+    )
+
+    execute_process(
+      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_LIBDIR@/tixi/tixi-targets-release.cmake "@XSLT_LIBRARIES@;"
+    )
+
+    execute_process(
+      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_LIBDIR@/tixi/tixi-targets-release.cmake "@XML_LIBRARIES@;"
+    )
+
+endif()
