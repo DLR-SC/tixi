@@ -52,11 +52,13 @@ xmlNsPtr findNamespace(const xmlDocPtr document, const xmlNodePtr node, const ch
 
       if (strcmp(namespaceURI, (char*) ns->href)==0) {
         /* namespace found */
-        return ns;
+        break;
       }
     }
 
-    return NULL;
+    free(nsArray);
+
+    return ns;
   }
 }
 
