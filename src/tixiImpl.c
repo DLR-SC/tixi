@@ -1038,7 +1038,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
     extractPrefixAndName(attributeName, &prefix, &name);
 
     if (prefix) {
-      xmlNsPtr ns = xmlSearchNs(element->doc, element, prefix);
+      xmlNsPtr ns = xmlSearchNs(element->doc, element, (xmlChar*) prefix);
       if (!ns) {
         printMsg(MESSAGETYPE_ERROR, "Error: unknown namespace prefix \"%s\".\n",
                  prefix);
@@ -1046,7 +1046,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
         errorCode = INVALID_NAMESPACE_PREFIX;
       }
       else {
-        textPtr = xmlGetNsProp(element, (xmlChar*) name, ns->href);
+        textPtr = (char *) xmlGetNsProp(element, (xmlChar*) name, ns->href);
       }
 
       free(prefix);
@@ -1176,7 +1176,6 @@ ReturnCode tixiAddTextElementNSAtIndexImpl(const TixiDocumentHandle handle, cons
   xmlNodePtr targetNode = NULL;
   char* nsPrefix = NULL;
   char* elemName = NULL;
-  xmlNsPtr ns = NULL;
   int i = 1;
 
 
@@ -1609,7 +1608,8 @@ DLL_EXPORT ReturnCode tixiUpdateFloatVector (const TixiDocumentHandle handle, co
 DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const char *elementPath, const char *attributeName)
 {
   xmlNodePtr parent;
-  ReturnCode retVal;
+  int retVal = 0;
+  ReturnCode errorCode = SUCCESS;
   char* prefix = NULL;
   char* name = NULL;
 
@@ -1628,11 +1628,11 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
     retVal = xmlUnsetProp(parent, (xmlChar *) attributeName);
   }
   else {
-    xmlNsPtr ns = xmlSearchNs(parent->doc, parent, prefix);
+    xmlNsPtr ns = xmlSearchNs(parent->doc, parent, (xmlChar *) prefix);
     if (!ns) {
       printMsg(MESSAGETYPE_ERROR, "Error: unknown namespace prefix \"%s\".\n",
                prefix);
-      retVal = INVALID_NAMESPACE_PREFIX;
+      errorCode = INVALID_NAMESPACE_PREFIX;
     }
     else {
       retVal = xmlUnsetNsProp(parent, ns, (xmlChar*) name);
@@ -1641,12 +1641,15 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
   }
   free(name);
 
+  if (errorCode != SUCCESS) {
+      return errorCode;
+  }
 
-  if (retVal < 0) {
+  if (retVal != 0) {
       return ATTRIBUTE_NOT_FOUND;
   }
   else {
-      return retVal;
+      return SUCCESS;
   }
 }
 
@@ -2697,12 +2700,12 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
       textPtr = (char *) xmlGetProp(element, (xmlChar *) attributeName);
     }
     else {
-      xmlNsPtr ns = xmlSearchNs(element->doc, element, prefix);
+      xmlNsPtr ns = xmlSearchNs(element->doc, element, (xmlChar *) prefix);
       if (!ns) {
         textPtr = NULL;
       }
       else {
-        textPtr = xmlGetNsProp(element, (xmlChar*) name, ns->href);
+        textPtr = (char *) xmlGetNsProp(element, (xmlChar*) name, ns->href);
       }
       free(prefix);
     }

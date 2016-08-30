@@ -923,7 +923,7 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
       attributePtr = xmlSetProp(parent, (xmlChar*) attributeName, (xmlChar*) attributeValue);
     }
     else {
-      xmlNsPtr ns = xmlSearchNs(parent->doc, parent, prefix);
+      xmlNsPtr ns = xmlSearchNs(parent->doc, parent, (xmlChar *) prefix);
       if (!ns) {
         printMsg(MESSAGETYPE_ERROR, "Error: unknown namespace prefix \"%s\".\n",
                  prefix);
