@@ -320,7 +320,9 @@ enum ReturnCode
 
   UID_LINK_BROKEN,                /*!< 33: A node the is specified as a Link has no correspoding uid in that data set */
 
-  INVALID_NAMESPACE_URI           /*!< 34: The namespace URI is invalid (e.g. a null pointer) */
+  INVALID_NAMESPACE_URI,          /*!< 34: The namespace URI is invalid (e.g. a null pointer) */
+
+  INVALID_NAMESPACE_PREFIX        /*!< 35: The namespace prefix is invalid */
 
 };
 
@@ -1881,7 +1883,9 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be get from the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] text value of the specified attribute as a string
 
@@ -1892,6 +1896,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetTextAttribute (const TixiDocumentHandle handle,
                                             const char *elementPath, const char *attributeName,
@@ -1915,7 +1920,9 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] number  value of the specified attribute as an integer value
 
@@ -1926,6 +1933,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute (const TixiDocumentHandle handle,
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetIntegerAttribute (const TixiDocumentHandle handle,
                                                const char *elementPath, const char *attributeName,
@@ -1949,7 +1957,9 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] boolean  value of the specified attribute as an boolean value
 
@@ -1960,6 +1970,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute (const TixiDocumentHandle handle,
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
                                                const char *elementPath, const char *attributeName,
@@ -1983,7 +1994,9 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] number value of the specified attribute as a floating point value
 
@@ -1994,6 +2007,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetDoubleAttribute (const TixiDocumentHandle handle,
                                               const char *elementPath, const char *attributeName,
@@ -2018,7 +2032,9 @@ DLL_EXPORT ReturnCode tixiGetDoubleAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[in]  attributeValue text to assigned to the attribute. If attributeValue is
                              NULL the empty string will be assigned to the attribute.
@@ -2033,6 +2049,7 @@ DLL_EXPORT ReturnCode tixiGetDoubleAttribute (const TixiDocumentHandle handle,
                               to a list of elements
     - ALREADY_SAVED if element should be added to an already saved document
     - INVALID_XML_NAME if attributeName is not a valid XML-element name
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiAddTextAttribute (const TixiDocumentHandle handle,
                                             const char *elementPath, const char *attributeName,
@@ -2056,7 +2073,9 @@ DLL_EXPORT ReturnCode tixiAddTextAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[in]  number floating point value to be assigned to the attribute. If
                      number is NULL an error is return and the attribute
@@ -2075,6 +2094,7 @@ DLL_EXPORT ReturnCode tixiAddTextAttribute (const TixiDocumentHandle handle,
     - NO_ATTRIBUTE_NAME if attributeName is NULL
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
                               to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiAddDoubleAttribute (const TixiDocumentHandle handle,
                                               const char *elementPath, const char *attributeName,
@@ -2097,7 +2117,9 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the
                           document specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[in]  number integer value to be assigned to the attribute. If
                      number is NULL an error is return and the attribute
@@ -2116,6 +2138,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute (const TixiDocumentHandle handle,
     - NO_ATTRIBUTE_NAME if attributeName is NULL
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
                               to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiAddIntegerAttribute (const TixiDocumentHandle handle,
                                                const char *elementPath, const char *attributeName,
@@ -2146,6 +2169,8 @@ DLL_EXPORT ReturnCode tixiAddIntegerAttribute (const TixiDocumentHandle handle,
     - NO_ATTRIBUTE_NAME if attributeName is NULL
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
                               to a list of elements
+    - ATTRIBUTE_NOT_FOUND, if the attribute could not be removed (i.e. if it does not exist)
+    - INVALID_NAMESPACE_PREFIX, if the prefix in attributeName is invalid.
  */
 DLL_EXPORT ReturnCode tixiRemoveAttribute (const TixiDocumentHandle handle,
                                            const char *elementPath, const char *attributeName);

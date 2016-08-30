@@ -267,3 +267,56 @@ TEST(NamespaceFunctions, extractPrefixAndName)
 
 }
 
+TEST_F(Namespaces, attributesWithNS)
+{
+  ASSERT_EQ(SUCCESS, tixiRegisterNamespace(inDocumentHandle, "http://www.w3.org/TR/html4/", "h"));
+
+  ASSERT_EQ(SUCCESS, tixiAddDoubleAttribute(inDocumentHandle, "/root/h:table/h:tr", "h:width", 6., "%f"));
+  // prefix without any namespace
+  ASSERT_EQ(SUCCESS, tixiAddDoubleAttribute(inDocumentHandle, "/root/h:table/h:tr", "size", 2., "%f"));
+  // Invalid prefix
+  ASSERT_EQ(INVALID_NAMESPACE_PREFIX, tixiAddDoubleAttribute(inDocumentHandle, "/root/h:table/h:tr", "g:length", 0., "%f"));
+
+  double number;
+  ASSERT_EQ(SUCCESS, tixiGetDoubleAttribute(inDocumentHandle, "/root/h:table/h:tr", "size", &number));
+  ASSERT_NEAR(2., number, 1e-12);
+  ASSERT_EQ(SUCCESS, tixiGetDoubleAttribute(inDocumentHandle, "/root/h:table/h:tr", "h:width", &number));
+  ASSERT_NEAR(6., number, 1e-12);
+
+  // invalid prefix
+  ASSERT_EQ(INVALID_NAMESPACE_PREFIX, tixiGetDoubleAttribute(inDocumentHandle, "/root/h:table/h:tr", "g:width", &number));
+
+  int attCount = 0;
+  ASSERT_EQ(SUCCESS, tixiGetNumberOfAttributes(inDocumentHandle, "/root/h:table/h:tr", &attCount));
+  ASSERT_EQ(2, attCount);
+
+  // test attribute names
+  char * name = NULL;
+  ASSERT_EQ(SUCCESS, tixiGetAttributeName(inDocumentHandle, "/root/h:table/h:tr", 1, &name));
+  EXPECT_STREQ("h:width", name);
+
+  ASSERT_EQ(SUCCESS, tixiGetAttributeName(inDocumentHandle, "/root/h:table/h:tr", 2, &name));
+  EXPECT_STREQ("size", name);
+
+  ASSERT_EQ(SUCCESS, tixiCheckAttribute(inDocumentHandle, "/root/h:table/h:tr", "size"));
+  ASSERT_EQ(SUCCESS, tixiCheckAttribute(inDocumentHandle, "/root/h:table/h:tr", "h:width"));
+  ASSERT_EQ(ATTRIBUTE_NOT_FOUND, tixiCheckAttribute(inDocumentHandle, "/root/h:table/h:tr", "g:width"));
+  ASSERT_EQ(ATTRIBUTE_NOT_FOUND, tixiCheckAttribute(inDocumentHandle, "/root/h:table/h:tr", "h:size"));
+
+  // remove the size attribute
+  EXPECT_EQ(SUCCESS, tixiRemoveAttribute(inDocumentHandle, "/root/h:table/h:tr", "size"));
+  EXPECT_EQ(SUCCESS, tixiGetNumberOfAttributes(inDocumentHandle, "/root/h:table/h:tr", &attCount));
+  EXPECT_EQ(1, attCount);
+
+  // remove with invalid prefix
+  EXPECT_EQ(INVALID_NAMESPACE_PREFIX, tixiRemoveAttribute(inDocumentHandle, "/root/h:table/h:tr", "g:size"));
+
+  // correct prefix but invalid attribute
+  EXPECT_EQ(ATTRIBUTE_NOT_FOUND, tixiRemoveAttribute(inDocumentHandle, "/root/h:table/h:tr", "h:size"));
+
+  // remove h:width attribute
+  EXPECT_EQ(SUCCESS, tixiRemoveAttribute(inDocumentHandle, "/root/h:table/h:tr", "h:width"));
+  EXPECT_EQ(SUCCESS, tixiGetNumberOfAttributes(inDocumentHandle, "/root/h:table/h:tr", &attCount));
+  EXPECT_EQ(0, attCount);
+}
+

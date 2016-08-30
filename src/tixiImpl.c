@@ -1031,8 +1031,31 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
 
   error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
   if (!error) {
+    char* prefix = NULL;
+    char* name = NULL;
+    ReturnCode errorCode = ATTRIBUTE_NOT_FOUND;
 
-    textPtr = (char *) xmlGetProp(element, (xmlChar *) attributeName);
+    extractPrefixAndName(attributeName, &prefix, &name);
+
+    if (prefix) {
+      xmlNsPtr ns = xmlSearchNs(element->doc, element, prefix);
+      if (!ns) {
+        printMsg(MESSAGETYPE_ERROR, "Error: unknown namespace prefix \"%s\".\n",
+                 prefix);
+        textPtr = NULL;
+        errorCode = INVALID_NAMESPACE_PREFIX;
+      }
+      else {
+        textPtr = xmlGetNsProp(element, (xmlChar*) name, ns->href);
+      }
+
+      free(prefix);
+    }
+    else {
+      textPtr = (char *) xmlGetProp(element, (xmlChar *) attributeName);
+    }
+
+    free(name);
 
     if (textPtr) {
       *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
@@ -1047,7 +1070,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
               "Error: Attribute \"%s\" of element \"%s\" not found.  \n",
               attributeName, elementPath); */
       xmlXPathFreeObject(xpathObject);
-      return ATTRIBUTE_NOT_FOUND;
+      return errorCode;
     }
   }
 
@@ -1587,6 +1610,8 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
 {
   xmlNodePtr parent;
   ReturnCode retVal;
+  char* prefix = NULL;
+  char* name = NULL;
 
   retVal = getNodePtrFromElementPath(handle, elementPath, &parent);
 
@@ -1598,8 +1623,31 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
     return INVALID_XPATH;
   }
 
-  retVal = xmlUnsetProp(parent, (xmlChar *) attributeName);
-  return retVal;
+  extractPrefixAndName(attributeName, &prefix, &name);
+  if (!prefix) {
+    retVal = xmlUnsetProp(parent, (xmlChar *) attributeName);
+  }
+  else {
+    xmlNsPtr ns = xmlSearchNs(parent->doc, parent, prefix);
+    if (!ns) {
+      printMsg(MESSAGETYPE_ERROR, "Error: unknown namespace prefix \"%s\".\n",
+               prefix);
+      retVal = INVALID_NAMESPACE_PREFIX;
+    }
+    else {
+      retVal = xmlUnsetNsProp(parent, ns, (xmlChar*) name);
+    }
+    free(prefix);
+  }
+  free(name);
+
+
+  if (retVal < 0) {
+      return ATTRIBUTE_NOT_FOUND;
+  }
+  else {
+      return retVal;
+  }
 }
 
 
@@ -2641,8 +2689,24 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
 
   error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
   if (!error) {
+    char* name = NULL;
+    char* prefix = NULL;
+    extractPrefixAndName(attributeName, &prefix, &name);
 
-    textPtr = (char *) xmlGetProp(element, (xmlChar *) attributeName);
+    if (!prefix) {
+      textPtr = (char *) xmlGetProp(element, (xmlChar *) attributeName);
+    }
+    else {
+      xmlNsPtr ns = xmlSearchNs(element->doc, element, prefix);
+      if (!ns) {
+        textPtr = NULL;
+      }
+      else {
+        textPtr = xmlGetNsProp(element, (xmlChar*) name, ns->href);
+      }
+      free(prefix);
+    }
+    free(name);
 
     if (textPtr) {
       xmlFree(textPtr);
@@ -2983,9 +3047,15 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
       return INDEX_OUT_OF_RANGE;
     }
 
-    // get name
-    *attrName = (char *) malloc((strlen((char*)attr->name) + 3) * sizeof(char));
-    strcpy(*attrName,  (char*)attr->name);
+    if (attr->ns && attr->ns->prefix) {
+      *attrName = (char *) malloc((strlen((char*)attr->name) + strlen((char*)attr->ns->prefix) + 4) * sizeof(char));
+      sprintf(*attrName, "%s:%s", attr->ns->prefix, attr->name);
+    }
+    else {
+      // get name
+      *attrName = (char *) malloc((strlen((char*)attr->name) + 3) * sizeof(char));
+      strcpy(*attrName,  (char*)attr->name);
+    }
     error = addToMemoryList(document, (void *) *attrName);
   }
 

@@ -31,6 +31,7 @@
 #include "uidHelper.h"
 #include "tixiUtils.h"
 #include "webMethods.h"
+#include "namespaceFunctions.h"
 #include "libxml/xmlschemas.h"
 
 /**
@@ -912,14 +913,37 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
 
   error = checkElement(xpathContext, elementPath, &parent, &xpathObject);
   if (!error) {
-    attributePtr = xmlSetProp(parent, (xmlChar*) attributeName, (xmlChar*) attributeValue);
+    char* prefix = NULL;
+    char* name = NULL;
+    ReturnCode errorCode = FAILED;
+
+    extractPrefixAndName(attributeName, &prefix, &name);
+
+    if (!prefix) {
+      attributePtr = xmlSetProp(parent, (xmlChar*) attributeName, (xmlChar*) attributeValue);
+    }
+    else {
+      xmlNsPtr ns = xmlSearchNs(parent->doc, parent, prefix);
+      if (!ns) {
+        printMsg(MESSAGETYPE_ERROR, "Error: unknown namespace prefix \"%s\".\n",
+                 prefix);
+        attributePtr = NULL;
+        errorCode = INVALID_NAMESPACE_PREFIX;
+      }
+      else {
+        attributePtr = xmlSetNsProp(parent, ns, (xmlChar*) name, (xmlChar*) attributeValue);
+      }
+
+      free(prefix);
+    }
+    free(name);
 
     if (!attributePtr) {
       printMsg(MESSAGETYPE_ERROR,
                "Error: Failed to add attribute \"%s\" to element \"%s\".\n",
                attributeName, attributeValue);
       xmlXPathFreeObject(xpathObject);
-      return FAILED;
+      return errorCode;
     }
     xmlXPathFreeObject(xpathObject);
     return SUCCESS;
