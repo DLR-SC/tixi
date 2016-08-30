@@ -120,6 +120,26 @@ TEST_F(UtilsTest, string_endsWith)
   ASSERT_EQ(-1, string_endsWith("string1", "bla"));
 }
 
+TEST_F(UtilsTest, substring)
+{
+  const char* mystring = "Hallo Welt";
+  char* result = NULL;
+
+  result = substring(mystring,0, -1);
+  ASSERT_STREQ("Hallo Welt", result);
+  free(result);
+  result = NULL;
+
+  result = substring(mystring,0, 4);
+  ASSERT_STREQ("Hallo", result);
+  free(result);
+  result = NULL;
+
+  result = substring(mystring,6, -1);
+  ASSERT_STREQ("Welt", result);
+  free(result);
+  result = NULL;
+}
 
 TEST_F(UtilsTest, isPathRelative)
 {

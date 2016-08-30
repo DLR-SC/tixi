@@ -36,7 +36,7 @@
 extern "C" {
 #endif
 
-xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr document, const char *xPathExpression);
+xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const char *xPathExpression);
 
 int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression);
 
@@ -57,6 +57,22 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
     XPath String. Null in case if an error.
  */
 char* XPathExpressionGetElementPath(TixiDocument *tixiDocument, const char *xPathExpression, int index);
+
+/**
+ * @brief XPathRegisterNamespace
+ *
+ * @return
+ *   0 if okay, -1 in case of an error.
+ */
+int XPathRegisterNamespace(xmlXPathContextPtr xpathContext, const char* namespaceURI, const char* prefix);
+
+/**
+ * @brief XPathRegisterDocumentNamespaces Registers all namespace with prefixes that are defined in the document.
+ *
+ * @return
+ *   0 if okay, -1 in case of an error.
+ */
+int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext);
 
 #ifdef __cplusplus
 }

@@ -386,3 +386,23 @@ char* resolveDirectory(const char* workingDirectory, const char* inDirectory)
 
   return externalDataDirectory;
 }
+
+char *substring(const char *str, int start_pos, int end_pos)
+{
+  char* substr = NULL;
+  int end = end_pos;
+
+  if (end < 0) {
+    end = (int) strlen(str) - 1;
+  }
+
+  if (start_pos > end) {
+    return NULL;
+  }
+
+  substr = malloc((end - start_pos + 4) * sizeof(char));
+  memcpy(substr, &str[start_pos], (end - start_pos + 1)*sizeof(char));
+  substr[end - start_pos + 1] = '\0';
+
+  return substr;
+}

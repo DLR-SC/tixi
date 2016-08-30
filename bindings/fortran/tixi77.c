@@ -1393,3 +1393,24 @@ void tixiGetNumberOfAttributes_f(const TixiDocumentHandle* handle,
     free(cElementPath);
 }
 
+void tixiRegisterNamespace_f(const TixiDocumentHandle *handle,
+                             char *namespaceUri,
+                             char *prefix,
+                             ReturnCode *error,
+                             int lengthString1,
+                             int lengthString2)
+{
+    char *cNamespaceUri = makeCString(namespaceUri, lengthString1);
+    char *cPrefix = makeCString(prefix, lengthString2);
+
+    *error = tixiRegisterNamespace(*handle, cNamespaceUri, cPrefix);
+
+    free(cNamespaceUri);
+    free(cPrefix);
+}
+
+void tixiRegisterNamespacesFromDocument_f(const TixiDocumentHandle* handle,
+                                          ReturnCode* error)
+{
+    *error = tixiRegisterNamespacesFromDocument(*handle);
+}

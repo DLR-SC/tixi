@@ -31,6 +31,7 @@
 #include "uidHelper.h"
 #include "tixiUtils.h"
 #include "webMethods.h"
+#include "namespaceFunctions.h"
 #include "libxml/xmlschemas.h"
 
 /**
@@ -85,6 +86,11 @@ void freeTixiDocument(TixiDocument* document)
   }
   clearMemoryList(document);
   uid_clearUIDList(document);
+
+  if (document->xpathContext) {
+      xmlXPathFreeContext(document->xpathContext);
+      document->xpathContext = NULL;
+  }
 
   xmlFreeDoc(document->docPtr);
 
@@ -233,36 +239,25 @@ InternalReturnCode addToMemoryList(TixiDocument* document, void* memory)
   return SUCCESS;
 }
 
-ReturnCode checkExistence(const xmlDocPtr xmlDocument, const char* elementPath, xmlXPathObjectPtr* xpathObject)
+ReturnCode checkExistence(const xmlXPathContextPtr xpathContext, const char* elementPath, xmlXPathObjectPtr* xpathObject)
 {
 
-  xmlXPathContextPtr xpathContext = NULL;
   *xpathObject = NULL;
-
-  /* Create xpath evaluation context */
-  xpathContext = xmlXPathNewContext(xmlDocument);
-  if (!xpathContext) {
-    printMsg(MESSAGETYPE_ERROR, "Error: Unable to create new XPath context.\n");
-    return FAILED;
-  }
 
   *xpathObject = xmlXPathEvalExpression((const xmlChar*) elementPath, xpathContext);
   if (!(*xpathObject)) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", elementPath);
     //xmlXPathFreeObject(*xpathObject);
-    xmlXPathFreeContext(xpathContext);
     *xpathObject = NULL;
     return INVALID_XPATH;
   }
 
   if (xmlXPathNodeSetIsEmpty((*xpathObject)->nodesetval)) {
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(*xpathObject);
     *xpathObject = NULL;
     return ELEMENT_NOT_FOUND;
   }
 
-  xmlXPathFreeContext(xpathContext);
   return SUCCESS;
 }
 
@@ -306,11 +301,10 @@ ReturnCode checkExternalNode(const xmlNodePtr element)
 }
 
 
-ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elementPathDirty,
+ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* elementPathDirty,
                         xmlNodePtr* element, xmlXPathObjectPtr* xpathObject)
 {
 
-  xmlXPathContextPtr xpathContext = NULL;
   xmlNodeSetPtr nodes = NULL;
   char elementPath[1024];
 
@@ -322,24 +316,15 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elementPathDirt
     elementPath[strlen(elementPath)-1] = '\0';
   }
 
-  /* Create xpath evaluation context */
-  xpathContext = xmlXPathNewContext(xmlDocument);
-  if (!xpathContext) {
-    printMsg(MESSAGETYPE_ERROR, "Error: Unable to create new XPath context.\n");
-    return FAILED;
-  }
-
   /* Evaluate Expression */
   *xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, xpathContext);
   if (!(*xpathObject)) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     return INVALID_XPATH;
   }
 
   if (xmlXPathNodeSetIsEmpty((*xpathObject)->nodesetval)) {
     char * errorStr = buildString("Error: element %s not found!", elementPath);
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(*xpathObject);
     *xpathObject = NULL;
 
@@ -354,7 +339,6 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elementPathDirt
   if (nodes->nodeNr > 1) {
     printMsg(MESSAGETYPE_ERROR,
              "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(*xpathObject);
     *xpathObject = NULL;
     return ELEMENT_PATH_NOT_UNIQUE;
@@ -364,13 +348,11 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elementPathDirt
 
   if (nodes->nodeTab[0]->type == XML_ELEMENT_NODE || nodes->nodeTab[0]->type == XML_DOCUMENT_NODE) {
     *element = nodes->nodeTab[0];
-    xmlXPathFreeContext(xpathContext);
     return SUCCESS;
   }
   else {
     printMsg(MESSAGETYPE_ERROR,
              "Error: XPath expression \"%s\"does not point to an element node.\n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(*xpathObject);
     *xpathObject = NULL;
     return NOT_AN_ELEMENT;
@@ -378,7 +360,7 @@ ReturnCode checkElement(const xmlDocPtr xmlDocument, const char* elementPathDirt
 }
 
 
-ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char* pointPath,
+ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
                               int pointIndex, char* name, int ignoreError, double* value)
 {
   xmlNodePtr coordinate = NULL;
@@ -403,7 +385,7 @@ ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char* pointPath,
   strcpy(coordinatePath, pointPath);
   strcat(coordinatePath, suffixString);
 
-  error = checkElement(xmlDocument, coordinatePath, &coordinate, &xpathObject);
+  error = checkElement(document->xpathContext, coordinatePath, &coordinate, &xpathObject);
 
   free(coordinatePath);
   free(suffixString);
@@ -411,7 +393,7 @@ ReturnCode getCoordinateValue(xmlDocPtr xmlDocument, char* pointPath,
   suffixString = NULL;
   if (!error) {
 
-    char* textPtr = (char*) xmlNodeListGetString(xmlDocument, coordinate->children, 0);
+    char* textPtr = (char*) xmlNodeListGetString(document->docPtr, coordinate->children, 0);
 
     if (textPtr) {
       *value = atof(textPtr);
@@ -442,7 +424,6 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
   ReturnCode errorZ = -1;
 
   TixiDocument* document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
   xmlXPathObjectPtr xpathParentObject = NULL;
   xmlNodePtr parent = NULL;
   char* pointPath = NULL;
@@ -459,9 +440,7 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
     return INDEX_OUT_OF_RANGE;
   }
 
-  xmlDocument = document->docPtr;
-
-  error = checkElement(xmlDocument, parentPath, &parent, &xpathParentObject);
+  error = checkElement(document->xpathContext, parentPath, &parent, &xpathParentObject);
   xmlXPathFreeObject(xpathParentObject);
 
   if (!error) {
@@ -477,7 +456,7 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
 
     /* pad with trailing blanks, so we can check for the size in getCoordinateValue */
 
-    error = checkExistence(xmlDocument, pointPath, &xpathPointObject);
+    error = checkExistence(document->xpathContext, pointPath, &xpathPointObject);
 
     if (xpathPointObject) {
       nPointElements = xpathPointObject->nodesetval->nodeNr;
@@ -494,9 +473,9 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
         error = INDEX_OUT_OF_RANGE;
       }
       else {
-        errorX = getCoordinateValue(xmlDocument, pointPath, pointIndex, "x", ignoreMissingElements, x);
-        errorY = getCoordinateValue(xmlDocument, pointPath, pointIndex, "y", ignoreMissingElements, y);
-        errorZ = getCoordinateValue(xmlDocument, pointPath, pointIndex, "z", ignoreMissingElements, z);
+        errorX = getCoordinateValue(document, pointPath, pointIndex, "x", ignoreMissingElements, x);
+        errorY = getCoordinateValue(document, pointPath, pointIndex, "y", ignoreMissingElements, y);
+        errorZ = getCoordinateValue(document, pointPath, pointIndex, "z", ignoreMissingElements, z);
 
         if( errorX && errorY && errorZ) {
           error = NO_POINT_FOUND;
@@ -615,7 +594,7 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
   while(1) {
     // loop until there are no externaldata nodes included
 
-    xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument->docPtr, "//externaldata");
+    xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument->xpathContext, "//externaldata");
     xmlNodeSetPtr nodeset = NULL;
     char* externalDataNodeXPath, *externalDataDirectoryXPath, *externalDataDirectory, *resolvedDirectory;
     int externalFileCount = 0;
@@ -873,8 +852,6 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
 {
 
   TixiDocument* document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
-  xmlXPathContextPtr xpathContext = NULL;
   xmlXPathObjectPtr xpathObject = NULL;
   xmlNodeSetPtr nodes = NULL;
   xmlNodePtr parent = NULL;
@@ -885,28 +862,15 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
     return parent;
   }
 
-  xmlDocument = document->docPtr;
-
-  /* Check parent element */
-  xpathContext = xmlXPathNewContext(xmlDocument);
-
-  if (!xpathContext) {
-    printMsg(MESSAGETYPE_ERROR, "Error: unable to create new XPath context\n");
-    xmlXPathFreeContext(xpathContext);
-    return parent;
-  }
-
-  xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, xpathContext);
+  xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, document->xpathContext);
 
   if (!xpathObject) {
     printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     return parent;
   }
 
   if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
     printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return parent;
   }
@@ -918,20 +882,18 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
   if (nodes->nodeNr > 1) {
     printMsg(MESSAGETYPE_ERROR,
              "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return parent;
   }
 
   parent = nodes->nodeTab[0]->parent;
 
-  xmlXPathFreeContext(xpathContext);
   xmlXPathFreeObject(xpathObject);
   return parent;
 }
 
 
-ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char* elementPath,
+ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* elementPath,
                                    const char* attributeName, const char* attributeValue)
 {
   ReturnCode error = -1;
@@ -949,16 +911,39 @@ ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char* elementPat
     return INVALID_XML_NAME;
   }
 
-  error = checkElement(xmlDocument, elementPath, &parent, &xpathObject);
+  error = checkElement(xpathContext, elementPath, &parent, &xpathObject);
   if (!error) {
-    attributePtr = xmlSetProp(parent, (xmlChar*) attributeName, (xmlChar*) attributeValue);
+    char* prefix = NULL;
+    char* name = NULL;
+    ReturnCode errorCode = FAILED;
+
+    extractPrefixAndName(attributeName, &prefix, &name);
+
+    if (!prefix) {
+      attributePtr = xmlSetProp(parent, (xmlChar*) attributeName, (xmlChar*) attributeValue);
+    }
+    else {
+      xmlNsPtr ns = xmlSearchNs(parent->doc, parent, (xmlChar *) prefix);
+      if (!ns) {
+        printMsg(MESSAGETYPE_ERROR, "Error: unknown namespace prefix \"%s\".\n",
+                 prefix);
+        attributePtr = NULL;
+        errorCode = INVALID_NAMESPACE_PREFIX;
+      }
+      else {
+        attributePtr = xmlSetNsProp(parent, ns, (xmlChar*) name, (xmlChar*) attributeValue);
+      }
+
+      free(prefix);
+    }
+    free(name);
 
     if (!attributePtr) {
       printMsg(MESSAGETYPE_ERROR,
                "Error: Failed to add attribute \"%s\" to element \"%s\".\n",
                attributeName, attributeValue);
       xmlXPathFreeObject(xpathObject);
-      return FAILED;
+      return errorCode;
     }
     xmlXPathFreeObject(xpathObject);
     return SUCCESS;
@@ -973,8 +958,6 @@ ReturnCode genericAddTextAttribute(xmlDocPtr xmlDocument, const char* elementPat
 ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elementPath, xmlNodePtr* pNodePrt)
 {
   TixiDocument* document = getDocument(handle);
-  xmlDocPtr xmlDocument = NULL;
-  xmlXPathContextPtr xpathContext = NULL;
   xmlXPathObjectPtr xpathObject = NULL;
   xmlNodeSetPtr nodes = NULL;
 
@@ -983,27 +966,15 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elem
     return INVALID_HANDLE;
   }
 
-  xmlDocument = document->docPtr;
-
-  xpathContext = xmlXPathNewContext(xmlDocument);
-
-  if (!xpathContext) {
-    printMsg(MESSAGETYPE_ERROR, "Error: unable to create new XPath context\n");
-    xmlXPathFreeContext(xpathContext);
-    return FAILED;
-  }
-
-  xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, xpathContext);
+  xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, document->xpathContext);
 
   if (!xpathObject) {
     printMsg(MESSAGETYPE_ERROR, "Error: unable to evaluate xpath expression \"%s\"\n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     return INVALID_XPATH;
   }
 
   if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
     printMsg(MESSAGETYPE_ERROR, "Error: No element found at XPath expression \"%s\"\n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return ELEMENT_NOT_FOUND;
   }
@@ -1015,13 +986,11 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elem
   if (nodes->nodeNr > 1) {
     printMsg(MESSAGETYPE_ERROR,
              "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return ELEMENT_PATH_NOT_UNIQUE;
   }
 
   *pNodePrt = nodes->nodeTab[0];
-  xmlXPathFreeContext(xpathContext);
   xmlXPathFreeObject(xpathObject);
 
   return SUCCESS;
@@ -1098,6 +1067,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
   dstDocument->uidListHead = NULL;
   dstDocument->hasIncludedExternalFiles = srcDocument->hasIncludedExternalFiles;
   dstDocument->usePrettyPrint = srcDocument->usePrettyPrint;
+  dstDocument->xpathContext = xmlXPathNewContext(xmlDocument);
 
   if (addDocumentToList(dstDocument, &(dstDocument->handle)) != SUCESS) {
     printMsg(MESSAGETYPE_ERROR, "Error in TIXI::copyDocument => Failed  adding document to document list.");

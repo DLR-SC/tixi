@@ -82,6 +82,14 @@ int string_startsWith(const char *string, const char *subString);
  */
 int string_endsWith(const char *string, const char *subString);
 
+/**
+ * @brief Creates a substring. The user has to free it
+ * @param str The input string
+ * @param start_pos Starting position.
+ * @param end_pos End position. -1 indicates the end of the string.
+ * @return
+ */
+char* substring(const char* str, int start_pos, int end_pos);
 
 /**
   @brief Returns the directory- and filename. The dirname will always end

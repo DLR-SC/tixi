@@ -318,7 +318,11 @@ enum ReturnCode
 
   UID_DONT_EXISTS,                /*!< 33: A given uID's does not exist */
 
-  UID_LINK_BROKEN                /*!< 33: A node the is specified as a Link has no correspoding uid in that data set */
+  UID_LINK_BROKEN,                /*!< 33: A node the is specified as a Link has no correspoding uid in that data set */
+
+  INVALID_NAMESPACE_URI,          /*!< 34: The namespace URI is invalid (e.g. a null pointer) */
+
+  INVALID_NAMESPACE_PREFIX        /*!< 35: The namespace prefix is invalid */
 
 };
 
@@ -1149,6 +1153,51 @@ DLL_EXPORT ReturnCode tixiAddTextElement (const TixiDocumentHandle handle, const
 
 
 /**
+  @brief Creates an element holding text within the given namespace.
+
+  Creates an element specified by the elementPath expression and
+  insert text into the element. Elements with the same name can be
+  added multiple times.
+
+  If the namespace does not yet exist in parent nodes, a xmlns attribute is added
+  to the node. If the qualified name contains a prefix, the prefix is used as the
+  namespace prefix also for all future childs nodes.
+
+  <b>Fortran syntax:</b>
+
+  tixi_add_text_element_ns( integer  handle, character*n parent_path, character*n qualified_name, character*n namespace_uri, character*n text, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above)
+                         into which the new element is to be inserted. The parent
+                         element has to exist already.
+
+  @param[in]  qualifiedName qualified name of the element to be inserted into the parent element.
+                            This name might include a namespace prefix (e.g. "html:td")
+
+  @param[in]  namespaceURI URI of the namespace that should be connected with the element.
+
+  @param[in]  text text to be placed inside the element pointed to by elementPath. If
+                   text is NULL an empty element will be created.
+
+  @return
+    - SUCCESS if successfully added the text element
+    - INVALID_XML_NAME if elementName is not a valid XML-element name
+    - INVALID_HANDLE if the handle is not valid
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+    - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+    - INVALID_NAMESPACE_URI if namespaceURI is invalid (i.e. a null pointer)
+    - ALREADY_SAVED if element should be added to an already saved document
+*/
+DLL_EXPORT ReturnCode tixiAddTextElementNS (const TixiDocumentHandle handle, const char *parentPath,
+                                            const char *qualifiedName, const char *namespaceURI, const char *text);
+
+
+
+/**
   @brief Creates an element holding text at a given index.
 
   Creates an element specified by the elementPath expression and
@@ -1186,12 +1235,57 @@ DLL_EXPORT ReturnCode tixiAddTextElement (const TixiDocumentHandle handle, const
 
 DLL_EXPORT ReturnCode tixiAddTextElementAtIndex (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, const char *text, int index);
 
-
 /**
-  @brief Creates an element and setting the value to "true" or "false".
+  @brief Creates an element holding text at a given index in the specified namespace.
 
   Creates an element specified by the elementPath expression and
-  insert one of the boolean values "true" or "false" into the element.
+  insert text into the element. Elements with the same name can be
+  added multiple times, so in this version of the function an index could be
+  provides to specifiy a exact position.
+
+  If the namespace does not yet exist in parent nodes, a xmlns attribute is added
+  to the node. If the qualified name contains a prefix, the prefix is used as the
+  namespace prefix also for all future childs nodes.
+
+  <b>Fortran syntax:</b>
+
+  tixi_add_text_element_ns_at_index( integer  handle, character*n parent_path, character*n qualified_name, character*n namespace_uri, character*n text, integer index, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above)
+                         into which the new element is to be inserted. The parent
+                         element has to exist already.
+
+  @param[in]  qualifiedName qualified name of the element to be inserted into the parent element.
+                            This name might include a namespace prefix (e.g. "html:td")
+
+  @param[in]  namespaceURI URI of the namespace that should be connected with the element.
+
+  @param[in]  text text to be placed inside the element pointed to by elementPath. If
+                   text is NULL an empty element will be created.
+
+  @param[in]  index the position index where the new node should be created.
+
+  @return
+    - SUCCESS if successfully added the text element
+    - INVALID_XML_NAME if elementName is not a valid XML-element name
+    - INVALID_HANDLE if the handle is not valid
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+    - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+    - INVALID_NAMESPACE_URI if namespaceURI is invalid (i.e. a null pointer)
+    - ALREADY_SAVED if element should be added to an already saved document
+  */
+DLL_EXPORT ReturnCode tixiAddTextElementNSAtIndex(const TixiDocumentHandle handle, const char *parentPath,
+                                                  const char* qualifiedName, const char* namespaceURI, const char *text, int index);
+
+/**
+  @brief Creates an element and sets the value to "true" or "false".
+
+  Creates an element specified by the elementPath expression and
+  inserts one of the boolean values "true" or "false" into the element.
   Elements with the same name can be added multiple times.
 
   <b>Fortran syntax:</b>
@@ -1219,8 +1313,52 @@ DLL_EXPORT ReturnCode tixiAddTextElementAtIndex (const TixiDocumentHandle handle
     - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
     - ALREADY_SAVED if element should be added to an already saved document
   */
-
 DLL_EXPORT ReturnCode tixiAddBooleanElement (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, int boolean);
+
+
+/**
+  @brief Creates an element in the given namesoace and sets the value to "true" or "false".
+
+  Creates an element specified by the elementPath expression and
+  inserts one of the boolean values "true" or "false" into the element.
+  Elements with the same name can be added multiple times.
+
+  If the namespace does not yet exist in parent nodes, a xmlns attribute is added
+  to the node. If the qualified name contains a prefix, the prefix is used as the
+  namespace prefix also for all future childs nodes.
+
+  <b>Fortran syntax:</b>
+
+  tixi_add_boolean_element_ns( integer  handle, character*n parent_path, character*n qualified_name, character*n namespace_uri, integer boolean, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above)
+                         into which the new element is to be inserted. The parent
+                         element has to exist already.
+
+  @param[in]  qualifiedName qualified name of the element to be inserted into the parent element.
+                            This name might include a namespace prefix (e.g. "html:td")
+
+  @param[in]  namespaceURI URI of the namespace that should be connected with the element.
+
+  @param[in]  boolean boolean value to be placed inside the element pointed to by elementPath. The
+                      value of boolean has to be "0" or "1".
+
+  @return
+    - SUCCESS if successfully added the text element
+    - INVALID_XML_NAME if elementName is not a valid XML-element name
+    - INVALID_HANDLE if the handle is not valid
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+    - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+    - INVALID_NAMESPACE_URI if namespaceURI is invalid (i.e. a null pointer)
+    - ALREADY_SAVED if element should be added to an already saved document
+ */
+DLL_EXPORT ReturnCode tixiAddBooleanElementNS (const TixiDocumentHandle handle, const char *parentPath,
+                                               const char *qualifiedName, const char* namespaceURI, int boolean);
+
 
 /**
   @brief Creates an element which holds a floating point number.
@@ -1257,6 +1395,50 @@ DLL_EXPORT ReturnCode tixiAddDoubleElement (const TixiDocumentHandle handle,
                                             const char *parentPath, const char *elementName,
                                             double number, const char *format);
 
+
+/**
+  @brief Creates an element which holds a floating point number in the given namespace.
+
+  Creates an element specified by the elementPath expression. Elements
+  with the same name can be added multiple times.
+
+  If the namespace does not yet exist in parent nodes, a xmlns attribute is added
+  to the node. If the qualified name contains a prefix, the prefix is used as the
+  namespace prefix also for all future childs nodes.
+
+  <b>Fortran syntax:</b>
+
+  tixi_add_double_element_ns( integer  handle, character*n parent_path, character*n qualified_name, character*n namespace_uri, real number, character*n format, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above).
+
+  @param[in]  qualifiedName qualified name of the element to be inserted into the parent element.
+                            This name might include a namespace prefix (e.g. "html:td")
+
+  @param[in]  namespaceURI URI of the namespace that should be connected with the element.
+
+  @param[in]  number floating point number to be placed inside the element pointed to by
+                     elementPath. If number is NULL an empty element will be created.
+
+  @param[in]  format format string used to convert number into a string.
+                     The format string usage is identical to format strings in printf.
+                     If format is NULL "%g" will be used to format the string.
+
+  @return
+    - SUCCESS if successfully retrieve the text content
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+    - INVALID_NAMESPACE_URI if namespaceURI is invalid (i.e. a null pointer)
+    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+ */
+DLL_EXPORT ReturnCode tixiAddDoubleElementNS (const TixiDocumentHandle handle,
+                                              const char *parentPath, const char *qualifiedName, const char* namespaceURI,
+                                              double number, const char *format);
+
 /**
   @brief Creates an element which holds an integer.
 
@@ -1291,6 +1473,51 @@ DLL_EXPORT ReturnCode tixiAddDoubleElement (const TixiDocumentHandle handle,
 DLL_EXPORT ReturnCode tixiAddIntegerElement (const TixiDocumentHandle handle,
                                              const char *parentPath, const char *elementName,
                                              int number, const char *format);
+
+
+/**
+  @brief Creates an element which holds an integer in the given namespace.
+
+  Creates an element specified by the elementPath expression holding
+  an integer number. Elements with the same name can be added multiple times.
+
+  If the namespace does not yet exist in parent nodes, a xmlns attribute is added
+  to the node. If the qualified name contains a prefix, the prefix is used as the
+  namespace prefix also for all future childs nodes.
+
+  <b>Fortran syntax:</b>
+
+  tixi_add_integer_element_ns( integer  handle, character*n parent_path, character*n qualified_name, character*n namespace_uri, integer number, character*n format, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiOpenDocument or ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above).
+
+  @param[in]  qualifiedName qualified name of the element to be inserted into the parent element.
+                            This name might include a namespace prefix (e.g. "html:td")
+
+  @param[in]  namespaceURI URI of the namespace that should be connected with the element.
+
+  @param[in]  number integer number to be placed inside the element pointed to by
+                     elementPath. If number is NULL an empty element will be created.
+
+  @param[in]  format format string used to convert number into a string.
+                     The format string usage is identical to format strings in printf.
+                     If format is NULL "%g" will be used to format the string.
+
+  @return
+    - SUCCESS if successfully retrieve the text content
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+    - INVALID_NAMESPACE_URI if namespaceURI is invalid (i.e. a null pointer)
+    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+ */
+DLL_EXPORT ReturnCode tixiAddIntegerElementNS (const TixiDocumentHandle handle,
+                                               const char *parentPath,
+                                               const char *qualifiedName, const char *namespaceURI,
+                                               int number, const char *format);
 
 
 /**
@@ -1411,6 +1638,46 @@ DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, const 
 
 
 /**
+  @brief Creates an empty element in the specified namespace.
+
+  Creates an empty element specified by the elementPath expression
+  Elements with the same name can be added multiple times.
+
+  If the namespace does not yet exist in parent nodes, a xmlns attribute is added
+  to the node. If the qualified name contains a prefix, the prefix is used as the
+  namespace prefix also for all future childs nodes.
+
+  <b>Fortran syntax:</b>
+
+  tixi_create_element_ns( integer  handle, character*n parent_path, character*n qualified_name, character*n namespace_uri, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above)
+                         into which the new element is to be inserted. The parent
+                         element has to exist already.
+
+  @param[in]  qualifiedName qualified name of the element to be inserted into the parent element.
+                            This name might include a namespace prefix (e.g. "html:td")
+
+  @param[in]  namespaceURI URI of the namespace that should be connected with the element.
+
+  @return
+    - SUCCESS if successfully added the text element
+    - INVALID_XML_NAME if elementName is not a valid XML-element name
+    - INVALID_HANDLE if the handle is not valid
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+    - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+    - INVALID_NAMESPACE_URI if namespaceURI is invalid (i.e. a null pointer)
+    - ALREADY_SAVED if element should be added to an already saved document
+ */
+DLL_EXPORT ReturnCode tixiCreateElementNS (const TixiDocumentHandle handle, const char *parentPath,
+                                           const char *qualifiedName, const char* namespaceURI);
+
+
+/**
   @brief Creates an empty element at a given index.
 
   Creates an empty element specified by the elementPath expression. In this function you need to provide an index > 0
@@ -1442,6 +1709,49 @@ DLL_EXPORT ReturnCode tixiCreateElement (const TixiDocumentHandle handle, const 
     - ALREADY_SAVED if element should be added to an already saved document
  */
 DLL_EXPORT ReturnCode tixiCreateElementAtIndex (const TixiDocumentHandle handle, const char *parentPath, const char *elementName, int index);
+
+
+/**
+  @brief Creates an empty element at a given index in the specified namespace.
+
+  Creates an empty element specified by the elementPath expression. In this function you need to provide an index > 0
+        on which position the new element should be created.
+  Elements with the same name can be added multiple times.
+
+  If the namespace does not yet exist in parent nodes, a xmlns attribute is added
+  to the node. If the qualified name contains a prefix, the prefix is used as the
+  namespace prefix also for all future childs nodes.
+
+  <b>Fortran syntax:</b>
+
+  tixi_create_element_at_index_ns( integer  handle, character*n parent_path, character*n qualified_name, character*n namespace_uri, integer index, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above)
+                         into which the new element is to be inserted. The parent
+                         element has to exist already.
+
+  @param[in]  qualifiedName qualified name of the element to be inserted into the parent element.
+                            This name might include a namespace prefix (e.g. "html:td")
+
+  @param[in]  namespaceURI URI of the namespace that should be connected with the element.
+
+  @param[in]  index       position of the new created element
+
+  @return
+    - SUCCESS if successfully added the text element
+    - INVALID_XML_NAME if elementName is not a valid XML-element name
+    - INVALID_HANDLE if the handle is not valid
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+    - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+    - INVALID_NAMESPACE_URI if namespaceURI is invalid (i.e. a null pointer)
+    - ALREADY_SAVED if element should be added to an already saved document
+ */
+DLL_EXPORT ReturnCode tixiCreateElementNSAtIndex (const TixiDocumentHandle handle, const char *parentPath,
+                                                  const char *qualifiedName, int index, const char* namespaceURI);
 
 
 /**
@@ -1602,7 +1912,9 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be get from the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] text value of the specified attribute as a string
 
@@ -1613,6 +1925,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetTextAttribute (const TixiDocumentHandle handle,
                                             const char *elementPath, const char *attributeName,
@@ -1636,7 +1949,9 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] number  value of the specified attribute as an integer value
 
@@ -1647,6 +1962,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute (const TixiDocumentHandle handle,
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetIntegerAttribute (const TixiDocumentHandle handle,
                                                const char *elementPath, const char *attributeName,
@@ -1670,7 +1986,9 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] boolean  value of the specified attribute as an boolean value
 
@@ -1681,6 +1999,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerAttribute (const TixiDocumentHandle handle,
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
                                                const char *elementPath, const char *attributeName,
@@ -1704,7 +2023,9 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[out] number value of the specified attribute as a floating point value
 
@@ -1715,6 +2036,7 @@ DLL_EXPORT ReturnCode tixiGetBooleanAttribute (const TixiDocumentHandle handle,
     - ATTRIBUTE_NOT_FOUND if the element has no attribute attributeName
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiGetDoubleAttribute (const TixiDocumentHandle handle,
                                               const char *elementPath, const char *attributeName,
@@ -1739,7 +2061,9 @@ DLL_EXPORT ReturnCode tixiGetDoubleAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[in]  attributeValue text to assigned to the attribute. If attributeValue is
                              NULL the empty string will be assigned to the attribute.
@@ -1754,6 +2078,7 @@ DLL_EXPORT ReturnCode tixiGetDoubleAttribute (const TixiDocumentHandle handle,
                               to a list of elements
     - ALREADY_SAVED if element should be added to an already saved document
     - INVALID_XML_NAME if attributeName is not a valid XML-element name
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiAddTextAttribute (const TixiDocumentHandle handle,
                                             const char *elementPath, const char *attributeName,
@@ -1777,7 +2102,9 @@ DLL_EXPORT ReturnCode tixiAddTextAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the document
                           specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[in]  number floating point value to be assigned to the attribute. If
                      number is NULL an error is return and the attribute
@@ -1796,6 +2123,7 @@ DLL_EXPORT ReturnCode tixiAddTextAttribute (const TixiDocumentHandle handle,
     - NO_ATTRIBUTE_NAME if attributeName is NULL
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
                               to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiAddDoubleAttribute (const TixiDocumentHandle handle,
                                               const char *elementPath, const char *attributeName,
@@ -1818,7 +2146,9 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute (const TixiDocumentHandle handle,
   @param[in]  elementPath an XPath compliant path to an element in the
                           document specified by handle (see section \ref XPathExamples above).
 
-  @param[in]  attributeName name of the attribute to be added to the element
+  @param[in]  attributeName name of the attribute to be added to the element. The name
+                            can also consist of a namespace prefix + ":" + the attribute
+                            name.
 
   @param[in]  number integer value to be assigned to the attribute. If
                      number is NULL an error is return and the attribute
@@ -1837,6 +2167,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute (const TixiDocumentHandle handle,
     - NO_ATTRIBUTE_NAME if attributeName is NULL
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
                               to a list of elements
+    - INVALID_NAMESPACE_PREFIX if the prefix in attributeName does not match to a namespace
  */
 DLL_EXPORT ReturnCode tixiAddIntegerAttribute (const TixiDocumentHandle handle,
                                                const char *elementPath, const char *attributeName,
@@ -1867,6 +2198,8 @@ DLL_EXPORT ReturnCode tixiAddIntegerAttribute (const TixiDocumentHandle handle,
     - NO_ATTRIBUTE_NAME if attributeName is NULL
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
                               to a list of elements
+    - ATTRIBUTE_NOT_FOUND, if the attribute could not be removed (i.e. if it does not exist)
+    - INVALID_NAMESPACE_PREFIX, if the prefix in attributeName is invalid.
  */
 DLL_EXPORT ReturnCode tixiRemoveAttribute (const TixiDocumentHandle handle,
                                            const char *elementPath, const char *attributeName);
@@ -1920,6 +2253,170 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
 
 /*@}*/
 
+/**
+  \defgroup Namespaces Namespace Support Functions
+
+  These functions are used, to register xml namespaces to the parser or add namespaces to
+  existing elements. For the following explanations, consider the following xml file
+
+  @verbatim
+  <root>
+    <h:table xmlns:h="http://www.w3.org/TR/html4/">
+      <h:tr>
+        <h:td>Apples</h:td>
+        <h:td>Bananas</h:td>
+      </h:tr>
+    </h:table>
+    <aircraft xmlns="http://www.dlr.de/cpacs">
+      <modelname>D150</modelname>
+    </aircraft>
+  </root>
+  @endverbatim
+
+  <H2>Reading elements with namespaces</H2>
+
+  This file defines two namespaces - "http://www.w3.org/TR/html4/" and "http://www.dlr.de/cpacs".
+  A query for "/root/h:table" or "/root/aircraft" will result in an error, as no prefix was defined
+  for both namespaces. The prefix inside the xml file exists only in the file, but not in the parser.
+  To successfully query these paths, the namespaces must be registered with some (arbitrary) prefix using
+  ::tixiRegisterNamespace or ::tixiRegisterNamespacesFromDocument.
+
+  After calling ::tixiRegisterNamespace(handle, "http://www.w3.org/TR/html4/", "html") the query for
+  "/root/html:table" is now valid. After calling ::tixiRegisterNamespace(handle, "http://www.dlr.de/cpacs", "cpacs")
+  the query for "/root/cpacs:aircraft" becomes valid.
+
+  <H2>Writing elements with namespaces</H2>
+
+  To write elements with namespaces, the following functions are available:
+   - ::tixiCreateElementNS
+   - ::tixiCreateElementNSAtIndex
+   - ::tixiAddBooleanElementNS
+   - ::tixiAddDoubleElementNS
+   - ::tixiAddIntegerElementNS
+   - ::tixiAddTextElementNS
+   - ::tixiAddTextElementNSAtIndex
+
+  To reproduce the upper xml file, use the following tixi code:
+
+  @verbatim
+  tixiCreateDocument("root", &handle);
+
+  // create table element in prefixed html namespace
+  tixiCreateElementNS(handle, "/root", "h:table", "http://www.w3.org/TR/html4/");
+  tixiRegisterNamespace(handle, "http://www.w3.org/TR/html4/", "h");
+
+  tixiCreateElementNS(handle, "/root/h:table", "tr", "http://www.w3.org/TR/html4/");
+  tixiAddTextElementNS(handle, "/root/h:table/h:tr", "td", "http://www.w3.org/TR/html4/", "Apples");
+  tixiAddTextElementNS(handle, "/root/h:table/h:tr", "td", "http://www.w3.org/TR/html4/", "Bananas"):
+
+  // create aircraft in default namespace (no prefix!)
+  tixiCreateElementNS(handle, "/root", "aircraft", "http://www.dlr.de/cpacs");
+  tixiRegisterNamespace(handle, "http://www.dlr.de/cpacs", "c");
+  tixiAddTextElementNS(handle, "/root/c:aircraft", "modelname", "http://www.dlr.de/cpacs", "D150");
+  @endverbatim
+ */
+/*@{*/
+
+
+/**
+  @brief Registers the given namespace and its prefix.
+
+  When dealing with xml namespaces, elements can only be accessed via xPath
+  when their namespace was registered with a prefix.
+
+  To automatically register all namespaces and prefixes in the current
+  document, use ::tixiRegisterNamespacesFromDocument.
+
+  <b>Fortran syntax:</b>
+
+  tixi_register_namespace( integer handle, character*n namespace_uri, character*n prefix, integer error )
+
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+  @param[in]  namespaceURI The URI for the namespace (e.g. "http://www.w3.org/TR/html4/")
+  @param[in]  prefix The desired prefix of the namespace (e.g. "html")
+
+  @return
+    - SUCCESS if the namespace could be registered successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - FAILED In case of an error
+ */
+DLL_EXPORT ReturnCode tixiRegisterNamespace(const TixiDocumentHandle handle, const char* namespaceURI, const char* prefix);
+
+
+/**
+ @brief Registers all prefixed namespaces of the xml document to the parser.
+
+ Default (non-prefixed) namespaces must be still registered using ::tixiRegisterNamespace manually
+ to be accessible via xPath.
+
+ In the example above, the namespace "http://www.w3.org/TR/html4/" would be registered with
+ the prefix "h" and a query to "/root/h:table" becomes successful.
+
+  <b>Fortran syntax:</b>
+
+  tixi_register_namespaces_from_document( integer handle, integer error )
+
+  @param[in]  handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP
+
+  @return
+    - SUCCESS if the namespace could be registered successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - FAILED In case of an error.
+ */
+DLL_EXPORT ReturnCode tixiRegisterNamespacesFromDocument(const TixiDocumentHandle handle);
+
+
+/**
+  @brief This function sets the namespace for the specified element.
+
+  This function can be used, after an element was created or read
+  from file to set the namespace of the element.
+  To set a default namespace for this element, add NULL as the prefix.
+
+  <b>Fortran syntax:</b>
+
+  tixi_set_element_namespace( integer handle, character*n element_path, character*n namespace_uri, character*n prefix, integer error )
+
+  @return
+    - SUCCESS if the namespace could be set successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_NAMESPACE_URI if the namespace URI is invalid
+    - ELEMENT_NOT_FOUND if the element at elementPath does not exist
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - FAILED If the namespace could not be set due to another error.
+ */
+DLL_EXPORT ReturnCode tixiSetElementNamespace(const TixiDocumentHandle handle, const char* elementPath,
+                                              const char* namespaceURI, const char* prefix);
+
+
+/**
+  @brief This function adds a namespace declaration inside the tag of specified element.
+
+  This function can be used, after an element was created or read
+  from file to set the namespace of the element.
+
+  The namespace is not applied to the element, but can be used from child nodes.
+
+  Different to ::tixiSetElementNamespace the namespace prefix may not be empty!
+
+  <b>Fortran syntax:</b>
+
+  tixi_add_namespace_attribute( integer handle, character*n element_path, character*n namespace_uri, character*n prefix, integer error )
+
+  @return
+    - SUCCESS if the namespace could be set successfully
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_NAMESPACE_URI if the namespace URI is invalid
+    - ELEMENT_NOT_FOUND if the element at elementPath does not exist
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - FAILED If the prefix is empty or the namespace could not be set due to another error.
+ */
+DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, const char* elementPath,
+                                           const char* namespaceURI, const char* prefix);
+
+/*@}*/
 /**
   \defgroup MiscFunctions Miscellaneous Functions
 

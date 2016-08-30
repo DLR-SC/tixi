@@ -7,7 +7,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*     http://www.apache.org/licenses/LICENSE-2.0
+*   http://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,17 +18,17 @@
 #include "xpathFunctions.h"
 #include "tixiInternal.h"
 
+#include "libxml/xpathInternals.h"
+
+#include <assert.h>
+
 extern void printMsg(MessageType type, const char* message, ...);
 
-xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char* xPathExpression)
+xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const char* xPathExpression)
 {
-  xmlXPathContextPtr xpathContext;
   xmlXPathObjectPtr xpathObject;
 
-  /* Create xpath evaluation context */
-  xpathContext = xmlXPathNewContext(doc);
   if (!xpathContext) {
-    printMsg(MESSAGETYPE_ERROR, "Error: Unable to create new XPath context.\n");
     return NULL;
   }
 
@@ -36,17 +36,14 @@ xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char* xPathExpres
   xpathObject = xmlXPathEvalExpression((xmlChar*) xPathExpression, xpathContext);
   if (!(xpathObject)) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", xPathExpression);
-    xmlXPathFreeContext(xpathContext);
     return NULL;
   }
 
   if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-    xmlXPathFreeContext(xpathContext);
     xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
-  xmlXPathFreeContext(xpathContext);
   return xpathObject;
 }
 
@@ -54,14 +51,12 @@ xmlXPathObjectPtr XPathEvaluateExpression(xmlDocPtr doc, const char* xPathExpres
 
 int XPathGetNodeNumber(TixiDocument* tixiDocument, const char* xPathExpression)
 {
-  xmlDocPtr doc;
   xmlXPathObjectPtr xpathObject;
   xmlNodeSetPtr nodes = NULL;
   int nodeNr = 0;
 
   /* Load XML document */
-  doc = tixiDocument->docPtr;
-  xpathObject = XPathEvaluateExpression(doc, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
   if (xpathObject == NULL) {
     return -1;
   }
@@ -77,17 +72,13 @@ int XPathGetNodeNumber(TixiDocument* tixiDocument, const char* xPathExpression)
 char* XPathExpressionGetText(TixiDocument* tixiDocument, const char* xPathExpression, int index)
 {
 
-  xmlDocPtr doc;
   xmlXPathObjectPtr xpathObject;
   xmlNodeSetPtr nodes = NULL;
   xmlNodePtr cur;
   char* text = NULL;
   int size = 0;
 
-  /* Load XML document */
-  doc = tixiDocument->docPtr;
-
-  xpathObject = XPathEvaluateExpression(doc, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
   if (xpathObject == NULL) {
     return NULL;
   }
@@ -117,7 +108,7 @@ char* XPathExpressionGetText(TixiDocument* tixiDocument, const char* xPathExpres
 
   if (cur->type == XML_ELEMENT_NODE) {
     xmlNodePtr children = cur->children;
-    text = (char*) xmlNodeListGetString(doc, children, 0);
+    text = (char*) xmlNodeListGetString(tixiDocument->docPtr, children, 0);
   }
   else if (cur->type == XML_ATTRIBUTE_NODE) {
     if (cur->children) {
@@ -136,16 +127,12 @@ char* XPathExpressionGetText(TixiDocument* tixiDocument, const char* xPathExpres
 char* XPathExpressionGetElementName(TixiDocument* tixiDocument, const char* xPathExpression, int index)
 {
 
-  xmlDocPtr doc;
   xmlXPathObjectPtr xpathObject;
   xmlNodeSetPtr nodes = NULL;
   xmlNodePtr cur;
   int size = 0;
 
-  /* Load XML document */
-  doc = tixiDocument->docPtr;
-
-  xpathObject = XPathEvaluateExpression(doc, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
   if (xpathObject == NULL) {
     return NULL;
   }
@@ -188,16 +175,12 @@ char* XPathExpressionGetElementName(TixiDocument* tixiDocument, const char* xPat
 char* XPathExpressionGetElementPath(TixiDocument* tixiDocument, const char* xPathExpression, int index)
 {
 
-  xmlDocPtr doc;
   xmlXPathObjectPtr xpathObject;
   xmlNodeSetPtr nodes = NULL;
   xmlNodePtr cur;
   int size = 0;
 
-  /* Load XML document */
-  doc = tixiDocument->docPtr;
-
-  xpathObject = XPathEvaluateExpression(doc, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
   if (xpathObject == NULL) {
     return NULL;
   }
@@ -229,3 +212,54 @@ char* XPathExpressionGetElementPath(TixiDocument* tixiDocument, const char* xPat
   return (char*) xmlGetNodePath(cur);
 }
 
+int XPathRegisterNamespace(xmlXPathContextPtr xpathContext, const char *namespaceURI, const char *prefix)
+{
+  return xmlXPathRegisterNs(xpathContext, (xmlChar*) prefix, (xmlChar*) namespaceURI);
+}
+
+int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
+{
+  xmlXPathObjectPtr xpathObj;
+  xmlNodeSetPtr nodes;
+  int nodeCount = 0;
+  int inode = 0;
+  int error = 0;
+
+
+  /* Get all unique namespace declarations */
+  xpathObj = xmlXPathEvalExpression((xmlChar*) "//*/namespace::*[not(. = ../../namespace::*|preceding::*/namespace::*)]", xpathContext);
+  if (xpathObj == NULL) {
+    printMsg(MESSAGETYPE_ERROR, "Error: unable to retrieve all namespaces \n");
+    return -1;
+  }
+
+  nodes = xpathObj->nodesetval;
+  nodeCount = (nodes) ? nodes->nodeNr : 0;
+
+  for (inode = 0; inode < nodeCount; ++inode) {
+
+    if (nodes->nodeTab[inode] && nodes->nodeTab[inode]->type == XML_NAMESPACE_DECL) {
+      xmlNsPtr ns = (xmlNsPtr)nodes->nodeTab[inode];
+
+      if (!ns) {
+        continue;
+      }
+
+      /* ignore default xml prefix */
+      if (ns->prefix && strcmp((char*)ns->prefix, "xml") != 0 ) {
+        if (XPathRegisterNamespace(xpathContext, (char*)ns->href, (char*) ns->prefix) != 0) {
+          printMsg(MESSAGETYPE_ERROR, "Error: unable to register NS with prefix=\"%s\" and href=\"%s\"\n", ns->prefix, ns->href);
+          error = -1;
+        }
+      }
+      else if(!ns->prefix) {
+        printMsg(MESSAGETYPE_STATUS, "Skipping default namespace \"%s\"\n", ns->href);
+      }
+
+    } /* is namespace */
+  } /* for */
+
+  xmlXPathFreeObject(xpathObj);
+
+  return error;
+}

@@ -7,7 +7,7 @@ configure_file (
 )
 
 set(TIXI_SRC tixiImpl.c tixiUtils.c uidHelper.c tixiInternal.c webMethods.c 
-	xpathFunctions.c xslTransformation.c)
+	xpathFunctions.c xslTransformation.c namespaceFunctions.c)
 
 set(TIXI_HDR tixi.h tixiData.h tixiInternal.h tixiUtils.h)
 
