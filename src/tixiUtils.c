@@ -393,7 +393,7 @@ char *substring(const char *str, int start_pos, int end_pos)
   int end = end_pos;
 
   if (end < 0) {
-    end = strlen(str) - 1;
+    end = (int) strlen(str) - 1;
   }
 
   if (start_pos > end) {

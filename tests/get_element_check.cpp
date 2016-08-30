@@ -178,7 +178,7 @@ TEST_F(GetElementTests, getMatrixOfPoints)
   int i;
   int nPoints = 10;
   char entryPath[50];
-  int insertPosition = -1;
+  size_t insertPosition = -1;
 
   strcpy( entryPath, "/plane/matrixOfPoints/r[" );
   insertPosition=strlen(entryPath);

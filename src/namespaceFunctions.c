@@ -19,7 +19,7 @@ void extractPrefixAndName(const char *qualifiedName, char** prefix, char** name)
     *name = substring(qualifiedName, 0, -1);
   }
   else {
-    int pos = chr - qualifiedName;
+    int pos = (int) (chr - qualifiedName);
     *prefix = substring(qualifiedName, 0, pos-1);
     *name = substring(qualifiedName, pos+1, -1);
   }
