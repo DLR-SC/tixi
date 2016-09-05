@@ -21,13 +21,20 @@ add_custom_target(tixi_mex_interface ALL
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
 )
 
+configure_file(Makefile.in ${CMAKE_CURRENT_BINARY_DIR}/Makefile @ONLY)
+
 install(
 	CODE "file( GLOB MFILES ${CMAKE_CURRENT_BINARY_DIR}/*.m )"
 	CODE "file( INSTALL \${MFILES} DESTINATION \${CMAKE_INSTALL_PREFIX}/share/tixi/matlab )"
 	COMPONENT interfaces
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c DESTINATION share/tixi/matlab
+install(FILES
+	${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
+	${CMAKE_CURRENT_SOURCE_DIR}/common.h
+	${CMAKE_CURRENT_SOURCE_DIR}/Readme.md
+	${CMAKE_CURRENT_BINARY_DIR}/Makefile
+	DESTINATION share/tixi/matlab
 	COMPONENT interfaces)
 
 

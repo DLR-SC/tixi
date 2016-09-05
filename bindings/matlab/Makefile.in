@@ -1,0 +1,5 @@
+# Use this makefile, to create the MATLAB bindings for tixi
+# It requires a MATLAB installation and MATLAB's mex command must be in PATH
+
+all:
+	mex tiximatlab.c -I../../../include -L../../../@CMAKE_INSTALL_LIBDIR@ -lTIXI -output tixi_matlab
