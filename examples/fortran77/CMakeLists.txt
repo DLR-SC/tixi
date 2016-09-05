@@ -1,5 +1,5 @@
 # only build, if fortran compiler was found before
-if(NOT CMAKE_Fortran_COMPILER STREQUAL CMAKE_Fortran_COMPILER-NOTFOUND)
+if(NOT CMAKE_Fortran_COMPILER STREQUAL CMAKE_Fortran_COMPILER-NOTFOUND AND CMAKE_Fortran_COMPILER)
   enable_language(Fortran)
 
   # copy xml files
