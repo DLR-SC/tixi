@@ -21,7 +21,7 @@ add_custom_target(tixi_mex_interface ALL
 	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
 )
 
-configure_file(Makefile.in ${CMAKE_CURRENT_BINARY_DIR}/Makefile @ONLY)
+configure_file(Makefile.in ${CMAKE_CURRENT_BINARY_DIR}/Makefile-matlab @ONLY)
 
 install(
 	CODE "file( GLOB MFILES ${CMAKE_CURRENT_BINARY_DIR}/*.m )"
@@ -33,10 +33,18 @@ install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
 	${CMAKE_CURRENT_SOURCE_DIR}/common.h
 	${CMAKE_CURRENT_SOURCE_DIR}/Readme.md
-	${CMAKE_CURRENT_BINARY_DIR}/Makefile
 	DESTINATION share/tixi/matlab
-	COMPONENT interfaces)
+	COMPONENT interfaces
+)
 
+# We cannot directly create a Makefile, as it would collide with cmake's makefile
+# Hence, we are renaming it after installation
+install(FILES
+	${CMAKE_CURRENT_BINARY_DIR}/Makefile-matlab
+	RENAME Makefile
+	DESTINATION share/tixi/matlab
+	COMPONENT interfaces
+)
 
 if(MATLAB_FOUND)
 	# If matlab is found, the tiximatlab.c file is compiled into a
