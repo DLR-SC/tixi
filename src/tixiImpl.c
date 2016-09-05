@@ -1686,6 +1686,9 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   TixiDocument *document = getDocument(handle);
   xmlXPathObjectPtr xpathObject = NULL;
   xmlNodeSetPtr nodes = NULL;
+  char * prefix = NULL;
+  char * childTagName = NULL;
+
   int iNode;
   char *childElementPath =
       (char *) malloc(sizeof(char) * (strlen(elementPath) + strlen(childName) + 2));
@@ -1792,14 +1795,19 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   nodes = xpathObject->nodesetval;
   assert(nodes);
 
+  extractPrefixAndName(childName, &prefix, &childTagName);
+
+  if (prefix) {
+    free(prefix);
+  }
 
   for (iNode = 0; iNode < nodes->nodeNr; iNode++) {
+    xmlNodePtr child = nodes->nodeTab[iNode];
+    assert(child);
 
-    assert(nodes->nodeTab[iNode]);
+    if (child->type == XML_ELEMENT_NODE) {
 
-    if (nodes->nodeTab[iNode]->type == XML_ELEMENT_NODE) {
-
-      if (!strcmp(childName, (char *) nodes->nodeTab[iNode]->name)) {
+      if (!strcmp(childTagName, (char *) child->name)) {
         (*count)++;
       }
     }
@@ -1808,6 +1816,7 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
   xmlXPathFreeObject(xpathObject);
   free(childElementPath);
   free(allChildren);
+  free(childTagName);
   return SUCCESS;
 }
 

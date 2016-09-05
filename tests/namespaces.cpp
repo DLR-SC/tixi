@@ -148,6 +148,14 @@ TEST_F(Namespaces, addBooleanElementNS)
   ASSERT_EQ(INVALID_NAMESPACE_URI, tixiAddBooleanElementNS(inDocumentHandle, "/root", "svg:iscircle", NULL, 0));
 }
 
+TEST_F(Namespaces, getNamedChildrenCount)
+{
+    int count = 0;
+    tixiRegisterNamespace(inDocumentHandle, "http://www.w3.org/TR/html4/", "html");
+    ASSERT_EQ(SUCCESS, tixiGetNamedChildrenCount(inDocumentHandle, "/root/html:table/html:tr", "html:td", &count));
+    ASSERT_EQ(2, count);
+}
+
 /**
   This test should produce the following output
 
