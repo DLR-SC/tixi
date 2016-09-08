@@ -103,7 +103,6 @@ void freeTixiDocument(TixiDocument* document);
   @param xpathContext (in) pointer to an libxml2 xpath context
   @param elementPath (in) path to the element to be check
   @param element (out) pointer to the XML-node pointed to be element path
-  @param xpathObject (out) libxml2 internal object pointer. Has to be freed by the calling routine.
   @return
     - SUCCESS element exists and is unique
     - FAILED internal error
@@ -111,8 +110,7 @@ void freeTixiDocument(TixiDocument* document);
     - ELEMENT_NOT_FOUND
     - NOT_AN_ELEMENT
  */
-DLL_EXPORT ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* elementPath, xmlNodePtr* element,
-                                   xmlXPathObjectPtr* xpathObject);
+DLL_EXPORT ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* elementPath, xmlNodePtr* element);
 
 
 /**

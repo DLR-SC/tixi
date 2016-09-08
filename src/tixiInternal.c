@@ -302,13 +302,13 @@ ReturnCode checkExternalNode(const xmlNodePtr element)
 
 
 ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* elementPathDirty,
-                        xmlNodePtr* element, xmlXPathObjectPtr* xpathObject)
+                        xmlNodePtr* element)
 {
 
   xmlNodeSetPtr nodes = NULL;
   char elementPath[1024];
 
-  *xpathObject = NULL;
+  xmlXPathObjectPtr xpathObject = NULL;
 
   /* remove trailing slash */
   strncpy(elementPath, elementPathDirty, 1024);
@@ -317,30 +317,28 @@ ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* eleme
   }
 
   /* Evaluate Expression */
-  *xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, xpathContext);
-  if (!(*xpathObject)) {
+  xpathObject = xmlXPathEvalExpression((xmlChar*) elementPath, xpathContext);
+  if (!xpathObject) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", elementPath);
     return INVALID_XPATH;
   }
 
-  if (xmlXPathNodeSetIsEmpty((*xpathObject)->nodesetval)) {
+  if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
     char * errorStr = buildString("Error: element %s not found!", elementPath);
-    xmlXPathFreeObject(*xpathObject);
-    *xpathObject = NULL;
+    xmlXPathFreeObject(xpathObject);
 
     printMsg(MESSAGETYPE_STATUS, errorStr);
     free(errorStr);
     return ELEMENT_NOT_FOUND;
   }
 
-  nodes = (*xpathObject)->nodesetval;
+  nodes = xpathObject->nodesetval;
   assert(nodes);
 
   if (nodes->nodeNr > 1) {
     printMsg(MESSAGETYPE_ERROR,
              "Error: Element chosen by XPath \"%s\" expression is not unique. \n", elementPath);
-    xmlXPathFreeObject(*xpathObject);
-    *xpathObject = NULL;
+    xmlXPathFreeObject(xpathObject);
     return ELEMENT_PATH_NOT_UNIQUE;
   }
 
@@ -348,13 +346,13 @@ ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* eleme
 
   if (nodes->nodeTab[0]->type == XML_ELEMENT_NODE || nodes->nodeTab[0]->type == XML_DOCUMENT_NODE) {
     *element = nodes->nodeTab[0];
+    xmlXPathFreeObject(xpathObject);
     return SUCCESS;
   }
   else {
     printMsg(MESSAGETYPE_ERROR,
              "Error: XPath expression \"%s\"does not point to an element node.\n", elementPath);
-    xmlXPathFreeObject(*xpathObject);
-    *xpathObject = NULL;
+    xmlXPathFreeObject(xpathObject);
     return NOT_AN_ELEMENT;
   }
 }
@@ -365,7 +363,6 @@ ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
 {
   xmlNodePtr coordinate = NULL;
   ReturnCode error = -1;
-  xmlXPathObjectPtr xpathObject = NULL;
   size_t suffixStringLength = 0;
   size_t pointPathLength = strlen(pointPath);
   size_t coordinatePathStringLength = 0;
@@ -385,7 +382,7 @@ ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
   strcpy(coordinatePath, pointPath);
   strcat(coordinatePath, suffixString);
 
-  error = checkElement(document->xpathContext, coordinatePath, &coordinate, &xpathObject);
+  error = checkElement(document->xpathContext, coordinatePath, &coordinate);
 
   free(coordinatePath);
   free(suffixString);
@@ -402,7 +399,6 @@ ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
     else {
       error = FAILED;
     }
-    xmlXPathFreeObject(xpathObject);
   }
   else {
     if (!ignoreError) {
@@ -424,7 +420,6 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
   ReturnCode errorZ = -1;
 
   TixiDocument* document = getDocument(handle);
-  xmlXPathObjectPtr xpathParentObject = NULL;
   xmlNodePtr parent = NULL;
   char* pointPath = NULL;
   char* coordinatePathBuffer = NULL;
@@ -440,8 +435,7 @@ ReturnCode getPoint(const TixiDocumentHandle handle, const char* parentPath, con
     return INDEX_OUT_OF_RANGE;
   }
 
-  error = checkElement(document->xpathContext, parentPath, &parent, &xpathParentObject);
-  xmlXPathFreeObject(xpathParentObject);
+  error = checkElement(document->xpathContext, parentPath, &parent);
 
   if (!error) {
 
@@ -897,7 +891,6 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
                                    const char* attributeName, const char* attributeValue)
 {
   ReturnCode error = -1;
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr parent = NULL;
   xmlAttrPtr attributePtr = NULL;
 
@@ -911,7 +904,7 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
     return INVALID_XML_NAME;
   }
 
-  error = checkElement(xpathContext, elementPath, &parent, &xpathObject);
+  error = checkElement(xpathContext, elementPath, &parent);
   if (!error) {
     char* prefix = NULL;
     char* name = NULL;
@@ -942,10 +935,8 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
       printMsg(MESSAGETYPE_ERROR,
                "Error: Failed to add attribute \"%s\" to element \"%s\".\n",
                attributeName, attributeValue);
-      xmlXPathFreeObject(xpathObject);
       return errorCode;
     }
-    xmlXPathFreeObject(xpathObject);
     return SUCCESS;
   }
   else {

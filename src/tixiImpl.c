@@ -831,7 +831,6 @@ DLL_EXPORT ReturnCode tixiDTDValidate(const TixiDocumentHandle handle, const cha
 DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const char *elementPath, char **text)
 {
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr element = NULL;
   ReturnCode error = SUCCESS;
 
@@ -840,7 +839,7 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
     return INVALID_HANDLE;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
 
@@ -857,9 +856,6 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
       strcpy(*text, "");
     }
     error = addToMemoryList(document, (void *) *text);
-    if (!error) {
-      xmlXPathFreeObject(xpathObject);
-    }
   }
 
   return error;
@@ -931,7 +927,6 @@ DLL_EXPORT ReturnCode tixiGetBooleanElement(const TixiDocumentHandle handle, con
 DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, const char *elementPath, const char *text)
 {
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr element = NULL;
   xmlNodePtr newElement = NULL;
   ReturnCode error = SUCCESS;
@@ -946,8 +941,7 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
     return ALREADY_SAVED;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
     newElement = xmlNewText((xmlChar*) text);
@@ -1026,7 +1020,6 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
                                            const char *attributeName, char **text)
 {
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   char *textPtr;
   xmlNodePtr element = NULL;
   ReturnCode error = SUCCESS;
@@ -1037,7 +1030,7 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
     return INVALID_HANDLE;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
   if (!error) {
     char* prefix = NULL;
     char* name = NULL;
@@ -1070,14 +1063,12 @@ DLL_EXPORT ReturnCode tixiGetTextAttribute(const TixiDocumentHandle handle, cons
       strcpy(*text, textPtr);
       xmlFree(textPtr);
       error = addToMemoryList(document, (void *) *text);
-      xmlXPathFreeObject(xpathObject);
       return error;
     }
     else {
       /*printMsg(MESSAGETYPE_ERROR,
               "Error: Attribute \"%s\" of element \"%s\" not found.  \n",
               attributeName, elementPath); */
-      xmlXPathFreeObject(xpathObject);
       return errorCode;
     }
   }
@@ -1830,7 +1821,6 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
   ReturnCode error = -1;
   int iValue;
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr parent = NULL;
 
 
@@ -1864,7 +1854,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
     format = "%g";
   }
 
-  error = checkElement(document->xpathContext, parentPath, &parent, &xpathObject);
+  error = checkElement(document->xpathContext, parentPath, &parent);
   if (!error) {
 
     /* create node containing the list */
@@ -1890,7 +1880,6 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
         printMsg(MESSAGETYPE_ERROR,
                  "Error:  Failed to add child #%d to list  element \"%s\".\n", iValue + 1, listName);
         xmlFreeNode(listNode);
-        xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
 
@@ -1899,7 +1888,6 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
                  "Error:  Failed to add attribute \"%s\" to element \"%s/%-s%-s\".\n",
                  attributeName, parentPath, listName, childName);
         xmlFreeNode(listNode);
-        xmlXPathFreeObject(xpathObject);
         return FAILED;
       }
     }
@@ -1910,11 +1898,9 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
                "Error:  Failed to add list element \"%s\" to parent \"%s\".\n",
                listName, parentPath);
       xmlFreeNode(listNode);
-      xmlXPathFreeObject(xpathObject);
       return FAILED;
     }
     else {
-      xmlXPathFreeObject(xpathObject);
       return SUCCESS;
     }
   }
@@ -1928,7 +1914,6 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
 {
   ReturnCode error = -1;
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr parent = NULL;
 
   if (!document) {
@@ -1945,11 +1930,7 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
     format = "%g";
   }
 
-  error = checkElement(document->xpathContext, parentPath, &parent, &xpathObject);
-  if (xpathObject) {
-    xmlXPathFreeObject(xpathObject);
-    xpathObject = NULL;
-  }
+  error = checkElement(document->xpathContext, parentPath, &parent);
 
   if (!error) {
 
@@ -2697,7 +2678,6 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
 {
   TixiDocument *document = getDocument(handle);
 
-  xmlXPathObjectPtr xpathObject = NULL;
   char *textPtr;
   xmlNodePtr element = NULL;
   ReturnCode error = SUCCESS;
@@ -2707,7 +2687,7 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
     return INVALID_HANDLE;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
   if (!error) {
     char* name = NULL;
     char* prefix = NULL;
@@ -2730,10 +2710,8 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
 
     if (textPtr) {
       xmlFree(textPtr);
-      xmlXPathFreeObject(xpathObject);
       return SUCCESS;
     } else {
-      xmlXPathFreeObject(xpathObject);
       return ATTRIBUTE_NOT_FOUND;
     }
   } else {
@@ -2920,7 +2898,6 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
 {
   TixiDocument *document = getDocument(handle);
   xmlNodePtr element = NULL;
-  xmlXPathObjectPtr xpathObject = NULL;
   int error = SUCCESS;
 
   if (!document) {
@@ -2932,8 +2909,7 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
     return INDEX_OUT_OF_RANGE;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
 
   if(!error){
     xmlNodePtr child = element->children;
@@ -2977,7 +2953,6 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
 DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds)
 {
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr element = NULL;
   ReturnCode error = SUCCESS;
 
@@ -2987,8 +2962,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
     return INVALID_HANDLE;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
     xmlNodePtr children = element->children;
@@ -3008,7 +2982,6 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
 DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle, const char *elementPath, int* nAttributes)
 {
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr element = NULL;
   ReturnCode error = SUCCESS;
 
@@ -3018,8 +2991,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle,
     return INVALID_HANDLE;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
     xmlAttrPtr attr = element->properties;
@@ -3037,7 +3009,6 @@ DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle,
 DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, const char *elementPath, int attrIndex, char** attrName)
 {
   TixiDocument *document = getDocument(handle);
-  xmlXPathObjectPtr xpathObject = NULL;
   xmlNodePtr element = NULL;
   ReturnCode error = SUCCESS;
 
@@ -3051,8 +3022,7 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
     return INDEX_OUT_OF_RANGE;
   }
 
-  error = checkElement(document->xpathContext, elementPath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
+  error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
     xmlAttrPtr attr = element->properties;
@@ -3087,7 +3057,6 @@ DLL_EXPORT ReturnCode tixiGetNodeType(const TixiDocumentHandle handle, const cha
 {
   TixiDocument *document = getDocument(handle);
   xmlNodePtr element     = NULL;
-  xmlXPathObjectPtr xpathObject = NULL;
   int error = SUCCESS;
 
   if (!document) {
@@ -3095,8 +3064,7 @@ DLL_EXPORT ReturnCode tixiGetNodeType(const TixiDocumentHandle handle, const cha
     return INVALID_HANDLE;
   }
 
-  error = checkElement(document->xpathContext, nodePath, &element, &xpathObject);
-  xmlXPathFreeObject(xpathObject);
+  error = checkElement(document->xpathContext, nodePath, &element);
 
   if (!error) {
     switch (element->type) {
