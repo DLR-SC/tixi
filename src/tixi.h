@@ -327,11 +327,11 @@ enum ReturnCode
 
   UID_DONT_EXISTS,                /*!< 33: A given uID's does not exist */
 
-  UID_LINK_BROKEN,                /*!< 33: A node the is specified as a Link has no correspoding uid in that data set */
+  UID_LINK_BROKEN,                /*!< 34: A node the is specified as a Link has no correspoding uid in that data set */
 
-  INVALID_NAMESPACE_URI,          /*!< 34: The namespace URI is invalid (e.g. a null pointer) */
+  INVALID_NAMESPACE_URI,          /*!< 35: The namespace URI is invalid (e.g. a null pointer) */
 
-  INVALID_NAMESPACE_PREFIX        /*!< 35: The namespace prefix is invalid */
+  INVALID_NAMESPACE_PREFIX        /*!< 36: The namespace prefix is invalid */
 
 };
 

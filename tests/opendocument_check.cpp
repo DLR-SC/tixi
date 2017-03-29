@@ -59,7 +59,7 @@ TEST(opendocument_checks, check_handle)
 TEST(opendocument_checks, open_http_url)
 {
   TixiDocumentHandle documentHandle = -1;
-  const char* xmlUrl = "http://www.w3schools.com/XML/note.xml";
+  const char* xmlUrl = "https://www.w3schools.com/XML/note.xml";
 
   ASSERT_TRUE( tixiOpenDocumentFromHTTP( xmlUrl, &documentHandle ) == SUCCESS );
   ASSERT_TRUE( documentHandle != -1 );

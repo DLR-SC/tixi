@@ -328,3 +328,25 @@ TEST_F(Namespaces, attributesWithNS)
   EXPECT_EQ(0, attCount);
 }
 
+TEST_F(Namespaces, createCpacsFile)
+{
+  const char * refText = "<?xml version=\"1.0\"?>\n"
+                         "<cpacs xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"cpacs_schema.xsd\">\n"
+                         "  <header/>\n"
+                         "</cpacs>\n";
+
+  char * text = NULL;
+
+  TixiDocumentHandle handle;
+  ASSERT_EQ(SUCCESS, tixiCreateDocument("cpacs", &handle));
+  ASSERT_EQ(SUCCESS, tixiDeclareNamespace(handle, "/cpacs", "http://www.w3.org/2001/XMLSchema-instance", "xsi"));
+  ASSERT_EQ(SUCCESS, tixiRegisterNamespace(handle, "http://www.w3.org/2001/XMLSchema-instance", "xsi"));
+  ASSERT_EQ(SUCCESS, tixiAddTextAttribute(handle, "/cpacs", "xsi:noNamespaceSchemaLocation", "cpacs_schema.xsd"));
+  ASSERT_EQ(SUCCESS, tixiCreateElement(handle, "/cpacs", "header"));
+
+  tixiExportDocumentAsString(handle, &text);
+  ASSERT_STREQ(refText, text);
+
+  tixiCloseDocument(handle);
+}
+
