@@ -934,7 +934,7 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
     if (!attributePtr) {
       printMsg(MESSAGETYPE_ERROR,
                "Error: Failed to add attribute \"%s\" to element \"%s\".\n",
-               attributeName, attributeValue);
+               attributeName, elementPath);
       return errorCode;
     }
     return SUCCESS;
