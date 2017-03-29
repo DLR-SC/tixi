@@ -21,10 +21,14 @@ add_executable(tixiDemo ${DEMO_SRC})
 target_link_libraries (tixiDemo TIXI)
 
 add_executable(tixi_c_examples tixi_c_examples.c)
+target_link_libraries (tixi_c_examples TIXI ${LIBS})
+
+add_executable(createCpacsFile createcpacsfile.c)
+target_link_libraries (createCpacsFile TIXI)
+
 if (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
    set (LIBS m)
 endif()
-target_link_libraries (tixi_c_examples TIXI ${LIBS})
 
 add_custom_command(
 	TARGET tixiDemo
