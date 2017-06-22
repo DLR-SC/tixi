@@ -2809,9 +2809,16 @@ DLL_EXPORT ReturnCode tixiUIDCheckExists(TixiDocumentHandle handle, const char *
   TixiDocument *document = getDocument(handle);
   ReturnCode error = FAILED;
 
-  error = tixiUIDCheckDuplicates(handle);
-  if (error != SUCCESS) {
-    return error;
+  if(!document)
+    return INVALID_HANDLE;
+
+  // if the UID list is already set, delete and rebuild it.
+  if(document->uidListHead) {
+    uid_clearUIDList(document);
+  }
+
+  if (uid_readDocumentUIDs(document) != SUCCESS) {
+    return FAILED;
   }
 
   if (uid_checkExists(document, uID) == 0) {
