@@ -55,6 +55,11 @@ TEST(uid_checks, tixiUIDCheck_duplicates)
   ASSERT_TRUE( tixiUIDCheckDuplicates( documentHandle ) == UID_NOT_UNIQUE);
   ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
 
+  /* check if tixiUIDCheckExists returns true on duplicate UID */
+  ASSERT_TRUE( tixiOpenDocument( filename_uid_duplicated, &documentHandle ) == SUCCESS );
+  ASSERT_TRUE( tixiUIDCheckExists( documentHandle, "a" ) == SUCCESS);
+  ASSERT_TRUE( tixiCloseDocument( documentHandle ) == SUCCESS );
+
   /* check a document without uids */
   ASSERT_TRUE( tixiOpenDocument( filename_without_uids, &documentHandle ) == SUCCESS );
   ASSERT_TRUE( tixiUIDCheckDuplicates( documentHandle ) == SUCCESS);
