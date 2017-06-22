@@ -1,0 +1,17 @@
+language: cpp
+compiler:
+  - gcc
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y --force-yes cmake libxml2-dev libxslt-dev libcurl4-openssl-dev python doxygen gfortran
+  
+before_script:
+  - mkdir build
+  - cd build
+
+script: 
+  - cmake -DTIXI_BUILD_TESTS=ON ..
+  - make
+  - cd tests
+  - ./TIXI-unittests
