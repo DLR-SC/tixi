@@ -16,4 +16,6 @@ script:
   - cmake -DTIXI_BUILD_TESTS=ON ..
   - make
   - cd tests
-  - ./TIXI-unittests
+  # Don't run the curl tests, as curl seems to be defect on Ubuntu 12.04.
+  # This can be even tested with /usr/bin/curl file:///path/to/file
+  - ./TIXI-unittests --gtest_filter=-*curlGet*
