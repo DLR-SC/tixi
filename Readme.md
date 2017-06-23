@@ -1,3 +1,5 @@
+Build-Status: [![Build Status](https://travis-ci.org/DLR-SC/tixi.svg?branch=master)](https://travis-ci.org/DLR-SC/tixi)
+
 # TIXI #
 
  - Binary Downloads:  https://github.com/DLR-SC/tixi/wiki/Downloads

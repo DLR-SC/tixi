@@ -244,7 +244,7 @@ TEST_F(UtilsTest, localPathToURI)
 TEST_F(UtilsTest, loadFileToString)
 {
   const char* expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root/>\n";
-  char* string = loadFileToString("TestData/out.xml");
+  char* string = loadFileToString("TestData/minimal.xml");
   ASSERT_STREQ(expected, string);
   free(string);
 }
