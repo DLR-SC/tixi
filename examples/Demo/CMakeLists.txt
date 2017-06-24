@@ -7,6 +7,10 @@
 
 set(DEMO_SRC tixiDemo.c)
 
+if (APPLE)
+  SET(CMAKE_INSTALL_RPATH "@executable_path/../${CMAKE_INSTALL_LIBDIR}")
+endif(APPLE)
+
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 if(CMAKE_COMPILER_IS_GNUCC)
@@ -42,7 +46,7 @@ add_custom_command(
 
 SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/tixiDemo")
 IF(APPLE)
-  SET(APPS "\${CMAKE_INSTALL_PREFIX}/tixiDemo.app")
+  SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/tixiDemo")
 ENDIF(APPLE)
 IF(WIN32)
   SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/tixiDemo.exe")
@@ -54,14 +58,14 @@ ENDIF(WIN32)
 SET(DIRS ${ADD_LIB_PATH} ${XML_INCLUDE_DIR} ${XSLT_INCLUDE_DIR} ${CURL_INCLUDE_DIR})
 SET(DIRS ${DIRS} ${LIBRARY_OUTPUT_PATH})
 
-if (WIN32 OR APPLE)
-
 # Install the tixiDemo application, on Apple, the bundle is at the root of the
 # install tree, and on other platforms it'll go into the bin directory.
 INSTALL(TARGETS tixiDemo 
     BUNDLE DESTINATION . COMPONENT Runtime
     RUNTIME DESTINATION bin COMPONENT Runtime
     )
+
+if (WIN32)
 
 # Now the work of copying dependencies into the bundle/package
 # The quotes are escaped and variables to use at install time have their $ escaped

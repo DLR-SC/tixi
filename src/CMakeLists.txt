@@ -27,6 +27,10 @@ if(WIN32)
   set(TIXI_LIBS ${TIXI_LIBS} Shlwapi)
 endif(WIN32)
 
+if(APPLE)
+  set(TIXI_LIBS ${TIXI_LIBS} m "-framework Foundation" iconv z "-framework Security")
+endif(APPLE)
+
 add_library(TIXI SHARED ${TIXI_SRC} ${TIXI_HDR})
 target_link_libraries (TIXI  ${TIXI_LIBS})
 set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})

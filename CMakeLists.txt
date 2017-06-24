@@ -16,8 +16,6 @@ if (NOT IS_ABSOLUTE ${CMAKE_INSTALL_PREFIX})
    set (CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX})
 endif()
 
-OPTION(ENABLE_COVERAGE "Enable GCov coverage analysis (defines a 'coverage' target and enforces static build of tixi)" ON)
-
 set(TIXI_VERSION_MAJOR 2)
 set(TIXI_VERSION_MINOR 2)
 set(TIXI_VERSION_PATCH 4)
@@ -49,10 +47,15 @@ find_package(XSLT REQUIRED)
 find_package(XML REQUIRED)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+# create library output path
+file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_PATH})
+
+set(CMAKE_MACOSX_RPATH 1)
 
 # code coverage analysis
 IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
-        IF(ENABLE_COVERAGE)
+        OPTION(TIXI_ENABLE_COVERAGE "Enable GCov coverage analysis (defines a 'coverage' target and enforces static build of tixi)" OFF)
+        IF(TIXI_ENABLE_COVERAGE)
                 MESSAGE(STATUS "Coverage enabled")
                 INCLUDE(CodeCoverage)
                 SETUP_TARGET_FOR_COVERAGE(coverage ${PROJECT_NAME}-unittests coverageReport "--gtest_output=xml")
