@@ -35,7 +35,7 @@
 #include "mex.h"
 
 #ifndef __PACKAGENAME__
-// define a generic package name if macro is not defined in including source file
+/* define a generic package name if macro is not defined in including source file */
 #define __PACKAGENAME__ "TIXI"
 #endif
 
