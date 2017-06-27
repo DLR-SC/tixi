@@ -52,7 +52,7 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
     endif()
 
     install(FILES ${LIBRARY_OUTPUT_PATH}/tixi.f90
-            DESTINATION share/tixi/fortran03
+            DESTINATION share/tixi${TIXI_VERSION_MAJOR}/fortran03
             COMPONENT interfaces
     )
 else()
