@@ -1,4 +1,4 @@
-function tixiUIDCheckExists(handle, uID)
+function found = tixiUIDCheckExists(handle, uID)
     if (ischar(handle))
         error('Invalid type of argument "handle"');
     end
