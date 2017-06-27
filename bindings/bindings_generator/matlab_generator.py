@@ -59,7 +59,7 @@ class MatlabGenerator(object):
         count = 0
         for arg in outarrays:
             if len(arg.arrayinfos['arraysizes']) == 0:
-                instr += ', _' + arg.name + '_size'
+                instr += ', ' + arg.name + '_size'
                 count += 1
         
         if len(instr) > 0:
@@ -113,11 +113,11 @@ class MatlabGenerator(object):
                     % (arg.type + '*'*arg.npointer, arg.name))    
         else:
             if arg.type == 'double':
-                string += 'plhs[%d] = dArrayToMx(%s, _%s_size);\n' % (index, arg.name, arg.name)
+                string += 'plhs[%d] = dArrayToMx(%s, %s_size);\n' % (index, arg.name, arg.name)
             elif arg.type == 'int':
-                string += 'plhs[%d] = iArrayToMx(%s, _%s_size);\n' % (index, arg.name, arg.name) 
+                string += 'plhs[%d] = iArrayToMx(%s, %s_size);\n' % (index, arg.name, arg.name)
             elif arg.is_string:
-                string += 'plhs[%d] = mxCreateCharMatrixFromStrings(_%s_size, %s);\n' % (index, arg.name, arg.name)
+                string += 'plhs[%d] = mxCreateCharMatrixFromStrings(%s_size, %s);\n' % (index, arg.name, arg.name)
             else:
                 #pass
                 raise Exception('Conversion from "%s, %s" to mx not yet implemented' \
@@ -143,7 +143,7 @@ class MatlabGenerator(object):
             arg.arrayinfos['is_array'] and not arg.arrayinfos['autoalloc']]
         for arg in outarrays:   
             if len(arg.arrayinfos['arraysizes']) > 0:
-                sizestr = '_%s_size = 1' % arg.name
+                sizestr = '%s_size = 1' % arg.name
                 for sizeindex in arg.arrayinfos['arraysizes']:
                     sizestr += ' * ' + func.arguments[sizeindex].name
                 sizestr += ';\n'
@@ -159,7 +159,7 @@ class MatlabGenerator(object):
         # calc output array sizes
         for arg in outarrays:
             if len(arg.arrayinfos['arraysizes']) > 0:
-                sizestr = '_%s_size = 1' % arg.name
+                sizestr = '%s_size = 1' % arg.name
                 for sizeindex in arg.arrayinfos['arraysizes']:
                     sizestr += ' * ' + func.arguments[sizeindex].name
                 sizestr += ';\n'
@@ -174,7 +174,7 @@ class MatlabGenerator(object):
             arg.arrayinfos['is_array'] and not arg.arrayinfos['autoalloc']]
         for arg in outarrays:
             string += 4*' ' + '%s = mxMalloc(sizeof(%s) * %s);\n' \
-                % (arg.name, arg.type + (arg.npointer-1)*'*', '_' + arg.name+'_size')
+                % (arg.name, arg.type + (arg.npointer-1)*'*', arg.name+'_size')
                 
         return string
         
@@ -213,7 +213,7 @@ class MatlabGenerator(object):
             sizestr = 'int '
             _count = 0
             for arg in outarrays:
-                sizestr += '_%s_size, ' % arg.name
+                sizestr += '%s_size, ' % arg.name
                 _count += 1
             sizestr = sizestr[0:-2]
             if _count > 0:
@@ -234,7 +234,7 @@ class MatlabGenerator(object):
         add_arg_count = 0
         for arg in outarrays:
             if len(arg.arrayinfos['arraysizes']) == 0:
-                pseudocall += '_%s_size, ' % arg.name
+                pseudocall += '%s_size, ' % arg.name
                 add_arg_count += 1
             
         if len(inargs) > 0:
@@ -284,7 +284,7 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
                 string += 4*' ' + 'if (!isscalar(prhs[%s])) {\n' \
                         % (count + ninargs + 1)
                 string += 4*' ' + '    mexErrMsgTxt("Argument \'%s\' must not be an array.\\n");\n' \
-                        % ('_' + arg.name + '_size')
+                        % (arg.name + '_size')
                 string += 4*' ' + '}\n\n'
                 count += 1
         
@@ -321,7 +321,7 @@ This function returns %d value(s)\\n");\n' % (pseudocall, noutargs)
         for arg in outarrays:
             if len(arg.arrayinfos['arraysizes']) == 0:
                 string += 4*' ' + '%s = mxToInt(prhs[%d]);\n' \
-                    % ('_' + arg.name + '_size', count + ninargs +1)
+                    % (arg.name + '_size', count + ninargs +1)
                 count += 1
                     
         string += '\n'
