@@ -402,7 +402,7 @@ extern "C" {
             call += '}\n'
         
         call += '''else {
-    // this is only executed if the function could not be identified
+    /* this is only executed if the function could not be identified */
     char text[255];
 '''
         call += '    snprintf(text, 250, "%%s is not a valid %s function!\\n", functionName);\n' % self.prefix
