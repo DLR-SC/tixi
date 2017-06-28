@@ -123,7 +123,7 @@ if __name__ == '__main__':
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper
-    pg = PG.PythonGenerator(name_prefix = 'tixi', libname = 'TIXI')
+    pg = PG.PythonGenerator(name_prefix = 'tixi3', libname = 'tixi3')
     pg.license = apache
     pg.userfunctions = userfunctions
     pg.blacklist = blacklist
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     print('done')
     
     # write file
-    filename = 'tixiwrapper.py'
+    filename = 'tixi3wrapper.py'
     print('Write tixi python interface to file "%s" ... ' % filename, end=' ') 
     fop = open(filename, 'w')
     fop.write(wrapper)

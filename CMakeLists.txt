@@ -2,24 +2,27 @@ cmake_minimum_required (VERSION 2.6)
 
 # Set a default build type if none was specified
 if(NOT DEFINED CMAKE_BUILD_TYPE)
-  message(STATUS "Setting build type to 'Release' as none was specified.")
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
-  # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
-    "MinSizeRel" "RelWithDebInfo")
+    message(STATUS "Setting build type to 'Release' as none was specified.")
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+    # Set the possible values of build type for cmake-gui
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+      "MinSizeRel" "RelWithDebInfo")
 endif()
 
 project (TIXI)
 
 # convert path to absolute (required for some scripts)
 if (NOT IS_ABSOLUTE ${CMAKE_INSTALL_PREFIX})
-   set (CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX})
+    set (CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_PREFIX})
 endif()
 
-set(TIXI_VERSION_MAJOR 2)
-set(TIXI_VERSION_MINOR 2)
-set(TIXI_VERSION_PATCH 4)
+set(TIXI_VERSION_MAJOR 3)
+set(TIXI_VERSION_MINOR 0)
+set(TIXI_VERSION_PATCH 0dev)
 set(TIXI_VERSION "${TIXI_VERSION_MAJOR}.${TIXI_VERSION_MINOR}.${TIXI_VERSION_PATCH}")
+
+# set name of the tixi library
+set(TIXI_LIB_NAME tixi${TIXI_VERSION_MAJOR})
 
 set(ADD_INCLUDE_PATH "" CACHE PATH "Additional include path for package search")
 set(ADD_LIB_PATH "" CACHE PATH     "Additional library path for package search")
@@ -39,7 +42,7 @@ if(NOT DEFINED CMAKE_INSTALL_BINDIR)
 endif(NOT DEFINED CMAKE_INSTALL_BINDIR)
 
 if(NOT DEFINED CMAKE_INSTALL_INCLUDE_DIR)
-    set(CMAKE_INSTALL_INCLUDE_DIR "include")
+    set(CMAKE_INSTALL_INCLUDE_DIR "include/${TIXI_LIB_NAME}")
 endif(NOT DEFINED CMAKE_INSTALL_INCLUDE_DIR)
 
 find_package(CURL REQUIRED)
@@ -93,12 +96,12 @@ add_subdirectory(bindings)
 #create gtests, override gtest standard setting
 option(TIXI_BUILD_TESTS "Build TIXI Testsuite" OFF)
 if(TIXI_BUILD_TESTS)
-  enable_testing() 
-  option(gtest_force_shared_crt "" ON)
-  mark_as_advanced(gtest_force_shared_crt)
-  set (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
-  add_subdirectory (${gtest_SOURCE_DIR})
-  add_subdirectory(tests)
+    enable_testing() 
+    option(gtest_force_shared_crt "" ON)
+    mark_as_advanced(gtest_force_shared_crt)
+    set (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
+    add_subdirectory (${gtest_SOURCE_DIR})
+    add_subdirectory(tests)
 endif(TIXI_BUILD_TESTS)
 
 #demos
@@ -122,10 +125,10 @@ set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "TIXI")
 # set path variable for installer
 set(CPACK_NSIS_MODIFY_PATH ON)
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
-  set(CPACK_CUSTOM_INITIAL_DEFINITIONS "!define CPACK_REQUIRIRE_64BIT")
+    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES64")
+    set(CPACK_CUSTOM_INITIAL_DEFINITIONS "!define CPACK_REQUIRIRE_64BIT")
 else()
-  set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
+    set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
 endif()
 
 include(CPack)

@@ -35,7 +35,7 @@ if __name__ == '__main__':
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper
-    generator = MG.MatlabGenerator(parser, 'tixi', 'tixi.h')
+    generator = MG.MatlabGenerator(parser, 'tixi3', 'tixi.h')
     generator.blacklist = blacklist
     generator.create_wrapper()
     

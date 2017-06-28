@@ -27,7 +27,7 @@ endif(PYTHON_EXECUTABLE)
 if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
     #run python to create the wrapper
     add_custom_command(
-        OUTPUT ${LIBRARY_OUTPUT_PATH}/tixi.f90
+        OUTPUT ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}.f90
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_fortran03.py
                 ${PROJECT_SOURCE_DIR}/src/tixi.h
                 ${PROJECT_SOURCE_DIR}/bindings/bindings_generator/cheader_parser.py
@@ -39,7 +39,7 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
 
     add_custom_target(tixiFortran03 ALL
         COMMENT "Create Fortran 2003 interface for tixi" VERBATIM
-        DEPENDS ${LIBRARY_OUTPUT_PATH}/tixi.f90
+        DEPENDS ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}.f90
     )
 
     if(TIXI_BUILD_TESTS AND NOT CMAKE_Fortran_COMPILER STREQUAL CMAKE_Fortran_COMPILER-NOTFOUND AND CMAKE_Fortran_COMPILER)
@@ -47,12 +47,12 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
       link_directories(${LIBRARY_OUTPUT_PATH})
       set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../tests)
       add_definitions(-DTIXI_VERSION="${TIXI_VERSION}")
-      add_executable(wrappertestsF03 wrappertests.F90 ${LIBRARY_OUTPUT_PATH}/tixi.f90)
-      target_link_libraries(wrappertestsF03 TIXI_static)
+      add_executable(wrappertestsF03 wrappertests.F90 ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}.f90)
+      target_link_libraries(wrappertestsF03 ${TIXI_LIB_NAME}_static)
     endif()
 
-    install(FILES ${LIBRARY_OUTPUT_PATH}/tixi.f90
-            DESTINATION share/tixi/fortran03
+    install(FILES ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}.f90
+            DESTINATION share/${TIXI_LIB_NAME}/fortran03
             COMPONENT interfaces
     )
 else()

@@ -2,4 +2,4 @@
 # It requires a MATLAB installation and MATLAB's mex command must be in PATH
 
 all:
-	mex tiximatlab.c -I../../../include -L../../../@CMAKE_INSTALL_LIBDIR@ -lTIXI -output tixi_matlab
+	mex tiximatlab.c -I../../../include/tixi3 -L../../../@CMAKE_INSTALL_LIBDIR@ -ltixi3 -output tixi_matlab

@@ -117,7 +117,7 @@ if __name__ == '__main__':
     print('done')
     
     # write file
-    filename = 'tixi.f90'
+    filename = 'tixi3.f90'
     print('Write tixi Fortran 2003 interface to file "%s" ... ' % filename, end=' ') 
     fop = open(filename, 'w')
     fop.write(wrapper)

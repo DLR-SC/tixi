@@ -10,37 +10,37 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../src)
 include(CMakeDetermineFortranCompiler)
 
 if(CMAKE_Fortran_COMPILER STREQUAL CMAKE_Fortran_COMPILER-NOTFOUND)
-	message(STATUS "No Fortran Compiler found, please specify for which compiler the interface should be built")
+    message(STATUS "No Fortran Compiler found, please specify for which compiler the interface should be built")
 else()
-	if(${CMAKE_Fortran_COMPILER} MATCHES "gfortran")
-		message(STATUS "Generating fortran interface for gfortran naming scheme.")
-		add_definitions(-DGFORTRAN)
-	elseif(${CMAKE_Fortran_COMPILER} MATCHES "g77")
-		message(STATUS "Generating fortran interface for g77 naming scheme.")
-		add_definitions(-DG77)
-	elseif(${CMAKE_Fortran_COMPILER} MATCHES "f90_irix")
-		message(STATUS "Generating fortran interface for f90/irix naming scheme.")
-		add_definitions(-DF90_IRIX)
-	elseif(${CMAKE_Fortran_COMPILER} MATCHES "f90")
-		message(STATUS "Generating fortran interface for f90 naming scheme.")
-		add_definitions(-DGFORTRAN)
-	elseif(${CMAKE_Fortran_COMPILER} MATCHES "ifort")
-		message(STATUS "Generating fortran interface for intel-fortran (ifort) naming scheme.")
-		if (WIN32)
-			add_definitions(-DIFORT_WIN32)
-		else()
-			add_definitions(-DIFORT_UNIX)
-		endif()
-	endif()
+    if(${CMAKE_Fortran_COMPILER} MATCHES "gfortran")
+        message(STATUS "Generating fortran interface for gfortran naming scheme.")
+        add_definitions(-DGFORTRAN)
+    elseif(${CMAKE_Fortran_COMPILER} MATCHES "g77")
+        message(STATUS "Generating fortran interface for g77 naming scheme.")
+        add_definitions(-DG77)
+    elseif(${CMAKE_Fortran_COMPILER} MATCHES "f90_irix")
+        message(STATUS "Generating fortran interface for f90/irix naming scheme.")
+        add_definitions(-DF90_IRIX)
+    elseif(${CMAKE_Fortran_COMPILER} MATCHES "f90")
+        message(STATUS "Generating fortran interface for f90 naming scheme.")
+        add_definitions(-DGFORTRAN)
+    elseif(${CMAKE_Fortran_COMPILER} MATCHES "ifort")
+        message(STATUS "Generating fortran interface for intel-fortran (ifort) naming scheme.")
+        if (WIN32)
+            add_definitions(-DIFORT_WIN32)
+        else()
+            add_definitions(-DIFORT_UNIX)
+        endif()
+    endif()
 
-	add_library(TIXIf STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
-	set_target_properties(TIXIf PROPERTIES VERSION ${TIXI_VERSION})
-	install (TARGETS TIXIf 
-			DESTINATION ${CMAKE_INSTALL_LIBDIR}
-			COMPONENT interfaces)
-	install (FILES tixi77.h 
-			DESTINATION include
-			COMPONENT interfaces)
-	
+        add_library(${TIXI_LIB_NAME}-f90 STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
+        set_target_properties(${TIXI_LIB_NAME}-f90 PROPERTIES VERSION ${TIXI_VERSION})
+        install (TARGETS ${TIXI_LIB_NAME}-f90
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            COMPONENT interfaces)
+    install (FILES tixi77.h 
+            DESTINATION include
+            COMPONENT interfaces)
+    
 endif()
 

@@ -25,25 +25,25 @@ if(PYTHON_EXECUTABLE)
 endif(PYTHON_EXECUTABLE)
 
 if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
-	#run python to create the wrapper
-		add_custom_command(
-			OUTPUT ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
-			DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_python.py ${PROJECT_SOURCE_DIR}/src/tixi.h
-			WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
-			COMMAND ${PYTHON_EXECUTABLE}
-			ARGS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_python.py
-		)
+    #run python to create the wrapper
+        add_custom_command(
+                        OUTPUT ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}wrapper.py
+            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_python.py ${PROJECT_SOURCE_DIR}/src/tixi.h
+            WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+            COMMAND ${PYTHON_EXECUTABLE}
+            ARGS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_python.py
+        )
 
-		add_custom_target(tixiPython ALL
-			COMMENT "Create python interface for tixi" VERBATIM 
-			DEPENDS ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
-		)
-		
-		file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wrappertests.py DESTINATION ${PROJECT_BINARY_DIR}/tests)
-		
-		install(FILES ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py 
-				DESTINATION share/tixi/python
-				COMPONENT interfaces)
+        add_custom_target(tixiPython ALL
+            COMMENT "Create python interface for tixi" VERBATIM 
+                        DEPENDS ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}wrapper.py
+        )
+        
+        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wrappertests.py DESTINATION ${PROJECT_BINARY_DIR}/tests)
+        
+                install(FILES ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}wrapper.py
+                                DESTINATION share/${TIXI_LIB_NAME}/python
+                COMPONENT interfaces)
 else()
     message(WARNING "Python could not be found or the python installation is too old ( < 2.5). Python bindings will not be build!")
 endif()
