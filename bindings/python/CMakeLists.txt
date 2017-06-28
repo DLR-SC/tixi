@@ -27,7 +27,7 @@ endif(PYTHON_EXECUTABLE)
 if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
 	#run python to create the wrapper
 		add_custom_command(
-			OUTPUT ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
+                        OUTPUT ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}wrapper.py
 			DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_python.py ${PROJECT_SOURCE_DIR}/src/tixi.h
 			WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
 			COMMAND ${PYTHON_EXECUTABLE}
@@ -36,12 +36,12 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
 
 		add_custom_target(tixiPython ALL
 			COMMENT "Create python interface for tixi" VERBATIM 
-			DEPENDS ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py
+                        DEPENDS ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}wrapper.py
 		)
 		
 		file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wrappertests.py DESTINATION ${PROJECT_BINARY_DIR}/tests)
 		
-		install(FILES ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py 
+                install(FILES ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}wrapper.py
                                 DESTINATION share/${TIXI_LIB_NAME}/python
 				COMPONENT interfaces)
 else()
