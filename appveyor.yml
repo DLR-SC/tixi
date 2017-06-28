@@ -1,0 +1,78 @@
+version: '{build}'
+
+os: Visual Studio 2015
+
+platform:
+  - Win32
+  - x64
+
+configuration:
+  - Release
+
+build:
+  verbosity: minimal
+
+artifacts:
+  - path: '_build/*.zip'
+    name: binaries
+
+install:
+  - ps: |
+      Write-Output "Configuration: $env:CONFIGURATION"
+      Write-Output "Platform: $env:PLATFORM"
+      $generator = "Visual Studio 14 2015"
+      $thirdparty = "tixi-3rdparty-vc2015-win32"
+      if ($env:PLATFORM -eq "x64")
+      {
+          $generator = "$generator Win64"
+          $thirdparty = "tixi-3rdparty-vc2015-win64"
+      }
+      md c:\tixi-3rdparty -Force | Out-Null
+      If (!(Test-Path -Path "c:\tixi-3rdparty\$thirdparty")) {
+        Write-Output "Downloading tixi 3rdparty libraries"
+        (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/$thirdparty.zip", "c:\$thirdparty.zip")
+        Write-Output "Extract tixi 3rdparty libraries"
+        & 7z x -y "c:\$thirdparty.zip" -oC:\tixi-3rdparty\ > null
+      }
+      If (!(Test-Path -Path "c:\tixi-3rdparty\matlab-libs-win")) {
+        Write-Output "Downloading matlab libraries"
+        (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/matlab-libs-win.zip", "c:\matlab-libs-win.zip")
+        Write-Output "Extract matlab libraries"
+        & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
+      }
+
+
+build_script:
+- ps: |
+    md _build -Force | Out-Null
+    cd _build
+    Write-Output "Running cmake:  -DTIXI_BUILD_TESTS=ON -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win -DCMAKE_PREFIX_PATH=c:\tixi-3rdparty\$thirdparty -DCMAKE_INSTALL_PREFIX=install .."
+    & cmake -G "$generator"  -DTIXI_BUILD_TESTS=ON -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win -DCMAKE_PREFIX_PATH=c:\tixi-3rdparty\"$thirdparty" -DCMAKE_INSTALL_PREFIX=install ..
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+    & cmake --build . --config $env:CONFIGURATION --target install
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+
+
+test_script:
+- ps: |
+    cd tests
+    $env:PATH = "..\install\bin;$env:PATH"
+    & $env:CONFIGURATION\TIXI-unittests.exe --gtest_output=xml:test_results.xml
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+    (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test_results.xml))
+    cd ..
+
+after_test:
+- ps: |
+    & cmake --build . --config $env:CONFIGURATION --target doc
+    & cpack -G ZIP
+
+cache:
+ - c:\tixi-3rdparty -> appveyor.yml
+

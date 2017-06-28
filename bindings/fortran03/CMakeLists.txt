@@ -1,4 +1,3 @@
-find_package(PythonInterp)
 
 # work around wrong python detection script of cmake (happens with old python versions)
 if(PYTHON_EXECUTABLE)

@@ -49,6 +49,8 @@ find_package(CURL REQUIRED)
 find_package(XSLT REQUIRED)
 find_package(XML REQUIRED)
 
+find_package(PythonInterp)
+
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 # create library output path
 file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_PATH})
