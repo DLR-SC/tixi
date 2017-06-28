@@ -14,11 +14,11 @@ endif(APPLE)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 if(CMAKE_COMPILER_IS_GNUCC)
-	set(CMAKE_C_FLAGS "-Wall -fmessage-length=0")
+    set(CMAKE_C_FLAGS "-Wall -fmessage-length=0")
 endif()
 
 if(MSVC)
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 add_executable(tixiDemo ${DEMO_SRC})
@@ -35,10 +35,10 @@ if (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
 endif()
 
 add_custom_command(
-	TARGET tixiDemo
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND}
-	ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/howtoin.xml ${CMAKE_CURRENT_BINARY_DIR}/howtoin.xml
+    TARGET tixiDemo
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -E copy ${CMAKE_CURRENT_SOURCE_DIR}/howtoin.xml ${CMAKE_CURRENT_BINARY_DIR}/howtoin.xml
 )
 #--------------------------------------------------------------------------------
 # Now the installation stuff below

@@ -13,14 +13,14 @@ TARGET_LINK_LIBRARIES(${test_BIN} ${test_LIBS})
 #ADD_CUSTOM_TARGET(test DEPENDS check)
 
 ADD_TEST(
-  NAME unittests
-  COMMAND ${test_BIN} --gtest_output=xml
+    NAME unittests
+    COMMAND ${test_BIN} --gtest_output=xml
 )
 
 #execute_process(COMMAND ${CMAKE_PROGRAM} -E copy_if_different ${PROJECT_SOURCE_DIR}/tests/TestData tests/Testdata)
 file(COPY ${PROJECT_SOURCE_DIR}/tests/TestData DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 configure_file (
-  "${CMAKE_CURRENT_SOURCE_DIR}/runtests.sh.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/runtests.sh"
+    "${CMAKE_CURRENT_SOURCE_DIR}/runtests.sh.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/runtests.sh"
 )
