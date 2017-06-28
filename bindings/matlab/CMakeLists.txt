@@ -53,7 +53,7 @@ if(MATLAB_FOUND)
 	message(STATUS "MATLAB found: TiXI mex file will be build.")
 
 	# c wrapper code
-	set(TMAT_SRC tiximatlab.c common.h)
+        set(TMAT_SRC ${TIXI_LIB_NAME}matlab.c common.h)
 
 	# add def for exports
 	if(MSVC)
@@ -69,7 +69,7 @@ if(MATLAB_FOUND)
         install(TARGETS ${TIXI_LIB_NAME}_matlab DESTINATION share/${TIXI_LIB_NAME}/matlab
 		COMPONENT interfaces)
 else(MATLAB_FOUND)
-	message(STATUS "MATLAB not found: The TiXI mex is not created. It can still be build using the generated tiximatlab.c file.")
+        message(STATUS "MATLAB not found: The TiXI mex is not created. It can still be build using the generated ${TIXI_LIB_NAME}matlab.c file.")
 endif(MATLAB_FOUND)
 	
 endif() # python found
