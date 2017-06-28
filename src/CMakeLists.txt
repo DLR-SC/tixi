@@ -31,18 +31,18 @@ if(APPLE)
   set(TIXI_LIBS ${TIXI_LIBS} m "-framework Foundation" iconv z "-framework Security")
 endif(APPLE)
 
-add_library(TIXI SHARED ${TIXI_SRC} ${TIXI_HDR})
-target_link_libraries (TIXI  ${TIXI_LIBS})
-set_target_properties( TIXI PROPERTIES VERSION ${TIXI_VERSION})
-set_target_properties( TIXI PROPERTIES SOVERSION "${TIXI_VERSION_MAJOR}")
+add_library(${TIXI_LIB_NAME} SHARED ${TIXI_SRC} ${TIXI_HDR})
+target_link_libraries (${TIXI_LIB_NAME}  ${TIXI_LIBS})
+set_target_properties( ${TIXI_LIB_NAME} PROPERTIES VERSION ${TIXI_VERSION})
+set_target_properties( ${TIXI_LIB_NAME} PROPERTIES SOVERSION "${TIXI_VERSION_MAJOR}")
 
-add_library(TIXI_static ${TIXI_SRC} ${TIXI_HDR})
-target_link_libraries (TIXI_static  ${TIXI_LIBS})
+add_library(${TIXI_LIB_NAME}_static ${TIXI_SRC} ${TIXI_HDR})
+target_link_libraries (${TIXI_LIB_NAME}_static  ${TIXI_LIBS})
 
-set(CMAKE_INSTALL_INCLUDE_DIR "include/tixi${TIXI_VERSION_MAJOR}")
+set(CMAKE_INSTALL_INCLUDE_DIR "include/${TIXI_LIB_NAME}")
 set(CONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
 
-install (TARGETS TIXI EXPORT tixi-targets
+install (TARGETS ${TIXI_LIB_NAME} EXPORT tixi-targets
 		 RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 		 LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

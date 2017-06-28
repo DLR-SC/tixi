@@ -1,7 +1,7 @@
 # units tests makefile
 
 FILE (GLOB_RECURSE test_SRCS *.cpp *.cxx *.cc *.C *.c *.h *.hpp)
-SET (test_LIBS gtest TIXI_static)
+SET (test_LIBS gtest ${TIXI_LIB_NAME}_static)
 SET (test_BIN ${PROJECT_NAME}-unittests)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${XML_INCLUDE_DIRS} ${XSLT_INCLUDE_DIRS})

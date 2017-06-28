@@ -25,7 +25,7 @@ configure_file(Makefile.in ${CMAKE_CURRENT_BINARY_DIR}/Makefile-matlab @ONLY)
 
 install(
 	CODE "file( GLOB MFILES ${CMAKE_CURRENT_BINARY_DIR}/*.m )"
-        CODE "file( INSTALL \${MFILES} DESTINATION \${CMAKE_INSTALL_PREFIX}/share/tixi${TIXI_VERSION_MAJOR}/matlab )"
+        CODE "file( INSTALL \${MFILES} DESTINATION \${CMAKE_INSTALL_PREFIX}/share/${TIXI_LIB_NAME}/matlab )"
 	COMPONENT interfaces
 )
 
@@ -33,7 +33,7 @@ install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
 	${CMAKE_CURRENT_SOURCE_DIR}/common.h
 	${CMAKE_CURRENT_SOURCE_DIR}/Readme.md
-        DESTINATION share/tixi${TIXI_VERSION_MAJOR}/matlab
+        DESTINATION share/${TIXI_LIB_NAME}/matlab
 	COMPONENT interfaces
 )
 
@@ -42,7 +42,7 @@ install(FILES
 install(FILES
 	${CMAKE_CURRENT_BINARY_DIR}/Makefile-matlab
 	RENAME Makefile
-        DESTINATION share/tixi${TIXI_VERSION_MAJOR}/matlab
+        DESTINATION share/${TIXI_LIB_NAME}/matlab
 	COMPONENT interfaces
 )
 
@@ -62,11 +62,11 @@ if(MATLAB_FOUND)
 
 	include_directories(${PROJECT_SOURCE_DIR}/src ${MATLAB_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
-	add_library(tixi_matlab SHARED ${TMAT_SRC})
-	target_link_libraries(tixi_matlab ${MATLAB_mat_LIBRARY} ${MATLAB_mx_LIBRARY} ${MATLAB_mex_LIBRARY} TIXI)
-	set_target_properties(tixi_matlab PROPERTIES SUFFIX ${MATLAB_MEX_SUFFIX} PREFIX "")
+        add_library(tixi_matlab SHARED ${TMAT_SRC})
+        target_link_libraries(tixi_matlab ${MATLAB_mat_LIBRARY} ${MATLAB_mx_LIBRARY} ${MATLAB_mex_LIBRARY} ${TIXI_LIB_NAME})
+        set_target_properties(tixi_matlab PROPERTIES SUFFIX ${MATLAB_MEX_SUFFIX} PREFIX "")
 
-        install(TARGETS tixi_matlab DESTINATION share/tixi${TIXI_VERSION_MAJOR}/matlab
+        install(TARGETS tixi_matlab DESTINATION share/${TIXI_LIB_NAME}/matlab
 		COMPONENT interfaces)
 else(MATLAB_FOUND)
 	message(STATUS "MATLAB not found: The TiXI mex is not created. It can still be build using the generated tiximatlab.c file.")

@@ -42,7 +42,7 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
 		file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wrappertests.py DESTINATION ${PROJECT_BINARY_DIR}/tests)
 		
 		install(FILES ${LIBRARY_OUTPUT_PATH}/tixiwrapper.py 
-                                DESTINATION share/tixi${TIXI_VERSION_MAJOR}/python
+                                DESTINATION share/${TIXI_LIB_NAME}/python
 				COMPONENT interfaces)
 else()
     message(WARNING "Python could not be found or the python installation is too old ( < 2.5). Python bindings will not be build!")

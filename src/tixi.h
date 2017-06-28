@@ -20,7 +20,7 @@ extern "C" {
 #endif
 
 #if defined(WIN32)
-#if defined (TIXI_EXPORTS)
+#if defined (tixi3_EXPORTS)
 #define DLL_EXPORT __declspec (dllexport)
 #else
 #define DLL_EXPORT

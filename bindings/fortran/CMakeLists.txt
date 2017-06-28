@@ -33,9 +33,9 @@ else()
 		endif()
 	endif()
 
-	add_library(TIXIf STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
-	set_target_properties(TIXIf PROPERTIES VERSION ${TIXI_VERSION})
-	install (TARGETS TIXIf 
+        add_library(${TIXI_LIB_NAME}-f90 STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
+        set_target_properties(${TIXI_LIB_NAME}-f90 PROPERTIES VERSION ${TIXI_VERSION})
+        install (TARGETS ${TIXI_LIB_NAME}-f90
 			DESTINATION ${CMAKE_INSTALL_LIBDIR}
 			COMPONENT interfaces)
 	install (FILES tixi77.h 
