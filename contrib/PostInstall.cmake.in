@@ -6,15 +6,15 @@ set (PYTHON_EXECUTABLE @PYTHON_EXECUTABLE@)
 if (WIN32)
 
     execute_process(
-      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_LIBDIR@/tixi-targets-release.cmake "@CURL_LIBRARIES@;"
+      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CONFIG_INSTALL_DIR@/tixi-targets-release.cmake "@CURL_LIBRARIES@;"
     )
 
     execute_process(
-      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_LIBDIR@/tixi-targets-release.cmake "@XSLT_LIBRARIES@;"
+      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CONFIG_INSTALL_DIR@/tixi-targets-release.cmake "@XSLT_LIBRARIES@;"
     )
 
     execute_process(
-      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CMAKE_INSTALL_LIBDIR@/tixi-targets-release.cmake "@XML_LIBRARIES@;"
+      COMMAND ${PYTHON_EXECUTABLE} @CMAKE_SOURCE_DIR@/contrib/remove-library.py  ${CMAKE_INSTALL_PREFIX}/@CONFIG_INSTALL_DIR@/tixi-targets-release.cmake "@XML_LIBRARIES@;"
     )
 
 endif()

@@ -2,7 +2,6 @@
 # @author Martin Siggel
 
 find_package(MATLAB QUIET)
-find_package(PythonInterp)
 
 if(PYTHONINTERP_FOUND)
 message(STATUS "TiXI MATLAB interface files are created (*.m, tiximatlab.c).")
