@@ -9,7 +9,7 @@ message(STATUS "TiXI MATLAB interface files are created (*.m, tiximatlab.c).")
 
 #run python to create the tiglmatlab.c
 add_custom_command(
-	OUTPUT tiximatlab.c
+        OUTPUT ${TIXI_LIB_NAME}matlab.c
 	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/make_tixi_matlab.py ${PROJECT_SOURCE_DIR}/src/tixi.h
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	COMMAND ${PYTHON_EXECUTABLE}
@@ -18,7 +18,7 @@ add_custom_command(
 
 add_custom_target(tixi_mex_interface ALL
 	COMMENT "Create MATLAB mex source for tixi" VERBATIM
-	DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${TIXI_LIB_NAME}matlab.c
 )
 
 configure_file(Makefile.in ${CMAKE_CURRENT_BINARY_DIR}/Makefile-matlab @ONLY)
@@ -30,7 +30,7 @@ install(
 )
 
 install(FILES
-	${CMAKE_CURRENT_BINARY_DIR}/tiximatlab.c
+        ${CMAKE_CURRENT_BINARY_DIR}/${TIXI_LIB_NAME}matlab.c
 	${CMAKE_CURRENT_SOURCE_DIR}/common.h
 	${CMAKE_CURRENT_SOURCE_DIR}/Readme.md
         DESTINATION share/${TIXI_LIB_NAME}/matlab
@@ -62,11 +62,11 @@ if(MATLAB_FOUND)
 
 	include_directories(${PROJECT_SOURCE_DIR}/src ${MATLAB_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
-        add_library(tixi_matlab SHARED ${TMAT_SRC})
-        target_link_libraries(tixi_matlab ${MATLAB_mat_LIBRARY} ${MATLAB_mx_LIBRARY} ${MATLAB_mex_LIBRARY} ${TIXI_LIB_NAME})
-        set_target_properties(tixi_matlab PROPERTIES SUFFIX ${MATLAB_MEX_SUFFIX} PREFIX "")
+        add_library(${TIXI_LIB_NAME}_matlab SHARED ${TMAT_SRC})
+        target_link_libraries(${TIXI_LIB_NAME}_matlab ${MATLAB_mat_LIBRARY} ${MATLAB_mx_LIBRARY} ${MATLAB_mex_LIBRARY} ${TIXI_LIB_NAME})
+        set_target_properties(${TIXI_LIB_NAME}_matlab PROPERTIES SUFFIX ${MATLAB_MEX_SUFFIX} PREFIX "")
 
-        install(TARGETS tixi_matlab DESTINATION share/${TIXI_LIB_NAME}/matlab
+        install(TARGETS ${TIXI_LIB_NAME}_matlab DESTINATION share/${TIXI_LIB_NAME}/matlab
 		COMPONENT interfaces)
 else(MATLAB_FOUND)
 	message(STATUS "MATLAB not found: The TiXI mex is not created. It can still be build using the generated tiximatlab.c file.")
