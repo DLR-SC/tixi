@@ -1,4 +1,4 @@
-Build-Status: [![Build Status](https://travis-ci.org/DLR-SC/tixi.svg?branch=master)](https://travis-ci.org/DLR-SC/tixi)
+Build-Status: [![Build Status](https://travis-ci.org/DLR-SC/tixi.svg?branch=master)](https://travis-ci.org/DLR-SC/tixi) [![Build status](https://ci.appveyor.com/api/projects/status/mhcsgq5smp8at4sx/branch/master?svg=true)](https://ci.appveyor.com/project/rainman110/tixi/branch/master)
 
 # TIXI #
 
