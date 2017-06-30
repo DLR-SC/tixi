@@ -165,6 +165,11 @@ namespace tixi3
 
             ~TixiError() throw() {}
 
+            ReturnCode returnCode() const
+            {
+                return m_ret;
+            }
+
             virtual const char* what() const throw() /*override*/
             {
                 return m_message.c_str();
