@@ -18,7 +18,6 @@
 #pragma once
 
 #define HAVE_CXX11 ( __cplusplus >= 201103L )
-#define HAVE_STDUNIQUE_PTR @HAVE_STDUNIQUE_PTR@ //this is set by CMake
 
 #include <tixi.h>
 
@@ -35,7 +34,7 @@ namespace tixi3
 {
     namespace helper
     {
-#if defined (HAVE_STDUNIQUE_PTR) && (HAVE_CXX11)
+#if HAVE_CXX11
         /* use std::unique_ptr for CPP11 */
         template <typename T>
         using unique_ptr = std::unique_ptr<T>;
