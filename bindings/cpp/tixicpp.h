@@ -30,6 +30,8 @@
 #include <sstream>
 #include <stdexcept>
 
+#include <memory>
+
 namespace tixi3
 {
     namespace helper
