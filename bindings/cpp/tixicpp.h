@@ -504,16 +504,16 @@ namespace tixi3
         return helper::TixiGetAttributeInternal<int>(tixiHandle, xpath, attribute, tixiGetBooleanAttribute) != 0;
     }
 
-    int         TixiGetIntAttribute   (const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
+    int         TixiGetIntegerAttribute   (const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
     {
-        return helper::TixiGetAttributeInternal<int>(tixiHandle, xpath, attribute, tixiGetBooleanAttribute);
+        return helper::TixiGetAttributeInternal<int>(tixiHandle, xpath, attribute, tixiGetIntegerAttribute);
     }
 
     template <typename T> T TixiGetAttribute             (const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute);
     template <> inline std::string TixiGetAttribute<std::string>(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute) { return TixiGetTextAttribute  (tixiHandle, xpath, attribute); }
     template <> inline double      TixiGetAttribute<double     >(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute) { return TixiGetDoubleAttribute(tixiHandle, xpath, attribute); }
     template <> inline bool        TixiGetAttribute<bool       >(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute) { return TixiGetBoolAttribute  (tixiHandle, xpath, attribute); }
-    template <> inline int         TixiGetAttribute<int        >(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute) { return TixiGetIntAttribute   (tixiHandle, xpath, attribute); }
+    template <> inline int         TixiGetAttribute<int        >(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute) { return TixiGetIntegerAttribute   (tixiHandle, xpath, attribute); }
 
     std::string TixiGetTextElement  (const TixiDocumentHandle& tixiHandle, const std::string& xpath)
     {
@@ -646,7 +646,10 @@ namespace tixi3
     std::string TixiExportDocumentAsString(const TixiDocumentHandle& tixiHandle)
     {
         char* ptr;
-        tixiExportDocumentAsString(tixiHandle, &ptr);
+        const ReturnCode ret = tixiExportDocumentAsString(tixiHandle, &ptr);
+        if (ret != SUCCESS) {
+            throw helper::TixiError(ret);
+        }
         return ptr;
     }
 
