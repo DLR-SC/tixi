@@ -17,7 +17,7 @@
 
 #pragma once
 
-#define HAVE_CXX11 ( __cplusplus >= 201103L )
+#define TIXI_HAVE_CXX11 ( __cplusplus >= 201103L )
 
 #include <tixi.h>
 
@@ -36,7 +36,7 @@ namespace tixi3
 {
     namespace internal
     {
-#if HAVE_CXX11
+#if TIXI_HAVE_CXX11
         /* use std::unique_ptr for CPP11 */
         template <typename T>
         using unique_ptr = std::unique_ptr<T>;
