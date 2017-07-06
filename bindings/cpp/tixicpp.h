@@ -32,7 +32,7 @@
 
 #include <memory>
 
-namespace tixi3
+namespace tixi
 {
     namespace internal
     {
