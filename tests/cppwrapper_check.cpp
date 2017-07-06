@@ -27,9 +27,9 @@ TEST(CppWrapper, createDocumentInvalidRootNodeName)
 
     try {
         documentHandle =  tixi3::TixiCreateDocument( rootElementName );
-        FAIL() << "Expected tixi3::helper::TixiError";
+        FAIL() << "Expected tixi3::TixiError";
     }
-    catch(tixi3::helper::TixiError const & err) {
+    catch(tixi3::TixiError const & err) {
         ASSERT_TRUE(err.returnCode()==INVALID_XML_NAME);
     }
 }
@@ -82,7 +82,7 @@ TEST(CppWrapper, exportAsString)
     try {
         text2=tixi3::TixiExportDocumentAsString(-1);
     }
-    catch(tixi3::helper::TixiError const & err) {
+    catch(tixi3::TixiError const & err) {
         ASSERT_TRUE(err.returnCode()==INVALID_HANDLE);
     }
 }
@@ -115,7 +115,7 @@ TEST(CppWrapper,getAttribute)
     try{
         text = tixi3::TixiGetTextAttribute(-1,"plane/name","non_existing_attribute");
     }
-    catch(tixi3::helper::TixiError const & err) {
+    catch(tixi3::TixiError const & err) {
         ASSERT_TRUE(err.returnCode()==INVALID_HANDLE);
     }
 
@@ -123,7 +123,7 @@ TEST(CppWrapper,getAttribute)
     try{
         text = tixi3::TixiGetAttribute<std::string>(documentHandle,"/plane/wings/wing[1]","non_existing_attribute");
     }
-    catch(tixi3::helper::TixiError const & err) {
+    catch(tixi3::TixiError const & err) {
         ASSERT_TRUE(err.returnCode()==ATTRIBUTE_NOT_FOUND);
     }
 
@@ -131,7 +131,7 @@ TEST(CppWrapper,getAttribute)
     try{
         text = tixi3::TixiGetAttribute<std::string>(documentHandle,"/plane/wings/wing","position");
     }
-    catch(tixi3::helper::TixiError const & err) {
+    catch(tixi3::TixiError const & err) {
         ASSERT_TRUE(err.returnCode()==ELEMENT_PATH_NOT_UNIQUE);
     }
 
@@ -163,7 +163,7 @@ TEST(CppWrapper,checkRemoveAttribute){
     try{
         tixi3::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings");
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()!=SUCCESS);
     }
 }
@@ -181,7 +181,7 @@ TEST(CppWrapper,getElement)
     try{
         text=tixi3::TixiGetElement<std::string>( -1, "/plane/name/pp"  );
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()==INVALID_HANDLE);
     }
 
@@ -189,7 +189,7 @@ TEST(CppWrapper,getElement)
     try{
         text=tixi3::TixiGetElement<std::string>( documentHandle, "/plane/name/pp"  );
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()==ELEMENT_NOT_FOUND);
     }
 
@@ -197,7 +197,7 @@ TEST(CppWrapper,getElement)
     try{
         text=tixi3::TixiGetElement<std::string>( documentHandle, "cc/plane/na|<<me/pp"  );
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()==INVALID_XPATH);
     }
 
@@ -205,7 +205,7 @@ TEST(CppWrapper,getElement)
     try{
         text=tixi3::TixiGetElement<std::string>( documentHandle, "/plane/wings/wing"  );
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()==ELEMENT_PATH_NOT_UNIQUE);
     }
 
@@ -237,7 +237,7 @@ TEST(CppWrapper,checkRemoveElement){
     try{
         tixi3::TixiCheckElement( documentHandle, "/plane/aPoint/point/z");
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()!=SUCCESS);
     }
 }
@@ -266,7 +266,7 @@ TEST(CppWrapper,saveElement){
     try{
         tixi3::TixiSaveElement( documentHandle, "/rootElement/newParent","withParent" );
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()==ELEMENT_NOT_FOUND);
     }
 
@@ -278,7 +278,7 @@ TEST(CppWrapper,saveElement){
     try{
         tixi3::TixiSaveElement( documentHandle, "/rootElement/bool_x",2);
     }
-    catch(tixi3::helper::TixiError const & err){
+    catch(tixi3::TixiError const & err){
         ASSERT_TRUE(err.returnCode()!=SUCCESS);
     }
 

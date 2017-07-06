@@ -34,7 +34,7 @@
 
 namespace tixi3
 {
-    namespace helper
+    namespace internal
     {
 #if HAVE_CXX11
         /* use std::unique_ptr for CPP11 */
@@ -149,38 +149,44 @@ namespace tixi3
             default: throw std::logic_error("Invalid ReturnCode");
             }
         }
+    }
 
-        class TixiError : public std::exception
+    class TixiError : public std::exception
+    {
+    public:
+
+        TixiError(ReturnCode ret)
+            : m_ret(ret)
         {
-        public:
-            TixiError(ReturnCode ret)
-                : m_ret(ret)
-            {
-                m_message = "ReturnCode: " + errorToString(m_ret);
-            }
+            m_message = "ReturnCode: " + internal::errorToString(m_ret);
+        }
 
-            TixiError(ReturnCode ret, const std::string& message)
-                : m_ret(ret)
-            {
-                m_message = message + "\nReturnCode: " + errorToString(m_ret);
-            }
+        TixiError(ReturnCode ret, const std::string& message)
+            : m_ret(ret)
+        {
+            m_message = message + "\nReturnCode: " + internal::errorToString(m_ret);
+        }
 
-            ~TixiError() throw() {}
+        ~TixiError() throw() {}
 
-            ReturnCode returnCode() const
-            {
-                return m_ret;
-            }
+        ReturnCode returnCode() const
+        {
+            return m_ret;
+        }
 
-            virtual const char* what() const throw() /*override*/
-            {
-                return m_message.c_str();
-            }
+        virtual const char* what() const throw() /*override*/
+        {
+            return m_message.c_str();
+        }
 
-        private:
-            ReturnCode m_ret;
-            std::string m_message;
-        };
+    private:
+        ReturnCode m_ret;
+        std::string m_message;
+    };
+
+    namespace internal
+    {
+
 
         struct SplitXPath
         {
@@ -196,60 +202,6 @@ namespace tixi3
             result.element     = pos != std::string::npos ? xpath.substr(pos + 1) : xpath;
             return result;
         }
-
-        template<typename T>
-        struct PrimitiveChildReader
-        {
-            T operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
-            {
-                return TixiGetElement<T>(tixiHandle, xpath);
-            }
-        };
-
-        template<typename T>
-        struct ChildReader
-        {
-            unique_ptr<T> operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
-            {
-                unique_ptr<T> child = make_unique<T>();
-                child->ReadCPACS(tixiHandle, xpath);
-                return child;
-            }
-        };
-
-        template<typename T, typename Arg1>
-        struct ChildWithArgsReader1
-        {
-            ChildWithArgsReader1(Arg1* arg1) : m_arg1(arg1) {}
-
-            unique_ptr<T> operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
-            {
-                unique_ptr<T> child = make_unique<T>(m_arg1);
-                child->ReadCPACS(tixiHandle, xpath);
-                return child;
-            }
-
-        private:
-            Arg1* m_arg1;
-        };
-
-        template<typename T>
-        struct PrimitiveChildWriter
-        {
-            void operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const T& child) const
-            {
-                TixiSaveElement(tixiHandle, xpath, child);
-            }
-        };
-
-        template<typename T>
-        struct ChildWriter
-        {
-            void operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const unique_ptr<T>& child) const
-            {
-                child->WriteCPACS(tixiHandle, xpath);
-            }
-        };
 
         template <typename T, typename GetFunc>
         T TixiGetAttributeInternal(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute, GetFunc getFunc)
@@ -305,7 +257,87 @@ namespace tixi3
                 );
             }
         }
+    }
 
+    TixiDocumentHandle TixiCreateDocument(const std::string& rootElement)
+    {
+        TixiDocumentHandle handle;
+        const ReturnCode ret = tixiCreateDocument(rootElement.c_str(), &handle);
+        if (ret != SUCCESS) {
+            throw TixiError(ret, "Failed to create tixi document with root element: " + rootElement);
+        }
+        return handle;
+    }
+
+    TixiDocumentHandle TixiOpenDocument(const std::string& filename)
+    {
+        TixiDocumentHandle handle;
+        const ReturnCode ret = tixiOpenDocument(filename.c_str(), &handle);
+        if (ret != SUCCESS) {
+            throw TixiError(ret, "Failed to open tixi document: " + filename);
+        }
+        return handle;
+    }
+
+    TixiDocumentHandle TixiImportFromString(const std::string& xml)
+    {
+        TixiDocumentHandle handle;
+        const ReturnCode ret = tixiImportFromString(xml.c_str(), &handle);
+        if (ret != SUCCESS) {
+            throw TixiError(ret, "Failed to import tixi document from string. " + xml);
+        }
+        return handle;
+    }
+
+    void TixiAddCpacsHeader(const TixiDocumentHandle& tixiHandle, const std::string& name, const std::string& creator, const std::string& version, const std::string& description, const std::string& cpacsVersion)
+    {
+        const ReturnCode ret = tixiAddCpacsHeader(tixiHandle, name.c_str(), creator.c_str(), version.c_str(), description.c_str(), cpacsVersion.c_str());
+        if (ret != SUCCESS) {
+            throw TixiError(ret,
+                "Failed to add CPACS Header\n"
+                "name: " + name + "\n"
+                "creator: " + creator + "\n"
+                "version: " + version + "\n"
+                "description: " + description + "\n"
+                "cpacsVersion: " + cpacsVersion
+            );
+        }
+    }
+
+    bool TixiCheckAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
+    {
+        const ReturnCode ret = tixiCheckAttribute(tixiHandle, xpath.c_str(), attribute.c_str());
+        if (ret == SUCCESS) {
+            return true;
+        } else if (ret == ATTRIBUTE_NOT_FOUND) {
+            return false;
+        } else {
+            throw TixiError(ret,
+                "Checking attribute existence failed\n"
+                "xpath: " + xpath + "\n"
+                "attribute: " + attribute
+            );
+        }
+    }
+
+    bool TixiCheckElement  (const TixiDocumentHandle& tixiHandle, const std::string& xpath)
+    {
+        const ReturnCode ret = tixiCheckElement(tixiHandle, xpath.c_str());
+        if (ret == SUCCESS) {
+            return true;
+        } else if (ret == ELEMENT_NOT_FOUND) {
+            return false;
+        } else {
+            throw TixiError(ret,
+                "Checking element existence failed\n"
+                "xpath: " + xpath
+            );
+        }
+    }
+    
+    namespace internal
+    {
+    
         template<typename UpdateFunc, typename SaveFunc, typename Value>
         void TixiSaveElementInternal(const TixiDocumentHandle& tixiHandle, const std::string& xpath, UpdateFunc updateFunc, SaveFunc saveFunc, const Value& value)
         {
@@ -361,108 +393,17 @@ namespace tixi3
                 }
             }
         }
-
-        template<typename T, typename Arg1, typename Arg2>
-        struct ChildWithArgsReader2
-        {
-            ChildWithArgsReader2(Arg1* arg1, Arg2* arg2) : m_arg1(arg1), m_arg2(arg2) {}
-
-            unique_ptr<T> operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
-            {
-                unique_ptr<T> child = make_unique<T>(m_arg1, m_arg2);
-                child->ReadCPACS(tixiHandle, xpath);
-                return child;
-            }
-
-        private:
-            Arg1* m_arg1;
-            Arg2* m_arg2;
-        };
-    }
-
-    TixiDocumentHandle TixiCreateDocument(const std::string& rootElement)
-    {
-        TixiDocumentHandle handle;
-        const ReturnCode ret = tixiCreateDocument(rootElement.c_str(), &handle);
-        if (ret != SUCCESS) {
-            throw helper::TixiError(ret, "Failed to create tixi document with root element: " + rootElement);
-        }
-        return handle;
-    }
-
-    TixiDocumentHandle TixiOpenDocument(const std::string& filename)
-    {
-        TixiDocumentHandle handle;
-        const ReturnCode ret = tixiOpenDocument(filename.c_str(), &handle);
-        if (ret != SUCCESS) {
-            throw helper::TixiError(ret, "Failed to open tixi document: " + filename);
-        }
-        return handle;
-    }
-
-    TixiDocumentHandle TixiImportFromString(const std::string& xml)
-    {
-        TixiDocumentHandle handle;
-        const ReturnCode ret = tixiImportFromString(xml.c_str(), &handle);
-        if (ret != SUCCESS) {
-            throw helper::TixiError(ret, "Failed to import tixi document from string. " + xml);
-        }
-        return handle;
-    }
-
-    void TixiAddCpacsHeader(const TixiDocumentHandle& tixiHandle, const std::string& name, const std::string& creator, const std::string& version, const std::string& description, const std::string& cpacsVersion)
-    {
-        const ReturnCode ret = tixiAddCpacsHeader(tixiHandle, name.c_str(), creator.c_str(), version.c_str(), description.c_str(), cpacsVersion.c_str());
-        if (ret != SUCCESS) {
-            throw helper::TixiError(ret,
-                "Failed to add CPACS Header\n"
-                "name: " + name + "\n"
-                "creator: " + creator + "\n"
-                "version: " + version + "\n"
-                "description: " + description + "\n"
-                "cpacsVersion: " + cpacsVersion
-            );
-        }
-    }
-
-    bool TixiCheckAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
-    {
-        const ReturnCode ret = tixiCheckAttribute(tixiHandle, xpath.c_str(), attribute.c_str());
-        if (ret == SUCCESS) {
-            return true;
-        } else if (ret == ATTRIBUTE_NOT_FOUND) {
-            return false;
-        } else {
-            throw helper::TixiError(ret,
-                "Checking attribute existence failed\n"
-                "xpath: " + xpath + "\n"
-                "attribute: " + attribute
-            );
-        }
-    }
-
-    bool TixiCheckElement  (const TixiDocumentHandle& tixiHandle, const std::string& xpath)
-    {
-        const ReturnCode ret = tixiCheckElement(tixiHandle, xpath.c_str());
-        if (ret == SUCCESS) {
-            return true;
-        } else if (ret == ELEMENT_NOT_FOUND) {
-            return false;
-        } else {
-            throw helper::TixiError(ret,
-                "Checking element existence failed\n"
-                "xpath: " + xpath
-            );
-        }
+        
+        
     }
 
     int TixiGetNamedChildrenCount(const TixiDocumentHandle& tixiHandle, const std::string& xpath)
     {
-        const helper::SplitXPath sp = helper::splitXPath(xpath);
+        const internal::SplitXPath sp = internal::splitXPath(xpath);
         int count = 0;
         ReturnCode ret = tixiGetNamedChildrenCount(tixiHandle, sp.parentXPath.c_str(), sp.element.c_str(), &count);
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret);
+            throw TixiError(ret);
         }
         return count;
     }
@@ -472,7 +413,7 @@ namespace tixi3
         int count = 0;
         const ReturnCode ret = tixiGetNumberOfAttributes(tixiHandle, xpath.c_str(), &count);
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret, "Failed to get number of attributes at xpath: " + xpath);
+            throw TixiError(ret, "Failed to get number of attributes at xpath: " + xpath);
         }
         std::vector<std::string> names;
         names.reserve(count);
@@ -480,9 +421,9 @@ namespace tixi3
             char* name = NULL;
             const ReturnCode ret = tixiGetAttributeName(tixiHandle, xpath.c_str(), i, &name);
             if (ret != SUCCESS) {
-                throw helper::TixiError(ret,
+                throw TixiError(ret,
                     "Failed to get the name an attribute\n"
-                    "Index: " + helper::to_string(i) + "\n"
+                    "Index: " + internal::to_string(i) + "\n"
                     "xpath: " + xpath
                 );
             }
@@ -493,22 +434,22 @@ namespace tixi3
 
     std::string TixiGetTextAttribute  (const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
     {
-        return std::string(helper::TixiGetAttributeInternal<char*>(tixiHandle, xpath, attribute, tixiGetTextAttribute));
+        return std::string(internal::TixiGetAttributeInternal<char*>(tixiHandle, xpath, attribute, tixiGetTextAttribute));
     }
 
     double      TixiGetDoubleAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
     {
-        return helper::TixiGetAttributeInternal<double>(tixiHandle, xpath, attribute, tixiGetDoubleAttribute);
+        return internal::TixiGetAttributeInternal<double>(tixiHandle, xpath, attribute, tixiGetDoubleAttribute);
     }
 
     bool        TixiGetBoolAttribute  (const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
     {
-        return helper::TixiGetAttributeInternal<int>(tixiHandle, xpath, attribute, tixiGetBooleanAttribute) != 0;
+        return internal::TixiGetAttributeInternal<int>(tixiHandle, xpath, attribute, tixiGetBooleanAttribute) != 0;
     }
 
     int         TixiGetIntegerAttribute   (const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute)
     {
-        return helper::TixiGetAttributeInternal<int>(tixiHandle, xpath, attribute, tixiGetIntegerAttribute);
+        return internal::TixiGetAttributeInternal<int>(tixiHandle, xpath, attribute, tixiGetIntegerAttribute);
     }
 
     template <typename T> T TixiGetAttribute             (const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute);
@@ -519,22 +460,22 @@ namespace tixi3
 
     std::string TixiGetTextElement  (const TixiDocumentHandle& tixiHandle, const std::string& xpath)
     {
-        return std::string(helper::TixiGetElementInternal<char*>(tixiHandle, xpath, tixiGetTextElement));
+        return std::string(internal::TixiGetElementInternal<char*>(tixiHandle, xpath, tixiGetTextElement));
     }
 
     double      TixiGetDoubleElement(const TixiDocumentHandle& tixiHandle, const std::string& xpath)
     {
-        return helper::TixiGetElementInternal<double>(tixiHandle, xpath, tixiGetDoubleElement);
+        return internal::TixiGetElementInternal<double>(tixiHandle, xpath, tixiGetDoubleElement);
     }
 
     bool        TixiGetBoolElement  (const TixiDocumentHandle& tixiHandle, const std::string& xpath)
     {
-        return helper::TixiGetElementInternal<int>(tixiHandle, xpath, tixiGetBooleanElement) != 0;
+        return internal::TixiGetElementInternal<int>(tixiHandle, xpath, tixiGetBooleanElement) != 0;
     }
 
     int         TixiGetIntElement   (const TixiDocumentHandle& tixiHandle, const std::string& xpath)
     {
-        return helper::TixiGetElementInternal<int>(tixiHandle, xpath, tixiGetIntegerElement);
+        return internal::TixiGetElementInternal<int>(tixiHandle, xpath, tixiGetIntegerElement);
     }
 
     template <typename T> T           TixiGetElement             (const TixiDocumentHandle& tixiHandle, const std::string& xpath) { /* static_assert(false, "TixiGetElement<T> cannot be used for the given T"); */ }
@@ -545,60 +486,60 @@ namespace tixi3
 
     void TixiSaveAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute, const char*        value)
     {
-        helper::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddTextAttribute, value);
+        internal::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddTextAttribute, value);
     }
 
     void TixiSaveAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute, const std::string& value)
     {
-        helper::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddTextAttribute, value.c_str());
+        internal::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddTextAttribute, value.c_str());
     }
 
     void TixiSaveAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute, double             value)
     {
-        helper::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddDoubleAttribute, value, (const char*)NULL);
+        internal::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddDoubleAttribute, value, (const char*)NULL);
     }
 
     void TixiSaveAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute, bool               value)
     {
-        helper::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddTextAttribute, value ? "true" : "false"); // TODO: no tixiAddBooleanAttribute in Tixi
+        internal::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddTextAttribute, value ? "true" : "false"); // TODO: no tixiAddBooleanAttribute in Tixi
     }
 
     void TixiSaveAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute, int                value)
     {
-        helper::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddIntegerAttribute, value, "%d");
+        internal::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddIntegerAttribute, value, "%d");
     }
 
     void TixiSaveElement(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const char*        value)
     {
-        helper::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateTextElement, tixiAddTextElement, value);
+        internal::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateTextElement, tixiAddTextElement, value);
     }
 
     void TixiSaveElement(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& value)
     {
-        helper::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateTextElement, tixiAddTextElement, value.c_str());
+        internal::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateTextElement, tixiAddTextElement, value.c_str());
     }
 
     void TixiSaveElement(const TixiDocumentHandle& tixiHandle, const std::string& xpath, double             value, const std::string& format = "%g")
     {
-        helper::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateDoubleElement, tixiAddDoubleElement, value, format.c_str());
+        internal::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateDoubleElement, tixiAddDoubleElement, value, format.c_str());
     }
 
     void TixiSaveElement(const TixiDocumentHandle& tixiHandle, const std::string& xpath, bool               value)
     {
-        helper::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateBooleanElement, tixiAddBooleanElement, value ? 1 : 0);
+        internal::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateBooleanElement, tixiAddBooleanElement, value ? 1 : 0);
     }
 
     void TixiSaveElement(const TixiDocumentHandle& tixiHandle, const std::string& xpath, int                value)
     {
-        helper::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateIntegerElement, tixiAddIntegerElement, value, "%d");
+        internal::TixiSaveElementInternal(tixiHandle, xpath, tixiUpdateIntegerElement, tixiAddIntegerElement, value, "%d");
     }
 
     void TixiCreateElement            (const TixiDocumentHandle& tixiHandle, const std::string& xpath)
     {
-        const helper::SplitXPath sp = helper::splitXPath(xpath);
+        const internal::SplitXPath sp = internal::splitXPath(xpath);
         const ReturnCode ret = tixiCreateElement(tixiHandle, sp.parentXPath.c_str(), sp.element.c_str());
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret,
+            throw TixiError(ret,
                 "Error creating element\n"
                 "xpath: " + xpath
             );
@@ -627,7 +568,7 @@ namespace tixi3
     {
         const ReturnCode ret = tixiRemoveAttribute(tixiHandle, xpath.c_str(), attribute.c_str());
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret,
+            throw TixiError(ret,
                 "Error removing attribute\n"
                 "xpath: " + xpath
             );
@@ -638,7 +579,7 @@ namespace tixi3
     {
         const ReturnCode ret = tixiRemoveElement(tixiHandle, xpath.c_str());
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret,
+            throw TixiError(ret,
                 "Error removing element\n"
                 "xpath: " + xpath
             );
@@ -650,7 +591,7 @@ namespace tixi3
         char* ptr;
         const ReturnCode ret = tixiExportDocumentAsString(tixiHandle, &ptr);
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret);
+            throw TixiError(ret);
         }
         return ptr;
     }
@@ -659,7 +600,7 @@ namespace tixi3
     {
         const ReturnCode ret = tixiRegisterNamespacesFromDocument(tixiHandle);
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret, "Failed to register all document namespaces");
+            throw TixiError(ret, "Failed to register all document namespaces");
         }
     }
 
@@ -667,8 +608,64 @@ namespace tixi3
     {
         const ReturnCode ret =  tixiRegisterNamespace(tixiHandle, namespaceURI.c_str(), prefix.c_str());
         if (ret != SUCCESS) {
-            throw helper::TixiError(ret, "Failed to register all document namespaces");
+            throw TixiError(ret, "Failed to register all document namespaces");
         }
+    }
+
+    namespace internal
+    {
+        template<typename T>
+        struct PrimitiveChildReader
+        {
+            T operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
+            {
+                return TixiGetElement<T>(tixiHandle, xpath);
+            }
+        };
+
+        template<typename T>
+        struct ChildReader
+        {
+            unique_ptr<T> operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
+            {
+                unique_ptr<T> child = make_unique<T>();
+                child->ReadCPACS(tixiHandle, xpath);
+                return child;
+            }
+        };
+
+        template<typename T, typename Arg1>
+        struct ChildWithArgsReader1
+        {
+            ChildWithArgsReader1(Arg1* arg1) : m_arg1(arg1) {}
+
+            unique_ptr<T> operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
+            {
+                unique_ptr<T> child = make_unique<T>(m_arg1);
+                child->ReadCPACS(tixiHandle, xpath);
+                return child;
+            }
+
+        private:
+            Arg1* m_arg1;
+        };
+
+        template<typename T, typename Arg1, typename Arg2>
+        struct ChildWithArgsReader2
+        {
+            ChildWithArgsReader2(Arg1* arg1, Arg2* arg2) : m_arg1(arg1), m_arg2(arg2) {}
+
+            unique_ptr<T> operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath) const
+            {
+                unique_ptr<T> child = make_unique<T>(m_arg1, m_arg2);
+                child->ReadCPACS(tixiHandle, xpath);
+                return child;
+            }
+
+        private:
+            Arg1* m_arg1;
+            Arg2* m_arg2;
+        };
     }
 
     template<typename T, typename ReadChildFunc>
@@ -701,38 +698,38 @@ namespace tixi3
 
         // read child nodes
         for (int i = 0; i < childCount; i++) {
-            children.push_back(readChild(tixiHandle, xpath + "[" + helper::to_string(i + 1) + "]"));
+            children.push_back(readChild(tixiHandle, xpath + "[" + internal::to_string(i + 1) + "]"));
         }
     }
 
     template<typename T>
     void TixiReadElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, std::vector<T>& children, int minOccurs = -1, int maxOccurs = -1)
     {
-        TixiReadElements(tixiHandle, xpath, children, helper::PrimitiveChildReader<T>(), minOccurs, maxOccurs);
+        TixiReadElements(tixiHandle, xpath, children, internal::PrimitiveChildReader<T>(), minOccurs, maxOccurs);
     }
 
     template<typename T>
-    void TixiReadElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, std::vector<helper::unique_ptr<T> >& children, int minOccurs = -1, int maxOccurs = -1)
+    void TixiReadElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, std::vector<internal::unique_ptr<T> >& children, int minOccurs = -1, int maxOccurs = -1)
     {
-        TixiReadElements(tixiHandle, xpath, children, helper::ChildReader<T>(), minOccurs, maxOccurs);
+        TixiReadElements(tixiHandle, xpath, children, internal::ChildReader<T>(), minOccurs, maxOccurs);
     }
 
     template<typename T, typename Arg1>
-    void TixiReadElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, std::vector<helper::unique_ptr<T> >& children, Arg1* arg1, int minOccurs = -1, int maxOccurs = -1)
+    void TixiReadElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, std::vector<internal::unique_ptr<T> >& children, Arg1* arg1, int minOccurs = -1, int maxOccurs = -1)
     {
-        TixiReadElements(tixiHandle, xpath, children, helper::ChildWithArgsReader1<T, Arg1>(arg1), minOccurs, maxOccurs);
+        TixiReadElements(tixiHandle, xpath, children, internal::ChildWithArgsReader1<T, Arg1>(arg1), minOccurs, maxOccurs);
     }
 
     template<typename T, typename Arg1, typename Arg2>
-    void TixiReadElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, std::vector<helper::unique_ptr<T> >& children, Arg1* arg1, Arg2* arg2, int minOccurs = -1, int maxOccurs = -1)
+    void TixiReadElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, std::vector<internal::unique_ptr<T> >& children, Arg1* arg1, Arg2* arg2, int minOccurs = -1, int maxOccurs = -1)
     {
-        TixiReadElements(tixiHandle, xpath, children, helper::ChildWithArgsReader2<T, Arg1, Arg2>(arg1, arg2), minOccurs, maxOccurs);
+        TixiReadElements(tixiHandle, xpath, children, internal::ChildWithArgsReader2<T, Arg1, Arg2>(arg1, arg2), minOccurs, maxOccurs);
     }
 
     template<typename T, typename WriteChildFunc>
     void TixiSaveElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::vector<T>& children, WriteChildFunc writeChild)
     {
-        const helper::SplitXPath& sp = helper::splitXPath(xpath);
+        const internal::SplitXPath& sp = internal::splitXPath(xpath);
 
         // get number of children
         const int childCount = TixiGetNamedChildrenCount(tixiHandle, xpath);
@@ -742,7 +739,7 @@ namespace tixi3
             // iteratore over all child nodes
             for (std::size_t i = 0; i < children.size(); i++) {
                 // if child node does not exist, create it
-                const std::string& childPath = xpath + "[" + helper::to_string(i + 1) + "]";
+                const std::string& childPath = xpath + "[" + internal::to_string(i + 1) + "]";
                 if (!TixiCheckElement(tixiHandle, childPath)) {
                     TixiCreateElement(tixiHandle, xpath);
                 }
@@ -754,19 +751,40 @@ namespace tixi3
 
         // delete old children which where not overwritten
         for (std::size_t i = children.size() + 1; i <= static_cast<std::size_t>(childCount); i++) {
-            TixiRemoveElement(tixiHandle, xpath + "[" + helper::to_string(children.size() + 1) + "]");
+            TixiRemoveElement(tixiHandle, xpath + "[" + internal::to_string(children.size() + 1) + "]");
         }
+    }
+    
+    namespace internal
+    {
+        template<typename T>
+        struct PrimitiveChildWriter
+        {
+            void operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const T& child) const
+            {
+                TixiSaveElement(tixiHandle, xpath, child);
+            }
+        };
+
+        template<typename T>
+        struct ChildWriter
+        {
+            void operator()(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const unique_ptr<T>& child) const
+            {
+                child->WriteCPACS(tixiHandle, xpath);
+            }
+        };
     }
 
     template<typename T>
     void TixiSaveElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::vector<T>& children)
     {
-        TixiSaveElements(tixiHandle, xpath, children, helper::PrimitiveChildWriter<T>());
+        TixiSaveElements(tixiHandle, xpath, children, internal::PrimitiveChildWriter<T>());
     }
 
     template<typename T>
-    void TixiSaveElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::vector<helper::unique_ptr<T> >& children)
+    void TixiSaveElements(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::vector<internal::unique_ptr<T> >& children)
     {
-        TixiSaveElements(tixiHandle, xpath, children, helper::ChildWriter<T>());
+        TixiSaveElements(tixiHandle, xpath, children, internal::ChildWriter<T>());
     }
 }
