@@ -17,9 +17,9 @@
 #pragma once
 
 #if defined(_MSC_VER) && _MSC_VER > 1600
-#define HAVE_CXX11 1
+#define TIXI_HAVE_CXX11 1
 #else
-#define HAVE_CXX11 ( __cplusplus >= 201103L )
+#define TIXI_HAVE_CXX11 ( __cplusplus >= 201103L )
 #endif
 
 #include <tixi.h>
