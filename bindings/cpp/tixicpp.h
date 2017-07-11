@@ -1,7 +1,5 @@
 // Copyright (c) 2016 RISC Software GmbH
 //
-// Do not edit, all changes are lost when files are re-generated.
-//
 // Licensed under the Apache License, Version 2.0 (the "License")
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -28,7 +26,6 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <ctime>
 
 #include <sstream>
 #include <stdexcept>
@@ -419,7 +416,7 @@ namespace tixi
         return internal::TixiGetElementInternal<int>(tixiHandle, xpath, tixiGetIntegerElement);
     }
 
-    template <typename T> T           TixiGetElement             (const TixiDocumentHandle& tixiHandle, const std::string& xpath) { /* static_assert(false, "TixiGetElement<T> cannot be used for the given T"); */ }
+    template <typename T> T           TixiGetElement             (const TixiDocumentHandle& tixiHandle, const std::string& xpath);
     template <> inline    std::string TixiGetElement<std::string>(const TixiDocumentHandle& tixiHandle, const std::string& xpath) { return TixiGetTextElement  (tixiHandle, xpath); }
     template <> inline    double      TixiGetElement<double     >(const TixiDocumentHandle& tixiHandle, const std::string& xpath) { return TixiGetDoubleElement(tixiHandle, xpath); }
     template <> inline    bool        TixiGetElement<bool       >(const TixiDocumentHandle& tixiHandle, const std::string& xpath) { return TixiGetBoolElement  (tixiHandle, xpath); }
