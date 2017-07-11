@@ -188,35 +188,12 @@ TEST(CppWrapper,saveAttribute){
 
     std::string rootElementName = "rootElement";
     ASSERT_NO_THROW( documentHandle = tixi::TixiCreateDocument( rootElementName ) );
-    ASSERT_NO_THROW( tixi::TixiSaveElement( documentHandle, "/rootElement/element", "content" ) );
+    ASSERT_NO_THROW( tixi::TixiCreateElement(documentHandle, "/rootElement/element") );
 
     ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","sattribute","stringAttribute") );
     ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","dattribute",3.14159) );
     ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","iattribute",4711) );
     ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","battribute",true) );
-}
-
-TEST(CppWrapper,saveElement){
-    std::string rootElementName = "rootElement";
-    ASSERT_NO_THROW( documentHandle = tixi::TixiCreateDocument( rootElementName ) );
-
-    /*--------------------------------------------------------------------*/
-    ASSERT_NO_THROW( tixi::TixiSaveElement( documentHandle, "/rootElement","level1") );
-    ASSERT_NO_THROW( tixi::TixiSaveElement( documentHandle, "/rootElement/level1","level2") );
-
-    /*--------------------------------------------------------------------*/
-    ASSERT_NO_THROW( tixi::TixiSaveElement( documentHandle, "/rootElement/double",3.14159265) );
-    ASSERT_NO_THROW( tixi::TixiSaveElement( documentHandle, "/rootElement/int",4711) );
-    ASSERT_NO_THROW( tixi::TixiSaveElement( documentHandle, "/rootElement/bool_t",true) );
-    ASSERT_NO_THROW( tixi::TixiSaveElement( documentHandle, "/rootElement/bool_f",false) );
-
-    std::vector<std::string> children(5);
-    children[0]="child1";
-    children[1]="child2";
-    children[2]="child3";
-    children[3]="child4";
-    children[4]="child5";
-    ASSERT_NO_THROW( tixi::TixiSaveElements<std::string>( documentHandle, "/rootElement/children",children) );
 }
 
 TEST(CppWrapper,getNamedChildrenCount){
