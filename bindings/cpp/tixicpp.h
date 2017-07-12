@@ -309,9 +309,11 @@ namespace tixi
         const ReturnCode ret = tixiCheckAttribute(tixiHandle, xpath.c_str(), attribute.c_str());
         if (ret == SUCCESS) {
             return true;
-        } else if (ret == ATTRIBUTE_NOT_FOUND) {
+        }
+        else if (ret == ATTRIBUTE_NOT_FOUND) {
             return false;
-        } else {
+        }
+        else {
             throw TixiError(ret,
                 "Checking attribute existence failed\n"
                 "xpath: " + xpath + "\n"
@@ -325,9 +327,11 @@ namespace tixi
         const ReturnCode ret = tixiCheckElement(tixiHandle, xpath.c_str());
         if (ret == SUCCESS) {
             return true;
-        } else if (ret == ELEMENT_NOT_FOUND) {
+        }
+        else if (ret == ELEMENT_NOT_FOUND) {
             return false;
-        } else {
+        }
+        else {
             throw TixiError(ret,
                 "Checking element existence failed\n"
                 "xpath: " + xpath
