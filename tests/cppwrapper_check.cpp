@@ -1,7 +1,7 @@
 /*
 * Copyright (C) 2017 German Aerospace Center (DLR/SC)
 *
-* Created: 2017-06-30 Jan Kkleinert <Jan.Kleinert@dlr.de>
+* Created: 2017-06-30 Jan Kleinert <Jan.Kleinert@dlr.de>
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -19,13 +19,13 @@
 #include "test.h" // Brings in the GTest framework
 #include "tixicpp.h"
 
-#define EXPECT_TIXI_ERROR(cmd,RC)           \
-    ASSERT_THROW(cmd,tixi::TixiError);     \
+#define EXPECT_TIXI_ERROR(RC, cmd)          \
+    ASSERT_THROW(cmd, tixi::TixiError);     \
     try {                                   \
         cmd;                                \
     }                                       \
-    catch(tixi::TixiError const & err) {   \
-        EXPECT_EQ(err.returnCode(),RC);     \
+    catch (tixi::TixiError const & err) {   \
+        EXPECT_EQ(RC, err.returnCode());    \
     }
 
 static TixiDocumentHandle documentHandle = -1;
@@ -33,7 +33,7 @@ static TixiDocumentHandle documentHandle = -1;
 TEST(CppWrapper, createDocumentInvalidRootNodeName)
 {
     std::string rootElementName = "1";
-    EXPECT_TIXI_ERROR( documentHandle =  tixi::TixiCreateDocument( rootElementName ),INVALID_XML_NAME );
+    EXPECT_TIXI_ERROR( INVALID_XML_NAME, documentHandle =  tixi::TixiCreateDocument( rootElementName ) );
 }
 
 TEST(CppWrapper, createDocumentAddCPACSHeader)
@@ -51,22 +51,22 @@ TEST(CppWrapper, createDocumentAddCPACSHeader)
 
   // Now check the different header values
   ASSERT_NO_THROW( text = tixi::TixiGetTextElement( documentHandle, "/rootElement/header/name" ) );
-  EXPECT_EQ(text, cpacsName);
+  EXPECT_STREQ(cpacsName.c_str(), text.c_str());
 
   ASSERT_NO_THROW( text = tixi::TixiGetTextElement( documentHandle, "/rootElement/header/creator") );
-  EXPECT_EQ(text, cpacsCreator);
+  EXPECT_STREQ(cpacsCreator.c_str(), text.c_str());
 
   ASSERT_NO_THROW( text = tixi::TixiGetTextElement( documentHandle, "/rootElement/header/version") );
-  EXPECT_EQ(text, version);
+  EXPECT_STREQ(version.c_str(), text.c_str());
 
   ASSERT_NO_THROW( text = tixi::TixiGetTextElement( documentHandle, "/rootElement/header/cpacsVersion") );
-  EXPECT_EQ(text, cpacsVersion);
+  EXPECT_STREQ(cpacsVersion.c_str(), text.c_str());
 
   ASSERT_NO_THROW( text = tixi::TixiGetTextElement( documentHandle, "/rootElement/header/description") );
-  EXPECT_EQ(text, cpacsDescription);
+  EXPECT_STREQ(cpacsDescription.c_str(), text.c_str());
 }
 
-TEST(CppWrapper,importFromString)
+TEST(CppWrapper, importFromString)
 {
     std::string s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root/>";
     TixiDocumentHandle handle;
@@ -81,23 +81,23 @@ TEST(CppWrapper, exportAsString)
     std::string text;
     std::string text2;
     ASSERT_NO_THROW( text=tixi::TixiExportDocumentAsString(documentHandle) );
-    EXPECT_TIXI_ERROR( text2=tixi::TixiExportDocumentAsString(-1),INVALID_HANDLE );
+    EXPECT_TIXI_ERROR( INVALID_HANDLE, text2=tixi::TixiExportDocumentAsString(-1) );
 }
 
-TEST(CppWrapper,getAttributeNames)
+TEST(CppWrapper, getAttributeNames)
 {
     TixiDocumentHandle documentHandle;
     std::string xmlFilename = "TestData/in.xml";
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument(xmlFilename) );
 
     std::vector<std::string> attributeNames;
-    ASSERT_NO_THROW( attributeNames=tixi::TixiGetAttributeNames(documentHandle,"/plane/aPoint[1]") );
-    EXPECT_EQ( attributeNames.size(),2);
-    EXPECT_EQ( attributeNames[0],"system");
-    EXPECT_EQ( attributeNames[1],"type");
+    ASSERT_NO_THROW( attributeNames=tixi::TixiGetAttributeNames(documentHandle, "/plane/aPoint[1]") );
+    EXPECT_EQ( 2,        attributeNames.size());
+    EXPECT_EQ( "system", attributeNames[0]);
+    EXPECT_EQ( "type",   attributeNames[1]);
 }
 
-TEST(CppWrapper,getAttribute)
+TEST(CppWrapper, getAttribute)
 {
     std::string xmlFilename = "TestData/in.xml";
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument(xmlFilename) );
@@ -109,21 +109,21 @@ TEST(CppWrapper,getAttribute)
     bool mybool = false;
 
 
-    EXPECT_TIXI_ERROR( text = tixi::TixiGetTextAttribute(-1,"plane/name","non_existing_attribute"),INVALID_HANDLE );
-    EXPECT_TIXI_ERROR( text = tixi::TixiGetAttribute<std::string>(documentHandle,"/plane/wings/wing[1]","non_existing_attribute"), ATTRIBUTE_NOT_FOUND);
-    EXPECT_TIXI_ERROR( text = tixi::TixiGetAttribute<std::string>(documentHandle,"/plane/wings/wing","position"),ELEMENT_PATH_NOT_UNIQUE );
+    EXPECT_TIXI_ERROR( INVALID_HANDLE,          text = tixi::TixiGetTextAttribute(-1, "plane/name", "non_existing_attribute") );
+    EXPECT_TIXI_ERROR( ATTRIBUTE_NOT_FOUND,     text = tixi::TixiGetAttribute<std::string>(documentHandle, "/plane/wings/wing[1]", "non_existing_attribute") );
+    EXPECT_TIXI_ERROR( ELEMENT_PATH_NOT_UNIQUE, text = tixi::TixiGetAttribute<std::string>(documentHandle, "/plane/wings/wing", "position") );
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( text=tixi::TixiGetAttribute<std::string>( documentHandle,  "/plane/wings", "numberOfWings" ) );
-    EXPECT_EQ( text, "2");
+    EXPECT_EQ( "2", text);
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( numberd=tixi::TixiGetAttribute<double>( documentHandle, "/plane/coordinateOrigin", "scaling" ) );
-    EXPECT_EQ( numberd, 1.3456);
+    EXPECT_NEAR(1.3456, numberd, 1e-10);
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( numberi=tixi::TixiGetAttribute<int>( documentHandle,  "/plane/wings", "numberOfWings" ) );
-    EXPECT_EQ( numberi, 2);
+    EXPECT_EQ( 2, numberi);
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( mybool=tixi::TixiGetAttribute<bool>( documentHandle, "/plane/wings/wing[1]", "top" ) );
@@ -134,14 +134,14 @@ TEST(CppWrapper,getAttribute)
     ASSERT_EQ(false, mybool);
 }
 
-TEST(CppWrapper,checkRemoveAttribute){
+TEST(CppWrapper, checkRemoveAttribute){
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument("TestData/in.xml") );
-    EXPECT_EQ( tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings"),true );
+    EXPECT_EQ( true, tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings") );
     ASSERT_NO_THROW( tixi::TixiRemoveAttribute( documentHandle, "/plane/wings", "numberOfWings" ) );
-    EXPECT_EQ(tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings"),false );
+    EXPECT_EQ( false, tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings"));
 }
 
-TEST(CppWrapper,getElement)
+TEST(CppWrapper, getElement)
 {
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument("TestData/in.xml") );
 
@@ -151,62 +151,62 @@ TEST(CppWrapper,getElement)
     bool myBool = false;
 
     /*--------------------------------------------------------------------*/
-    EXPECT_TIXI_ERROR( text=tixi::TixiGetElement<std::string>( -1            , "/plane/name/pp"       ),INVALID_HANDLE );
-    EXPECT_TIXI_ERROR( text=tixi::TixiGetElement<std::string>( documentHandle, "/plane/name/pp"       ),ELEMENT_NOT_FOUND );
-    EXPECT_TIXI_ERROR( text=tixi::TixiGetElement<std::string>( documentHandle, "cc/plane/na|<<me/pp"  ),INVALID_XPATH );
-    EXPECT_TIXI_ERROR( text=tixi::TixiGetElement<std::string>( documentHandle, "/plane/wings/wing"    ),ELEMENT_PATH_NOT_UNIQUE );
+    EXPECT_TIXI_ERROR( INVALID_HANDLE,          text=tixi::TixiGetElement<std::string>( -1            , "/plane/name/pp"       ) );
+    EXPECT_TIXI_ERROR( ELEMENT_NOT_FOUND,       text=tixi::TixiGetElement<std::string>( documentHandle, "/plane/name/pp"       ) );
+    EXPECT_TIXI_ERROR( INVALID_XPATH,           text=tixi::TixiGetElement<std::string>( documentHandle, "cc/plane/na|<<me/pp"  ) );
+    EXPECT_TIXI_ERROR( ELEMENT_PATH_NOT_UNIQUE, text=tixi::TixiGetElement<std::string>( documentHandle, "/plane/wings/wing"    ) );
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( text=tixi::TixiGetElement<std::string>( documentHandle, "/plane/empty" ) );
-    EXPECT_EQ( text, "");
+    EXPECT_STREQ( "", text.c_str() );
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( text=tixi::TixiGetElement<std::string>( documentHandle, "/plane/name" ) );
-    EXPECT_EQ( text, "Junkers JU 52");
+    EXPECT_STREQ( "Junkers JU 52", text.c_str() );
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( numberd=tixi::TixiGetElement<double>( documentHandle, "/plane/wings/wing[1]/centerOfGravity/x" ) );
-    EXPECT_EQ( numberd, 30.0);
+    EXPECT_NEAR( 30.0, numberd, 1e-10 );
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( numberi=tixi::TixiGetElement<int>( documentHandle, "/plane/numberOfPassengers" ) );
-    EXPECT_EQ( numberi, 57);
+    EXPECT_EQ( 57, numberi );
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( myBool=tixi::TixiGetElement<bool>( documentHandle, "/plane/bool/aBool1" ) );
-    EXPECT_EQ( myBool, true);
+    EXPECT_EQ( true, myBool );
 }
 
-TEST(CppWrapper,checkRemoveElement){
+TEST(CppWrapper, checkRemoveElement){
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument("TestData/in.xml") );
-    EXPECT_EQ( tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z"), true );
+    EXPECT_EQ( true, tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z") );
     ASSERT_NO_THROW( tixi::TixiRemoveElement( documentHandle, "/plane/aPoint/point/z" ) );
-    EXPECT_EQ( tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z"), false );
+    EXPECT_EQ( false, tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z") );
 }
 
-TEST(CppWrapper,saveAttribute){
+TEST(CppWrapper, saveAttribute){
 
     std::string rootElementName = "rootElement";
     ASSERT_NO_THROW( documentHandle = tixi::TixiCreateDocument( rootElementName ) );
     ASSERT_NO_THROW( tixi::TixiCreateElement(documentHandle, "/rootElement/element") );
 
-    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","sattribute","stringAttribute") );
-    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","dattribute",3.14159) );
-    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","iattribute",4711) );
-    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element","battribute",true) );
+    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element", "sattribute", "stringAttribute") );
+    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element", "dattribute", 3.14159) );
+    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element", "iattribute", 4711) );
+    ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element", "battribute", true) );
 }
 
-TEST(CppWrapper,getNamedChildrenCount){
+TEST(CppWrapper, getNamedChildrenCount){
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument("TestData/in.xml") );
 
     int count=-1;
 
     ASSERT_NO_THROW( count = tixi::TixiGetNamedChildrenCount( documentHandle, "/plane/wings/this_child_does_not_exist") );
-    ASSERT_TRUE( count  == 0 );
+    EXPECT_EQ( 0, count );
 
     ASSERT_NO_THROW( count = tixi::TixiGetNamedChildrenCount( documentHandle, "/plane/wings") );
-    ASSERT_TRUE( count  == 1 );
+    EXPECT_EQ( 1, count );
 
     ASSERT_NO_THROW( count = tixi::TixiGetNamedChildrenCount( documentHandle, "/plane/wings/wing") );
-    ASSERT_TRUE( count  == 2 );
+    EXPECT_EQ( 2, count );
 }
