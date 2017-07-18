@@ -1,3 +1,17 @@
+Version 3.0
+---------------
+
+-General Changes:
+    - Renamed TIXI library to tixi3
+	- TiXI header file is now located under include/tixi3/tixi.h
+    - Added new C++ bindings for TiXI located under include/tixi3/tixicpp.h
+	
+-Fixes:
+    - Fixed failure in ```tixiUIDCheckExists``` if a uID is duplicate
+	- Fixed invalid characters in Matlab bindings
+	- Fixed missing return value in the matlab bindings of ```tixiUIDCheckExists```
+	- Fixed compilation of the matlab bindings on linux
+
 Version 2.2.4
 ---------------
 
