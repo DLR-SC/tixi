@@ -184,6 +184,8 @@ namespace tixi
         std::string m_message;
     };
 
+    bool TixiCheckElement(const TixiDocumentHandle& tixiHandle, const std::string& xpath);
+
     namespace internal
     {
 
