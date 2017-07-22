@@ -196,6 +196,18 @@ TEST(CppWrapper, saveAttribute){
     ASSERT_NO_THROW( tixi::TixiSaveAttribute( documentHandle, "/rootElement/element", "battribute", true) );
 }
 
+TEST(CppWrapper, saveElement){
+
+    const std::string rootElementName = "rootElement";
+    ASSERT_NO_THROW( documentHandle = tixi::TixiCreateDocument(rootElementName) );
+
+    ASSERT_NO_THROW( tixi::TixiSaveElement(documentHandle, "/" + rootElementName + "/cselement", "cstringElement") );
+    ASSERT_NO_THROW( tixi::TixiSaveElement(documentHandle, "/" + rootElementName + "/selement", std::string("stringElement")) );
+    ASSERT_NO_THROW( tixi::TixiSaveElement(documentHandle, "/" + rootElementName + "/delement", 3.14159) );
+    ASSERT_NO_THROW( tixi::TixiSaveElement(documentHandle, "/" + rootElementName + "/ielement", 4711) );
+    ASSERT_NO_THROW( tixi::TixiSaveElement(documentHandle, "/" + rootElementName + "/belement", true) );
+}
+
 TEST(CppWrapper, getNamedChildrenCount){
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument("TestData/in.xml") );
 
