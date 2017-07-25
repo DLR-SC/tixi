@@ -15,4 +15,4 @@ if(NOT TARGET ${TIXI_LIB_NAME})
 endif()
  
 # These are IMPORTED targets created by tixi-targets.cmake
-set(TIXI_LIBRARIES ${TIXI_LIB_NAME})
+set(TIXI_LIBRARIES @TIXI_LIB_NAME@)
