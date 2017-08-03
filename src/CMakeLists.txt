@@ -33,8 +33,8 @@ endif(APPLE)
 
 add_library(${TIXI_LIB_NAME} SHARED ${TIXI_SRC} ${TIXI_HDR})
 target_link_libraries (${TIXI_LIB_NAME}  ${TIXI_LIBS})
-set_target_properties( ${TIXI_LIB_NAME} PROPERTIES VERSION ${TIXI_VERSION})
-set_target_properties( ${TIXI_LIB_NAME} PROPERTIES SOVERSION "${TIXI_VERSION_MAJOR}")
+set_target_properties( ${TIXI_LIB_NAME} PROPERTIES VERSION ${TIXI_VERSION_MINOR}.${TIXI_VERSION_PATCH})
+set_target_properties( ${TIXI_LIB_NAME} PROPERTIES SOVERSION "${TIXI_VERSION_MINOR}")
 
 add_library(${TIXI_LIB_NAME}_static ${TIXI_SRC} ${TIXI_HDR})
 target_link_libraries (${TIXI_LIB_NAME}_static  ${TIXI_LIBS})
