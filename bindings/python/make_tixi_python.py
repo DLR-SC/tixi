@@ -123,7 +123,7 @@ if __name__ == '__main__':
     parser.parse_header_file(tixipath + '/src/tixi.h')
     
     # create the wrapper
-    pg = PG.PythonGenerator(name_prefix = 'tixi3', libname = 'tixi3')
+    pg = PG.PythonGenerator(name_prefix = 'tixi', libname = 'tixi3')
     pg.license = apache
     pg.userfunctions = userfunctions
     pg.blacklist = blacklist
