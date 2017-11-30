@@ -6,7 +6,7 @@ Created on Wed May 01 11:44:49 2013
 """
 
 from __future__ import print_function
-import sys, os 
+import sys, os
 from datetime import date
 
 tixipath = os.path.dirname(os.path.realpath(__file__)) + '/../..'
@@ -42,9 +42,9 @@ apache += \
 userfunctions = \
 '''def open(self, xmlInputFilename, recursive = False):
     if recursive:
-        self.openDocumentRecursive(xmlInputFilename, OpenMode.OPENMODE_RECURSIVE)
+        self.tixiOpenDocumentRecursive(xmlInputFilename, OpenMode.OPENMODE_RECURSIVE)
     else:
-        self.openDocument(xmlInputFilename)
+        self.tixiOpenDocument(xmlInputFilename)
 
 def close(self):
     if self._handle.value >= 0:
@@ -60,11 +60,11 @@ def save(self, fileName, recursive = False, remove = False):
         You cannot have 'remove' without 'recursive'.
     \'\'\'
     if recursive and remove:
-        self.saveAndRemoveDocument(fileName)
+        self.tixiSaveAndRemoveDocument(fileName)
     elif recursive:
-        self.saveCompleteDocument(fileName)
+        self.tixiSaveCompleteDocument(fileName)
     else:
-        self.saveDocument(fileName)
+        self.tixiSaveDocument(fileName)
 
 def checkElement(self, elementPath):
     \'\'\' boolean return values from special return code is coded manually here \'\'\'
@@ -76,7 +76,7 @@ def checkElement(self, elementPath):
     if tixiReturn == ReturnCode.ELEMENT_NOT_FOUND:
         return False
     catch_error(tixiReturn, elementPath)
-    
+
 def uIDCheckExists(self, uID):
     _c_uID = ctypes.c_char_p()
     _c_uID.value = str.encode(uID)
@@ -85,8 +85,8 @@ def uIDCheckExists(self, uID):
         return True
     else:
         return False
-    catch_error(tixiReturn, uID) 
-    
+    catch_error(tixiReturn, uID)
+
 def checkAttribute(self, elementPath, attributeName):
     \'\'\' boolean return values from special return code is coded manually here \'\'\'
     _c_elementPath = ctypes.c_char_p()
@@ -99,31 +99,31 @@ def checkAttribute(self, elementPath, attributeName):
     if tixiReturn == ReturnCode.ATTRIBUTE_NOT_FOUND:
         return False
     catch_error(tixiReturn, elementPath, attributeName)
-    
-    
+
+
 '''
 
 postconstr = '''
-self.version = self.getVersion()
+self.version = self.tixiGetVersion()
 '''
 
 blacklist = ['tixiCheckElement', 'tixiUIDCheckExists', 'tixiCheckAttribute', 'tixiCloseDocument', 'tixiGetRawInterface', 'tixiSetPrintMsgFunc']
 
 if __name__ == '__main__':
     # parse the file
-    
-    #ann =   CP.Annotation('#annotate out: 3, 4A(3)')    
-    
+
+    #ann =   CP.Annotation('#annotate out: 3, 4A(3)')
+
     parser = CP.CHeaderFileParser()
-    
+
     # set the handle string that the parser can identify the handles
     parser.handle_str = 'TixiDocumentHandle'
     parser.returncode_str  ='ReturnCode'
     parser.typedefs = {'TixiPrintMsgFnc': 'void'}
     parser.parse_header_file(tixipath + '/src/tixi.h')
-    
+
     # create the wrapper
-    pg = PG.PythonGenerator(name_prefix = 'tixi', libname = 'tixi3')
+    pg = PG.PythonGenerator(name_prefix = 'tixi3', libname = 'tixi3')
     pg.license = apache
     pg.userfunctions = userfunctions
     pg.blacklist = blacklist
@@ -132,16 +132,16 @@ if __name__ == '__main__':
     pg.add_alias('tixiOpenDocumentFromHTTP', 'openHttp')
     pg.add_alias('tixiCreateDocument', 'create')
     pg.add_alias('tixiImportFromString', 'openString')
-    
+
     print('Creating python interface... ', end=' ')
     wrapper = pg.create_wrapper(parser)
     print('done')
-    
+
     # write file
     filename = 'tixi3wrapper.py'
-    print('Write tixi python interface to file "%s" ... ' % filename, end=' ') 
+    print('Write tixi python interface to file "%s" ... ' % filename, end=' ')
     fop = open(filename, 'w')
     fop.write(wrapper)
     print('done')
-    
-    
+
+
