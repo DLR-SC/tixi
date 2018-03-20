@@ -2729,6 +2729,7 @@ DLL_EXPORT ReturnCode tixiXSLTransformationToString(TixiDocumentHandle handle, c
   if ( textPtr ) {
     *resultText = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
     strcpy(*resultText, textPtr);
+    xmlFree(textPtr);
     error = addToMemoryList(document, (void *) *resultText);
   } else {
     *resultText = NULL;
