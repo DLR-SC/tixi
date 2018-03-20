@@ -3148,7 +3148,7 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
   @param[in]  xslFilename The name of a local file with XSL mapping informations.
   @param[out] resultText The resulting document of the transformation.
   @return
-    - SUCCESS if successfull
+    - SUCCESS if successful
     - FAILED  is something went wrong, i.e. opening of files
  */
 DLL_EXPORT ReturnCode tixiXSLTransformationToString(TixiDocumentHandle handle, const char *xslFilename, char **resultText);
