@@ -3165,7 +3165,7 @@ DLL_EXPORT ReturnCode tixiXSLTransformationToString(TixiDocumentHandle handle, c
   @param[in]  xslFilename The name of a local file with XSL mapping informations.
   @param[in]  resultFilename The name of a local file to store the resulting XML document in.
   @return
-    - SUCCESS if successfull
+    - SUCCESS if successful
     - FAILED  is something went wrong, i.e. opening of files
  */
 DLL_EXPORT ReturnCode tixiXSLTransformationToFile(TixiDocumentHandle handle, const char *xslFilename, const char *resultFilename);
