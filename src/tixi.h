@@ -3137,22 +3137,38 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
 /*@{*/
 
 /**
+  @brief Performs a XML transformation .
+
+  <b>Fortran syntax:</b>
+
+  tixi_xsl_transformation_to_string( integer  handle, character*n xslFilename, character*n resultFilename, integer error )
+
+
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  xslFilename The name of a local file with XSL mapping informations.
+  @param[out] resultText The resulting document of the transformation.
+  @return
+    - SUCCESS if successful
+    - FAILED  is something went wrong, i.e. opening of files
+ */
+DLL_EXPORT ReturnCode tixiXSLTransformationToString(TixiDocumentHandle handle, const char *xslFilename, char **resultText);
+
+/**
   @brief Performs a XML transformation and saves the result to resultFilename.
 
   <b>Fortran syntax:</b>
 
   tixi_xsl_transformation_to_file( integer  handle, character*n xslFilename, character*n resultFilename, integer error )
 
+
   @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
   @param[in]  xslFilename The name of a local file with XSL mapping informations.
   @param[in]  resultFilename The name of a local file to store the resulting XML document in.
   @return
-    - SUCCESS if successfully retrieve the text content of a single element
+    - SUCCESS if successful
     - FAILED  is something went wrong, i.e. opening of files
  */
 DLL_EXPORT ReturnCode tixiXSLTransformationToFile(TixiDocumentHandle handle, const char *xslFilename, const char *resultFilename);
-
-
 
 
 /*@}*/
