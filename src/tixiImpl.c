@@ -2719,6 +2719,25 @@ DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *
   }
 }
 
+DLL_EXPORT ReturnCode tixiXSLTransformationToString(TixiDocumentHandle handle, const char *xslFilename, char **resultText)
+{
+  TixiDocument *document = getDocument(handle);
+  int error = SUCCESS;
+  char *textPtr = NULL;
+
+  textPtr = xsltTransformToString(document->docPtr, xslFilename);
+  if ( textPtr ) {
+    *resultText = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
+    strcpy(*resultText, textPtr);
+    error = addToMemoryList(document, (void *) *resultText);
+  } else {
+    *resultText = NULL;
+    error = FAILED;
+  }
+
+  return error;
+}
+
 DLL_EXPORT ReturnCode tixiXSLTransformationToFile(TixiDocumentHandle handle, const char *xslFilename, const char *resultFilename)
 {
   TixiDocument *document = getDocument(handle);
