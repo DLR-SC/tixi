@@ -264,6 +264,16 @@ namespace tixi
         return handle;
     }
 
+    inline TixiDocumentHandle TixiOpenDocumentRecursive(const std::string& filename)
+    {
+        TixiDocumentHandle handle;
+        const ReturnCode ret = tixiOpenDocumentRecursive(filename.c_str(), &handle, OPENMODE_RECURSIVE);
+        if (ret != SUCCESS) {
+            throw TixiError(ret, "Failed to open tixi document recursively: " + filename);
+        }
+        return handle;
+    }
+
     inline TixiDocumentHandle TixiImportFromString(const std::string& xml)
     {
         TixiDocumentHandle handle;
@@ -274,6 +284,22 @@ namespace tixi
         return handle;
     }
 
+    inline void TixiSaveDocument(TixiDocumentHandle handle, const std::string& filename)
+    {
+        const ReturnCode ret = tixiSaveDocument(handle, filename.c_str());
+        if (ret != SUCCESS) {
+            throw TixiError(ret, "Failed to save tixi document: " + filename);
+        }
+    }
+
+    inline void TixiSaveCompleteDocument(TixiDocumentHandle handle, const std::string& filename)
+    {
+        const ReturnCode ret = tixiSaveCompleteDocument(handle, filename.c_str());
+        if (ret != SUCCESS) {
+            throw TixiError(ret, "Failed to save complete tixi document: " + filename);
+        }
+    }
+	
     inline void TixiAddCpacsHeader(const TixiDocumentHandle& tixiHandle, const std::string& name, const std::string& creator, const std::string& version, const std::string& description, const std::string& cpacsVersion)
     {
         const ReturnCode ret = tixiAddCpacsHeader(tixiHandle, name.c_str(), creator.c_str(), version.c_str(), description.c_str(), cpacsVersion.c_str());
