@@ -1,3 +1,15 @@
+Version 3.0.1
+----------------
+
+-General Changes:
+	- Completed C++ wrapper
+
+-New Functions:
+	- tixiXSLTransformationToString To perform an xml transformation
+	
+-Fixes:
+	- Fixed an error in Python bindings that added a tixi prefix in front of all methods
+
 Version 3.0
 ---------------
 
