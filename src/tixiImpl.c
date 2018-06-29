@@ -1652,6 +1652,37 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
   }
 }
 
+DLL_EXPORT ReturnCode tixiRenameElement(const TixiDocumentHandle handle,
+                                        const char* parentPath,
+                                        const char* oldName,
+                                        const char* newName)
+{
+    xmlNodePtr parent = NULL;
+    xmlNodePtr element = NULL;
+    int retVal = 0;
+
+    retVal = getNodePtrFromElementPath(handle, parentPath, &parent);
+    if (retVal != SUCCESS) {
+      return retVal;
+    }
+
+    if(parent == NULL) {
+      return INVALID_XPATH;
+    }
+
+    char* elementPath = (char*) malloc( sizeof(char) *( strlen(parentPath) + strlen(oldName) + 2 ) );
+    elementPath[0] = '\0';
+    strcat(elementPath, parentPath);
+    strcat(elementPath, "/");
+    strcat(elementPath, oldName);
+    retVal = getNodePtrFromElementPath(handle, elementPath, &element);
+    if (retVal != SUCCESS) {
+        return retVal;
+    }
+
+    xmlNodeSetName(element, (xmlChar*) newName);
+    return SUCCESS;
+}
 
 DLL_EXPORT ReturnCode tixiRemoveElement(const TixiDocumentHandle handle, const char *elementPath)
 {

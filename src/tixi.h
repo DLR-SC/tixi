@@ -1764,6 +1764,32 @@ DLL_EXPORT ReturnCode tixiCreateElementNSAtIndex (const TixiDocumentHandle handl
 
 
 /**
+  @brief Renames an element
+
+  This function renames an element from the document.
+
+  <b>Fortran syntax:</b>
+
+  tixi_rename_element( integer handle, character*n parent_path, character*n old_name, character*n new_name )
+
+  @param[in] handle file handle as returned by ::tixiCreateDocument
+  @param[in] parentPath an XPath complian path to the elements parent
+                         of the element that shall be renamed
+  @param[in] oldName the element that shall be renamed
+  @param[in] newName the new name for the element
+  @return
+    - SUCCESS if the element was renamed successfully
+    - INVALID_HANDLE if the handle is not valid, i.e. does not or no longer exist
+    - INVALD_XPATH if the parentPath is not a well-formed XPath-expression
+    - ELEMENT_NOT_FOUND if there does not exist an element with name "oldName" unter
+                        the parentPath
+ */
+DLL_EXPORT ReturnCode tixiRenameElement(const TixiDocumentHandle handle,
+                                        const char* parentPath,
+                                        const char* oldName,
+                                        const char* newName);
+
+/**
   @brief Removes an element.
 
   Removes an element from the document. It is not an error to remove
