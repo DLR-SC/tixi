@@ -43,11 +43,13 @@ if(PYTHONINTERP_FOUND AND NOT PYTHON_VERSION_STRING VERSION_LESS "2.5" )
 
     if(TIXI_BUILD_TESTS AND NOT CMAKE_Fortran_COMPILER STREQUAL CMAKE_Fortran_COMPILER-NOTFOUND AND CMAKE_Fortran_COMPILER)
       enable_language(Fortran)
-      link_directories(${LIBRARY_OUTPUT_PATH})
-      set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../tests)
-      add_definitions(-DTIXI_VERSION="${TIXI_VERSION}")
+      
       add_executable(wrappertestsF03 wrappertests.F90 ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}.f90)
+      target_compile_definitions(wrappertestsF03 PRIVATE TIXI_VERSION="${TIXI_VERSION}")
       target_link_libraries(wrappertestsF03 ${TIXI_LIB_NAME}_static)
+      set_target_properties(wrappertestsF03 PROPERTIES
+          RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/tests
+      )
     endif()
 
     install(FILES ${LIBRARY_OUTPUT_PATH}/${TIXI_LIB_NAME}.f90

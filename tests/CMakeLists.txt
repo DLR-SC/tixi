@@ -1,18 +1,17 @@
 # units tests makefile
 
 FILE (GLOB_RECURSE test_SRCS *.cpp *.cxx *.cc *.C *.c *.h *.hpp)
-SET (test_LIBS gtest ${TIXI_LIB_NAME}_static)
 SET (test_BIN ${PROJECT_NAME}-unittests)
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/src ${XML_INCLUDE_DIRS} ${XSLT_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/bindings/cpp)
+add_executable(${test_BIN} ${test_SRCS} )
+target_link_libraries(${test_BIN} PRIVATE gtest ${TIXI_LIB_NAME}_static tixicpp)
 
-LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
-ADD_EXECUTABLE(${test_BIN} ${test_SRCS} )
-TARGET_LINK_LIBRARIES(${test_BIN} ${test_LIBS})
-#ADD_CUSTOM_TARGET(check ${test_BIN} --gtest_output=xml DEPENDS ${test_BIN} COMMENT "Executing unit tests..." VERBATIM SOURCES ${test_SRCS})
-#ADD_CUSTOM_TARGET(test DEPENDS check)
 
-ADD_TEST(
+if (VLD_FOUND)
+    target_link_libraries(${test_BIN} PRIVATE vld)
+endif(VLD_FOUND)
+
+add_test(
     NAME unittests
     COMMAND ${test_BIN} --gtest_output=xml
 )

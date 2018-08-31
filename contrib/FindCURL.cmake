@@ -57,12 +57,18 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(CURL
                                   VERSION_VAR CURL_VERSION_STRING)
 
 if(CURL_FOUND)
-  set(CURL_LIBRARIES ${CURL_LIBRARY})
-  set(CURL_INCLUDE_DIRS ${CURL_INCLUDE_DIR})
+  add_library(curllib UNKNOWN IMPORTED)
+  set_target_properties(curllib PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES ${CURL_INCLUDE_DIR}
+      IMPORTED_LOCATION ${CURL_LIBRARY}
+      IMPORTED_IMPLIB ${CURL_LIBRARY}
+  )
   if (WIN32)
     string(REGEX MATCH "_a.lib$" CURL_STATICLIB ${CURL_LIBRARY})
     if (CURL_STATICLIB)
-      add_definitions(-DCURL_STATICLIB)
+      set_target_properties(curllib
+          PROPERTIES INTERFACE_COMPILE_DEFINITIONS "CURL_STATICLIB"
+      )
     endif(CURL_STATICLIB)
   endif (WIN32)
 endif()
