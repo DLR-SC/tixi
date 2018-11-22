@@ -16,6 +16,7 @@
 
 #include <tixi.h>
 
+#include <map>
 #include <vector>
 #include <string>
 #include <sstream>
@@ -359,6 +360,51 @@ namespace tixi
             throw TixiError(ret);
         }
         return count;
+    }
+
+    inline int TixiGetNumberOfChilds(const TixiDocumentHandle& tixiHandle, const std::string& xpath)
+    {
+        int count = 0;
+        const ReturnCode ret = tixiGetNumberOfChilds(tixiHandle, xpath.c_str(), &count);
+        if (ret != SUCCESS) {
+            throw TixiError(ret,
+                "Failed to determine number of child nodes\n"
+                "xpath: " + xpath
+            );
+        }
+        return count;
+    }
+
+    inline std::string TixiGetChildNodeName(const TixiDocumentHandle& tixiHandle, const std::string& xpath, int index)
+    {
+        char* nodeNamePtr = NULL;
+        const ReturnCode ret = tixiGetChildNodeName(tixiHandle, xpath.c_str(), index, &nodeNamePtr);
+        if (ret != SUCCESS) {
+            throw TixiError(ret,
+                "Failed to determine child node name\n"
+                "Index: " + internal::to_string(index) + "\n"
+                "xpath: " + xpath
+            );
+        }
+        return nodeNamePtr;
+    }
+
+    inline std::vector<std::string> TixiGetChildElementPaths(const TixiDocumentHandle& tixiHandle, const std::string& xpath)
+    {
+        const int childCount = TixiGetNumberOfChilds(tixiHandle, xpath);
+        std::map<std::string, int> namedChildIndex;
+        std::vector<std::string> childElementPaths;
+        for (int i = 1; i <= childCount; i++) {
+            const std::string nodeName = TixiGetChildNodeName(tixiHandle, xpath, i);
+            if (nodeName == "#text" || nodeName == "#cdata-section" || nodeName == "#comment") {
+                continue;
+            }
+            const std::string childPath = xpath + "/" + nodeName + "[" + internal::to_string(++namedChildIndex[nodeName]) + "]";
+            if (tixiCheckElement(tixiHandle, childPath.c_str()) == SUCCESS) {
+                childElementPaths.push_back(childPath);
+            }
+        }
+        return childElementPaths;
     }
 
     inline std::vector<std::string> TixiGetAttributeNames(const TixiDocumentHandle& tixiHandle, const std::string& xpath)
