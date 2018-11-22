@@ -222,3 +222,23 @@ TEST(CppWrapper, getNamedChildrenCount){
     ASSERT_NO_THROW( count = tixi::TixiGetNamedChildrenCount( documentHandle, "/plane/wings/wing") );
     EXPECT_EQ( 2, count );
 }
+
+TEST(CppWrapper, getChildElementPaths) {
+    ASSERT_NO_THROW(documentHandle = tixi::TixiOpenDocument("TestData/in.xml"));
+
+    std::vector<std::string> childPaths;
+    ASSERT_NO_THROW(childPaths = tixi::TixiGetChildElementPaths(documentHandle, "/plane/wings"));
+    EXPECT_EQ(2, childPaths.size());
+    EXPECT_EQ("/plane/wings/wing[1]", childPaths[0]);
+    EXPECT_EQ("/plane/wings/wing[2]", childPaths[1]);
+
+    ASSERT_NO_THROW(childPaths = tixi::TixiGetChildElementPaths(documentHandle, "/plane/coordinateOrigin"));
+    EXPECT_EQ(3, childPaths.size());
+    EXPECT_EQ("/plane/coordinateOrigin/x[1]", childPaths[0]);
+    EXPECT_EQ("/plane/coordinateOrigin/y[1]", childPaths[1]);
+    EXPECT_EQ("/plane/coordinateOrigin/z[1]", childPaths[2]);
+
+    ASSERT_NO_THROW(childPaths = tixi::TixiGetChildElementPaths(documentHandle, "/plane/coordinateOrigin/x"));
+    EXPECT_EQ(0, childPaths.size());
+}
+
