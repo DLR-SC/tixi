@@ -21,6 +21,10 @@ if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
+if (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
+   set (LIBS m)
+endif()
+
 add_executable(tixiDemo ${DEMO_SRC})
 target_link_libraries (tixiDemo ${TIXI_LIB_NAME})
 
@@ -29,10 +33,6 @@ target_link_libraries (tixi_c_examples ${TIXI_LIB_NAME} ${LIBS})
 
 add_executable(createCpacsFile createcpacsfile.c)
 target_link_libraries (createCpacsFile ${TIXI_LIB_NAME})
-
-if (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
-   set (LIBS m)
-endif()
 
 add_custom_command(
     TARGET tixiDemo

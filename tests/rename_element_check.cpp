@@ -40,7 +40,7 @@ class RenameElementTests : public ::testing::Test {
 
 TEST_F(RenameElementTests, renameSingleElement)
 {
-    ASSERT_TRUE( tixiRenameElement( NULL, "/plane/aPoint", "point", "thisnameiswaycooler") == INVALID_HANDLE);
+    ASSERT_TRUE( tixiRenameElement( -1, "/plane/aPoint", "point", "thisnameiswaycooler") == INVALID_HANDLE);
     ASSERT_TRUE( tixiRenameElement( documentHandle, "/plane/idontexist", "point", "thisnameiswaycooler") == ELEMENT_NOT_FOUND);
     ASSERT_TRUE( tixiRenameElement( documentHandle, "/plane/aPoint", "idontexist", "thisnameiswaycooler") == ELEMENT_NOT_FOUND);
 

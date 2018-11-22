@@ -127,18 +127,18 @@ TEST(CppWrapper, getAttribute)
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( mybool=tixi::TixiGetAttribute<bool>( documentHandle, "/plane/wings/wing[1]", "top" ) );
-    ASSERT_EQ(true, mybool);
+    ASSERT_TRUE(mybool);
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( mybool=tixi::TixiGetAttribute<bool>( documentHandle, "/plane/wings/wing[2]", "top" ) );
-    ASSERT_EQ(false, mybool);
+    ASSERT_FALSE(mybool);
 }
 
 TEST(CppWrapper, checkRemoveAttribute){
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument("TestData/in.xml") );
-    EXPECT_EQ( true, tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings") );
+    EXPECT_TRUE(tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings") );
     ASSERT_NO_THROW( tixi::TixiRemoveAttribute( documentHandle, "/plane/wings", "numberOfWings" ) );
-    EXPECT_EQ( false, tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings"));
+    EXPECT_FALSE(tixi::TixiCheckAttribute( documentHandle, "/plane/wings", "numberOfWings"));
 }
 
 TEST(CppWrapper, getElement)
@@ -174,14 +174,14 @@ TEST(CppWrapper, getElement)
 
     /*--------------------------------------------------------------------*/
     ASSERT_NO_THROW( myBool=tixi::TixiGetElement<bool>( documentHandle, "/plane/bool/aBool1" ) );
-    EXPECT_EQ( true, myBool );
+    EXPECT_TRUE( myBool );
 }
 
 TEST(CppWrapper, checkRemoveElement){
     ASSERT_NO_THROW( documentHandle=tixi::TixiOpenDocument("TestData/in.xml") );
-    EXPECT_EQ( true, tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z") );
+    EXPECT_TRUE( tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z") );
     ASSERT_NO_THROW( tixi::TixiRemoveElement( documentHandle, "/plane/aPoint/point/z" ) );
-    EXPECT_EQ( false, tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z") );
+    EXPECT_FALSE( tixi::TixiCheckElement( documentHandle, "/plane/aPoint/point/z") );
 }
 
 TEST(CppWrapper, saveAttribute){
