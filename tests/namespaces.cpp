@@ -156,6 +156,14 @@ TEST_F(Namespaces, getNamedChildrenCount)
     ASSERT_EQ(2, count);
 }
 
+TEST_F(Namespaces, getChildNodeName)
+{
+    char* name = 0;
+    tixiRegisterNamespace(inDocumentHandle, "http://www.w3.org/TR/html4/", "h");
+    ASSERT_EQ(SUCCESS, tixiGetChildNodeName(inDocumentHandle, "/root/h:table/h:tr", 1, &name));
+    ASSERT_STREQ("h:td", name);
+}
+
 /**
   This test should produce the following output
 
