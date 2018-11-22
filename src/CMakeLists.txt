@@ -1,6 +1,10 @@
 # TIXI Library
 # @author Martin Siggel
 
+find_package(CURL REQUIRED)
+find_package(XSLT REQUIRED)
+find_package(XML REQUIRED)
+
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/tixi_version.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/tixi_version.h"
@@ -11,10 +15,6 @@ set(TIXI_SRC tixiImpl.c tixiUtils.c uidHelper.c tixiInternal.c webMethods.c
 
 set(TIXI_HDR tixi.h tixiData.h tixiInternal.h tixiUtils.h)
 
-
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_definitions(-DDEBUG) 
-endif()
 
 if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fmessage-length=0")
@@ -29,7 +29,9 @@ if(APPLE)
     set(TIXI_LIBS ${TIXI_LIBS} m "-framework Foundation" iconv z "-framework Security")
 endif(APPLE)
 
-add_library(${TIXI_LIB_NAME} SHARED ${TIXI_SRC} ${TIXI_HDR})
+add_library(${TIXI_LIB_NAME} ${TIXI_SRC} ${TIXI_HDR})
+
+target_compile_definitions(${TIXI_LIB_NAME} PRIVATE $<$<CONFIG:DEBUG>:DEBUG>)
 
 target_include_directories(${TIXI_LIB_NAME} PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
@@ -42,6 +44,7 @@ set_target_properties(${TIXI_LIB_NAME} PROPERTIES VERSION ${TIXI_VERSION_MINOR}.
 set_target_properties(${TIXI_LIB_NAME} PROPERTIES SOVERSION "${TIXI_VERSION_MINOR}")
 
 add_library(${TIXI_LIB_NAME}_static ${TIXI_SRC} ${TIXI_HDR})
+target_compile_definitions(${TIXI_LIB_NAME}_static PRIVATE $<$<CONFIG:DEBUG>:DEBUG>)
 target_link_libraries (${TIXI_LIB_NAME}_static  ${TIXI_LIBS})
 target_include_directories(${TIXI_LIB_NAME}_static PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
