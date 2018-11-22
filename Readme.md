@@ -1,5 +1,7 @@
 Build-Status: [![Build Status](https://travis-ci.org/DLR-SC/tixi.svg?branch=master)](https://travis-ci.org/DLR-SC/tixi) [![Build status](https://ci.appveyor.com/api/projects/status/mhcsgq5smp8at4sx/branch/master?svg=true)](https://ci.appveyor.com/project/rainman110/tixi/branch/master)
 
+[![Anaconda-Server Badge](https://anaconda.org/dlr-sc/tixi3/badges/installer/conda.svg)](https://anaconda.org/DLR-SC/tixi3)
+
 # TIXI #
 
  - Binary Downloads:  https://github.com/DLR-SC/tixi/wiki/Downloads
