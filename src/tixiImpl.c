@@ -2999,10 +2999,14 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
       *text = (char *) malloc(10 * sizeof(char));
       strcpy(*text, "#comment");
     }
+    else if (child->ns && child->ns->prefix) {
+      *text = (char *) malloc((strlen((const char*)child->name) + strlen((const char*)child->ns->prefix) + 4) * sizeof(char));
+      sprintf(*text, "%s:%s", child->ns->prefix, child->name);
+    }
     else {
       // get name
-      *text = (char *) malloc((strlen((char*)child->name) + 3) * sizeof(char));
-      strcpy(*text,  (char*) child->name);
+      *text = (char *) malloc((strlen((const char*)child->name) + 3) * sizeof(char));
+      strcpy(*text,  (const char*) child->name);
     }
     error = addToMemoryList(document, (void *) *text);
   }
