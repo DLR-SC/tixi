@@ -3019,6 +3019,49 @@ DLL_EXPORT ReturnCode   tixiGetChildNodeName(const TixiDocumentHandle handle, co
   return error;
 }
 
+ReturnCode tixiSwapElements(const TixiDocumentHandle handle, const char* element1Path, const char* element2Path)
+{
+    TixiDocument *document = getDocument(handle);
+    xmlNodePtr element1 = NULL;
+    xmlNodePtr element2 = NULL;
+    xmlNodePtr tmp = NULL;
+    ReturnCode error = SUCCESS;
+
+    if (!document) {
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+      return INVALID_HANDLE;
+    }
+
+    error = checkElement(document->xpathContext, element1Path, &element1);
+    if (error != SUCCESS) {
+        return error;
+    }
+
+    error = checkElement(document->xpathContext, element2Path, &element2);
+    if (error != SUCCESS) {
+        return error;
+    }
+
+    if (element1 == element2) {
+        return SUCCESS;
+    }
+
+    // we don't allow swapping parent element with childs
+    if (isParent(element1, element2) || isParent(element2, element1)) {
+        printMsg(MESSAGETYPE_ERROR, "Cannot swap parent element with child.");
+        return FAILED;
+    }
+
+    // swap nodes
+    tmp = xmlCopyNode(element1, 0);
+    element1 = xmlReplaceNode(element1, tmp);
+    element2 = xmlReplaceNode(element2, element1);
+    tmp = xmlReplaceNode(tmp, element2);
+    xmlFreeNode(tmp);
+
+    return SUCCESS;
+}
+
 DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds)
 {
   TixiDocument *document = getDocument(handle);

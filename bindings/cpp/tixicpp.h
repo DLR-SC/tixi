@@ -483,6 +483,16 @@ namespace tixi
     template <> inline    bool        TixiGetElement<bool       >(const TixiDocumentHandle& tixiHandle, const std::string& xpath) { return TixiGetBoolElement  (tixiHandle, xpath); }
     template <> inline    int         TixiGetElement<int        >(const TixiDocumentHandle& tixiHandle, const std::string& xpath) { return TixiGetIntElement   (tixiHandle, xpath); }
 
+    inline void TixiSwapElements(const TixiDocumentHandle& tixiHandle, const std::string& elementPath1, const std::string& elementPath2)
+    {
+        const ReturnCode ret = tixiSwapElements(tixiHandle, elementPath1.c_str(), elementPath2.c_str());
+        if (ret != SUCCESS) {
+            throw TixiError(ret, "Error swapping elements\n"
+                                 "Element1: " + elementPath1 + "\n"
+                                 "Element2: " + elementPath2);
+        }
+    }
+
     inline void TixiSaveAttribute(const TixiDocumentHandle& tixiHandle, const std::string& xpath, const std::string& attribute, const char*        value)
     {
         internal::TixiSaveAttributeInternal(tixiHandle, xpath, attribute, tixiAddTextAttribute, value);
