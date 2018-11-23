@@ -842,11 +842,15 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
   error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
-
-    xmlNodePtr children = element->children;
     char *textPtr = NULL;
 
-    textPtr = (char *) xmlNodeListGetString(document->docPtr, children, 0);
+    if (!xmlNodeIsText(element)) {
+        textPtr = (char *) xmlNodeListGetString(document->docPtr, element->children, 0);
+    }
+    else {
+        textPtr = (char *) xmlNodeGetContent(element);
+    }
+
     if ( textPtr ) {
       *text = (char *) malloc((strlen(textPtr) + 1) * sizeof(char));
       strcpy(*text, textPtr);
@@ -1829,10 +1833,12 @@ DLL_EXPORT ReturnCode tixiGetNamedChildrenCount(const TixiDocumentHandle handle,
     assert(child);
 
     if (child->type == XML_ELEMENT_NODE) {
-
       if (!strcmp(childTagName, (char *) child->name)) {
         (*count)++;
       }
+    }
+    else if (child->type == XML_TEXT_NODE) {
+        (*count)++;
     }
   }
 

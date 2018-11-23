@@ -344,7 +344,9 @@ ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* eleme
 
   assert(nodes->nodeTab[0]);
 
-  if (nodes->nodeTab[0]->type == XML_ELEMENT_NODE || nodes->nodeTab[0]->type == XML_DOCUMENT_NODE) {
+  if (nodes->nodeTab[0]->type == XML_ELEMENT_NODE ||
+      nodes->nodeTab[0]->type == XML_DOCUMENT_NODE ||
+      nodes->nodeTab[0]->type == XML_TEXT_NODE ) {
     *element = nodes->nodeTab[0];
     xmlXPathFreeObject(xpathObject);
     return SUCCESS;
