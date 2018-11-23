@@ -1248,3 +1248,17 @@ char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePtr)
   addToMemoryList(document, (void*) generatedXPath);
   return generatedXPath;
 }
+
+int isParent(xmlNodePtr possibleParent, xmlNodePtr n)
+{
+    // recurse n up until parent is found
+    while (n) {
+        if (n == possibleParent) {
+            return 1;
+        }
+
+        n = n->parent;
+    }
+    
+    return 0;
+}

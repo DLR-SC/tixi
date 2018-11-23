@@ -373,6 +373,13 @@ DLL_EXPORT char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr 
  */
 ReturnCode reorderXmlElements(TixiDocumentHandle handle, const char* elementPath, int fromIndex, int toIndex);
 
+/**
+ * @brief Tests, whether p is parent of n
+ * 
+ * @return 1, if p is parent of n, otherwise 0
+ */
+int isParent(xmlNodePtr p, xmlNodePtr n);
+
 #ifdef __cplusplus
 }
 #endif

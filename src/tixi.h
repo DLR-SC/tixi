@@ -1918,6 +1918,26 @@ DLL_EXPORT ReturnCode tixiGetChildNodeName (const TixiDocumentHandle handle,
 */
 DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds);
 
+/**
+  @brief Swaps to xml elements with each other
+
+  The function does not allow to swap a parent element with a (sub) child.
+
+  @param[in] handle handle as returned by ::tixiCreateDocument, ::tixiOpenDocumentRecursive or ::tixiOpenDocumentFromHTTP.
+  @param[in] element1Path an XPath compliant path to the first element.
+  @param[in] element2Path an XPath compliant path to the second element.
+
+  @return
+    - SUCCESS if swap was successful
+    - FAILED if one element is parent of the other element.
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_XPATH if element1Path or element2Path is not a well-formed XPath-expression
+    - ELEMENT_NOT_FOUND if element1Path or element2Path does not point to a node in the XML-document
+    - ELEMENT_PATH_NOT_UNIQUE if element1Path or element2Path resolves not to a single element but
+                              to a list of elements
+ */
+DLL_EXPORT ReturnCode tixiSwapElements(const TixiDocumentHandle handle, const char* element1Path, const char* element2Path);
+
 /*@}*/
 
 /**
