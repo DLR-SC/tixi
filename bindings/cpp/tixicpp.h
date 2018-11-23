@@ -487,7 +487,7 @@ namespace tixi
     {
         const ReturnCode ret = tixiSwapElements(tixiHandle, elementPath1.c_str(), elementPath2.c_str());
         if (ret != SUCCESS) {
-            throw TixiError(ret, "Error swapping elements\n\""
+            throw TixiError(ret, "Error swapping elements\n"
                                  "Element1: " + elementPath1 + "\n"
                                  "Element2: " + elementPath2);
         }

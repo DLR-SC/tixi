@@ -25,7 +25,9 @@
   {                                                 \
     char* text;                                     \
     tixiExportDocumentAsString(handle, &text);      \
-    EXPECT_STREQ("<?xml version=\"1.0\"?>\n" ## expected_text ## "\n", text); \
+    EXPECT_STREQ("<?xml version=\"1.0\"?>\n"        \
+      expected_text                                 \
+      "\n", text);                                  \
   }                                                 \
 
 class SwapElementsCheck : public testing::Test
