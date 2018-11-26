@@ -1671,7 +1671,7 @@ DLL_EXPORT ReturnCode tixiRenameElement(const TixiDocumentHandle handle,
                                         const char* oldName,
                                         const char* newName)
 {
-    char* elementPath = (char*) malloc( sizeof(char) *( strlen(parentPath) + strlen(oldName) + 2 ) );
+    char* elementPath = NULL;
     xmlNodePtr parent = NULL;
     xmlNodePtr element = NULL;
     int retVal = 0;
@@ -1685,10 +1685,7 @@ DLL_EXPORT ReturnCode tixiRenameElement(const TixiDocumentHandle handle,
       return INVALID_XPATH;
     }
 
-    elementPath[0] = '\0';
-    strcat(elementPath, parentPath);
-    strcat(elementPath, "/");
-    strcat(elementPath, oldName);
+    elementPath = buildString("%s/%s", parentPath, oldName);
     retVal = getNodePtrFromElementPath(handle, elementPath, &element);
     free(elementPath);
     if (retVal != SUCCESS) {

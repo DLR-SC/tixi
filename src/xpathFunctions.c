@@ -296,7 +296,7 @@ xmlXPathObjectPtr XPathCacheGet(XPathCache const * cache, xmlChar const * xpath)
 
 void XPathCacheInsert(XPathCache *cache, const xmlChar *xpath, const xmlXPathObjectPtr result)
 {
-    if (!cache || !xpath || !result || xmlStrcmp(xpath, cache->xpath) == 0) {
+    if (!cache || !xpath || !result) {
         return;
     }
 
