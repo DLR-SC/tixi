@@ -2645,6 +2645,22 @@ DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func);
  */
 DLL_EXPORT TixiPrintMsgFnc tixiGetPrintMsgFunc();
 
+
+/**
+  @brief Enables the internal xPath cache
+ 
+  This speeds up xpath queries with repeating same xpathes.
+  
+  @param[in] handle The document handle of a tixi document.
+  @param[in[ enabled Boolean, whether to enable the cache or not.
+  
+  @return
+    - SUCCESS if the cache could be enabled/disabled
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - FAILED  otherwise
+ */
+DLL_EXPORT ReturnCode tixiSetCacheEnabled(TixiDocumentHandle handle, int enabled);
+
 /*@}*/
 
 /**

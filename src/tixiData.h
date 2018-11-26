@@ -130,6 +130,13 @@ struct TixiUIDListEntry
   TixiUIDListEntry* next;        /**< Pointer to next entry in the list */
 };
 
+typedef struct
+{
+  xmlChar* xpath;
+  xmlXPathObjectPtr result;
+  int enabled;
+} XPathCache;
+
 /**
  * @brief Structure to hold the document meta data.
  *
@@ -151,6 +158,7 @@ typedef struct
   int usePrettyPrint;                  /**< if pretty print should used when saving a file */
   TixiUIDListEntry* uidListHead;       /**< Pointer to the head of the list of uids */
   xmlXPathContextPtr xpathContext;     /**< Pointer to the XPath Context */
+  XPathCache* xpathCache;              /**< Pointer to the XPath Cache */
 } TixiDocument;
 
 typedef struct TixiDocumentListEntry TixiDocumentListEntry;

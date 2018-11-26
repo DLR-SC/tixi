@@ -303,6 +303,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
     document->usePrettyPrint = 1;
     document->uidListHead = NULL;
     document->xpathContext = xmlXPathNewContext(xmlDocument);
+    document->xpathCache = XPathNewCache();
     addDocumentToList(document, &(document->handle));
     *handle = document->handle;
     returnValue = SUCCESS; /*?*/
@@ -406,6 +407,7 @@ DLL_EXPORT ReturnCode tixiCreateDocument(const char *rootElementName, TixiDocume
   document->usePrettyPrint = 1;
   document->uidListHead = NULL;
   document->xpathContext = xmlXPathNewContext(xmlDocument);
+  document->xpathCache = XPathNewCache();
 
   if (addDocumentToList(document, &(document->handle)) != SUCESS) {
     printMsg(MESSAGETYPE_ERROR, "Error: Failed  adding document to document list.");
@@ -584,6 +586,7 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
     document->usePrettyPrint = 1;
     document->uidListHead = NULL;
     document->xpathContext = xmlXPathNewContext(xmlDocument);
+    document->xpathCache = XPathNewCache();
     addDocumentToList(document, &(document->handle));
     *handle = document->handle;
     returnValue = SUCCESS; /*?*/
@@ -1251,6 +1254,9 @@ ReturnCode tixiAddTextElementNSAtIndexImpl(const TixiDocumentHandle handle, cons
   while(targetNode != NULL && i++ < index)
     targetNode = targetNode->next;
 
+  // structure change!, we have to empty the xpath cache
+  XPathClearCache(document->xpathCache);
+
   child = xmlNewNode(NULL, (xmlChar *) elemName);
   if (text != NULL) {
     xmlNodePtr headingChildNode = xmlNewText( (xmlChar *) text );
@@ -1615,6 +1621,7 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
   ReturnCode errorCode = SUCCESS;
   char* prefix = NULL;
   char* name = NULL;
+  TixiDocument* document = NULL;
 
   retVal = getNodePtrFromElementPath(handle, elementPath, &parent);
 
@@ -1626,8 +1633,10 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
     return INVALID_XPATH;
   }
 
+  document = getDocument(handle);
   extractPrefixAndName(attributeName, &prefix, &name);
   if (!prefix) {
+    XPathClearCache(document->xpathCache);
     retVal = xmlUnsetProp(parent, (xmlChar *) attributeName);
   }
   else {
@@ -1638,6 +1647,7 @@ DLL_EXPORT ReturnCode tixiRemoveAttribute(const TixiDocumentHandle handle, const
       errorCode = INVALID_NAMESPACE_PREFIX;
     }
     else {
+      XPathClearCache(document->xpathCache);
       retVal = xmlUnsetNsProp(parent, ns, (xmlChar*) name);
     }
     free(prefix);
@@ -1697,6 +1707,8 @@ DLL_EXPORT ReturnCode tixiRemoveElement(const TixiDocumentHandle handle, const c
   retVal = getNodePtrFromElementPath(handle, elementPath, &parent);
 
   if(parent != NULL) {
+    TixiDocument* document = getDocument(handle);
+    XPathClearCache(document->xpathCache);
     xmlUnlinkNode(parent);
     xmlFreeNode(parent);
     return SUCCESS;
@@ -1971,7 +1983,7 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
   error = checkElement(document->xpathContext, parentPath, &parent);
 
   if (!error) {
-
+    XPathClearCache(document->xpathCache);
     /* create node containing the point coordinates */
 
     xmlNodePtr pointNode = parent;
@@ -2153,6 +2165,24 @@ DLL_EXPORT ReturnCode tixiGetVectorSize (const TixiDocumentHandle handle, const 
     token = strtok(0, VECTOR_SEPARATOR);
   }
   return SUCCESS;
+}
+
+DLL_EXPORT ReturnCode tixiSetCacheEnabled(TixiDocumentHandle handle, int enabled)
+{
+    TixiDocument *document = getDocument(handle);
+
+    if (!document) {
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+      return INVALID_HANDLE;
+    }
+
+    if (!document->xpathCache) {
+        return FAILED;
+    }
+
+    document->xpathCache->enabled = enabled;
+
+    return SUCCESS;
 }
 
 DLL_EXPORT ReturnCode tixiGetArrayDimensions (const TixiDocumentHandle handle,
@@ -3053,6 +3083,7 @@ ReturnCode tixiSwapElements(const TixiDocumentHandle handle, const char* element
     }
 
     // swap nodes
+    XPathClearCache(document->xpathCache);
     tmp = xmlCopyNode(element1, 0);
     element1 = xmlReplaceNode(element1, tmp);
     element2 = xmlReplaceNode(element2, element1);
