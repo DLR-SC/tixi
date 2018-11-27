@@ -2,8 +2,8 @@
 # @author Martin Siggel
 
 find_package(CURL REQUIRED)
-find_package(XSLT REQUIRED)
-find_package(XML REQUIRED)
+find_package(LibXml2 REQUIRED)
+find_package(LibXslt REQUIRED)
 
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/tixi_version.h.in"
@@ -20,7 +20,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fmessage-length=0")
 endif()
 
-set(TIXI_LIBS curllib xslt xml)
+set(TIXI_LIBS curllib LibXslt::LibXslt LibXml2::LibXml2)
 if(WIN32)
     set(TIXI_LIBS ${TIXI_LIBS} Shlwapi)
 endif(WIN32)

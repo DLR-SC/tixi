@@ -7,8 +7,8 @@ include(CMakeFindDependencyMacro)
 
 if(NOT "$<TARGET_PROPERTY:tixi3,TYPE>" STREQUAL "SHARED_LIBRARY")
   find_dependency(CURL)
-  find_dependency(XSLT)
-  find_dependency(XML)
+  find_dependency(LibXml2)
+  find_dependency(LibXslt)
 endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/tixi3-targets.cmake")

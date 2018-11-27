@@ -43,7 +43,7 @@ ENDIF(WIN32)
 #--------------------------------------------------------------------------------
 
 # directories to look for dependencies
-SET(DIRS ${ADD_LIB_PATH} ${XML_INCLUDE_DIR} ${XSLT_INCLUDE_DIR} ${CURL_INCLUDE_DIR})
+SET(DIRS ${ADD_LIB_PATH})
 SET(DIRS ${DIRS} ${LIBRARY_OUTPUT_PATH})
 
 # Install the tixiDemo application, on Apple, the bundle is at the root of the
