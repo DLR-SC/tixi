@@ -3,16 +3,16 @@
 #  TIXI_INCLUDE_DIRS - include directories for TIXI
 #  TIXI_LIBRARIES    - libraries to link against
 
-@PACKAGE_INIT@
+include(CMakeFindDependencyMacro)
 
-# Compute paths
-set_and_check(TIXI_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDE_DIR@")
-set_and_check(TIXI_CMAKE_DIR "@PACKAGE_CONFIG_INSTALL_DIR@")
- 
-# Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET ${TIXI_LIB_NAME})
-  include("${TIXI_CMAKE_DIR}/tixi3-targets.cmake")
+if(NOT "$<TARGET_PROPERTY:tixi3,TYPE>" STREQUAL "SHARED_LIBRARY")
+  find_dependency(CURL)
+  find_dependency(XSLT)
+  find_dependency(XML)
 endif()
- 
-# These are IMPORTED targets created by tixi-targets.cmake
-set(TIXI_LIBRARIES @TIXI_LIB_NAME@)
+
+include("${CMAKE_CURRENT_LIST_DIR}/tixi3-targets.cmake")
+
+# This is just for backwards compatibilty with old cmake stuff
+set(TIXI_LIBRARIES tixi3)
+set(TIXI_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/../../include/tixi3")
