@@ -99,4 +99,13 @@ if(LibXml2_FOUND AND NOT TARGET LibXml2::LibXml2)
    add_library(LibXml2::LibXml2 UNKNOWN IMPORTED)
    set_target_properties(LibXml2::LibXml2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${LIBXML2_INCLUDE_DIRS}")
    set_property(TARGET LibXml2::LibXml2 APPEND PROPERTY IMPORTED_LOCATION "${LIBXML2_LIBRARY}")
+
+   if (WIN32)
+     string(REGEX MATCH "_a.lib$" LibXml2_STATICLIB ${LIBXML2_LIBRARY})
+     if (LibXml2_STATICLIB)
+       set_target_properties(LibXml2::LibXml2
+           PROPERTIES INTERFACE_COMPILE_DEFINITIONS "LIBXML_STATIC"
+       )
+     endif(LibXml2_STATICLIB)
+   endif (WIN32)
 endif()
