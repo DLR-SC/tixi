@@ -47,8 +47,8 @@ build_script:
 - ps: |
     md _build -Force | Out-Null
     cd _build
-    Write-Output "Running cmake:  -DTIXI_BUILD_TESTS=ON -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win -DCMAKE_PREFIX_PATH=c:\tixi-3rdparty\$thirdparty -DCMAKE_INSTALL_PREFIX=install .."
-    & cmake -G "$generator"  -DTIXI_BUILD_TESTS=ON -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win -DCMAKE_PREFIX_PATH=c:\tixi-3rdparty\"$thirdparty" -DCMAKE_INSTALL_PREFIX=install ..
+    Write-Output "Running cmake:  -DBUILD_SHARED_LIBS=ON -DTIXI_BUILD_TESTS=ON -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win -DCMAKE_PREFIX_PATH=c:\tixi-3rdparty\$thirdparty -DCMAKE_INSTALL_PREFIX=install .."
+    & cmake -G "$generator"  -DBUILD_SHARED_LIBS=ON -DTIXI_BUILD_TESTS=ON -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win -DCMAKE_PREFIX_PATH=c:\tixi-3rdparty\"$thirdparty" -DCMAKE_INSTALL_PREFIX=install ..
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"
     }
@@ -61,7 +61,7 @@ build_script:
 test_script:
 - ps: |
     cd tests
-    $env:PATH = "..\install\bin;$env:PATH"
+    $env:PATH = "..\install\bin;..\lib\$env:CONFIGURATION;$env:PATH"
     & $env:CONFIGURATION\TIXI-unittests.exe --gtest_output=xml:test_results.xml
     if ($LastExitCode -ne 0) {
         throw "Exec: $ErrorMessage"

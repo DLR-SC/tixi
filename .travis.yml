@@ -13,7 +13,7 @@ before_script:
   - cd build
 
 script: 
-  - cmake -DTIXI_BUILD_TESTS=ON ..
+  - cmake -DBUILD_SHARED_LIBS=ON -DTIXI_BUILD_TESTS=ON ..
   - make
   - cd tests
   # Don't run the curl tests, as curl seems to be defect on Ubuntu 12.04.
