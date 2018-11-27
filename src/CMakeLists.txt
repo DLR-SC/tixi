@@ -73,7 +73,7 @@ write_basic_package_version_file(
 
 file(GENERATE
   OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/tixi3-config.cmake"
-  INPUT  "${PROJECT_SOURCE_DIR}/contrib/tixi-config.cmake.in"
+  INPUT  "${PROJECT_SOURCE_DIR}/cmake/tixi-config.cmake.in"
 )
 
 install (EXPORT tixi3-targets DESTINATION ${CONFIG_INSTALL_DIR})
