@@ -31,6 +31,7 @@
 #include "libxml/xmlsave.h"
 #include "tixi.h"
 #include "tixiData.h"
+#include "tixiInternal.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,7 +52,7 @@ struct MemoryStruct {
     - 0 if SUCCESS
     - != 0 if ERROR
  */
-int curlGetFileToLocalDisk(const char* url, const char* local);
+TIXI_INTERNAL_EXPORT int curlGetFileToLocalDisk(const char* url, const char* local);
 
 
 /**
@@ -61,7 +62,7 @@ int curlGetFileToLocalDisk(const char* url, const char* local);
   @param size_t size  (in) The (new) size
   @return void
  */
-void* myrealloc(void* ptr, size_t size);
+TIXI_INTERNAL_EXPORT void* myrealloc(void* ptr, size_t size);
 
 
 /**
@@ -74,7 +75,7 @@ void* myrealloc(void* ptr, size_t size);
   @return size_t
      - The real copies size in byte.
  */
-size_t writeMemoryCallback(void* ptr, size_t size, size_t nmemb, void* data);
+TIXI_INTERNAL_EXPORT size_t writeMemoryCallback(void* ptr, size_t size, size_t nmemb, void* data);
 
 
 /**
@@ -84,7 +85,7 @@ size_t writeMemoryCallback(void* ptr, size_t size, size_t nmemb, void* data);
   @return char*
     The content of the url-resource as string.
  */
-char* curlGetURLInMemory(const char* url);
+TIXI_INTERNAL_EXPORT char* curlGetURLInMemory(const char* url);
 
 #ifdef __cplusplus
 }

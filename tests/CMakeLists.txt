@@ -4,7 +4,7 @@ FILE (GLOB_RECURSE test_SRCS *.cpp *.cxx *.cc *.C *.c *.h *.hpp)
 SET (test_BIN ${PROJECT_NAME}-unittests)
 
 add_executable(${test_BIN} ${test_SRCS} )
-target_link_libraries(${test_BIN} PRIVATE gtest ${TIXI_LIB_NAME}_static tixicpp)
+target_link_libraries(${test_BIN} PRIVATE gtest ${TIXI_LIB_NAME} tixicpp tixi_internal_api)
 
 
 if (VLD_FOUND)

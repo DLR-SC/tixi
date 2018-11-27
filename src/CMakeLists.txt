@@ -43,13 +43,14 @@ target_link_libraries (${TIXI_LIB_NAME} PRIVATE ${TIXI_LIBS})
 set_target_properties(${TIXI_LIB_NAME} PROPERTIES VERSION ${TIXI_VERSION_MINOR}.${TIXI_VERSION_PATCH})
 set_target_properties(${TIXI_LIB_NAME} PROPERTIES SOVERSION "${TIXI_VERSION_MINOR}")
 
-add_library(${TIXI_LIB_NAME}_static ${TIXI_SRC} ${TIXI_HDR})
-target_compile_definitions(${TIXI_LIB_NAME}_static PRIVATE $<$<CONFIG:DEBUG>:DEBUG>)
-target_link_libraries (${TIXI_LIB_NAME}_static  ${TIXI_LIBS})
-target_include_directories(${TIXI_LIB_NAME}_static PUBLIC 
+add_library(tixi_internal_api INTERFACE)
+target_link_libraries(tixi_internal_api INTERFACE ${TIXI_LIBS})
+
+target_include_directories(tixi_internal_api INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
+
 
 set(CMAKE_INSTALL_INCLUDE_DIR "include/${TIXI_LIB_NAME}")
 

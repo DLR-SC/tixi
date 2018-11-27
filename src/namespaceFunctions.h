@@ -20,6 +20,7 @@
 #define TIXI_NAMESPACEFUNCTIONS_H
 
 #include <libxml/tree.h>
+#include "tixiInternal.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,7 +31,7 @@ extern "C" {
  *
  * The user must free the memory after this call.
  */
-void extractPrefixAndName(const char* qualifiedName, char** prefix, char** name);
+TIXI_INTERNAL_EXPORT void extractPrefixAndName(const char* qualifiedName, char** prefix, char** name);
 
 /**
  * @brief Searches in the given node and its parent nodes for a
@@ -39,7 +40,7 @@ void extractPrefixAndName(const char* qualifiedName, char** prefix, char** name)
  * @return
  *   The namespace, if it was found, otherwise a null pointer.
  */
-xmlNsPtr findNamespace(const xmlDocPtr document, const xmlNodePtr node, const char* namespaceURI);
+TIXI_INTERNAL_EXPORT xmlNsPtr findNamespace(const xmlDocPtr document, const xmlNodePtr node, const char* namespaceURI);
 
 /**
  * @brief nodeSetNamespace Sets the namespace for a node
@@ -47,7 +48,7 @@ xmlNsPtr findNamespace(const xmlDocPtr document, const xmlNodePtr node, const ch
  * The prefix can also be empty / null.
  * @return
  */
-xmlNsPtr nodeSetNamespace(const xmlDocPtr doc, xmlNodePtr node, const char* prefix, const char* namespaceURI);
+TIXI_INTERNAL_EXPORT xmlNsPtr nodeSetNamespace(const xmlDocPtr doc, xmlNodePtr node, const char* prefix, const char* namespaceURI);
 
 /**
  * @brief Adds the namespace attribute to a node.
@@ -55,7 +56,7 @@ xmlNsPtr nodeSetNamespace(const xmlDocPtr doc, xmlNodePtr node, const char* pref
  * The prefix must not be empty!
  * @return
  */
-xmlNsPtr nodeAddNamespace(const xmlDocPtr doc, xmlNodePtr node, const char* prefix, const char* namespaceURI);
+TIXI_INTERNAL_EXPORT xmlNsPtr nodeAddNamespace(const xmlDocPtr doc, xmlNodePtr node, const char* prefix, const char* namespaceURI);
 
 #ifdef __cplusplus
 } /* extern C */

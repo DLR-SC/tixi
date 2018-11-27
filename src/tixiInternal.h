@@ -23,6 +23,16 @@
 extern "C" {
 #endif
 
+#if defined(WIN32)
+#if defined (tixi3_EXPORTS)
+#define TIXI_INTERNAL_EXPORT __declspec (dllexport)
+#else
+#define TIXI_INTERNAL_EXPORT
+#endif
+#else
+#define TIXI_INTERNAL_EXPORT
+#endif
+
 /**
  * @file   tixiInternal.h
  * @author Hans-Peter Kersken <Hans-Peter.Kersken@dlr.de>
@@ -52,7 +62,7 @@ typedef enum {
  *
  * @return handle to the document
  */
-InternalReturnCode addDocumentToList(TixiDocument* document, TixiDocumentHandle* handle);
+TIXI_INTERNAL_EXPORT InternalReturnCode addDocumentToList(TixiDocument* document, TixiDocumentHandle* handle);
 
 /**
  * @brief Removes document from the list of managed documents.
@@ -62,7 +72,7 @@ InternalReturnCode addDocumentToList(TixiDocument* document, TixiDocumentHandle*
  *
  * @return error code
  */
-ReturnCode removeDocumentFromList(TixiDocumentHandle handle);
+TIXI_INTERNAL_EXPORT ReturnCode removeDocumentFromList(TixiDocumentHandle handle);
 
 /**
  * @brief Retrives a document.
@@ -72,14 +82,14 @@ ReturnCode removeDocumentFromList(TixiDocumentHandle handle);
  *
  * @return handle to the document or NULL if handle not in the list
  */
-DLL_EXPORT TixiDocument* getDocument(TixiDocumentHandle handle);
+TIXI_INTERNAL_EXPORT TixiDocument* getDocument(TixiDocumentHandle handle);
 
 /**
  @brief Adds pointer to memory allcoated by libxml to list of managed memory.
 
  @param (in) memory pointer to the memory location
  */
-InternalReturnCode addToMemoryList(TixiDocument* document, void* memory);
+TIXI_INTERNAL_EXPORT InternalReturnCode addToMemoryList(TixiDocument* document, void* memory);
 
 /**
   @brief Frees all memory locations pointed to by the pointers in the list
@@ -87,14 +97,14 @@ InternalReturnCode addToMemoryList(TixiDocument* document, void* memory);
 
   @param document (in) a pointer to a TixiDocument structure
  */
-InternalReturnCode clearMemoryList(TixiDocument* document);
+TIXI_INTERNAL_EXPORT InternalReturnCode clearMemoryList(TixiDocument* document);
 
 /**
   @brief Frees the memory used by the document
 
   @param document (in) a pointer to a TixiDocument structure
 */
-void freeTixiDocument(TixiDocument* document);
+TIXI_INTERNAL_EXPORT void freeTixiDocument(TixiDocument* document);
 
 
 /**
@@ -110,7 +120,7 @@ void freeTixiDocument(TixiDocument* document);
     - ELEMENT_NOT_FOUND
     - NOT_AN_ELEMENT
  */
-DLL_EXPORT ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* elementPath, xmlNodePtr* element);
+TIXI_INTERNAL_EXPORT ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const char* elementPath, xmlNodePtr* element);
 
 
 /**
@@ -126,11 +136,11 @@ DLL_EXPORT ReturnCode checkElement(const xmlXPathContextPtr xpathContext, const 
     - INVALID_XPATH
     - ELEMENT_NOT_FOUND
  */
-ReturnCode checkExistence(const xmlXPathContextPtr xpathContext, const char* nodePath, xmlXPathObjectPtr* xpathObject);
+TIXI_INTERNAL_EXPORT ReturnCode checkExistence(const xmlXPathContextPtr xpathContext, const char* nodePath, xmlXPathObjectPtr* xpathObject);
 
 
 /* TODO: header! */
-ReturnCode checkExternalNode(const xmlNodePtr element);
+TIXI_INTERNAL_EXPORT ReturnCode checkExternalNode(const xmlNodePtr element);
 
 /**
   @brief Retrieves coordinate value of a point element.
@@ -154,7 +164,7 @@ ReturnCode checkExternalNode(const xmlNodePtr element);
     - COORDINATE_NOT_FOUND
 */
 
-ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
+TIXI_INTERNAL_EXPORT ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
                               int pointIndex, char* name, int ignoreError, double* value);
 
 /**
@@ -183,18 +193,18 @@ ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
     - ELEMENT_PATH_NOT_UNIQUE
     - NOT_AN_ELEMENT
 */
-ReturnCode getPoint(const TixiDocumentHandle handle, const char* pointParentPath, const int pointIndex,
-                    int ignoreMissingCoordinates, double* x, double* y, double* z);
+TIXI_INTERNAL_EXPORT ReturnCode getPoint(const TixiDocumentHandle handle, const char* pointParentPath, const int pointIndex,
+                                         int ignoreMissingCoordinates, double* x, double* y, double* z);
 /**
   brief Check if libxml2 version used to build TIXI.
 */
-void checkLibxml2Version();
+TIXI_INTERNAL_EXPORT void checkLibxml2Version();
 
 /**
   @brief builds a string using snprintf to avoid buffer overflows. The resulting buffer
          has to be freed by the caller.
 */
-DLL_EXPORT char* buildString(const char* format, ...);
+TIXI_INTERNAL_EXPORT char* buildString(const char* format, ...);
 
 
 /**
@@ -231,7 +241,7 @@ DLL_EXPORT char* buildString(const char* format, ...);
     - FAILED internal error
     - OPEN_FAILED
 */
-ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number);
+TIXI_INTERNAL_EXPORT ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number);
 
 
 /**
@@ -244,7 +254,7 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number);
     - SUCCESS all external nodes are saved successfully
     - FAILED internal error
  */
-ReturnCode saveExternalFiles(xmlNodePtr aNodePrt, TixiDocument* aTixiDocument);
+TIXI_INTERNAL_EXPORT ReturnCode saveExternalFiles(xmlNodePtr aNodePrt, TixiDocument* aTixiDocument);
 
 
 /**
@@ -256,7 +266,7 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePrt, TixiDocument* aTixiDocument);
     - xmlNodePtr of the parent node
     - NULL if a error occured
  */
-xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPath);
+TIXI_INTERNAL_EXPORT xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPath);
 
 
 /**
@@ -275,8 +285,8 @@ xmlNodePtr getParentNodeToXPath(TixiDocumentHandle handle, const char* elementPa
     - INVALID_XML_NAME
     - SUCCESS
  */
-ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* elementPath,
-                                   const char* attributeName, const char* attributeValue);
+TIXI_INTERNAL_EXPORT ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* elementPath,
+                                                        const char* attributeName, const char* attributeValue);
 
 
 
@@ -296,7 +306,7 @@ ReturnCode genericAddTextAttribute(xmlXPathContextPtr xpathContext, const char* 
     - ELEMENT_PATH_NOT_UNIQUE
     - FAILED
  */
-ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elementPath, xmlNodePtr* nodePtr);
+TIXI_INTERNAL_EXPORT ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elementPath, xmlNodePtr* nodePtr);
 
 
 /**
@@ -309,7 +319,7 @@ ReturnCode getNodePtrFromElementPath(TixiDocumentHandle handle, const char* elem
     - 0 if SUCCESS
     - != 0 if ERROR
  */
-int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHandle* newTixiDocumentHandle);
+TIXI_INTERNAL_EXPORT int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHandle* newTixiDocumentHandle);
 
 
 /**
@@ -323,7 +333,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
     - INVALID_HANDLE       if handle not found in list of man
     - FAILED               if writing and closing the XML-file failed
  */
-ReturnCode saveDocument (TixiDocumentHandle handle, const char* xmlFilename, InternalSaveMode saveMode);
+TIXI_INTERNAL_EXPORT ReturnCode saveDocument (TixiDocumentHandle handle, const char* xmlFilename, InternalSaveMode saveMode);
 
 
 /**
@@ -341,7 +351,7 @@ ReturnCode saveDocument (TixiDocumentHandle handle, const char* xmlFilename, Int
     - OPEN_SCHEMA_FAILED   if opening of the XML-schema-file failed
     - FAILED               for all internal errors
  */
-ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc, int withDefaults);
+TIXI_INTERNAL_EXPORT ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc, int withDefaults);
 
 
 /**
@@ -355,7 +365,7 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc
     - char*                    The string with the generated XPath
     - NULL                     If an error occurred
  */
-DLL_EXPORT char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePrt);
+TIXI_INTERNAL_EXPORT char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr aNodePrt);
 
 
 /**
@@ -371,7 +381,7 @@ DLL_EXPORT char* generateXPathFromNodePtr(TixiDocumentHandle handle, xmlNodePtr 
     - SUCCESS                    If the reordering went well
     - FAILED                     If fromIndex or toIndex is out of range.
  */
-ReturnCode reorderXmlElements(TixiDocumentHandle handle, const char* elementPath, int fromIndex, int toIndex);
+TIXI_INTERNAL_EXPORT ReturnCode reorderXmlElements(TixiDocumentHandle handle, const char* elementPath, int fromIndex, int toIndex);
 
 /**
  * @brief Tests, whether p is parent of n

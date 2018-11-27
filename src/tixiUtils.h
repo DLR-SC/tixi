@@ -37,6 +37,7 @@ extern "C" {
 #include "libxml/xmlsave.h"
 #include "tixi.h"
 #include "tixiData.h"
+#include "tixiInternal.h"
 
 /**
   @brief compares up to <[length]> characters
@@ -50,7 +51,7 @@ extern "C" {
     - !=0 If <<*<[a]>>> sorts lexicographically before <<*<[b]>>>,
           <<strncasecmp>> returns a number less than zero
  */
-int my_strncasecmp (const char *a, const char *b, size_t len);
+TIXI_INTERNAL_EXPORT int my_strncasecmp (const char *a, const char *b, size_t len);
 
 
 /**
@@ -61,7 +62,7 @@ int my_strncasecmp (const char *a, const char *b, size_t len);
     - SUCCESS if successfully created
     - FAILED if directory could not be created
  */
-int create_local_directory(const char *dirname);
+TIXI_INTERNAL_EXPORT int create_local_directory(const char *dirname);
 
 
 /**
@@ -71,7 +72,7 @@ int create_local_directory(const char *dirname);
     - 0 if string starts with substring
     - -1 if string does not start with substring or an error occured
  */
-int string_startsWith(const char *string, const char *subString);
+TIXI_INTERNAL_EXPORT int string_startsWith(const char *string, const char *subString);
 
 /**
   @brief Checks if a string ends with substring .
@@ -80,7 +81,7 @@ int string_startsWith(const char *string, const char *subString);
     - 0 if string ends with substring
     - -1 if string does not end with substring or an error occured
  */
-int string_endsWith(const char *string, const char *subString);
+TIXI_INTERNAL_EXPORT int string_endsWith(const char *string, const char *subString);
 
 /**
  * @brief Creates a substring. The user has to free it
@@ -89,7 +90,7 @@ int string_endsWith(const char *string, const char *subString);
  * @param end_pos End position. -1 indicates the end of the string.
  * @return
  */
-char* substring(const char* str, int start_pos, int end_pos);
+TIXI_INTERNAL_EXPORT char* substring(const char* str, int start_pos, int end_pos);
 
 /**
   @brief Returns the directory- and filename. The dirname will always end
@@ -103,7 +104,7 @@ char* substring(const char* str, int start_pos, int end_pos);
     - SUCCESS
     - FAILED internal error
  */
-ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname);
+TIXI_INTERNAL_EXPORT ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname);
 
 
 /**
@@ -115,7 +116,7 @@ ReturnCode strip_dirname(const char *xmlFilename, char **dname, char **fname);
     - 0 if path is realtiv
     - != 0 if path seems to be absolute
  */
-int isPathRelative(const char *dirname);
+TIXI_INTERNAL_EXPORT int isPathRelative(const char *dirname);
 
 
 
@@ -127,7 +128,7 @@ int isPathRelative(const char *dirname);
     - 0 if path is realtive
     - != 0 if path seems to be absolute
  */
-int isLocalPathRelative(const char *dirname);
+TIXI_INTERNAL_EXPORT int isLocalPathRelative(const char *dirname);
 
 /**
   @brief Checks if a path is a URI (instead of a local path)
@@ -136,7 +137,7 @@ int isLocalPathRelative(const char *dirname);
     - 0, if is URI
     - != 0, if local path
  */
-int isURIPath(const char* path);
+TIXI_INTERNAL_EXPORT int isURIPath(const char* path);
 
 /**
   @brief uriToLocalPath converts a local URI (e.g. file://data.txt) to a local path (data.txt)
@@ -144,7 +145,7 @@ int isURIPath(const char* path);
   @return
     local Path or zero, if the URI is a remote path and can't be converted
  */
-char* uriToLocalPath(const char* uri);
+TIXI_INTERNAL_EXPORT char* uriToLocalPath(const char* uri);
 
 /**
   @brief localPathToURI converts a local path (e.g. ./data.txt) to an URI (file://data.txt)
@@ -152,7 +153,7 @@ char* uriToLocalPath(const char* uri);
   @return
     The URI of the path
  */
-char* localPathToURI(const char* path);
+TIXI_INTERNAL_EXPORT char* localPathToURI(const char* path);
 
 
 /**
@@ -161,7 +162,7 @@ char* localPathToURI(const char* path);
   @return
     The file as a string or a NULL pointer, if the file could not be loaded.
  */
-char* loadFileToString(const char* path);
+TIXI_INTERNAL_EXPORT char* loadFileToString(const char* path);
 
 /**
   @brief Converts all chars of a string to lower case.
@@ -170,7 +171,7 @@ char* loadFileToString(const char* path);
   @return
     string converted to lower case
  */
-char* stringToLower(char* string);
+TIXI_INTERNAL_EXPORT char* stringToLower(char* string);
 
 
 /**
@@ -180,7 +181,7 @@ char* stringToLower(char* string);
   @return
     a string with n characters removed from the string
  */
-char* string_stripLeft(const char *string, int n);
+TIXI_INTERNAL_EXPORT char* string_stripLeft(const char *string, int n);
 
 /**
   @brief If inDirectory is a relative path,
@@ -199,7 +200,7 @@ char* string_stripLeft(const char *string, int n);
 
   @return The corrected path
  */
-char* resolveDirectory(const char* workingDirectory, const char* inDirectory);
+TIXI_INTERNAL_EXPORT char* resolveDirectory(const char* workingDirectory, const char* inDirectory);
 
 #ifdef __cplusplus
 } /* extern C */
