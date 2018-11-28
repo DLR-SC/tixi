@@ -4,8 +4,6 @@
 set(TIXI_F_SRC tixi77.c)
 set(TIXI_F_HDR tixi77.h)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../src)
-
 #find out the fortran compiler
 include(CMakeDetermineFortranCompiler)
 
@@ -33,14 +31,27 @@ else()
         endif()
     endif()
 
-        add_library(${TIXI_LIB_NAME}-f90 STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
-        set_target_properties(${TIXI_LIB_NAME}-f90 PROPERTIES VERSION ${TIXI_VERSION})
-        install (TARGETS ${TIXI_LIB_NAME}-f90
-            DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            COMPONENT interfaces)
-    install (FILES tixi77.h 
-            DESTINATION include
-            COMPONENT interfaces)
+    add_library(${TIXI_LIB_NAME}-f90 STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
+    target_link_libraries(${TIXI_LIB_NAME}-f90 ${TIXI_LIB_NAME})
+    set_target_properties(${TIXI_LIB_NAME}-f90 PROPERTIES VERSION ${TIXI_VERSION})
+
+    install (TARGETS ${TIXI_LIB_NAME}-f90
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT interfaces)
     
+    install (FILES tixi77.h 
+        DESTINATION ${CMAKE_INSTALL_INCLUDE_DIR}
+        COMPONENT interfaces)
+    
+    install(TARGETS ${TIXI_LIB_NAME}-f90 EXPORT ${TIXI_LIB_NAME}-f90-targets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+    )
+
+    install(EXPORT ${TIXI_LIB_NAME}-f90-targets
+        DESTINATION ${CONFIG_INSTALL_DIR}
+    )
+
 endif()
 

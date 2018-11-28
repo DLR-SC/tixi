@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.1)
 
 # Set a default build type if none was specified
 if(NOT DEFINED CMAKE_BUILD_TYPE)
@@ -30,7 +30,7 @@ set(ADD_LIB_PATH "" CACHE PATH     "Additional library path for package search")
 set(CMAKE_INCLUDE_PATH "${CMAKE_INCLUDE_PATH}" ${ADD_INCLUDE_PATH})
 set(CMAKE_LIBRARY_PATH "${CMAKE_LIBRARY_PATH}" ${ADD_LIB_PATH})
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/contrib)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
     set(CMAKE_INSTALL_LIBDIR "lib")
@@ -45,9 +45,13 @@ if(NOT DEFINED CMAKE_INSTALL_INCLUDE_DIR)
     set(CMAKE_INSTALL_INCLUDE_DIR "include/${TIXI_LIB_NAME}")
 endif(NOT DEFINED CMAKE_INSTALL_INCLUDE_DIR)
 
-find_package(CURL REQUIRED)
-find_package(XSLT REQUIRED)
-find_package(XML REQUIRED)
+if(NOT DEFINED CONFIG_INSTALL_DIR)
+    set(CONFIG_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/${TIXI_LIB_NAME}")
+endif(NOT DEFINED CONFIG_INSTALL_DIR)
+
+if (NOT DEFINED CMAKE_DEBUG_POSTFIX)
+    set(CMAKE_DEBUG_POSTFIX "-d")
+endif (NOT DEFINED CMAKE_DEBUG_POSTFIX)
 
 find_package(PythonInterp)
 
@@ -78,14 +82,8 @@ if(WIN32)
         OPTION(TIXI_USE_VLD "Enable Visual Leak Detector." OFF)
         if(TIXI_USE_VLD)
             find_package( VLD REQUIRED )
-            add_definitions(-DHAVE_VLD=1)
-            include_directories(${VLD_INCLUDE_DIRS})
         endif(TIXI_USE_VLD)
     endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-endif(WIN32)
-
-if(WIN32)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif(WIN32)
 
 #create tixi library
@@ -100,9 +98,8 @@ option(TIXI_BUILD_TESTS "Build TIXI Testsuite" OFF)
 if(TIXI_BUILD_TESTS)
     enable_testing() 
     option(gtest_force_shared_crt "" ON)
-    mark_as_advanced(gtest_force_shared_crt)
-    set (gtest_SOURCE_DIR "thirdparty/gtest-1.6.0")
-    add_subdirectory (${gtest_SOURCE_DIR})
+    mark_as_advanced(gtest_force_shared_crt gtest_build_tests gtest_build_samples gtest_disable_pthreads)
+    add_subdirectory ("thirdparty/googletest" EXCLUDE_FROM_ALL)
     add_subdirectory(tests)
 endif(TIXI_BUILD_TESTS)
 

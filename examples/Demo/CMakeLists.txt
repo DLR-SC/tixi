@@ -5,34 +5,40 @@
 # Second, it allows us to scan for 3rd party library dependencies and install
 # them with tixi (cmake doesn't allow scanning dlls only).
 
-set(DEMO_SRC tixiDemo.c)
+cmake_minimum_required(VERSION 3.1)
+
+project(Tixi-Demos)
+
+
+if (NOT TARGET tixi3)
+    find_package(tixi3 REQUIRED)
+endif()
 
 if (APPLE)
   SET(CMAKE_INSTALL_RPATH "@executable_path/../${CMAKE_INSTALL_LIBDIR}")
 endif(APPLE)
 
-include_directories(${PROJECT_SOURCE_DIR}/src)
-
 if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "-Wall -fmessage-length=0")
 endif()
 
-if(MSVC)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-endif()
+add_executable(tixiDemo tixiDemo.c)
+target_link_libraries (tixiDemo tixi3)
 
-if (CMAKE_SYSTEM_NAME MATCHES ".*Linux")
-   set (LIBS m)
-endif()
-
-add_executable(tixiDemo ${DEMO_SRC})
-target_link_libraries (tixiDemo ${TIXI_LIB_NAME})
+if (UNIX)
+  # link math library
+  target_link_libraries (tixiDemo m)
+endif(UNIX)
 
 add_executable(tixi_c_examples tixi_c_examples.c)
-target_link_libraries (tixi_c_examples ${TIXI_LIB_NAME} ${LIBS})
+target_link_libraries (tixi_c_examples tixi3)
+
+if(WIN32)
+    target_compile_definitions(tixi_c_examples PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif(WIN32)
 
 add_executable(createCpacsFile createcpacsfile.c)
-target_link_libraries (createCpacsFile ${TIXI_LIB_NAME})
+target_link_libraries (createCpacsFile tixi3)
 
 add_custom_command(
     TARGET tixiDemo
@@ -55,7 +61,7 @@ ENDIF(WIN32)
 #--------------------------------------------------------------------------------
 
 # directories to look for dependencies
-SET(DIRS ${ADD_LIB_PATH} ${XML_INCLUDE_DIR} ${XSLT_INCLUDE_DIR} ${CURL_INCLUDE_DIR})
+SET(DIRS ${ADD_LIB_PATH})
 SET(DIRS ${DIRS} ${LIBRARY_OUTPUT_PATH})
 
 # Install the tixiDemo application, on Apple, the bundle is at the root of the

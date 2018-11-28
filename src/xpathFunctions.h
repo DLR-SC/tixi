@@ -31,27 +31,28 @@
 #include "libxml/xmlsave.h"
 #include "tixi.h"
 #include "tixiData.h"
+#include "tixiInternal.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-XPathCache* XPathNewCache(void);
-void XPathFreeCache(XPathCache*);
-void XPathClearCache(XPathCache*);
+TIXI_INTERNAL_EXPORT XPathCache* XPathNewCache(void);
+TIXI_INTERNAL_EXPORT void XPathFreeCache(XPathCache*);
+TIXI_INTERNAL_EXPORT void XPathClearCache(XPathCache*);
 
 /**
  * @brief Searches for cached xpath
  * @return NULL; if not cached
  */
-xmlXPathObjectPtr XPathCacheGet(const XPathCache* cache, const xmlChar* xpath);
-void XPathCacheInsert(XPathCache* cache, const xmlChar* xpath, const xmlXPathObjectPtr result);
+TIXI_INTERNAL_EXPORT xmlXPathObjectPtr XPathCacheGet(const XPathCache* cache, const xmlChar* xpath);
+TIXI_INTERNAL_EXPORT void XPathCacheInsert(XPathCache* cache, const xmlChar* xpath, const xmlXPathObjectPtr result);
 
-xmlXPathObjectPtr XPathEvaluateExpression(TixiDocument *tixiDocument, const char *xPathExpression);
+TIXI_INTERNAL_EXPORT xmlXPathObjectPtr XPathEvaluateExpression(TixiDocument *tixiDocument, const char *xPathExpression);
 
-int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression);
+TIXI_INTERNAL_EXPORT int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression);
 
-char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpression, int index);
+TIXI_INTERNAL_EXPORT char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpression, int index);
 
 /**
   @brief XPathExpressionGetElementPath Returns the name of the i-th element matching the xPathExpression
@@ -59,7 +60,7 @@ char* XPathExpressionGetText(TixiDocument *tixiDocument, const char *xPathExpres
   @return
     Name of the element. Null in case if an error. The String must not be freed by the user.
  */
-char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPathExpression, int index);
+TIXI_INTERNAL_EXPORT char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPathExpression, int index);
 
 /**
   @brief XPathExpressionGetElementPath Returns the XPath to the i-th element matching the xPathExpressio
@@ -67,7 +68,7 @@ char* XPathExpressionGetElementName(TixiDocument *tixiDocument, const char *xPat
   @return
     XPath String. Null in case if an error.
  */
-char* XPathExpressionGetElementPath(TixiDocument *tixiDocument, const char *xPathExpression, int index);
+TIXI_INTERNAL_EXPORT char* XPathExpressionGetElementPath(TixiDocument *tixiDocument, const char *xPathExpression, int index);
 
 /**
  * @brief XPathRegisterNamespace
@@ -75,7 +76,7 @@ char* XPathExpressionGetElementPath(TixiDocument *tixiDocument, const char *xPat
  * @return
  *   0 if okay, -1 in case of an error.
  */
-int XPathRegisterNamespace(xmlXPathContextPtr xpathContext, const char* namespaceURI, const char* prefix);
+TIXI_INTERNAL_EXPORT int XPathRegisterNamespace(xmlXPathContextPtr xpathContext, const char* namespaceURI, const char* prefix);
 
 /**
  * @brief XPathRegisterDocumentNamespaces Registers all namespace with prefixes that are defined in the document.
@@ -83,7 +84,7 @@ int XPathRegisterNamespace(xmlXPathContextPtr xpathContext, const char* namespac
  * @return
  *   0 if okay, -1 in case of an error.
  */
-int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext);
+TIXI_INTERNAL_EXPORT int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext);
 
 #ifdef __cplusplus
 }
