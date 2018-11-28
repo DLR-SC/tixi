@@ -24,16 +24,21 @@
 
 extern void printMsg(MessageType type, const char* message, ...);
 
-xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const char* xPathExpression)
+xmlXPathObjectPtr XPathEvaluateExpression(TixiDocument* doc, const char* xPathExpression)
 {
   xmlXPathObjectPtr xpathObject;
 
-  if (!xpathContext) {
+  if (!doc || !doc->xpathContext) {
     return NULL;
+  }
+  
+  xpathObject = XPathCacheGet(doc->xpathCache,(const xmlChar*) xPathExpression);
+  if (xpathObject) {
+    return xpathObject;
   }
 
   /* Evaluate Expression */
-  xpathObject = xmlXPathEvalExpression((xmlChar*) xPathExpression, xpathContext);
+  xpathObject = xmlXPathEvalExpression((const xmlChar*) xPathExpression, doc->xpathContext);
   if (!(xpathObject)) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid XPath expression \"%s\"\n", xPathExpression);
     return NULL;
@@ -43,6 +48,8 @@ xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const
     xmlXPathFreeObject(xpathObject);
     return NULL;
   }
+
+  XPathCacheInsert(doc->xpathCache, (const xmlChar*) xPathExpression, xpathObject);
 
   return xpathObject;
 }
@@ -56,14 +63,13 @@ int XPathGetNodeNumber(TixiDocument* tixiDocument, const char* xPathExpression)
   int nodeNr = 0;
 
   /* Load XML document */
-  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument, xPathExpression);
   if (xpathObject == NULL) {
     return -1;
   }
 
   nodes = xpathObject->nodesetval;
   nodeNr = nodes->nodeNr;
-  xmlXPathFreeObject(xpathObject);
   return nodeNr;
 }
 
@@ -78,7 +84,7 @@ char* XPathExpressionGetText(TixiDocument* tixiDocument, const char* xPathExpres
   char* text = NULL;
   int size = 0;
 
-  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument, xPathExpression);
   if (xpathObject == NULL) {
     return NULL;
   }
@@ -88,19 +94,16 @@ char* XPathExpressionGetText(TixiDocument* tixiDocument, const char* xPathExpres
   size = (nodes) ? nodes->nodeNr : 0;
   if (size == 0) {
     printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   if (size < index) {
     printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   if (index <= 0) {
     printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
@@ -115,12 +118,10 @@ char* XPathExpressionGetText(TixiDocument* tixiDocument, const char* xPathExpres
       text = (char*) cur->children->content;
     }
     else {
-      xmlXPathFreeObject(xpathObject);
       return NULL;
     }
   }
 
-  xmlXPathFreeObject(xpathObject);
   return text;
 }
 
@@ -132,7 +133,7 @@ char* XPathExpressionGetElementName(TixiDocument* tixiDocument, const char* xPat
   xmlNodePtr cur;
   int size = 0;
 
-  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument, xPathExpression);
   if (xpathObject == NULL) {
     return NULL;
   }
@@ -142,33 +143,27 @@ char* XPathExpressionGetElementName(TixiDocument* tixiDocument, const char* xPat
   size = (nodes) ? nodes->nodeNr : 0;
   if (size == 0) {
     printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   if (size < index) {
     printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   if (index <= 0) {
     printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   cur = nodes->nodeTab[--index];
 
   if (cur->type == XML_ELEMENT_NODE) {
-    xmlXPathFreeObject(xpathObject);
     return (char*)cur->name;
   }
   else if (cur->type == XML_ATTRIBUTE_NODE) {
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
-  xmlXPathFreeObject(xpathObject);
   return NULL;
 }
 
@@ -180,7 +175,7 @@ char* XPathExpressionGetElementPath(TixiDocument* tixiDocument, const char* xPat
   xmlNodePtr cur;
   int size = 0;
 
-  xpathObject = XPathEvaluateExpression(tixiDocument->xpathContext, xPathExpression);
+  xpathObject = XPathEvaluateExpression(tixiDocument, xPathExpression);
   if (xpathObject == NULL) {
     return NULL;
   }
@@ -190,24 +185,20 @@ char* XPathExpressionGetElementPath(TixiDocument* tixiDocument, const char* xPat
   size = (nodes) ? nodes->nodeNr : 0;
   if (size == 0) {
     printMsg(MESSAGETYPE_ERROR, "Error: XPath Expression '%s' returns 0 nodes.\n", xPathExpression);
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   if (size < index) {
     printMsg(MESSAGETYPE_ERROR, "Error: Index number too high, XPath expression only returns %d nodes.\n", size);
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   if (index <= 0) {
     printMsg(MESSAGETYPE_ERROR, "Error: Index number less or equal zero.\n");
-    xmlXPathFreeObject(xpathObject);
     return NULL;
   }
 
   cur = nodes->nodeTab[--index];
-  xmlXPathFreeObject(xpathObject);
 
   return (char*) xmlGetNodePath(cur);
 }
@@ -262,4 +253,56 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
   xmlXPathFreeObject(xpathObj);
 
   return error;
+}
+
+XPathCache *XPathNewCache()
+{
+    XPathCache* cache = (XPathCache*) malloc(sizeof(XPathCache));
+
+    cache->result = 0;
+    cache->xpath = 0;
+    cache->enabled = 0;
+
+    return cache;
+}
+
+void XPathClearCache(XPathCache * cache)
+{
+    if(cache->result) xmlXPathFreeObject(cache->result);
+    if(cache->xpath) xmlFree(cache->xpath);
+
+    cache->result = 0;
+    cache->xpath = 0;
+}
+
+void XPathFreeCache(XPathCache * cache)
+{
+    XPathClearCache(cache);
+    free(cache);
+}
+
+xmlXPathObjectPtr XPathCacheGet(XPathCache const * cache, xmlChar const * xpath)
+{
+    if (!cache || cache->enabled != 1) {
+        return NULL;
+    }
+
+    if (!xpath || !cache->xpath || xmlStrcmp(cache->xpath, xpath) != 0) {
+        return NULL;
+    }
+
+    return cache->result;
+}
+
+void XPathCacheInsert(XPathCache *cache, const xmlChar *xpath, const xmlXPathObjectPtr result)
+{
+    if (!cache || !xpath || !result) {
+        return;
+    }
+
+    XPathClearCache(cache);
+
+    cache->result = result;
+    cache->xpath = (xmlChar*) malloc((strlen((const char*)xpath) + 3) * sizeof (xmlChar*));
+    strcpy((char*) cache->xpath, (const char*) xpath);
 }

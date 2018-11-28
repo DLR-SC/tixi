@@ -36,7 +36,18 @@
 extern "C" {
 #endif
 
-xmlXPathObjectPtr XPathEvaluateExpression(xmlXPathContextPtr xpathContext, const char *xPathExpression);
+XPathCache* XPathNewCache(void);
+void XPathFreeCache(XPathCache*);
+void XPathClearCache(XPathCache*);
+
+/**
+ * @brief Searches for cached xpath
+ * @return NULL; if not cached
+ */
+xmlXPathObjectPtr XPathCacheGet(const XPathCache* cache, const xmlChar* xpath);
+void XPathCacheInsert(XPathCache* cache, const xmlChar* xpath, const xmlXPathObjectPtr result);
+
+xmlXPathObjectPtr XPathEvaluateExpression(TixiDocument *tixiDocument, const char *xPathExpression);
 
 int XPathGetNodeNumber(TixiDocument *tixiDocument, const char *xPathExpression);
 

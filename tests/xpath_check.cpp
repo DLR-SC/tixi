@@ -75,9 +75,8 @@ TEST_F(XPathChecks, XPathEvaluateExpression)
 {
   TixiDocument* document = getDocument(documentHandle);
 
-  xmlXPathObjectPtr res = XPathEvaluateExpression(document->xpathContext, elementPathExists);
+  xmlXPathObjectPtr res = XPathEvaluateExpression(document, elementPathExists);
   ASSERT_TRUE(res != NULL);
-  xmlXPathFreeObject(res);
 }
 
 TEST_F(XPathChecks, XPathEvaluateExpression_invalidContext)
@@ -89,7 +88,7 @@ TEST_F(XPathChecks, XPathEvaluateExpression_invalidContext)
 TEST_F(XPathChecks, XPathEvaluateExpression_invalidXPath)
 {
   TixiDocument* document = getDocument(documentHandle);
-  xmlXPathObjectPtr res = XPathEvaluateExpression(document->xpathContext, "\\");
+  xmlXPathObjectPtr res = XPathEvaluateExpression(document, "\\");
   ASSERT_TRUE(res == NULL);
 }
 

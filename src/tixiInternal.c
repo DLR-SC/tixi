@@ -92,6 +92,10 @@ void freeTixiDocument(TixiDocument* document)
       document->xpathContext = NULL;
   }
 
+  if (document->xpathCache) {
+      XPathFreeCache(document->xpathCache);
+      document->xpathCache = NULL;
+  }
   xmlFreeDoc(document->docPtr);
 
   free(document);
@@ -590,7 +594,7 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
   while(1) {
     // loop until there are no externaldata nodes included
 
-    xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument->xpathContext, "//externaldata");
+    xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument, "//externaldata");
     xmlNodeSetPtr nodeset = NULL;
     char* externalDataNodeXPath, *externalDataDirectoryXPath, *externalDataDirectory, *resolvedDirectory;
     int externalFileCount = 0;
@@ -614,12 +618,11 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
     }
     if (iNode == nodeset->nodeNr) {
       // no element node found
-      xmlXPathFreeObject(xpathObject);
+      XPathClearCache(aTixiDocument->xpathCache);
       break; // while loop
     }
 
-    // found external data node
-    xmlXPathFreeObject(xpathObject);
+    XPathClearCache(aTixiDocument->xpathCache);
 
     /* get nodes XPath */
     externalDataNodeXPath = (char*) xmlGetNodePath(cur);
@@ -1061,6 +1064,7 @@ int copyDocument(const TixiDocumentHandle oldTixiDocumentHandle, TixiDocumentHan
   dstDocument->hasIncludedExternalFiles = srcDocument->hasIncludedExternalFiles;
   dstDocument->usePrettyPrint = srcDocument->usePrettyPrint;
   dstDocument->xpathContext = xmlXPathNewContext(xmlDocument);
+  dstDocument->xpathCache = XPathNewCache();
 
   if (addDocumentToList(dstDocument, &(dstDocument->handle)) != SUCESS) {
     printMsg(MESSAGETYPE_ERROR, "Error in TIXI::copyDocument => Failed  adding document to document list.");
