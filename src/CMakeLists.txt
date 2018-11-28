@@ -33,6 +33,10 @@ add_library(${TIXI_LIB_NAME} ${TIXI_SRC} ${TIXI_HDR})
 
 target_compile_definitions(${TIXI_LIB_NAME} PRIVATE $<$<CONFIG:DEBUG>:DEBUG>)
 
+if(WIN32)
+    target_compile_definitions(${TIXI_LIB_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif(WIN32)
+
 target_include_directories(${TIXI_LIB_NAME} PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>

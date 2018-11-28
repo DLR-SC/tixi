@@ -86,10 +86,6 @@ if(WIN32)
     endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif(WIN32)
 
-if(WIN32)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-endif(WIN32)
-
 #create tixi library
 add_subdirectory(src)
 

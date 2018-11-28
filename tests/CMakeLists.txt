@@ -4,6 +4,11 @@ FILE (GLOB_RECURSE test_SRCS *.cpp *.cxx *.cc *.C *.c *.h *.hpp)
 SET (test_BIN ${PROJECT_NAME}-unittests)
 
 add_executable(${test_BIN} ${test_SRCS} )
+
+if(WIN32)
+    target_compile_definitions(${test_BIN} PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif(WIN32)
+
 target_link_libraries(${test_BIN} PRIVATE gtest ${TIXI_LIB_NAME} tixicpp tixi_internal_api)
 
 
