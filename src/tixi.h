@@ -2640,7 +2640,7 @@ DLL_EXPORT ReturnCode tixiSetPrintMsgFunc(TixiPrintMsgFnc func);
 /**
   @brief Returns the currently registered message handler function
   
-  @return:
+  @return
     - Function pointer to the message handler
  */
 DLL_EXPORT TixiPrintMsgFnc tixiGetPrintMsgFunc();
@@ -2652,7 +2652,7 @@ DLL_EXPORT TixiPrintMsgFnc tixiGetPrintMsgFunc();
   This speeds up xpath queries with repeating same xpathes.
   
   @param[in] handle The document handle of a tixi document.
-  @param[in[ enabled Boolean, whether to enable the cache or not.
+  @param[in] enabled Boolean, whether to enable the cache or not.
   
   @return
     - SUCCESS if the cache could be enabled/disabled
