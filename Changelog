@@ -1,3 +1,23 @@
+Version 3.0.3
+----------------
+
+-General Changes:
+	- Improved cmake export scripts. Tixi installs should now be relocatable.
+	- The cmake build system now builds by default static libraries. If shared
+	  libraries are desired, ```-DBUILD_SHARED_LIBS=ON``` has to be passed to cmake.
+	- Implemented caching for the functions ```tixiXPathExpressionGetXPath``` and
+	```tixiXPathEvaluateNodeNumber``` to speed up queries on large files.
+
+-New Functions:
+	- ```tixiSwapElements``` allows to exchange two xml elements.
+	- Added functions TixiGetNumberOfChilds, TixiGetChildNodeName and TixiGetChildElementPaths
+	  to C++ Bindings.
+
+-Fixes:
+	- Fixed indexing of text nodes. Now it is possible to directly select text nodes
+	  using e.g. /root/a/text()[2].
+	- Fixed function ```tixiGetChildNodeName``` to returns also the namespace prefix.
+
 Version 3.0.2
 ----------------
 
