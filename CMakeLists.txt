@@ -110,8 +110,6 @@ add_subdirectory(examples/fortran77)
 # create the doc
 include(createDoc)
 
-INCLUDE(InstallRequiredSystemLibraries)
-
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Martin Siggel") #required for debian/ubuntu
 set(CPACK_PACKAGE_VENDOR "www.dlr.de/sc")
 set(CPACK_PACKAGE_VERSION ${TIXI_VERSION})

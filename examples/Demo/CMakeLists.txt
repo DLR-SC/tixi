@@ -83,4 +83,8 @@ INSTALL(CODE "
     fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")
     " COMPONENT Runtime)
 
+
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT Runtime)
+INCLUDE(InstallRequiredSystemLibraries)
+
 endif()
