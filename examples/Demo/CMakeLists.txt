@@ -73,6 +73,8 @@ INSTALL(TARGETS tixiDemo
 
 if (WIN32)
 
+install(FILES $<TARGET_FILE:tixi3> DESTINATION bin COMPONENT Runtime)
+
 # Now the work of copying dependencies into the bundle/package
 # The quotes are escaped and variables to use at install time have their $ escaped
 # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
@@ -80,5 +82,9 @@ INSTALL(CODE "
     include(BundleUtilities)
     fixup_bundle(\"${APPS}\" \"\" \"${DIRS}\")
     " COMPONENT Runtime)
+
+
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_COMPONENT Runtime)
+INCLUDE(InstallRequiredSystemLibraries)
 
 endif()
