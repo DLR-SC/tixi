@@ -46,7 +46,7 @@ if(NOT "$<TARGET_PROPERTY:tixi3,TYPE>" STREQUAL "SHARED_LIBRARY")
       )
       endif(CURL_STATICLIB)
     endif (WIN32)
-  endif(CURL_FOUND)
+  endif()
 
 endif()
 
