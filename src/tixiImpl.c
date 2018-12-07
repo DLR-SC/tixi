@@ -1980,7 +1980,6 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
   error = checkElement(document->xpathContext, parentPath, &parent);
 
   if (!error) {
-    XPathClearCache(document->xpathCache);
     /* create node containing the point coordinates */
 
     xmlNodePtr pointNode = parent;
@@ -1988,6 +1987,7 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
 
     /* add x coordinate */
     char *textBuffer = buildString(format, x);
+    XPathClearCache(document->xpathCache);
 
     if (textBuffer) {
 
