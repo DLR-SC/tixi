@@ -878,9 +878,8 @@ DLL_EXPORT ReturnCode tixiDTDValidate (const TixiDocumentHandle handle, const ch
   @brief Retrieve text content of an element.
 
   Returns the text content of the element specified by elementPath in the
-  document specified by handle. elementPath must refer to exactly one
-  element which has only a text node and zero or more attributes but
-  no further children with text nodes. If an error occurs text is set
+  document specified by handle. If elementPath does not refer to an element with
+  textual content, an empty string is returned. If an error occurs text is set
   to NULL. On successful return the memory used for text is allocated
   internally and must not be released by the user. The deallocation
   is handle when the document referred to by handle is closed.
@@ -911,9 +910,7 @@ DLL_EXPORT ReturnCode tixiGetTextElement (const TixiDocumentHandle handle,
   @brief Retrieve integer content of an element.
 
   Returns the content of the element specified by elementPath in the
-  document specified by handle as an integer. elementPath must refer to exactly one
-  element which has only a text node and zero or more attributes but
-  no further children with text nodes. If an error occurs text is set
+  document specified by handle as an integer. If an error occurs text is set
   to NULL. On successful return the memory used for text is allocated
   internally and must not be released by the user. The deallocation
   is handle when the document referred to by handle is closed.
@@ -935,6 +932,7 @@ DLL_EXPORT ReturnCode tixiGetTextElement (const TixiDocumentHandle handle,
     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - NO_NUMBER if the content of elementPath cannot be interpreted as a numeric value
  */
 DLL_EXPORT ReturnCode tixiGetIntegerElement (const TixiDocumentHandle handle, const char *elementPath, int *number);
 
@@ -943,9 +941,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement (const TixiDocumentHandle handle, co
 
   Returns the content of the element specified by elementPath in the
   document specified by handle as a floating point
-  number. elementPath must refer to exactly one element which has
-  only a text node and zero or more attributes but no further
-  children with text nodes. If an error occurs number is set to
+  number. If an error occurs number is set to
   NULL.
 
   <b>Fortran syntax:</b>
@@ -965,6 +961,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement (const TixiDocumentHandle handle, co
     - INVALID_XPATH if elementPath is not a well-formed XPath-expression
     - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
     - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements
+    - NO_NUMBER if the content of elementPath cannot be interpreted as a numeric value
  */
 DLL_EXPORT ReturnCode tixiGetDoubleElement (const TixiDocumentHandle handle, const char *elementPath, double *number);
 

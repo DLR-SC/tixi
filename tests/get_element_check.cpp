@@ -116,6 +116,14 @@ TEST_F(GetElementTests, getDoubleElement)
   ASSERT_TRUE( number == 30.0);
 }
 
+TEST_F(GetElementTests, getDoubleElement_fail)
+{
+  double number = 0.;
+  const char* elementPath = "/plane/wings/wing[1]/centerOfGravity";
+
+  ASSERT_TRUE( tixiGetDoubleElement( documentHandle, elementPath, &number ) == NO_NUMBER );
+}
+
 TEST_F(GetElementTests, getIntegerElement)
 {
   int number = 0;

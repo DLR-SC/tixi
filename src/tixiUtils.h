@@ -173,6 +173,12 @@ TIXI_INTERNAL_EXPORT char* loadFileToString(const char* path);
  */
 TIXI_INTERNAL_EXPORT char* stringToLower(char* string);
 
+/**
+  @brief tests, wether a given string is numeric
+  @return
+    1, if the string can be converted to a number and 0 else.
+ */
+TIXI_INTERNAL_EXPORT int isNumeric (const char * s);
 
 /**
   @brief Strips the first len bytes of the string.
