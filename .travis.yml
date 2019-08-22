@@ -3,8 +3,8 @@ compiler:
   - gcc
 
 before_install:
-  - curl http://download.opensuse.org/repositories/science:/dlr/xUbuntu_12.04/Release.key | sudo apt-key add -
-  - echo "deb http://download.opensuse.org/repositories/science:/dlr/xUbuntu_12.04/ /" | sudo tee -a /etc/apt/sources.list
+  - curl http://download.opensuse.org/repositories/science:/dlr/xUbuntu_16.04/Release.key | sudo apt-key add -
+  - echo "deb http://download.opensuse.org/repositories/science:/dlr/xUbuntu_16.04/ /" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get update -qq
   - sudo apt-get install -y --force-yes cmake cmake-data gfortran
   
@@ -16,6 +16,4 @@ script:
   - cmake -DBUILD_SHARED_LIBS=ON -DTIXI_BUILD_TESTS=ON ..
   - make
   - cd tests
-  # Don't run the curl tests, as curl seems to be defect on Ubuntu 12.04.
-  # This can be even tested with /usr/bin/curl file:///path/to/file
-  - ./TIXI-unittests --gtest_filter=-*curlGet*
+  - ./TIXI-unittests
