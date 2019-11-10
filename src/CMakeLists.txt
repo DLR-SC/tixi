@@ -17,7 +17,7 @@ set(TIXI_HDR tixi.h tixiData.h tixiInternal.h tixiUtils.h)
 
 
 if(CMAKE_COMPILER_IS_GNUCC)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fmessage-length=0")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wall -fmessage-length=0")
 endif()
 
 set(TIXI_LIBS curllib LibXslt::LibXslt LibXml2::LibXml2)
