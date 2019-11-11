@@ -47,6 +47,12 @@ TEST_F(ValidateSchemaTests, tixiValidateSchemaFromFile)
   ASSERT_TRUE( tixiSchemaValidateFromFile( documentHandle, schemaFilename ) == SUCCESS);
 }
 
+TEST_F(ValidateSchemaTests, tixiValidateSchemaFromFile_invalid)
+{
+  const char* schemaFilename = "TestData/invalid_cpacs_schema.xsd";
+  ASSERT_EQ(NOT_SCHEMA_COMPLIANT, tixiSchemaValidateFromFile( documentHandle, schemaFilename ));
+}
+
 TEST_F(ValidateSchemaTests, tixiValidateSchemaFromFile_notAFile)
 {
   const char* schemaFilename = "TestData/InvaLid_ScheMa_fIleE_nAmE.xsd";
