@@ -1165,6 +1165,7 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc
     /* the schema cannot be loaded or is not well-formed */
     return OPEN_SCHEMA_FAILED;
   }
+
   parser_ctxt = xmlSchemaNewDocParserCtxt(*schema_doc);
   if (parser_ctxt == NULL) {
     printMsg(MESSAGETYPE_ERROR, "Error: validateSchema: unable to create a parser context for the schema.\n");
@@ -1186,6 +1187,9 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc
     xmlFreeDoc(*schema_doc);
     return FAILED;
   }
+
+  xmlSchemaSetValidErrors(valid_ctxt, (xmlSchemaValidityErrorFunc) fprintf, (xmlSchemaValidityWarningFunc) fprintf, stderr);
+
   if (withDefaults) {
     xmlSchemaSetValidOptions(valid_ctxt, XML_SCHEMA_VAL_VC_I_CREATE);
   }
