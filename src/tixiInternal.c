@@ -46,6 +46,11 @@
 
 extern void printMsg(MessageType type, const char* message, ...);
 
+void xmlStructuredErrorHandler(void * userData, xmlErrorPtr error) {
+  printMsg(MESSAGETYPE_ERROR, "%s:%i: %s", error->file, error->line, error->message);
+}
+
+
 InternalReturnCode clearMemoryList(TixiDocument* document)
 {
 
@@ -1188,7 +1193,7 @@ ReturnCode validateSchema(const TixiDocumentHandle handle, xmlDocPtr* schema_doc
     return FAILED;
   }
 
-  xmlSchemaSetValidErrors(valid_ctxt, (xmlSchemaValidityErrorFunc) fprintf, (xmlSchemaValidityWarningFunc) fprintf, stderr);
+  xmlSchemaSetValidStructuredErrors(valid_ctxt, xmlStructuredErrorHandler, stderr);
 
   if (withDefaults) {
     xmlSchemaSetValidOptions(valid_ctxt, XML_SCHEMA_VAL_VC_I_CREATE);
