@@ -84,6 +84,17 @@ TEST_F(VectorTests, tixiVectorAddTests)
   ASSERT_TRUE ( tixiCloseDocument( tmpHandle ) == SUCCESS );
 }
 
+TEST_F(VectorTests, tixiVectorAddNullTests)
+{
+  int count = 0;
+  double* points = NULL;
+  const char* xmlOutName = "x.xml";
+
+  // write parts of the array to an intermediate file
+  ASSERT_TRUE ( tixiAddFloatVector(documentHandleAdd, "/a", "test", points, count, "%g") == SUCCESS );
+  ASSERT_TRUE ( tixiSaveDocument(documentHandleAdd, xmlOutName) == SUCCESS );
+}
+
 TEST_F(VectorTests, tixiUpdateVectorTests)
 {
   int count = 0;
