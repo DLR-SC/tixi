@@ -1516,10 +1516,6 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
   int i;
   int stringSize = 0;
 
-  if(numElements < 1) {
-    return FAILED;
-  }
-
   if (!format) {
     format = "%g";
   };
@@ -1536,14 +1532,17 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
 
   /* copy strings to stringVector */
   stringVector[0] = '\0';
-  textBuffer = buildString(format, vector[0]);
-  strcat(stringVector, textBuffer);
-  free(textBuffer);
-  for(i=1; i<numElements; i++) {
-    textBuffer = buildString(format, vector[i]);
-    strcat(stringVector, VECTOR_SEPARATOR);
-    strcat(stringVector, textBuffer);
-    free(textBuffer);
+
+  if (numElements>0) {
+      textBuffer = buildString(format, vector[0]);
+      strcat(stringVector, textBuffer);
+      free(textBuffer);
+      for(i=1; i<numElements; i++) {
+        textBuffer = buildString(format, vector[i]);
+        strcat(stringVector, VECTOR_SEPARATOR);
+        strcat(stringVector, textBuffer);
+        free(textBuffer);
+      }
   }
 
   /* Add element */
