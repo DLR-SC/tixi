@@ -29,6 +29,16 @@ extern "C" {
 #define DLL_EXPORT
 #endif
 
+// DEPRECATION MACRO. THE deprecation message must start with "DEPRECATED: ...",
+// otherwise the bindings generator will not work.
+#ifdef __GNUC__
+#define DEPRECATED(X, MSG) X __attribute__((deprecated(MSG)))
+#elif defined(_MSC_VER)
+#define DEPRECATED(X, MSG) __declspec(deprecated(MSG)) X
+#else
+#define DEPRECATED(X, MSG) X
+#endif
+
 /* \mainpage TIXI Manual
 <b>Contents:</b>
   - \link Glossary Glossary\endlink
@@ -2775,6 +2785,8 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
 /**
   @brief Retrieves the number of dimensions of an Array.
 
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
+
   Returns the number of separate dimensions defined in sub-tags of the array in CPACS.
   For each dimension there is a finite set of allowed values that can be retrieved by
   "tixiGetArrayValues".
@@ -2818,12 +2830,15 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
     - ELEMENT_PATH_NOT_UNIQUE if arrayPath resolves not to a single element but to a list of elements
     - ELEMENT_NOT_FOUND if the rrayPath points to a element that is no array
  */
-DLL_EXPORT ReturnCode tixiGetArrayDimensions (const TixiDocumentHandle handle,
-                                              const char *arrayPath, int *dimensions);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayDimensions (const TixiDocumentHandle handle,
+                                                         const char *arrayPath, int *dimensions),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Retrieves the sizes of all dimensions of the array definition, and the overall array size (product of all dimensions's sizes).
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   For an array use example, please check tixiGetArrayDimensions()
 
@@ -2849,12 +2864,15 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensions (const TixiDocumentHandle handle,
   #annotate out: 2AM# sizes is an output array that has to be manually preallocated
   @endcond
  */
-DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handle, const char *arrayPath,
-                                                  int *sizes, int *linearArraySize);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handle, const char *arrayPath,
+                                                             int *sizes, int *linearArraySize),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Retrieves the names of all dimensions.
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   For an array use example, please check tixiGetArrayDimensions()
 
@@ -2879,11 +2897,14 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handl
   #annotate out: 2AM# one user specified return array (of strings)
   @endcond
  */
-DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handle,
-                                                  const char *arrayPath, char **dimensionNames);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handle,
+                                                             const char *arrayPath, char **dimensionNames),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 /**
   @brief Retrieves the selected dimension's values (e.g. separate allowed angles etc.).
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   For an array use example, please check tixiGetArrayDimensions()
 
@@ -2908,12 +2929,15 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handl
   #annotate out: 3AM# the size of the array "dimensionValues" is determined by a prior call to tixiGetArrayDimensionSizes
   @endcond
  */
-DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle handle, const char *arrayPath,
-                                                   const int dimension, double *dimensionValues);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle handle, const char *arrayPath,
+                                                              const int dimension, double *dimensionValues),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Retrieves the number of parameters of an array.
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   For an array use example, please check tixiGetArrayDimensions()
 
@@ -2937,11 +2961,16 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
     - ELEMENT_PATH_NOT_UNIQUE if arrayPath resolves not to a single element but to a list of elements
     - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
  */
-DLL_EXPORT ReturnCode tixiGetArrayParameters (const TixiDocumentHandle handle, const char *arrayPath, int *parameters);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayParameters (const TixiDocumentHandle handle,
+                                                         const char *arrayPath,
+                                                         int *parameters),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Retrieves names of all parameters
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   For an array use example, please check tixiGetArrayDimensions()
 
@@ -2965,12 +2994,15 @@ DLL_EXPORT ReturnCode tixiGetArrayParameters (const TixiDocumentHandle handle, c
   #annotate out: 2AM# one user specified return array (of strings)
   @endcond
  */
-DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handle,
-                                                  const char *arrayPath, char **parameterNames);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handle,
+                                                             const char *arrayPath, char **parameterNames),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Reads in an array. The memory management of the array is done by tixi.
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   For an array use example, please check ::tixiGetArrayDimensions()
 
@@ -3001,12 +3033,15 @@ DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handl
   #annotate out: 4A(3) # the size of the array "values" is determined by arraySize
   @endcond
  */
-DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char *arrayPath,
-                                    const char *elementName, int arraySize, double **values);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char *arrayPath,
+                                               const char *elementName, int arraySize, double **values),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Getter function to take one multidimensionally specified element from a complete array, retrieved earlier.
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   For an array use example, please check tixiGetArrayDimensions()
 
@@ -3021,11 +3056,17 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
 
   @return The element fetched
 */
-DLL_EXPORT double tixiGetArrayValue(const double *array, const int *dimSize, const int *dimPos, const int dims);
+DEPRECATED(DLL_EXPORT double tixiGetArrayValue(const double *array,
+                                               const int *dimSize,
+                                               const int *dimPos,
+                                               const int dims),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Helper function.
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   Returns the number of sub elements in CPACS arrays (either vector or array type).
 
@@ -3049,12 +3090,15 @@ DLL_EXPORT double tixiGetArrayValue(const double *array, const int *dimSize, con
     - ELEMENT_PATH_NOT_UNIQUE if arrayPath resolves not to a single element but to a list of elements
     - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
  */
-DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle, const char *arrayPath,
-                                                const char *elementName, int *elements);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle, const char *arrayPath,
+                                                           const char *elementName, int *elements),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
   @brief Helper function.
+
+  <b>DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3.</b>
 
   Returns the tag names of sub elements of mapType given.
 
@@ -3078,8 +3122,9 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
     - ELEMENT_PATH_NOT_UNIQUE if arrayPath resolves not to a single element but to a list of elements
     - ELEMENT_NOT_FOUND if arrayPath points to a element that is no array
  */
-DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle, const char *arrayPath,
-                                                const char *elementType, char **elementNames);
+DEPRECATED(DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle, const char *arrayPath,
+                                                           const char *elementType, char **elementNames),
+"DEPRECATED: This is a CPACS specific function, that is no longer needed in CPACS versions >= 3");
 
 
 /**
