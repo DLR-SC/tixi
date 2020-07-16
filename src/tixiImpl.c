@@ -2140,16 +2140,6 @@ DLL_EXPORT ReturnCode tixiGetVectorSize (const TixiDocumentHandle handle, const 
   char *token = NULL;
   *nElements = 0;
 
-  error = tixiGetTextAttribute(handle, vectorPath, MAPTYPE_IDENTIFIER, &tmpString);
-  if (error != SUCCESS) {
-    return error;
-  } else {
-    tmpString = stringToLower(tmpString);   /* side effect: changes original string anyway */
-    if ((strcmp(tmpString, VECTOR_ATTRIBUTE_NAME))) {   /* if not of type "vector": */
-      return ELEMENT_NOT_FOUND;
-    }
-  }
-
   error = tixiGetTextElement(handle, vectorPath, &tmpString);
   if(error != SUCCESS) {
     return error;
@@ -2642,17 +2632,6 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
   int count = 0;
   char *token = NULL;
   TixiDocument *document = NULL;
-
-
-  error = tixiGetTextAttribute(handle, vectorPath, MAPTYPE_IDENTIFIER, &tmpString);
-  if (error != SUCCESS) {
-    return error;
-  } else {
-    tmpString = stringToLower(tmpString);
-    if ((strcmp(tmpString, VECTOR_ATTRIBUTE_NAME))) {
-      return ELEMENT_NOT_FOUND;
-    }
-  }
 
   error = tixiGetTextElement(handle, vectorPath, &tmpString); /* check if element is of right type */
   if (error != SUCCESS) {
