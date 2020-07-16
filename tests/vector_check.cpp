@@ -54,7 +54,7 @@ TEST_F(VectorTests, tixiVectorGetTests)
   // check sizes
   ASSERT_TRUE ( tixiGetVectorSize(documentHandleGet, "/a/aeroPerformanceMap/cfx", &count) == SUCCESS );
   ASSERT_TRUE ( count == 32 );
-  ASSERT_TRUE ( tixiGetVectorSize(documentHandleGet, "/a/aeroPerformanceMap/cfy", &count) == ELEMENT_NOT_FOUND );
+  ASSERT_TRUE ( tixiGetVectorSize(documentHandleGet, "/a/aeroPerformanceMap/cfy", &count) == SUCCESS );
   ASSERT_TRUE ( tixiGetVectorSize(documentHandleGet, "/a/aeroPerformanceMap/cfz", &count) == SUCCESS );
   ASSERT_TRUE ( count == 2 );
 
