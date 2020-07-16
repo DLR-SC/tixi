@@ -160,10 +160,39 @@ mwSize nonzerocount(const mxArray* arr) {
 		return jc[n];  /* number of nonzero elements */
 	} else {  /* filter zero elements */
 		mwSize n = mxGetNumberOfElements(arr);
-		mwSize c = 0;
+        mwSize c = 0;
+        mwSize i;
+#if MX_HAS_INTERLEAVED_COMPLEX
+
+        if (mxIsComplex(arr)) {
+            mxComplexDouble * z = mxGetComplexDoubles(arr);
+
+            if (z == NULL) {
+                mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Operation supported only on numeric arrays.");
+            }
+
+            for (i = 0; i < n; i++) {
+                if (isnonzero(z[i].real) || isnonzero(z[i].imag)) {
+                    c++;
+                }
+            }
+        }
+        else {
+            mxDouble * z = mxGetDoubles(arr);
+
+            if (z == NULL) {
+                mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Operation supported only on numeric arrays.");
+            }
+
+            for (i = 0; i < n; i++) {
+                if (isnonzero(*(z++))) {
+                    c++;
+                }
+            }
+        }
+#else
 		const double* pr = mxGetPr(arr);
 		const double* pi = mxGetPi(arr);
-		mwSize i;
 
 		if (pr == NULL) {
 			mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Operation supported only on numeric arrays.");
@@ -182,6 +211,7 @@ mwSize nonzerocount(const mxArray* arr) {
 				}
 			}
 		}
+#endif
 		return c;
 	}
 }
@@ -223,10 +253,40 @@ bool isallinteger(const mxArray* arr) {
 		mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Sparse integer arrays are not supported.");
 		return false;
 	} else {
-		mwSize n = mxGetNumberOfElements(arr);
+        mwSize n = mxGetNumberOfElements(arr);
+        mwSize i;
+#if MX_HAS_INTERLEAVED_COMPLEX
+        if (mxIsComplex(arr)) {
+            mxComplexDouble * z = mxGetComplexDoubles(arr);
+
+            if (z == NULL) {
+                mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Operation supported only on numeric arrays.");
+                return false;
+            }
+
+            for(i=0; i<n; i++) {
+                if (!isinteger(z[i].real) || !isinteger(z[i].imag)) {
+                    return false;
+                }
+            }
+        }
+        else {
+            mxDouble * z = mxGetDoubles(arr);
+
+            if (z == NULL) {
+                mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Operation supported only on numeric arrays.");
+                return false;
+            }
+
+            for(i=0; i<n; i++) {
+                if (!isinteger(*(z++))) {
+                    return false;
+                }
+            }
+        }
+#else
 		const double* pr = mxGetPr(arr);
 		const double* pi = mxGetPi(arr);
-		mwSize i;
 
 		if (pr == NULL) {
 			mexErrMsgIdAndTxt(__ARGTYPEMISMATCH__, "Operation supported only on numeric arrays.");
@@ -246,6 +306,7 @@ bool isallinteger(const mxArray* arr) {
 				}
 			}
 		}
+#endif
 		return true;
 	}
 }
