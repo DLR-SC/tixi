@@ -406,3 +406,15 @@ char *substring(const char *str, int start_pos, int end_pos)
 
   return substr;
 }
+
+int isNumeric (const char * s)
+{
+    char * p;
+
+    if (s == NULL || *s == '\0') {
+      return 0;
+    }
+
+    strtod (s, &p);
+    return *p == '\0';
+}

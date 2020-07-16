@@ -880,9 +880,13 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, con
     return error;
   }
 
-  *number = atoi(text);
-
-  return SUCCESS;
+  if (isNumeric(text)) {
+    *number = atoi(text);
+    return SUCCESS;
+  }
+  else {
+      return NO_NUMBER;
+  }
 }
 
 DLL_EXPORT ReturnCode tixiGetDoubleElement(const TixiDocumentHandle handle, const char *elementPath, double *number)
@@ -897,10 +901,13 @@ DLL_EXPORT ReturnCode tixiGetDoubleElement(const TixiDocumentHandle handle, cons
     return error;
   }
 
-  *number = atof(text);
-  return SUCCESS;
-
-  /* use   strtod(nptr, (char **)NULL); to check for errors */
+  if (isNumeric(text)) {
+    *number = atof(text);
+    return SUCCESS;
+  }
+  else {
+      return NO_NUMBER;
+  }
 }
 
 

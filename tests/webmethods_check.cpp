@@ -21,12 +21,7 @@
 
 TEST(WebMethods, curlGetFileToLocalDisk)
 {
-  // create some local dummy file
-  FILE* f = fopen("mytmpfile.sh", "w");
-  fprintf(f, "hello world\n");
-  fclose(f);
-
-  int res = curlGetFileToLocalDisk("file://mytmpfile.sh", "tmp.sh");
+  int res = curlGetFileToLocalDisk("https://raw.githubusercontent.com/DLR-SC/tixi/master/tests/TestData/textfile.txt", "tmp.sh");
   ASSERT_EQ(0, res);
   remove ("tmp.sh");
   remove ("mytmpfile.sh");
@@ -41,15 +36,8 @@ TEST(WebMethods, curlGetFileToLocalDisk_invalidPath)
 
 TEST(WebMethods, curlGetURLInMemory)
 {
-  // create some local dummy file
-  FILE* f = fopen("mytmpfile.sh", "w");
-  fprintf(f, "hello world");
-  fclose(f);
-
-  char* text = curlGetURLInMemory("file://mytmpfile.sh");
-  ASSERT_STREQ("hello world", text);
-
-  remove ("mytmpfile.sh");
+  char* text = curlGetURLInMemory("https://raw.githubusercontent.com/DLR-SC/tixi/master/tests/TestData/textfile.txt");
+  ASSERT_STREQ("This is just some textfile\n", text);
   free(text);
 }
 
