@@ -70,3 +70,11 @@ TEST_F(GetTextElementTests, multipleTextNodes)
 
     EXPECT_EQ(SUCCESS, tixiCheckElement(documentHandle, "/root/b/text()[1]"));
 }
+
+TEST_F(GetTextElementTests, specialChars)
+{
+    char* text = NULL;
+    tixiAddTextElement(documentHandle, "/root", "c", "'bad < text ! &");
+    EXPECT_EQ(SUCCESS, tixiGetTextElement(documentHandle, "/root/c", &text));
+    EXPECT_STREQ("'bad < text ! &", text);
+}
