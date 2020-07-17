@@ -58,18 +58,23 @@ TixiPrintMsgFnc tixiMessageHandler = tixiDefaultMessageHandler;
  */
 TIXI_INTERNAL_EXPORT void printMsg(MessageType type, const char* message, ...)
 {
-  char buffer[2048];
+  #define BUFFER_SIZE 2048
+  char buffer[BUFFER_SIZE];
   char* extra = NULL;
   int len = 0;
 
   va_list varArgs;
   va_start(varArgs, message);
-  if ((len = vsnprintf(buffer, 2048, message, varArgs)) >= 2048) {
-    // message is longer than 2048 bytes,
-    // we must allocate
+  len = vsnprintf(buffer, BUFFER_SIZE, message, varArgs);
+  va_end(varArgs);
+  if (len >= BUFFER_SIZE) {
+    // message is longer than BUFFER_SIZE bytes,
+    // we must allocate dynamically
     extra = (char*) malloc((len+1) * sizeof(char));
 
+    va_start(varArgs, message);
     vsnprintf(extra, len+1, message, varArgs);
+    va_end(varArgs);
     if (tixiMessageHandler) {
       tixiMessageHandler(type, extra);
     }
@@ -84,7 +89,7 @@ TIXI_INTERNAL_EXPORT void printMsg(MessageType type, const char* message, ...)
     }
   }
 
-  va_end(varArgs);
+
 }
 
 int _initialized = 0;
