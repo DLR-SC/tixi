@@ -29,7 +29,7 @@ TEST(InternalCheck, getChildNodeCount)
 
     xmlNodePtr element = NULL;
     ASSERT_EQ(SUCCESS, checkElement(document->xpathContext, "/root", &element));
-    EXPECT_EQ(2, getChildNodeCount(element));
+    EXPECT_EQ(3, getChildNodeCount(element));
 
     ASSERT_EQ(SUCCESS, checkElement(document->xpathContext, "/root/a", &element));
     EXPECT_EQ(1, getChildNodeCount(element));

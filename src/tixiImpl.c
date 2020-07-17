@@ -849,14 +849,15 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
     xmlChar *textPtr = NULL;
 
     nChilds = getChildNodeCount(element);
-    if (!xmlNodeIsText(element) && nChilds > 1) {
-        textPtr = (char *) xmlNodeListGetString(document->docPtr, element->children, 0);
+
+    if (xmlNodeIsText(element)) {
+        textPtr = (char *) xmlNodeGetContent(element);
     }
-    else if(!xmlNodeIsText(element) && nChilds == 1 && xmlNodeIsText(element->children)) {
+    else if(nChilds == 1 && xmlNodeIsText(element->children)) {
         textPtr = (char *) xmlNodeGetContent(element->children);
     }
     else {
-        textPtr = (char *) xmlNodeGetContent(element);
+        textPtr = (char *) xmlNodeListGetString(document->docPtr, element->children, 0);
     }
 
     if ( textPtr ) {
