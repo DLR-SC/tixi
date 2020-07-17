@@ -69,6 +69,9 @@ TEST_F(GetTextElementTests, multipleTextNodes)
     EXPECT_EQ(2, count);
 
     EXPECT_EQ(SUCCESS, tixiCheckElement(documentHandle, "/root/b/text()[1]"));
+
+    EXPECT_EQ(SUCCESS, tixiGetTextElement(documentHandle, "/root/d", &text));
+    EXPECT_STREQ("", text);
 }
 
 TEST_F(GetTextElementTests, specialChars)
