@@ -836,6 +836,7 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
   TixiDocument *document = getDocument(handle);
   xmlNodePtr element = NULL;
   ReturnCode error = SUCCESS;
+  int nChilds = 0;
 
   if (!document) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
@@ -845,13 +846,18 @@ DLL_EXPORT ReturnCode tixiGetTextElement(const TixiDocumentHandle handle, const 
   error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
-    char *textPtr = NULL;
+    xmlChar *textPtr = NULL;
 
-    if (!xmlNodeIsText(element)) {
-        textPtr = (char *) xmlNodeListGetString(document->docPtr, element->children, 0);
+    nChilds = getChildNodeCount(element);
+
+    if (xmlNodeIsText(element)) {
+        textPtr = (char *) xmlNodeGetContent(element);
+    }
+    else if(nChilds == 1 && xmlNodeIsText(element->children)) {
+        textPtr = (char *) xmlNodeGetContent(element->children);
     }
     else {
-        textPtr = (char *) xmlNodeGetContent(element);
+        textPtr = (char *) xmlNodeListGetString(document->docPtr, element->children, 0);
     }
 
     if ( textPtr ) {

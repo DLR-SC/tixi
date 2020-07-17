@@ -390,6 +390,13 @@ TIXI_INTERNAL_EXPORT ReturnCode reorderXmlElements(TixiDocumentHandle handle, co
  */
 int isParent(xmlNodePtr p, xmlNodePtr n);
 
+/**
+ * @brief Returns the number of child nodes of an element
+ * @return Child node count
+ */
+TIXI_INTERNAL_EXPORT int getChildNodeCount(const xmlNodePtr nodePtr);
+
+
 #ifdef __cplusplus
 }
 #endif
