@@ -56,7 +56,7 @@ TixiPrintMsgFnc tixiMessageHandler = tixiDefaultMessageHandler;
 /**
   Route all messages to the internal message handler
  */
-void printMsg(MessageType type, const char* message, ...)
+TIXI_INTERNAL_EXPORT void printMsg(MessageType type, const char* message, ...)
 {
   char buffer[2048];
   char* extra = NULL;
