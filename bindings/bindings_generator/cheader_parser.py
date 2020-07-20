@@ -83,8 +83,11 @@ class CHeaderFileParser(object):
         '''
         Parse methods and their annotations
         '''
-        dec_pattern = re.compile(self.decoration + 
-            r'\s+(?P<fundec>.*?\([\w\s,*]*(\);)?)')
+
+        # search also for DEPRECATED( ... ) declarations
+        dec_pattern = re.compile(r'(?:DEPRECATED\(\s*)?'
+            + self.decoration
+            + r'\s+(?P<fundec>.*?\([\w\s,*]*(\);)?)')
             
         anno_pattern = re.compile('#annotate.*?#')
         
@@ -104,11 +107,15 @@ class CHeaderFileParser(object):
                     if not endterm in line:
                         continuing = True
                     else:
+                        if "DEPRECATED" in fundec:
+                            fundec = fundec.split(', "DEPRECATED:')[0]
                         fundec_dict.append({'line': index, 'declaration': fundec})
             else:
                 fundec += ' ' + line.strip()
                 if endterm in line:
                     continuing = False
+                    if "DEPRECATED" in fundec:
+                        fundec = fundec.split(', "DEPRECATED:')[0]
                     fundec_dict.append({'line': index, 'declaration': fundec})
         
         for index, line in enumerate(self.lines):
