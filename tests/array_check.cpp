@@ -20,6 +20,10 @@
 
 #include "tixi.h"
 
+// Array funcions are deprecated. We still want to test them
+// and don't want to get warnings
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 /**
     @test Tests for Array routines.
@@ -195,3 +199,5 @@ TEST_F(ArrayTests, array_test_negative)
   ASSERT_EQ   ( NON_MATCHING_SIZE, tixiGetArray(documentHandle, xPath, "cmz", 49, &values));
   ASSERT_EQ   ( NON_MATCHING_SIZE, tixiGetArray(documentHandle, xPath, "cmz", 47, &values));
 }
+
+#pragma GCC diagnostic pop

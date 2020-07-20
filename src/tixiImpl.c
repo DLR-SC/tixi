@@ -2184,21 +2184,26 @@ DLL_EXPORT ReturnCode tixiSetCacheEnabled(TixiDocumentHandle handle, int enabled
     return SUCCESS;
 }
 
+ReturnCode tixiGetArrayElementCountImpl (const TixiDocumentHandle handle, const char *arrayPath,
+                                                    const char *elementType, int *elements);
+
 DLL_EXPORT ReturnCode tixiGetArrayDimensions (const TixiDocumentHandle handle,
                                               const char *arrayPath, int *dimensions)
 {
 
   printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayDimensions is an outdated CPACS specific function. It will be removed in the next major release");
-  return tixiGetArrayElementCount(handle, arrayPath, "vector", dimensions);
+  return tixiGetArrayElementCountImpl(handle, arrayPath, "vector", dimensions);
 }
 
+ReturnCode tixiGetArrayElementNamesImpl (const TixiDocumentHandle handle, const char *arrayPath,
+                                         const char * elementType, char **elementNames);
 
 DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handle,
                                                   const char *arrayPath,
                                                   char **dimensionNames)
 {
   printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayDimensionNames is an outdated CPACS specific function. It will be removed in the next major release");
-  return tixiGetArrayElementNames(handle, arrayPath, "vector", dimensionNames);
+  return tixiGetArrayElementNamesImpl(handle, arrayPath, "vector", dimensionNames);
 }
 
 
@@ -2371,11 +2376,13 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
 }
 
 
+
+
 DLL_EXPORT ReturnCode tixiGetArrayParameters (const TixiDocumentHandle handle,
                                               const char *arrayPath, int *parameters)
 {
   printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayParameters is an outdated CPACS specific function. It will be removed in the next major release");
-  return tixiGetArrayElementCount(handle, arrayPath, "array", parameters);
+  return tixiGetArrayElementCountImpl(handle, arrayPath, "array", parameters);
 }
 
 
@@ -2384,7 +2391,7 @@ DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handl
                                                   char **parameterNames)
 {
   printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayParameterNames is an outdated CPACS specific function. It will be removed in the next major release");
-  return tixiGetArrayElementNames(handle, arrayPath, "array", parameterNames);
+  return tixiGetArrayElementNamesImpl(handle, arrayPath, "array", parameterNames);
 }
 
 
@@ -2537,8 +2544,8 @@ DLL_EXPORT double tixiGetArrayValue(const double *array, const int *dimSize, con
 }
 
 
-DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle, const char *arrayPath,
-                                                const char *elementType, int *elements)
+ReturnCode tixiGetArrayElementCountImpl (const TixiDocumentHandle handle, const char *arrayPath,
+                                                    const char *elementType, int *elements)
 {
   TixiDocument *document = getDocument(handle);
   xmlXPathObjectPtr xpathObject = NULL;
@@ -2586,8 +2593,15 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
 }
 
 
-DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle, const char *arrayPath,
-                                                const char * elementType, char **elementNames)
+DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle, const char *arrayPath,
+                                                const char *elementType, int *elements)
+{
+    return tixiGetArrayElementCountImpl(handle, arrayPath, elementType, elements);
+}
+
+
+ReturnCode tixiGetArrayElementNamesImpl (const TixiDocumentHandle handle, const char *arrayPath,
+                                         const char * elementType, char **elementNames)
 {
   TixiDocument *document = getDocument(handle);
   xmlXPathObjectPtr xpathObject = NULL;
@@ -2641,6 +2655,13 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
   free(xpathSubElementsName);
   xmlXPathFreeObject(xpathObject);
   return SUCCESS;
+}
+
+
+DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle, const char *arrayPath,
+                                                const char * elementType, char **elementNames)
+{
+    return tixiGetArrayElementNamesImpl(handle, arrayPath, elementType, elementNames);
 }
 
 
