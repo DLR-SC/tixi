@@ -2185,6 +2185,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensions (const TixiDocumentHandle handle,
                                               const char *arrayPath, int *dimensions)
 {
 
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayDimensions is an outdated CPACS specific function. It will be removed in the next major release");
   return tixiGetArrayElementCount(handle, arrayPath, "vector", dimensions);
 }
 
@@ -2193,7 +2194,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionNames (const TixiDocumentHandle handl
                                                   const char *arrayPath,
                                                   char **dimensionNames)
 {
-
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayDimensionNames is an outdated CPACS specific function. It will be removed in the next major release");
   return tixiGetArrayElementNames(handle, arrayPath, "vector", dimensionNames);
 }
 
@@ -2214,7 +2215,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionSizes (const TixiDocumentHandle handl
   int dim = 0;
 
 
-
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayDimensionSizes is an outdated CPACS specific function. It will be removed in the next major release");
   if (!document) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     free(xpathSubElementsName);
@@ -2299,7 +2300,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
   int count = 0;
 
 
-
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayDimensionValues is an outdated CPACS specific function. It will be removed in the next major release");
   if (!document) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     free(xpathSubElementsName);
@@ -2370,7 +2371,7 @@ DLL_EXPORT ReturnCode tixiGetArrayDimensionValues (const TixiDocumentHandle hand
 DLL_EXPORT ReturnCode tixiGetArrayParameters (const TixiDocumentHandle handle,
                                               const char *arrayPath, int *parameters)
 {
-
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayParameters is an outdated CPACS specific function. It will be removed in the next major release");
   return tixiGetArrayElementCount(handle, arrayPath, "array", parameters);
 }
 
@@ -2379,7 +2380,7 @@ DLL_EXPORT ReturnCode tixiGetArrayParameterNames (const TixiDocumentHandle handl
                                                   const char *arrayPath,
                                                   char **parameterNames)
 {
-
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayParameterNames is an outdated CPACS specific function. It will be removed in the next major release");
   return tixiGetArrayElementNames(handle, arrayPath, "array", parameterNames);
 }
 
@@ -2399,7 +2400,7 @@ DLL_EXPORT ReturnCode tixiGetArray (const TixiDocumentHandle handle, const char 
   double * tmpArray = NULL;
   int count = 0;
 
-
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArray is an outdated CPACS specific function. It will be removed in the next major release");
   if (!document) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
     free(xpathSubElementsName);
@@ -2514,6 +2515,8 @@ DLL_EXPORT double tixiGetArrayValue(const double *array, const int *dimSize, con
   int i = 0;
   int index = 0;
 
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayValue is an outdated CPACS specific function. It will be removed in the next major release");
+
   assert(dims > 0);
 
   /*
@@ -2539,6 +2542,8 @@ DLL_EXPORT ReturnCode tixiGetArrayElementCount (const TixiDocumentHandle handle,
   xmlNodeSetPtr nodes = NULL;
   char *infix = "/*[@mapType=\"";
   char *xpathSubElementsName = NULL;
+
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayElementCount is an outdated CPACS specific function. It will be removed in the next major release");
 
   if (!document || !document->docPtr) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
@@ -2588,6 +2593,8 @@ DLL_EXPORT ReturnCode tixiGetArrayElementNames (const TixiDocumentHandle handle,
   char *infix = "/*[@mapType=\"";    /* find all arrays in subelements of the given path */
   int elements,elem = 0;
   char *xpathSubElementsName = NULL;
+
+  printMsg(MESSAGETYPE_WARNING, "DEPRECATED: tixiGetArrayElementNames is an outdated CPACS specific function. It will be removed in the next major release");
 
   if (!document) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
