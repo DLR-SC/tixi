@@ -22,6 +22,7 @@
 
 // Array funcions are deprecated. We still want to test them
 // and don't want to get warnings
+#pragma warning( disable : 4068 4996 )
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
