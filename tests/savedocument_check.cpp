@@ -51,3 +51,19 @@ TEST_F(SaveDocumentCheck, saveRemove)
   ASSERT_EQ(SUCCESS, tixiSaveAndRemoveDocument(handle, "save-remove.xml"));
 }
 
+TEST_F(SaveDocumentCheck, saveWithoutNodeLinks)
+{
+    EXPECT_EQ(SUCCESS, tixiCheckAttribute(handle, "/plane/testNode", "externalFileName"));
+    EXPECT_EQ(SUCCESS, tixiCheckAttribute(handle, "/plane/testNode", "externalDataDirectory"));
+    EXPECT_EQ(SUCCESS, tixiCheckAttribute(handle, "/plane/testNode", "externalDataNodePath"));
+
+    ASSERT_EQ(SUCCESS, tixiRemoveExternalLinks(handle));
+    EXPECT_EQ(ATTRIBUTE_NOT_FOUND, tixiCheckAttribute(handle, "/plane/testNode", "externalFileName"));
+    EXPECT_EQ(ATTRIBUTE_NOT_FOUND, tixiCheckAttribute(handle, "/plane/testNode", "externalDataDirectory"));
+    EXPECT_EQ(ATTRIBUTE_NOT_FOUND, tixiCheckAttribute(handle, "/plane/testNode", "externalDataNodePath"));
+
+    ASSERT_EQ(SUCCESS, tixiSaveDocument(handle, "save-without-links.xml"));
+
+
+}
+

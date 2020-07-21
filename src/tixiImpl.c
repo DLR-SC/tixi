@@ -2108,6 +2108,21 @@ DLL_EXPORT ReturnCode tixiAddExternalLink(const TixiDocumentHandle handle, const
   return error;
 }
 
+DLL_EXPORT ReturnCode tixiRemoveExternalLinks(TixiDocumentHandle handle)
+{
+    TixiDocument* document = getDocument(handle);
+    xmlNodePtr rootNode = 0;
+
+    if (!document) {
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+      return INVALID_HANDLE;
+    }
+
+    rootNode = xmlDocGetRootElement(document->docPtr);
+    removeExternalNodeLinks(rootNode);
+
+    return SUCCESS;
+}
 
 DLL_EXPORT ReturnCode tixiUsePrettyPrint(TixiDocumentHandle handle, int usePrettyPrint)
 {

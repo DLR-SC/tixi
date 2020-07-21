@@ -2512,6 +2512,105 @@ DLL_EXPORT ReturnCode tixiAddExternalLink (const TixiDocumentHandle handle, cons
 
 
 /**
+  @brief Removes all link attributes to external files
+
+  This does not remove embedded nodes but the references to the filename etc. if
+  TiXI could successfully embed the external files into the main document before.
+  This is e.g. required, if the XML file should be validated against a schema.
+  The external data attributes make validation impossible. To enable validation,
+  this functions removes those extra attributes.
+
+  Note: because links to external files are removed, the document cannot be stored
+        anymore split to multiple files.
+
+  Assume a main.xml file
+  @code{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <plane>
+      <name>Junkers JU 52</name>
+      <externaldata>
+        <path>file://</path>
+        <filename>extdata.xml</filename>
+      </externaldata>
+      <aPoint>
+         ...
+      </aPoint>
+    </plane>
+  @endcode
+
+  which links to an external file extdata.xml
+  @code{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <testNode>
+      <aVeryTest>
+        <point>
+          <x>22</x>
+          <y>12.2</y>
+          <z>31.3453</z>
+        </point>
+      </aVeryTest>
+    </testNode>
+  @endcode
+
+  Internally, this external file is embedded into the xml structure after loading the document.
+  Additionally, some metadata attributes are stored into the external nodes to support saving
+  back into the external files.
+  Therefore, when exporting the document to string or saving the complete document into one file
+  the following xml structure is the result:
+
+  @code{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <plane>
+      <name>Junkers JU 52</name>
+      <testNode externalFileName="extdata.xml" externalDataDirectory="file://" externalDataNodePath="/plane">
+        <aVeryTest>
+          <point>
+            <x>22</x>
+            <y>12.2</y>
+            <z>31.3453</z>
+          </point>
+        </aVeryTest>
+      </testNode>
+      <aPoint>
+        ...
+      </aPoint>
+    </plane>
+  @endcode
+
+  The tixi function ::tixiRemoveExternalLinks simply removes the attributes "externalFileName", "externalDataDirectory", and "externalDataNodePath"
+
+  @code{.xml}
+    <?xml version="1.0" encoding="utf-8"?>
+    <plane>
+      <name>Junkers JU 52</name>
+      <testNode>
+        <aVeryTest>
+          <point>
+            <x>22</x>
+            <y>12.2</y>
+            <z>31.3453</z>
+          </point>
+        </aVeryTest>
+      </testNode>
+      <aPoint>
+        ...
+      </aPoint>
+    </plane>
+  @endcode
+
+  <b>Fortran syntax:</b>
+
+  tixi_remove_external_links( integer  handle, integer error )
+
+  @param[in]  handle as returned by ::tixiCreateDocument
+
+  @return
+    - SUCCESS if successfully added the header
+    - INVALID_HANDLE if the handle is not valid
+ */
+DLL_EXPORT ReturnCode tixiRemoveExternalLinks(TixiDocumentHandle handle);
+
+/**
   @brief Add header to XML-file.
 
   Inserts a header containing information on the tool used to create the file, its
