@@ -64,3 +64,16 @@ TEST(Bugs, empty_textelement)
   ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/Root/TextEl2", &text));
   ASSERT_STREQ("mytext2", text);
 }
+
+extern "C" void printMsg(MessageType type, const char* message, ...);
+
+TEST(Bugs, printMessageCrash)
+{
+    char msg[3000];
+    for (int i = 0; i < 3000; ++i) {
+        msg[i] = 'a';
+    }
+    msg[2999] = '\0';
+
+    printMsg(MESSAGETYPE_ERROR, "%s", msg);
+}
