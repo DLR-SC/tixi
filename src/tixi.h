@@ -2605,7 +2605,7 @@ DLL_EXPORT ReturnCode tixiAddExternalLink (const TixiDocumentHandle handle, cons
   @param[in]  handle as returned by ::tixiCreateDocument
 
   @return
-    - SUCCESS if successfully added the header
+    - SUCCESS if the external links have been removed successfully
     - INVALID_HANDLE if the handle is not valid
  */
 DLL_EXPORT ReturnCode tixiRemoveExternalLinks(TixiDocumentHandle handle);
