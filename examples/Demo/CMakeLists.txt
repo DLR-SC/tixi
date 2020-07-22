@@ -33,6 +33,11 @@ endif(UNIX)
 add_executable(tixi_c_examples tixi_c_examples.c)
 target_link_libraries (tixi_c_examples tixi3)
 
+if (UNIX)
+  # link math library
+  target_link_libraries (tixi_c_examples m)
+endif(UNIX)
+
 if(WIN32)
     target_compile_definitions(tixi_c_examples PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif(WIN32)
