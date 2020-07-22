@@ -245,6 +245,17 @@ TIXI_INTERNAL_EXPORT ReturnCode openExternalFiles(TixiDocument* aTixiDocument, i
 
 
 /**
+ * @brief Remove all links to external files
+ *
+ * This does not remove embedded nodes but the references to the filename etc. if
+ * tixi could successfully embed the external files into the main document before.
+ * This is e.g. required, if the XML file should be validated against a schema.
+ * The external data attributes make validation impossible so this functions removes them.
+ */
+TIXI_INTERNAL_EXPORT void removeExternalNodeLinks(xmlNodePtr aNodePtr);
+
+
+/**
   @brief Searches the tree for node that have to be saved in external files again.
          The external nodes will be removed from the main xml-document.
 

@@ -732,6 +732,26 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
 }
 
 
+void removeExternalNodeLinks(xmlNodePtr aNodePtr)
+{
+    xmlNodePtr cur_node = NULL;
+
+    /* find external data nodes */
+    for (cur_node = aNodePtr; cur_node; cur_node = cur_node->next) {
+
+      /* recurse down with the next element */
+      removeExternalNodeLinks(cur_node->children);
+
+      if( checkExternalNode( cur_node ) == SUCCESS) {
+          /* remove attributes */
+          xmlUnsetProp(cur_node, (xmlChar*) EXTERNAL_DATA_XML_ATTR_FILENAME);
+          xmlUnsetProp(cur_node, (xmlChar*) EXTERNAL_DATA_XML_ATTR_DIRECTORY);
+          xmlUnsetProp(cur_node, (xmlChar*) EXTERNAL_DATA_XML_ATTR_NODEPATH);
+      }
+    }
+}
+
+
 ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument* aTixiDocument)
 {
   TixiDocumentHandle handle = aTixiDocument->handle;
