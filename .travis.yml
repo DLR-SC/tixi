@@ -13,7 +13,7 @@ before_script:
   - cd build
 
 script: 
-  - cmake -DBUILD_SHARED_LIBS=ON -DTIXI_BUILD_TESTS=ON ..
+  - cmake -DBUILD_SHARED_LIBS=ON -DTIXI_BUILD_TESTS=ON -DTIXI_ENABLE_FORTRAN=ON ..
   - make
   - cd tests
   - ./TIXI-unittests

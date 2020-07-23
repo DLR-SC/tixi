@@ -53,6 +53,8 @@ if (NOT DEFINED CMAKE_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX "-d")
 endif (NOT DEFINED CMAKE_DEBUG_POSTFIX)
 
+option (TIXI_ENABLE_FORTRAN "Enable Fortran examples and binding" OFF)
+
 find_package(PythonInterp)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -105,7 +107,9 @@ endif(TIXI_BUILD_TESTS)
 
 #demos
 add_subdirectory(examples/Demo)
-add_subdirectory(examples/fortran77)
+if (TIXI_ENABLE_FORTRAN)
+  add_subdirectory(examples/fortran77)
+endif(TIXI_ENABLE_FORTRAN)
 
 # create the doc
 include(createDoc)
