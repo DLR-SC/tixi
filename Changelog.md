@@ -1,3 +1,38 @@
+Version 3.1.0
+----------------
+
+-API Changes:
+    - Deprecated all array functions. These are
+	  - tixiGetArray
+	  - tixiGetArrayDimensionNames
+	  - tixiGetArrayDimensions
+	  - tixiGetArrayDimensionSizes
+	  - tixiGetArrayDimensionValues
+	  - tixiGetArrayElementCount
+	  - tixiGetArrayElementNames
+	  - tixiGetArrayParameterNames
+	  - tixiGetArrayParameters
+	  - tixiGetArrayValue
+	- ```tixiGetDoubleElement``` and ```tixiGetIntegerElement``` now return the error code NO_NUMBER,
+	  if the element is not a number. Before, TiXI returned '0' as a number without error.
+	- ```tixiGetFloatVector```and ```tixiGetFloatVectorSize``` do not check for 'mapType="vector"' anymore.
+
+-General Changes:
+	- The validation error messages produced by
+	  ```tixiSchemaValidateFromFile```, ```tixiSchemaValidateWithDefaultsFromFile``` and
+	  ```tixiSchemaValidateFromString``` now show line numbers of the error in the xml file.
+	- Support of Matlab R2018a and newer
+
+-New Functions:
+    - Added new function ```tixiRemoveExternalLinks``` to remove links to external files to improve
+	  validation of xml files.
+
+-Fixes:
+	- Fixed several build problems
+	- Fixed adding empty vectors using ```tixiAddFloatVector```
+	- Fixed crash for very long error messages
+	- Fixed decoding of special characters by ```tixiGetTextElement```
+	
 Version 3.0.3
 ----------------
 
