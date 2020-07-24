@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 3.1.1
+----------------
+
+Fixes:
+- Fix for `::tixiGetDoubleElement` and `::tixiGetIntegerElement` and elements with trailing whitespace.
+
 Version 3.1.0
 ----------------
 
