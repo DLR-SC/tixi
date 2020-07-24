@@ -1298,8 +1298,9 @@ int isParent(xmlNodePtr possibleParent, xmlNodePtr n)
 
 int getChildNodeCount(const xmlNodePtr nodePtr)
 {
+    xmlNodePtr node = 0;
     int i = 0;
-    for (xmlNodePtr node = nodePtr->children; node; node = node->next, i++);
+    for (node = nodePtr->children; node; node = node->next, i++);
     return i--;
 }
 
