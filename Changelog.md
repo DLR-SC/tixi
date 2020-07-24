@@ -6,6 +6,7 @@ Version 3.1.1
 
 Fixes:
 - Fix for `::tixiGetDoubleElement` and `::tixiGetIntegerElement` and elements with trailing whitespace.
+- Removed all exit( ) calls in TiXI
 
 Version 3.1.0
 ----------------
