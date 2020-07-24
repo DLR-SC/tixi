@@ -53,6 +53,9 @@ if (NOT DEFINED CMAKE_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX "-d")
 endif (NOT DEFINED CMAKE_DEBUG_POSTFIX)
 
+include(CheckCCompilerFlag)
+check_c_compiler_flag("-Wno-deprecated-declarations" C_COMPILER_HAS_NO_DEPRECATED_DECL_OPTION)
+
 option (TIXI_ENABLE_FORTRAN "Enable Fortran examples and binding" OFF)
 
 find_package(PythonInterp)
