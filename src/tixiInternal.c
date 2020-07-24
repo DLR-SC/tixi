@@ -382,7 +382,7 @@ ReturnCode getCoordinateValue(TixiDocument* document, char* pointPath,
 
   if (!suffixString) {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in getCoordinateValue.\n");
-    exit(1);
+    return FAILED;
   }
 
   suffixStringLength = strlen(suffixString);
