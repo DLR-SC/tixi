@@ -32,7 +32,7 @@ else()
     endif()
 
     if (C_COMPILER_HAS_NO_DEPRECATED_DECL_OPTION)
-        set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Wno-deprecated-declarations")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
     endif()
 
     add_library(${TIXI_LIB_NAME}-f90 STATIC ${TIXI_F_SRC} ${TIXI_F_HDR})
