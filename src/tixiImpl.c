@@ -1370,7 +1370,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleElement(const TixiDocumentHandle handle, cons
   }
   else {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddDoubleElement.\n");
-    exit(1);
+    return FAILED;
   }
 
   return error;
@@ -1397,7 +1397,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleElementNS(const TixiDocumentHandle handle, co
   }
   else {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddDoubleElementNS.\n");
-    exit(1);
+    return FAILED;
   }
 
   return error;
@@ -1424,7 +1424,7 @@ DLL_EXPORT ReturnCode tixiAddIntegerElement(const TixiDocumentHandle handle, con
   }
   else {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddIntegerElement.\n");
-    exit(1);
+    return FAILED;
   }
 
   return error;
@@ -1451,7 +1451,7 @@ DLL_EXPORT ReturnCode tixiAddIntegerElementNS(const TixiDocumentHandle handle, c
   }
   else {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddIntegerElementNS.\n");
-    exit(1);
+    return FAILED;
   }
 
   return error;
@@ -1496,7 +1496,7 @@ DLL_EXPORT ReturnCode tixiAddDoubleAttribute(const TixiDocumentHandle handle,
   }
   else {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddDoubleAttribute.\n");
-    exit(1);
+    return FAILED;
   }
   return error;
 }
@@ -1521,7 +1521,7 @@ DLL_EXPORT ReturnCode tixiAddIntegerAttribute(const TixiDocumentHandle handle,
   }
   else {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddIntegerAttribute.\n");
-    exit(1);
+    return FAILED;
   }
   return error;
 }
@@ -1933,7 +1933,8 @@ DLL_EXPORT ReturnCode tixiAddDoubleListWithAttributes(const TixiDocumentHandle h
       if (!textBuffer) {
         printMsg(MESSAGETYPE_ERROR,
                  "Internal Error: Failed to allocate memory in tixiAddDoubleListWithAttributes.\n");
-        exit(1);
+        xmlFreeNode(listNode);
+        return FAILED;
       }
 
       child = xmlNewTextChild(listNode, nameSpace, (xmlChar *) childName, (xmlChar *) textBuffer);
@@ -2015,13 +2016,12 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
 
       if (!child) {
         printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "x");
-        xmlFreeNode(pointNode);
         return FAILED;
       }
     }
     else {
       printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
-      exit(1);
+      return FAILED;
     }
 
     /* add y coordinate */
@@ -2035,13 +2035,12 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
 
       if (!child) {
         printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "y");
-        xmlFreeNode(pointNode);
         return FAILED;
       }
     }
     else {
       printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
-      exit(1);
+      return FAILED;
     }
 
 
@@ -2056,13 +2055,12 @@ DLL_EXPORT ReturnCode tixiAddPoint(const TixiDocumentHandle handle, const char *
 
       if (!child) {
         printMsg(MESSAGETYPE_ERROR, "Error:  Failed to add %1s coordinate to point element.\n", "z");
-        xmlFreeNode(pointNode);
         return FAILED;
       }
     }
     else {
       printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddPoint.\n");
-      exit(1);
+      return FAILED;
     }
   }
   else {
@@ -2097,7 +2095,7 @@ DLL_EXPORT ReturnCode tixiAddExternalLink(const TixiDocumentHandle handle, const
 
   if (!textBuffer) {
     printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddExternalLink.\n");
-    exit(1);
+    return FAILED;
   }
 
   strcpy(textBuffer, parentPath);
