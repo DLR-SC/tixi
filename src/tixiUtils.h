@@ -181,6 +181,12 @@ TIXI_INTERNAL_EXPORT char* stringToLower(char* string);
 TIXI_INTERNAL_EXPORT int isNumeric (const char * s);
 
 /**
+  @brief strips any trailing whitespace from a string in place
+  @param char str (in) The source string
+ */
+TIXI_INTERNAL_EXPORT void trim_trailing_whitespace(char * str);
+
+/**
   @brief Strips the first len bytes of the string.
   @param char string (in)  The source string
   @param int n       (in)  The number of bytes to strip from s2

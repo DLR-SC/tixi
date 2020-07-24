@@ -891,6 +891,7 @@ DLL_EXPORT ReturnCode tixiGetIntegerElement(const TixiDocumentHandle handle, con
     return error;
   }
 
+  trim_trailing_whitespace(text);
   if (isNumeric(text)) {
     *number = atoi(text);
     return SUCCESS;
@@ -911,7 +912,7 @@ DLL_EXPORT ReturnCode tixiGetDoubleElement(const TixiDocumentHandle handle, cons
     printMsg(MESSAGETYPE_STATUS, "Error: tixiGetTextElement returns %d in tixiGetDoubleElement.\n", error);
     return error;
   }
-
+  trim_trailing_whitespace(text);
   if (isNumeric(text)) {
     *number = atof(text);
     return SUCCESS;

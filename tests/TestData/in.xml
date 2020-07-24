@@ -198,4 +198,7 @@
         <aBool2b>0</aBool2b>
         <aBool3b>-1</aBool3b>
     </bool>
+    <doubleWithExcessWhitespace>3.145 </doubleWithExcessWhitespace>
+    <intWithExcessWhitespace>  42  </intWithExcessWhitespace>
+
 </plane>

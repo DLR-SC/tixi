@@ -418,3 +418,18 @@ int isNumeric (const char * s)
     strtod (s, &p);
     return *p == '\0';
 }
+
+void trim_trailing_whitespace(char *str)
+{
+    int i;
+    int len = strlen(str);
+
+    i = len-1;
+    while( i >= 0 && isspace(str[i]))
+    {
+        i--;
+    }
+    if ( i < len-1 ) {
+        str[i+1]= '\0';
+    }
+}

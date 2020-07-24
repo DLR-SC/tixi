@@ -203,6 +203,18 @@ TEST_F(GetElementTests, getMatrixOfPoints)
   }
 }
 
+TEST_F(GetElementTests, bug_160)
+{
+    int my_int = 0;
+    double my_double = 0;
+
+    EXPECT_TRUE( tixiGetDoubleElement( documentHandle, "/plane/doubleWithExcessWhitespace", &my_double) == SUCCESS );
+    EXPECT_NEAR( my_double, 3.145, 1e-12);
+
+    EXPECT_TRUE( tixiGetIntegerElement( documentHandle, "/plane/intWithExcessWhitespace", &my_int) == SUCCESS );
+    EXPECT_EQ( my_int, 42);
+}
+
 TEST_F(GetElementTests, GetChildElements)
 {
   char* string;

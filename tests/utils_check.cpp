@@ -25,19 +25,8 @@
 
 static TixiDocumentHandle documentHandle = -1;
 
-class UtilsTest : public ::testing::Test
-{
-protected:
-  virtual void SetUp()
-  {
-  }
 
-  virtual void TearDown()
-  {
-  }
-};
-
-TEST_F(UtilsTest, string_stripLeft)
+TEST(UtilsTest, string_stripLeft)
 {
   const char* mystring = "    my new string";
   char* newstring = NULL;
@@ -46,7 +35,7 @@ TEST_F(UtilsTest, string_stripLeft)
   free(newstring);
 }
 
-TEST_F(UtilsTest, string_stripLeft_error)
+TEST(UtilsTest, string_stripLeft_error)
 {
 
   const char* mystring = " string";
@@ -54,7 +43,7 @@ TEST_F(UtilsTest, string_stripLeft_error)
   ASSERT_EQ(NULL,newstring);
 }
 
-TEST_F(UtilsTest, my_strncasecmp)
+TEST(UtilsTest, my_strncasecmp)
 {
   const char* a = "string1";
   const char* b = "string1";
@@ -69,7 +58,7 @@ TEST_F(UtilsTest, my_strncasecmp)
 
 }
 
-TEST_F(UtilsTest, my_strncasecmp_invalid )
+TEST(UtilsTest, my_strncasecmp_invalid )
 {
   const char* a = "string1";
   const char* b = "string1";
@@ -79,7 +68,7 @@ TEST_F(UtilsTest, my_strncasecmp_invalid )
   ASSERT_EQ(0, my_strncasecmp(a,b,10));
 }
 
-TEST_F(UtilsTest, create_local_directory)
+TEST(UtilsTest, create_local_directory)
 {
 
   const char* path = "tmp/";
@@ -89,7 +78,8 @@ TEST_F(UtilsTest, create_local_directory)
   rmdir(path);
 
 }
-TEST_F(UtilsTest, create_local_directory_failed)
+
+TEST(UtilsTest, create_local_directory_failed)
 {
 
   const char* path = "tmp2/temp2";
@@ -98,7 +88,7 @@ TEST_F(UtilsTest, create_local_directory_failed)
 
 }
 
-TEST_F(UtilsTest, string_startsWith)
+TEST(UtilsTest, string_startsWith)
 {
   const char* a = "string1";
   const char* b = "str";
@@ -109,7 +99,7 @@ TEST_F(UtilsTest, string_startsWith)
   ASSERT_EQ(-1, string_startsWith(a, c));
 }
 
-TEST_F(UtilsTest, string_endsWith)
+TEST(UtilsTest, string_endsWith)
 {
   ASSERT_EQ( 0, string_endsWith("string1", "ing1"));
   ASSERT_EQ( 0, string_endsWith("string1", "1"));
@@ -120,7 +110,7 @@ TEST_F(UtilsTest, string_endsWith)
   ASSERT_EQ(-1, string_endsWith("string1", "bla"));
 }
 
-TEST_F(UtilsTest, substring)
+TEST(UtilsTest, substring)
 {
   const char* mystring = "Hallo Welt";
   char* result = NULL;
@@ -141,7 +131,38 @@ TEST_F(UtilsTest, substring)
   result = NULL;
 }
 
-TEST_F(UtilsTest, isPathRelative)
+TEST(UtilsTest, trim_trailing_whitespace)
+{
+    char* str = (char*)malloc(sizeof(char)*128);
+
+    sprintf(str, "%s", "  test  ");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "  test");
+
+    sprintf(str, "%s", "test  ");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "test");
+
+    sprintf(str, "%s", "");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "");
+
+    sprintf(str, "%s", " ");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "");
+
+    sprintf(str, "%s", "test \n");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "test");
+
+    sprintf(str, "%s", "test\t");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "test");
+
+    free(str);
+}
+
+TEST(UtilsTest, isPathRelative)
 {
   // check relative path
   ASSERT_EQ(0, isPathRelative("file://tmp"));
@@ -154,7 +175,7 @@ TEST_F(UtilsTest, isPathRelative)
   ASSERT_NE(0, isPathRelative("usr/local"));
 }
 
-TEST_F(UtilsTest, isLocalPathRelative)
+TEST(UtilsTest, isLocalPathRelative)
 {
   ASSERT_EQ(0, isLocalPathRelative("./test.txt"));
 
@@ -170,7 +191,7 @@ TEST_F(UtilsTest, isLocalPathRelative)
 #endif
 }
 
-TEST_F(UtilsTest, isURIPath)
+TEST(UtilsTest, isURIPath)
 {
   ASSERT_EQ(0, isURIPath("file://test.txt"));
   ASSERT_EQ(0, isURIPath("file:///data/test.txt"));
@@ -187,12 +208,12 @@ TEST_F(UtilsTest, isURIPath)
   ASSERT_EQ(1, isURIPath("/home/user/data.txt"));
 }
 
-TEST_F(UtilsTest, isPathRelative_invalidPath)
+TEST(UtilsTest, isPathRelative_invalidPath)
 {
   ASSERT_NE(0, isPathRelative(NULL));
 }
 
-TEST_F(UtilsTest, uriToLocalPath)
+TEST(UtilsTest, uriToLocalPath)
 {
   char* result = NULL;
 
@@ -216,7 +237,7 @@ TEST_F(UtilsTest, uriToLocalPath)
   ASSERT_EQ(NULL, result);
 }
 
-TEST_F(UtilsTest, localPathToURI)
+TEST(UtilsTest, localPathToURI)
 {
   char* result = NULL;
 
@@ -241,7 +262,7 @@ TEST_F(UtilsTest, localPathToURI)
   free(result);
 }
 
-TEST_F(UtilsTest, loadFileToString)
+TEST(UtilsTest, loadFileToString)
 {
   const char* expected = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root/>\n";
   char* string = loadFileToString("TestData/minimal.xml");
@@ -250,7 +271,7 @@ TEST_F(UtilsTest, loadFileToString)
 }
 
 
-TEST_F(UtilsTest, stripDirName)
+TEST(UtilsTest, stripDirName)
 {
   char* dir, *file;
 #ifdef _WIN32
@@ -314,7 +335,7 @@ TEST_F(UtilsTest, stripDirName)
   strip_dirname(NULL, &dir, &file);
 }
 
-TEST_F(UtilsTest, resolveDirectory)
+TEST(UtilsTest, resolveDirectory)
 {
   char* dir = NULL;
   dir = resolveDirectory("TestData/", "file://Data");
