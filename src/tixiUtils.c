@@ -410,37 +410,26 @@ char *substring(const char *str, int start_pos, int end_pos)
 int isNumeric (const char * s)
 {
     char * p;
-    char * s_trimmed;
-    s_trimmed = trim_trailing_whitespace(s);
 
-    if (s_trimmed == NULL || *s_trimmed == '\0') {
+    if (s == NULL || *s == '\0') {
       return 0;
     }
 
-    strtod (s_trimmed, &p);
+    strtod (s, &p);
     return *p == '\0';
 }
 
-char* trim_trailing_whitespace(const char *str)
+void trim_trailing_whitespace(char *str)
 {
-    int i = 0;
-    int j = 0;
-    int len = 0;
-    char *out = 0;
-
-    len = strlen(str);
-    out = malloc(len + 1);
+    int i;
+    int len = strlen(str);
 
     i = len-1;
-    while( (str[i] == ' ' || str[i] == '\t' || str[i] == '\n') && i >= 0)
+    while( i >= 0 && isspace(str[i]))
     {
         i--;
     }
-
-    for( j=0; j<i+1; j++) {
-        out[j]=str[j];
+    if ( i < len-1 ) {
+        str[i+1]= '\0';
     }
-    out[i+1]= '\0';
-
-    return out;
 }

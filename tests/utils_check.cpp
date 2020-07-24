@@ -133,30 +133,33 @@ TEST(UtilsTest, substring)
 
 TEST(UtilsTest, trim_trailing_whitespace)
 {
-    const char* str_in1 = "  test  ";
-    const char* str_in2 = "test  ";
-    const char* str_in3 = "";
-    const char* str_in4 = " ";
-    const char* str_in5 = "test \n";
-    const char* str_in6 = "test\t";
+    char* str = (char*)malloc(sizeof(char)*128);
 
-    char* str_out1 = trim_trailing_whitespace(str_in1);
-    ASSERT_STREQ(str_out1, "  test");
+    sprintf(str, "%s", "  test  ");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "  test");
 
-    char* str_out2 = trim_trailing_whitespace(str_in2);
-    ASSERT_STREQ(str_out2, "test");
+    sprintf(str, "%s", "test  ");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "test");
 
-    char* str_out3 = trim_trailing_whitespace(str_in3);
-    ASSERT_STREQ(str_out3, "");
+    sprintf(str, "%s", "");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "");
 
-    char* str_out4 = trim_trailing_whitespace(str_in4);
-    ASSERT_STREQ(str_out4, "");
+    sprintf(str, "%s", " ");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "");
 
-    char* str_out5 = trim_trailing_whitespace(str_in5);
-    ASSERT_STREQ(str_out5, "test");
+    sprintf(str, "%s", "test \n");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "test");
 
-    char* str_out6 = trim_trailing_whitespace(str_in6);
-    ASSERT_STREQ(str_out6, "test");
+    sprintf(str, "%s", "test\t");
+    trim_trailing_whitespace(str);
+    ASSERT_STREQ(str, "test");
+
+    free(str);
 }
 
 TEST(UtilsTest, isPathRelative)
