@@ -4,7 +4,7 @@ function isvalid = tixiCheckDocumentHandle(handle)
     end
 
     try
-        tixi_matlab('tixiCheckDocumentHandle', handle);
+        tixi3_matlab('tixiCheckDocumentHandle', handle);
         isvalid = true;
     catch err
         if strfind(err.message, 'returned code 6')

@@ -8,7 +8,7 @@ function found = tixiCheckElement(handle, elementPath)
     end
 
     try
-        tixi_matlab('tixiCheckElement', handle, elementPath);
+        tixi3_matlab('tixiCheckElement', handle, elementPath);
         found = true;
     catch err
         if strfind(err.message, 'returned code 8')
