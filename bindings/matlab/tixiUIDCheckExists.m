@@ -8,7 +8,7 @@ function found = tixiUIDCheckExists(handle, uID)
     end
 
     try
-        tixi_matlab('tixiUIDCheckExists', handle, uID);
+        tixi3_matlab('tixiUIDCheckExists', handle, uID);
         found = true;
     catch err
         if strfind(err.message, 'returned code 32') || strfind(err.message, 'returned code 33')

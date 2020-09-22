@@ -12,7 +12,7 @@ function found = tixiCheckAttribute(handle, elementPath, attributeName)
     end
 
     try
-        tixi_matlab('tixiCheckAttribute', handle, elementPath, attributeName);
+        tixi3_matlab('tixiCheckAttribute', handle, elementPath, attributeName);
         found = true;
     catch err
         if strfind(err.message, 'returned code 12')
