@@ -11,7 +11,7 @@
 
 ## Installation ##
  - with Conda: [![Anaconda-Server Badge](https://anaconda.org/dlr-sc/tixi3/badges/installer/conda.svg)](https://anaconda.org/DLR-SC/tixi3)
- - with Linux package manager: [OpenBuildSerice](https://software.opensuse.org/download.html?project=science:dlr&package=tixi3)
+ - with Linux package manager: [OpenBuildService](https://software.opensuse.org/download.html?project=science:dlr&package=tixi3)
 
 
 ## Description ##
