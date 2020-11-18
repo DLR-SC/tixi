@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elasticityEvolution name="5b29606d-c2dd-4f86-8594-4e057fb6df44">
+  <model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="d57a6369-4b41-4254-8ffd-e895970ff865" xsi:type="constantElasticityEvolutionModel">
+    <externaldata>
+      <path>file://.</path>
+      <filename>ElasticityEvolutionValue.xml</filename>
+    </externaldata>
+  </model>
+</elasticityEvolution>
