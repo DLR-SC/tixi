@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="5042895a-8150-4fbc-8f5a-43cd6c0ccca7" xsi:type="isotropicLinearElasticity">
+   <e>70000.0</e>
+   <nu>0.33</nu>
+</value>

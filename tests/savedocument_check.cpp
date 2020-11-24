@@ -64,6 +64,15 @@ TEST_F(SaveDocumentCheck, saveWithoutNodeLinks)
 
     ASSERT_EQ(SUCCESS, tixiSaveDocument(handle, "save-without-links.xml"));
 
-
 }
 
+
+TEST(SaveDocumentCheckRecursive, saveSplittedRecursive)
+{
+    TixiDocumentHandle handle;
+    ASSERT_EQ(SUCCESS, tixiOpenDocumentRecursive("TestData/ElasticityEvolutionInclude.xml", &handle, OPENMODE_RECURSIVE));
+    EXPECT_EQ(SUCCESS, tixiCheckElement(handle, "/elasticityEvolution/model/value/e"));
+    EXPECT_EQ(SUCCESS, tixiCheckElement(handle, "/elasticityEvolution/model/value/nu"));
+    ASSERT_EQ(SUCCESS, tixiSaveDocument(handle, "Splitted.xml"));
+    ASSERT_EQ (SUCCESS, tixiCloseDocument( handle ));
+}
