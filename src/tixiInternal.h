@@ -254,6 +254,14 @@ TIXI_INTERNAL_EXPORT ReturnCode openExternalFiles(TixiDocument* aTixiDocument, i
  */
 TIXI_INTERNAL_EXPORT void removeExternalNodeLinks(xmlNodePtr aNodePtr);
 
+/**
+ * @brief Creates an external file xml node
+ *
+ * @param urlPath  The path / directory of the file
+ * @param filename The filename
+ * @return Xml node pointer containing the node structure.
+ */
+TIXI_INTERNAL_EXPORT xmlNodePtr createExternalNode(const char* urlPath, const char* filename);
 
 /**
   @brief Searches the tree for node that have to be saved in external files again.

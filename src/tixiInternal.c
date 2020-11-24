@@ -752,16 +752,38 @@ void removeExternalNodeLinks(xmlNodePtr aNodePtr)
 }
 
 
+xmlNodePtr createExternalNode(const char* urlPath, const char* filename)
+{
+    xmlNodePtr externalNode = xmlNewNode(NULL, (xmlChar*) EXTERNAL_DATA_NODE_NAME);
+    xmlNodePtr pathNode = xmlNewNode(NULL, (xmlChar*) EXTERNAL_DATA_NODE_NAME_PATH);
+    xmlNodePtr filenameNode = xmlNewNode(NULL, (xmlChar*) EXTERNAL_DATA_NODE_NAME_FILENAME);
+
+    xmlAddChild( externalNode, pathNode );
+    xmlAddChild( externalNode, filenameNode );
+
+    if (urlPath) {
+        xmlNodePtr pathNodeText = xmlNewText( (xmlChar *) urlPath );
+        xmlAddChild( pathNode, pathNodeText );
+    }
+
+    if (filename) {
+        xmlNodePtr filenameNodeText = xmlNewText( (xmlChar *) filename );
+        xmlAddChild( filenameNode, filenameNodeText );
+    }
+
+   return externalNode;
+}
+
 ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument* aTixiDocument)
 {
   TixiDocumentHandle handle = aTixiDocument->handle;
   xmlNodePtr cur_node = NULL;
   xmlNodePtr copiedNode = NULL;
+  xmlNodePtr externalNode = NULL;
   char* externalDataDirectory = NULL;
   char* externalFileName = NULL;
   char* fullExternalFileName = NULL;
   char* externalDataNodePath = NULL;
-  char* fullExternalDataNodePath = NULL;
   xmlDocPtr xmlDocument = NULL;
 
   /* find external data nodes */
@@ -827,23 +849,14 @@ ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument* aTixiDocument)
       xmlFreeDoc(xmlDocument);
 
       /* create external data node structure */
-      fullExternalDataNodePath = buildString("%s/%s", externalDataNodePath, EXTERNAL_DATA_NODE_NAME);
+      externalNode = createExternalNode(externalDataDirectory, externalFileName);
+      xmlReplaceNode(cur_node, externalNode);
 
-      /* add parent node if not exists */
-      if(tixiCheckElement(handle, fullExternalDataNodePath) != SUCCESS) {
-        tixiAddTextElement(handle, externalDataNodePath, EXTERNAL_DATA_NODE_NAME, "");
-        tixiAddTextElement(handle, fullExternalDataNodePath, EXTERNAL_DATA_NODE_NAME_PATH, externalDataDirectory);
-      }
-
-      /* add node for external reference */
-      tixiAddTextElement(handle, fullExternalDataNodePath, EXTERNAL_DATA_NODE_NAME_FILENAME, externalFileName);
-
-      /* remove the copied nodes from document*/
-      copiedNode = cur_node->prev;
-      xmlUnlinkNode(cur_node);
+      /* remove old node */
       xmlFreeNode(cur_node);
-      free(fullExternalDataNodePath);
-      cur_node = copiedNode;
+
+      cur_node = externalNode;
+
     }
   }
   return SUCCESS;
