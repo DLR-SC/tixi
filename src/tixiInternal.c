@@ -771,7 +771,7 @@ xmlNodePtr createExternalNode(const char* urlPath, const char* filename)
         xmlAddChild( filenameNode, filenameNodeText );
     }
 
-   return externalNode;
+    return externalNode;
 }
 
 ReturnCode saveExternalFiles(xmlNodePtr aNodePtr, TixiDocument* aTixiDocument)
