@@ -66,9 +66,9 @@ jobs:
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
       - name: Set up Visual Studio shell
-        uses: egor-tensin/vs-shell@v2
+        uses: ilammy/msvc-dev-cmd@v1
         with:
-          arch: x64
+          arch: amd64
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
