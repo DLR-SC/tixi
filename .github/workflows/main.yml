@@ -132,9 +132,9 @@ jobs:
       - name: Run unit tests
         shell: cmd /C call {0}
         run: |
-          set PATH=%cd%\build-win64\install\bin;%PATH%
+          set PATH=%cd%\build\install\bin;%PATH%
           cd build\tests
-          .\TIXI-unittests.exe --gtest_output=xml:test_results.xml
+          TIXI-unittests.exe --gtest_output=xml:test_results.xml
 
   deploy-win64:
     runs-on: "windows-latest"
