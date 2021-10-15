@@ -65,7 +65,6 @@ jobs:
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
-          choco install ninja
       - name: Set up Visual Studio shell
         uses: egor-tensin/vs-shell@v2
         with:
@@ -73,20 +72,17 @@ jobs:
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
-          set Path = "C:\ProgramData\chocolatey\lib\ninja\tools;%PATH%"
-          ninja --version
           mkdir build
           cd build
-          cmake -G "Ninja"  -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
-                            -DCMAKE_MAKE_PROGRAM="C:\ProgramData\chocolatey\lib\ninja\tools\ninja.exe" ^
-                            -DTIXI_ENABLE_FORTRAN=ON ^
-                            -DBUILD_SHARED_LIBS=ON ^
-                            -DTIXI_BUILD_TESTS=ON ^
-                            -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win ^
-                            -DCMAKE_PREFIX_PATH='c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64' ^
-                            -DCMAKE_INSTALL_PREFIX=install ^
+          cmake  -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
+                 -DTIXI_ENABLE_FORTRAN=ON ^
+                 -DBUILD_SHARED_LIBS=ON ^
+                 -DTIXI_BUILD_TESTS=ON ^
+                 -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win ^
+                 -DCMAKE_PREFIX_PATH='c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64' ^
+                 -DCMAKE_INSTALL_PREFIX=install ^
                             ..
-          ninja install
+          cmake --build . --target install
       - name: Upload build directory
         uses: actions/upload-artifact@v2
         with:
