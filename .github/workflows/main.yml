@@ -133,7 +133,7 @@ jobs:
 # returns in TestData\minimal.xml, so we have to checkout the repo and copy the file into the
 # build directory.
       - uses: actions/checkout@v2
-      - name: Hack: Copy TestData\minimal.xml from repo to build directory
+      - name: Hack - Copy TestData\minimal.xml from repo to build directory
         shell: cmd /C call {0}
         run: xcopy /s tests\TestData\minimal.xml build\tests\TestData /y
       - name: Run unit tests
