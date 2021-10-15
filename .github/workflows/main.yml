@@ -133,8 +133,8 @@ jobs:
         shell: cmd /C call {0}
         run: |
           set PATH=%cd%\build\install\bin;%PATH%
-          cd build\tests
-          TIXI-unittests.exe --gtest_output=xml:test_results.xml
+          cd build\tests\${{ matrix.config }}
+          .\TIXI-unittests.exe --gtest_output=xml:test_results.xml
 
   deploy-win64:
     runs-on: "windows-latest"
