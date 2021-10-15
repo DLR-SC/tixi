@@ -75,6 +75,7 @@ jobs:
           mkdir build
           cd build
           cmake -G "Ninja"  -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
+                            -DCMAKE_MAKE_PROGRAM="C:\ProgramData\chocolatey\lib\ninja\tools\ninja.exe" ^
                             -DTIXI_ENABLE_FORTRAN=ON ^
                             -DBUILD_SHARED_LIBS=ON ^
                             -DTIXI_BUILD_TESTS=ON ^
@@ -97,6 +98,7 @@ jobs:
         config: ["Debug", "Release"]
         os: ["ubunut-latest", "ubuntu-18.04"]
     runs-on: ${{ matrix.os }}
+    needs: build-linux
     steps:
       - name: Download build directory
         uses: actions/download-artifact@v2
@@ -106,6 +108,7 @@ jobs:
       - name: Run unit tests
         run: |
           cd build/tests
+          chmod a+x TIXI-unittests
           ./TIXI-unittests
 
   test-win64:
