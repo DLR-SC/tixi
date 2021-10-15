@@ -1,0 +1,160 @@
+name: CI
+
+on:
+  schedule:
+    - cron: "20 3 * * *"
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+
+  build-linux:
+    strategy:
+      matrix:
+        config: ["Debug", "Release"]
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y cmake cmake-data gfortran libcurl4-openssl-dev libxslt1-dev
+      - name: Build TiXI
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.config }} \
+                -DBUILD_SHARED_LIBS=ON \
+                -DTIXI_BUILD_TESTS=ON \
+                -DTIXI_ENABLE_FORTRAN=ON \
+                ..
+          make -j
+      - name: Upload build directory
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-linux-${{ matrix.config }}
+          path: build
+          retention-days: 1
+
+  build-win64:
+    strategy:
+      matrix:
+        config: ["Debug", "Release"]
+    runs-on: "windows-latest"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: |
+          md c:\tixi-3rdparty -Force | Out-Null
+          If (!(Test-Path -Path "c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64")) {
+            Write-Output "Downloading tixi 3rdparty libraries"
+            (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/tixi-3rdparty-vc2015-win64.zip", "c:\tixi-3rdparty-vc2015-win64.zip")
+            Write-Output "Extract tixi 3rdparty libraries"
+            & 7z x -y "c:\tixi-3rdparty-vc2015-win64.zip" -oC:\tixi-3rdparty\ > null
+          }
+          If (!(Test-Path -Path "c:\tixi-3rdparty\matlab-libs-win")) {
+            Write-Output "Downloading matlab libraries"
+            (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/matlab-libs-win.zip", "c:\matlab-libs-win.zip")
+            Write-Output "Extract matlab libraries"
+            & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
+          }
+          choco install ninja
+      - name: Build TiXI
+        shell: cmd /C call {0}
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+          set Path = "C:\ProgramData\chocolatey\lib\ninja\tools;%PATH%"
+          ninja --version
+          mkdir build
+          cd build
+          cmake -G "Ninja"  -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
+                            -DTIXI_ENABLE_FORTRAN=ON ^
+                            -DBUILD_SHARED_LIBS=ON ^
+                            -DTIXI_BUILD_TESTS=ON ^
+                            -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win ^
+                            -DCMAKE_PREFIX_PATH='c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64' ^
+                            -DCMAKE_INSTALL_PREFIX=install ^
+                            ..
+          ninja install
+      - name: Upload build directory
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-win64-${{ matrix.config }}
+          path: build
+          retention-days: 1
+
+
+  test-linux:
+    strategy:
+      matrix:
+        config: ["Debug", "Release"]
+    runs-on: "ubuntu-latest"
+    needs: build-linux
+    steps:
+      - name: Download build directory
+        uses: actions/download-artifact@v2
+        with:
+          name: build-linux-${{ matrix.config }}
+          path: build
+      - name: Run unit tests
+        run: |
+          cd build/tests
+          ./TIXI-unittests
+
+  test-win64:
+    strategy:
+      matrix:
+        config: ["Debug", "Release"]
+    runs-on: "windows-latest"
+    needs: build-win64
+    steps:
+      - name: Download build directory
+        uses: actions/download-artifact@v2
+        with:
+          name: build-win64-${{ matrix.config }}
+          path: build
+      - name: Run unit tests
+        shell: cmd /C call {0}
+        run: |
+          set PATH=%cd%\build-win64\install\bin;%PATH%
+          cd build\tests
+          .\TIXI-unittests.exe --gtest_output=xml:test_results.xml
+
+  deploy-win64:
+    runs-on: "windows-latest"
+    needs: test-win64
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Download build directory
+        uses: actions/download-artifact@v2
+        with:
+          name: build-win64-Release
+          path: build
+      - name: Artifact installer and zip
+        run: |
+          cd build
+          cmake --build .. --config Release --target doc
+          cpack -G ZIP
+          cpack -G NSIS
+      - name: Upload installer as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: win64-installer
+          path: build/*.exe
+      - name: Upload package as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: win64-package
+          path: build/*.zip
+      - name: Upload documentation as artifact
+        uses: actions/upload-artifact@v2
+        with:
+         name: html-documentation
+         path: build/doc/html/*
