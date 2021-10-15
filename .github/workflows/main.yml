@@ -65,13 +65,14 @@ jobs:
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
-      - name: Set up Visual Studio shell
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: amd64
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
+          if windows-2016==${{ matrix.os }} (
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+          ) else (
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+          )
           mkdir build
           cd build
           cmake  -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
