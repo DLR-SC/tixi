@@ -70,19 +70,24 @@ jobs:
         run: |
           if windows-2016==${{ matrix.os }} (
             call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+            set GENERATOR="Visual Studio 15 2017 Win64"
+            set CMAKE_ARCH_FLAG=""
           ) else (
             call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+            set GENERATOR="Visual Studio 16 2019"
+            set CMAKE_ARCH_FLAG="-A x64"
           )
           mkdir build
           cd build
-          cmake  -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
+          cmake  -G %GENERATOR% %CMAKE_ARCH_FLAG% ^
+                 -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
                  -DTIXI_ENABLE_FORTRAN=ON ^
                  -DBUILD_SHARED_LIBS=ON ^
                  -DTIXI_BUILD_TESTS=ON ^
                  -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win ^
                  -DCMAKE_PREFIX_PATH='c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64' ^
                  -DCMAKE_INSTALL_PREFIX=install ^
-                            ..
+                 ..
           cmake --build . --target install
       - name: Upload build directory
         uses: actions/upload-artifact@v2
