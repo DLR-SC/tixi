@@ -43,7 +43,7 @@ jobs:
   build-win64:
     strategy:
       matrix:
-        config: ["Debug", "Release"]
+        config: ["Release"]
         os: ["windows-latest", "windows-2016"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -113,7 +113,7 @@ jobs:
   test-win64:
     strategy:
       matrix:
-        config: ["Debug", "Release"]
+        config: ["Release"]
         os: ["windows-latest", "windows-2016"]
     runs-on: ${{ matrix.os }}
     needs: build-win64
