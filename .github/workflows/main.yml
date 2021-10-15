@@ -66,10 +66,13 @@ jobs:
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
           choco install ninja
+      - name: Set up Visual Studio shell
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
           set Path = "C:\ProgramData\chocolatey\lib\ninja\tools;%PATH%"
           ninja --version
           mkdir build
