@@ -120,7 +120,7 @@ class PythonGenerator(object):
         
         string += indent + 'try:\n'
         string += indent + '    if sys.platform == \'win32\':\n'
-        string += indent + '        lib = ctypes.cdll.%s\n' % self.libname
+        string += indent + '        lib = ctypes.cdll.LoadLibrary("%s.dll")\n' % self.libname
         string += indent + '    elif sys.platform == \'darwin\':\n'
         string += indent + '        lib = ctypes.CDLL("lib%s.dylib")\n' % self.libname
         string += indent + '    else:\n'
