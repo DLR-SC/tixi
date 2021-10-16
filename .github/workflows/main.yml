@@ -47,6 +47,14 @@ jobs:
         os: ["windows-latest", "windows-2016"]
     runs-on: ${{ matrix.os }}
     steps:
+# On the Github-hosted runner, git checks out text files with \r\n (I think)
+# which messes up some unit tests, specifically UtilsTest.loadFileToString,
+# which expects TestData/minimal.xml not to have any carriage returns \r.
+# So we have to overwrite this checkout policy here:
+      - name: Set git to use LF instead of CRLF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -124,18 +132,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: build-win64
     steps:
-      - uses: actions/checkout@v2
       - name: Download build directory
         uses: actions/download-artifact@v2
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
-  # Ugly hack: Because of https://github.com/actions/upload-artifact/issues/75 there are carriage
-  # returns in TestData\minimal.xml, so we have to checkout the repo and copy the file into the
-  # build directory.
-      - name: Hack - Copy TestData\minimal.xml from repo to build directory
-        shell: cmd /C call {0}
-        run: echo F|xcopy /S /Q /Y /F tests\TestData\minimal.xml build\tests\TestData\minimal.xml
       - name: Run unit tests
         shell: cmd /C call {0}
         run: |
