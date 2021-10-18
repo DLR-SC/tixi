@@ -73,9 +73,12 @@ jobs:
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
+      - name: Setup msys2/gfortran
+        uses: msys2/setup-msys2@v2
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
+          gfortran --version
           if windows-2016==${{ matrix.os }} (
             call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
             set GENERATOR="Visual Studio 15 2017 Win64"
