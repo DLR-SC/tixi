@@ -2713,7 +2713,7 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
         (*vectorArray)[count ++] = atof(token);    /* starting with zero */
     }
     else {
-        printMsg(MESSAGETYPE_STATUS, "Error: tixiGetFloatVector cannot parse the %i-th element \"%s\" as a float.\n", count+1, token);
+        printMsg(MESSAGETYPE_ERROR, "Error: tixiGetFloatVector cannot parse the %i-th element \"%s\" as a float.\n", count+1, token);
         return NO_NUMBER;
     }
 
