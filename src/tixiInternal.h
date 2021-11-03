@@ -19,6 +19,12 @@
 #ifndef TIXI_INTERNAL_H
 #define TIXI_INTERNAL_H
 
+
+#include "libxml/parser.h"
+#include "libxml/xpath.h"
+#include "libxml/xmlsave.h"
+#include "libxml/xpath.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,6 +37,7 @@ extern "C" {
 #endif
 #else
 #define TIXI_INTERNAL_EXPORT
+#define GLIB_VERSION_MIN_REQUIRED (GLIB_VERSION_2_26)
 #endif
 
 /**
@@ -40,10 +47,7 @@ extern "C" {
  * @brief  Header file for routines used to implement the API.
  * This file cotains declaration for auxillary routines used to implement the tixi API.
  */
-#include "libxml/parser.h"
-#include "libxml/xpath.h"
-#include "libxml/xmlsave.h"
-#include "libxml/xpath.h"
+
 #include "tixi.h"
 #include "tixiData.h"
 

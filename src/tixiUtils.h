@@ -19,6 +19,10 @@
 #ifndef TIXI_UTILS_H
 #define TIXI_UTILS_H
 
+#include "libxml/parser.h"
+#include "libxml/xpath.h"
+#include "libxml/xmlsave.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,9 +36,7 @@ extern "C" {
  *
  * This file cotains declaration for utility routines used to implement the tixi API.
  */
-#include "libxml/parser.h"
-#include "libxml/xpath.h"
-#include "libxml/xmlsave.h"
+
 #include "tixi.h"
 #include "tixiData.h"
 #include "tixiInternal.h"
