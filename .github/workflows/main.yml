@@ -163,8 +163,8 @@ jobs:
         run: |
           cd build
           cmake --build .. --config Release --target doc
-          cpack -G ZIP
-          cpack -G NSIS
+          & 'C:\Program Files\CMake\bin\cpack.exe' -G ZIP
+          & 'C:\Program Files\CMake\bin\cpack.exe' -G NSIS
       - name: Upload installer as artifact
         uses: actions/upload-artifact@v2
         with:

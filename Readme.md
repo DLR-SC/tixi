@@ -1,8 +1,6 @@
-### Build-Status ###
-  - Linux/macOS: [![Build Status](https://travis-ci.org/DLR-SC/tixi.svg?branch=master)](https://travis-ci.org/DLR-SC/tixi) 
-  - Windows: [![Build status](https://ci.appveyor.com/api/projects/status/mhcsgq5smp8at4sx/branch/master?svg=true)](https://ci.appveyor.com/project/rainman110/tixi/branch/master)
-
 # TIXI #
+
+[![CI](https://github.com/DLR-SC/tixi/actions/workflows/main.yml/badge.svg)](https://github.com/DLR-SC/tixi/actions/workflows/main.yml)
 
  - Binary Downloads:  https://github.com/DLR-SC/tixi/wiki/Downloads
  - API Documentation: http://tixi.sourceforge.net/Doc/index.html
