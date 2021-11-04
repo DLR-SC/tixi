@@ -60,9 +60,12 @@ TEST_F(VectorTests, tixiVectorGetTests)
 
   // check values returned
   count = 10;
-  ASSERT_TRUE ( tixiGetFloatVector(documentHandleGet, "/a/aeroPerformanceMap/cfx", &allPoints, count) == SUCCESS );
+  ASSERT_TRUE ( tixiGetFloatVector(documentHandleGet, "/a/aeroPerformanceMap/cfy", &allPoints, count) == SUCCESS );
   ASSERT_TRUE ( allPoints[0] == 1.0 );
   ASSERT_TRUE ( allPoints[7] == 8.0 );
+
+  // check "cannot parse number"
+  ASSERT_TRUE ( tixiGetFloatVector(documentHandleGet, "/a/aeroPerformanceMap/cfx", &allPoints, count) == NO_NUMBER );
 }
 
 TEST_F(VectorTests, tixiVectorAddTests)

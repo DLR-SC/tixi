@@ -2707,7 +2707,16 @@ DLL_EXPORT ReturnCode tixiGetFloatVector (const TixiDocumentHandle handle, const
     if (count == eNumber) {
       return SUCCESS;
     }
-    (*vectorArray)[count ++] = atof(token);    /* starting with zero */
+
+    trim_trailing_whitespace(token);
+    if (isNumeric(token)) {
+        (*vectorArray)[count ++] = atof(token);    /* starting with zero */
+    }
+    else {
+        printMsg(MESSAGETYPE_ERROR, "Error: tixiGetFloatVector cannot parse the %i-th element \"%s\" as a float.\n", count+1, token);
+        return NO_NUMBER;
+    }
+
     token = strtok(0, VECTOR_SEPARATOR);
   }
   return count < eNumber ? INDEX_OUT_OF_RANGE : SUCCESS;
