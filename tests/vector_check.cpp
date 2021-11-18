@@ -18,6 +18,7 @@
 
 #include "test.h" // Brings in the GTest framework
 #include "tixi.h"
+#include "tixiInternal.h"
 
 
 /**
@@ -121,4 +122,40 @@ TEST_F(VectorTests, tixiUpdateVectorTests)
   ASSERT_TRUE ( tixiUpdateFloatVector(documentHandleAdd, "/a/test_not_there", pointsUpdated, count, "%f") == ELEMENT_NOT_FOUND);
   ASSERT_TRUE ( tixiUpdateFloatVector(-1, "/a/test", pointsUpdated, count, "%f") == INVALID_HANDLE );
   ASSERT_TRUE ( tixiUpdateFloatVector(documentHandleAdd, "/a/test", pointsUpdated, 0, "%f") == FAILED );
+}
+
+// Make sure to run in a reasoble time
+TEST(Vector, Performance)
+{
+    TixiDocumentHandle handle;
+    ASSERT_EQ(SUCCESS, tixiCreateDocument("root", &handle));
+
+    int n = 40000;
+
+    double* vec = new double[n];
+
+    for (int i = 0; i < n; ++i) {
+        vec[i] = (float)i;
+    }
+
+    EXPECT_EQ(SUCCESS, tixiAddFloatVector(handle, "/root", "myvec", vec, n, "%f"));
+
+    delete [] vec;
+
+    tixiCloseDocument(handle);
+}
+
+TEST(Vector, vectorToString)
+{
+    int n = 10;
+    double* vec = new double[n];
+    char* myvecString = NULL;
+
+    for (int i = 0; i < n; ++i) vec[i] = (float)i;
+
+    myvecString = vectorToString(vec, n, "%.2f");
+
+    EXPECT_STREQ("0.00;1.00;2.00;3.00;4.00;5.00;6.00;7.00;8.00;9.00", myvecString);
+
+    delete [] vec;
 }

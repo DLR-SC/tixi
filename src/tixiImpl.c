@@ -1532,37 +1532,12 @@ DLL_EXPORT ReturnCode tixiAddFloatVector (const TixiDocumentHandle handle, const
   ReturnCode error;
   char *stringVector = NULL;
   char *textBuffer = NULL;
-  int i;
-  int stringSize = 0;
 
   if (!format) {
     format = "%g";
   };
 
-  /* calculate the size of the resulting string */
-  for(i=0; i<numElements; i++) {
-    textBuffer = buildString(format, vector[i]);
-    stringSize += (int) strlen(textBuffer);
-    free(textBuffer);
-  }
-
-  /* allocate memory */
-  stringVector = (char *) malloc(sizeof(char) * (stringSize + numElements + 1));
-
-  /* copy strings to stringVector */
-  stringVector[0] = '\0';
-
-  if (numElements>0) {
-      textBuffer = buildString(format, vector[0]);
-      strcat(stringVector, textBuffer);
-      free(textBuffer);
-      for(i=1; i<numElements; i++) {
-        textBuffer = buildString(format, vector[i]);
-        strcat(stringVector, VECTOR_SEPARATOR);
-        strcat(stringVector, textBuffer);
-        free(textBuffer);
-      }
-  }
+  stringVector = vectorToString(vector, numElements, format);
 
   /* Add element */
   error = tixiAddTextElement(handle, parentPath, elementName, stringVector);
@@ -1590,9 +1565,6 @@ DLL_EXPORT ReturnCode tixiUpdateFloatVector (const TixiDocumentHandle handle, co
 {
   ReturnCode error;
   char *stringVector = NULL;
-  char *textBuffer = NULL;
-  int i;
-  int stringSize = 0;
 
   if(numElements < 1) {
     return FAILED;
@@ -1602,27 +1574,7 @@ DLL_EXPORT ReturnCode tixiUpdateFloatVector (const TixiDocumentHandle handle, co
     format = "%g";
   };
 
-  /* calculate the size of the resulting string */
-  for(i=0; i<numElements; i++) {
-    textBuffer = buildString(format, vector[i]);
-    stringSize += (int) strlen(textBuffer);
-    free(textBuffer);
-  }
-
-  /* allocate memory */
-  stringVector = (char *) malloc(sizeof(char) * (stringSize + numElements + 1));
-
-  /* copy strings to stringVector */
-  stringVector[0] = '\0';
-  textBuffer = buildString(format, vector[0]);
-  strcat(stringVector, textBuffer);
-  free(textBuffer);
-  for(i=1; i<numElements; i++) {
-    textBuffer = buildString(format, vector[i]);
-    strcat(stringVector, VECTOR_SEPARATOR);
-    strcat(stringVector, textBuffer);
-    free(textBuffer);
-  }
+  stringVector = vectorToString(vector, numElements, format);
 
   error = tixiUpdateTextElement(handle, path, stringVector);
   free(stringVector);

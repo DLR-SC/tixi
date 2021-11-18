@@ -210,6 +210,11 @@ TIXI_INTERNAL_EXPORT void checkLibxml2Version();
 */
 TIXI_INTERNAL_EXPORT char* buildString(const char* format, ...);
 
+/**
+  @brief Converts a float vector into the cpacs string representation using the
+  given formatting rule
+*/
+TIXI_INTERNAL_EXPORT char* vectorToString(const double* floatVec, int numElements, const char* format);
 
 /**
   @brief Open external xml files and merge them into the tree.
