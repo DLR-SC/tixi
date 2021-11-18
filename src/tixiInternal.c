@@ -563,6 +563,46 @@ char* buildString(const char* format, ...)
   return buffer;
 }
 
+char* vectorToString(const double* vector, int numElements, const char* format)
+{
+    int i = 0, stringSize = 0, delim_size = strlen(VECTOR_SEPARATOR);
+    char* textBuffer = NULL;
+    // the output string
+    char* stringVector = NULL;
+
+    /* calculate the size of the resulting string */
+    for (i=0; i<numElements; i++) {
+      textBuffer = buildString(format, vector[i]);
+      stringSize += (int) strlen(textBuffer) + delim_size;
+      free(textBuffer);
+    }
+
+    /* allocate memory */
+    stringVector = (char *) malloc(sizeof(char) * (stringSize + 1));
+
+    /* copy strings to stringVector */
+    stringVector[0] = '\0';
+
+    if (numElements>0) {
+        textBuffer = buildString(format, vector[0]);
+        strcat(stringVector, textBuffer);
+        stringSize = (int) strlen(textBuffer);
+        free(textBuffer);
+        for(i=1; i<numElements; i++) {
+
+          textBuffer = buildString(format, vector[i]);
+          // by using the pointer stringVector + stringSize, we can avoid
+          // computing the string length as done by strcat
+          sprintf(stringVector + stringSize,"%s%s" , VECTOR_SEPARATOR, textBuffer);
+
+          stringSize += (int) strlen(textBuffer) + delim_size;
+          free(textBuffer);
+        }
+    }
+
+    return stringVector;
+}
+
 char* loadExternalFileToString(const char* filename)
 {
   if (isURIPath(filename) != 0) {
