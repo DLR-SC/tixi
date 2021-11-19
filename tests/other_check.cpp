@@ -135,18 +135,12 @@ TEST_F(OtherTests, childCount_twoChildren)
   ASSERT_TRUE( count == 2 );
 }
 
-TEST_F(OtherTests, addExternalLink_withAttribute)
+TEST_F(OtherTests, addExternalLink)
 {
   const char* parentPath = "/root";
-  ASSERT_TRUE( tixiAddExternalLink( outDocumentHandle, parentPath, "TestData/externalFile1", "MyFormat" ) == SUCCESS );
+  ASSERT_EQ(SUCCESS, tixiAddExternalLink( outDocumentHandle, parentPath, "./", "externaldata-included-1.xml" ));
+  ASSERT_EQ(ELEMENT_NOT_FOUND, tixiAddExternalLink( outDocumentHandle, "/invalidroot", "./", "externaldata-included-1.xml" ));
 }
-
-TEST_F(OtherTests, addExternalLink_withoutAttribute)
-{
-  const char* parentPath = "/root";
-  ASSERT_TRUE( tixiAddExternalLink( outDocumentHandle, parentPath, "TestData/externalFile2", NULL ) == SUCCESS );
-}
-
 
 TEST_F(OtherTests, usePrettyPrint)
 {
