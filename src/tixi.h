@@ -387,6 +387,22 @@ enum OpenMode
 
 
 typedef enum OpenMode OpenMode;
+/**
+
+\ingroup Enums
+     Mode how to add external data nodes to the document.
+
+ Has a typedef to AddLinkMode.
+  */
+enum AddLinkMode
+{
+  ADDLINK_CREATE,                   /*!< Just create the link. The files won't be load into the document. */
+  ADDLINK_CREATE_AND_OPEN           /*!< Creates the link and loads the specified file into the document. */
+};
+
+
+typedef enum AddLinkMode AddLinkMode;
+
 
 /**
 
@@ -2510,6 +2526,7 @@ DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, cons
                          should be inserted.
   @param[in]  pathOrUrl The parent path or url to the file.
   @param[in]  filename The actual name of the xml file.
+  @param[in]  mode Mode whether to create only the link or load the files into the document.
 
   @return
     - SUCCESS if successfully added the header
@@ -2518,7 +2535,7 @@ DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, cons
     - ALREADY_SAVED if the header should be added to an already saved document
  */
 DLL_EXPORT ReturnCode tixiAddExternalLink (const TixiDocumentHandle handle, const char *parentPath,
-                                           const char *pathOrUrl, const char *filename);
+                                           const char *pathOrUrl, const char *filename, AddLinkMode mode);
 
 
 /**

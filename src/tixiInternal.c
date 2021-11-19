@@ -626,51 +626,16 @@ char* loadExternalFileToString(const char* filename)
 }
 
 
-ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
+ReturnCode loadExternalDataNode(TixiDocument* aTixiDocument, xmlNodePtr externalDataNode, int* fileCounter)
 {
-  int iNode = 0;
-  int handle = aTixiDocument->handle;
-  xmlNodePtr cur = NULL;
-  ReturnCode error = SUCCESS;
-
-  assert(aTixiDocument != NULL);
-  *number = 0;
-
-  while(1) {
-    // loop until there are no externaldata nodes included
-
-    xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument, "//externaldata");
-    xmlNodeSetPtr nodeset = NULL;
+    int handle = aTixiDocument->handle;
     char* externalDataNodeXPath, *externalDataDirectoryXPath, *externalDataDirectory, *resolvedDirectory;
     int externalFileCount = 0;
-
-    if (!xpathObject) {
-      // no more external data, stop
-      break;
-    }
-
-    nodeset = xpathObject->nodesetval;
-    if (!nodeset || nodeset->nodeNr < 1) {
-      break;
-    }
-
-    // goto the first node that is an element
-    for (iNode = 0; iNode < nodeset->nodeNr; ++iNode) {
-      cur = nodeset->nodeTab[iNode];
-      if (cur->type == XML_ELEMENT_NODE) {
-        break; // for loop
-      }
-    }
-    if (iNode == nodeset->nodeNr) {
-      // no element node found
-      XPathClearCache(aTixiDocument->xpathCache);
-      break; // while loop
-    }
-
-    XPathClearCache(aTixiDocument->xpathCache);
+    ReturnCode error = SUCCESS;
+    int iNode = 0;
 
     /* get nodes XPath */
-    externalDataNodeXPath = (char*) xmlGetNodePath(cur);
+    externalDataNodeXPath = (char*) xmlGetNodePath(externalDataNode);
 
 
     /* now get the subdirectory */
@@ -725,7 +690,7 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
       if (xmlDocument) {
         xmlNodePtr rootToInsert = xmlDocGetRootElement(xmlDocument);
 
-        xmlNodePtr parent = cur->parent;
+        xmlNodePtr parent = externalDataNode->parent;
         if (parent) {
           xmlChar* nodePathNew = NULL;
           char* dataURI = localPathToURI(externalDataDirectory);
@@ -744,10 +709,10 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
           xmlFree(nodePathNew);
 
           /* replace externalData node with xml file's content */
-          xmlReplaceNode(cur, nodeToInsert);
+          xmlReplaceNode(externalDataNode, nodeToInsert);
 
           /* file could be loaded and parsed, increase the counter */
-          (*number)++;
+          (*fileCounter)++;
         }
 
         xmlFreeDoc(xmlDocument);
@@ -758,14 +723,63 @@ ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
                  externalFullFileName);
 
         /* remove external data node */
-        xmlUnlinkNode(cur);
+        xmlUnlinkNode(externalDataNode);
       }
       free(externalFullFileName);
     } /* end for files */
 
     free(resolvedDirectory);
     free(externalDataNodeXPath);
-    xmlFreeNode(cur);
+    xmlFreeNode(externalDataNode);
+
+    return SUCCESS;
+
+}
+
+ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number)
+{
+  int iNode = 0;
+
+  assert(aTixiDocument != NULL);
+  *number = 0;
+
+  while(1) {
+    // loop until there are no externaldata nodes included
+
+    xmlXPathObjectPtr xpathObject = XPathEvaluateExpression(aTixiDocument, "//externaldata");
+    xmlNodeSetPtr nodeset = NULL;
+    xmlNodePtr cur = NULL;
+    ReturnCode errCode = SUCCESS;
+
+    if (!xpathObject) {
+      // no more external data, stop
+      break;
+    }
+
+    nodeset = xpathObject->nodesetval;
+    if (!nodeset || nodeset->nodeNr < 1) {
+      break;
+    }
+
+    // goto the first node that is an element
+    for (iNode = 0; iNode < nodeset->nodeNr; ++iNode) {
+      cur = nodeset->nodeTab[iNode];
+      if (cur->type == XML_ELEMENT_NODE) {
+        break; // for loop
+      }
+    }
+    if (iNode == nodeset->nodeNr) {
+      // no element node found
+      XPathClearCache(aTixiDocument->xpathCache);
+      break; // while loop
+    }
+
+    XPathClearCache(aTixiDocument->xpathCache);
+
+    errCode = loadExternalDataNode(aTixiDocument, cur, number);
+    if (errCode != SUCCESS) {
+        return errCode;
+    }
   }
 
   return SUCCESS;

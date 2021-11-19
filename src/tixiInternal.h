@@ -252,6 +252,18 @@ TIXI_INTERNAL_EXPORT char* vectorToString(const double* floatVec, int numElement
 */
 TIXI_INTERNAL_EXPORT ReturnCode openExternalFiles(TixiDocument* aTixiDocument, int* number);
 
+/**
+ * @brief Loads all files into the document given a external data node
+ *
+ * @param aTixiDocument (in) A TIXI document with a opened main-xml file.
+ * @param externalDataNode (in) A pointer to the external data node.
+ * @param fileCounter (out) File counter pointer to enable counting the number of opened files.
+ * @return
+    - SUCCESS
+    - FAILED internal error
+    - OPEN_FAILED
+ */
+TIXI_INTERNAL_EXPORT ReturnCode loadExternalDataNode(TixiDocument* aTixiDocument, xmlNodePtr externalDataNode, int* fileCounter);
 
 /**
  * @brief Remove all links to external files

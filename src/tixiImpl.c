@@ -2036,54 +2036,54 @@ DLL_EXPORT ReturnCode tixiGetPoint(const TixiDocumentHandle handle, const char *
 }
 
 DLL_EXPORT ReturnCode tixiAddExternalLink(const TixiDocumentHandle handle, const char *parentPath,
-                                          const char *path, const char *filename)
+                                          const char *path, const char *filename, AddLinkMode mode)
 {
-  char * exteralDataPath = NULL;
   ReturnCode errorCode = FAILED;
+  xmlNodePtr parent = NULL;
+  xmlNodePtr externalNode = NULL;
+  TixiDocument *document = NULL;
 
   // check arguments
   if (path == NULL) {
       printMsg(MESSAGETYPE_ERROR, "Null pointer for argument 'path' in tixiAddExternalLink.\n");
-      goto finish;
+      return FAILED;
   }
 
   if (parentPath == NULL) {
       printMsg(MESSAGETYPE_ERROR, "Null pointer for argument 'parentPath' in tixiAddExternalLink.\n");
-      goto finish;
+      return FAILED;
   }
 
   if (filename == NULL) {
       printMsg(MESSAGETYPE_ERROR, "Null pointer for argument 'filename' in tixiAddExternalLink.\n");
-      goto finish;
+      return FAILED;
   }
 
-  errorCode = tixiCreateElement(handle, parentPath, EXTERNAL_DATA_NODE_NAME);
+  document = getDocument(handle);
+  if (!document) {
+      printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+      return INVALID_HANDLE;
+  }
+
+  errorCode = checkElement(document->xpathContext, parentPath, &parent);
   if (errorCode != SUCCESS) {
-      goto finish;
+      return errorCode;
   }
 
-  exteralDataPath = buildString("%s/%s", parentPath, EXTERNAL_DATA_NODE_NAME);
-
-  if (!exteralDataPath) {
-    printMsg(MESSAGETYPE_ERROR, "Internal Error: Failed to allocate memory in tixiAddExternalLink.\n");
-    errorCode = FAILED;
-    goto finish;
+  externalNode = createExternalNode(path, filename);
+  if (!externalNode) {
+      printMsg(MESSAGETYPE_ERROR, "Internal Error: failed to allocate memory in tixiAddExternalLink.\n");
+      return FAILED;
   }
 
-  errorCode = tixiAddTextElement(handle, exteralDataPath, EXTERNAL_DATA_NODE_NAME_PATH, path);
-  if (errorCode != SUCCESS) {
-      goto finish;
+  externalNode = xmlAddChild(parent, externalNode);
+
+  if (mode == ADDLINK_CREATE_AND_OPEN) {
+    int fileCount = 0;
+    return loadExternalDataNode(document, externalNode, &fileCount);
   }
 
-  errorCode = tixiAddTextElement(handle, exteralDataPath, EXTERNAL_DATA_NODE_NAME_FILENAME, filename);
-  if (errorCode != SUCCESS) {
-      goto finish;
-  }
-
-finish:
-  free(exteralDataPath);
-
-  return errorCode;
+  return SUCCESS;
 }
 
 DLL_EXPORT ReturnCode tixiRemoveExternalLinks(TixiDocumentHandle handle)
