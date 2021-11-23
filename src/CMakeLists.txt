@@ -30,6 +30,7 @@ if(APPLE)
 endif(APPLE)
 
 add_library(${TIXI_LIB_NAME} ${TIXI_SRC} ${TIXI_HDR})
+set_property(TARGET ${TIXI_LIB_NAME} PROPERTY C_STANDARD 99)
 
 target_compile_definitions(${TIXI_LIB_NAME} PRIVATE $<$<CONFIG:DEBUG>:DEBUG>)
 

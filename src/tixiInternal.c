@@ -566,15 +566,14 @@ char* buildString(const char* format, ...)
 char* vectorToString(const double* vector, int numElements, const char* format)
 {
     int i = 0, stringSize = 0, delim_size = strlen(VECTOR_SEPARATOR);
-    char* textBuffer = NULL;
     // the output string
     char* stringVector = NULL;
 
     /* calculate the size of the resulting string */
     for (i=0; i<numElements; i++) {
-      textBuffer = buildString(format, vector[i]);
-      stringSize += (int) strlen(textBuffer) + delim_size;
-      free(textBuffer);
+        // according to C99 Standard, n=0 allows a null pointer
+        // effectively just counting the written bytes this way
+        stringSize += snprintf(NULL, 0, format, vector[i]) + delim_size;
     }
 
     /* allocate memory */
@@ -583,21 +582,17 @@ char* vectorToString(const double* vector, int numElements, const char* format)
     /* copy strings to stringVector */
     stringVector[0] = '\0';
 
-    if (numElements>0) {
-        textBuffer = buildString(format, vector[0]);
-        strcat(stringVector, textBuffer);
-        stringSize = (int) strlen(textBuffer);
-        free(textBuffer);
-        for(i=1; i<numElements; i++) {
+    if (numElements > 0) {
+        char* formatExt = buildString("%s%s", VECTOR_SEPARATOR, format);
 
-          textBuffer = buildString(format, vector[i]);
+        stringSize = sprintf(stringVector, format , vector[0]);
+        for (i=1; i < numElements; i++) {
+
           // by using the pointer stringVector + stringSize, we can avoid
           // computing the string length as done by strcat
-          sprintf(stringVector + stringSize,"%s%s" , VECTOR_SEPARATOR, textBuffer);
-
-          stringSize += (int) strlen(textBuffer) + delim_size;
-          free(textBuffer);
+          stringSize += sprintf(stringVector + stringSize, formatExt, vector[i]);
         }
+        free(formatExt);
     }
 
     return stringVector;
