@@ -135,18 +135,53 @@ TEST_F(OtherTests, childCount_twoChildren)
   ASSERT_TRUE( count == 2 );
 }
 
-TEST_F(OtherTests, addExternalLink_withAttribute)
+TEST_F(OtherTests, addExternalLink_Create)
 {
   const char* parentPath = "/root";
-  ASSERT_TRUE( tixiAddExternalLink( outDocumentHandle, parentPath, "TestData/externalFile1", "MyFormat" ) == SUCCESS );
+
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata/path"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata/filename"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/testNode"));
+
+  ASSERT_EQ(SUCCESS, tixiAddExternalLink( outDocumentHandle, parentPath, "TestData", "externaldata-included-1.xml", ADDLINK_CREATE ));
+
+  EXPECT_EQ(SUCCESS, tixiCheckElement(outDocumentHandle, "/root/externaldata"));
+  EXPECT_EQ(SUCCESS, tixiCheckElement(outDocumentHandle, "/root/externaldata/path"));
+  EXPECT_EQ(SUCCESS, tixiCheckElement(outDocumentHandle, "/root/externaldata/filename"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/testNode"));
+
 }
 
-TEST_F(OtherTests, addExternalLink_withoutAttribute)
+TEST_F(OtherTests, addExternalLink_CreateAndOpen)
 {
   const char* parentPath = "/root";
-  ASSERT_TRUE( tixiAddExternalLink( outDocumentHandle, parentPath, "TestData/externalFile2", NULL ) == SUCCESS );
+
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata/path"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata/filename"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/testNode"));
+
+  ASSERT_EQ(SUCCESS, tixiAddExternalLink( outDocumentHandle, parentPath, "TestData", "externaldata-included-1.xml", ADDLINK_CREATE_AND_OPEN ));
+
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata/path"));
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiCheckElement(outDocumentHandle, "/root/externaldata/filename"));
+  EXPECT_EQ(SUCCESS, tixiCheckElement(outDocumentHandle, "/root/testNode"));
 }
 
+TEST_F(OtherTests, addExternalLink_Errors)
+{
+  const char* parentPath = "/root";
+
+  EXPECT_EQ(FAILED, tixiAddExternalLink( outDocumentHandle, NULL, "TestData", "externaldata-included-1.xml", ADDLINK_CREATE_AND_OPEN ));
+  EXPECT_EQ(FAILED, tixiAddExternalLink( outDocumentHandle, parentPath, NULL, "externaldata-included-1.xml", ADDLINK_CREATE_AND_OPEN ));
+  EXPECT_EQ(FAILED, tixiAddExternalLink( outDocumentHandle, parentPath, "TestData", NULL, ADDLINK_CREATE_AND_OPEN ));
+
+  EXPECT_EQ(ELEMENT_NOT_FOUND, tixiAddExternalLink( outDocumentHandle, "/invalidroot", "./", "externaldata-included-1.xml", ADDLINK_CREATE));
+
+  EXPECT_EQ(OPEN_FAILED, tixiAddExternalLink( outDocumentHandle, parentPath, "TestData", "this_file_does_not_exists.xml", ADDLINK_CREATE_AND_OPEN ));
+}
 
 TEST_F(OtherTests, usePrettyPrint)
 {

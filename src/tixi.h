@@ -387,6 +387,22 @@ enum OpenMode
 
 
 typedef enum OpenMode OpenMode;
+/**
+
+\ingroup Enums
+     Mode how to add external data nodes to the document.
+
+ Has a typedef to AddLinkMode.
+  */
+enum AddLinkMode
+{
+  ADDLINK_CREATE,                   /*!< Just create the link. The files won't be load into the document. */
+  ADDLINK_CREATE_AND_OPEN           /*!< Creates the link and loads the specified file into the document. */
+};
+
+
+typedef enum AddLinkMode AddLinkMode;
+
 
 /**
 
@@ -2488,18 +2504,29 @@ DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, cons
 
 
 /**
-  @brief Add a name of an external file as a url.
+  @brief Adds a link to an external xml file
+
+  The file is linked in the XML as
+
+  @verbatim
+  <externaldata>
+        <path>https://dlr.de/myxmlstore</path>
+        <filename>externaldata-included-1.xml</filename>
+  </externaldata>
+  @endverbatim
+
+  Note: the linked external file is not automatically loaded into the document.
 
   <b>Fortran syntax:</b>
 
-  tixi_add_external_link( integer  handle, character*n parent_path, character*n url, character*n file_format, integer error )
+  tixi_add_external_link( integer  handle, character*n parent_path, character*n path, character*n filename, integer error )
 
   @param[in]  handle as returned by ::tixiCreateDocument
-  @param[in]  parentPath path to the element into which the element holding the url
+  @param[in]  parentPath The Path to the element into which the element holding the url
                          should be inserted.
-  @param[in]  url an url to specify an additional output file not in XML-format
-  @param[in]  fileFormat an optional attribute (may be NULL) to specify a file format,
-                         e.g. CNGS, netcdf, ...
+  @param[in]  pathOrUrl The parent path or url to the file.
+  @param[in]  filename The actual name of the xml file.
+  @param[in]  mode Mode whether to create only the link or load the files into the document.
 
   @return
     - SUCCESS if successfully added the header
@@ -2508,7 +2535,7 @@ DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, cons
     - ALREADY_SAVED if the header should be added to an already saved document
  */
 DLL_EXPORT ReturnCode tixiAddExternalLink (const TixiDocumentHandle handle, const char *parentPath,
-                                           const char *url, const char *fileFormat);
+                                           const char *pathOrUrl, const char *filename, AddLinkMode mode);
 
 
 /**
