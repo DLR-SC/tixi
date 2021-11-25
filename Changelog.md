@@ -1,8 +1,33 @@
 Changelog
 =========
 
+
+Version 3.2.0
+-------------
+
+API Changes:
+
+ - Fixed inconsistent behaviour of the function ``::tixiAddExternalLink``. 
+   The function now creates external node links consistent to ``::tixiOpenDocumentRecursive``.
+   A new required argument defines, whether the newly created external node
+   should be directly loaded into the xml tree (issue #173).
+
+General Changes:
+
+ - Drasting performance improvements when adding and changing vectors via 
+   ``::tixiAddFloatVector`` and ``::tixiUpdateFloatVector`` by changing
+   the quadratic runtime behaviour to a linear behaviour (issue #183).
+ - Added support for Python 3.8 and Python 3.9 (issue #178).
+
+
+Fixes:
+- Fixed invalid calls in matlab bindings (issue #170).
+- Fixed error code in ``::tixiGetFloatVector``, if a vector element is not a number (issue #184).
+- Fixed a crash when saving to external xml documents (issue #175). 
+
+
 Version 3.1.1
-----------------
+-------------
 
 Fixes:
 - Fix for `::tixiGetDoubleElement` and `::tixiGetIntegerElement` and elements with trailing whitespace.
