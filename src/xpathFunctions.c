@@ -44,11 +44,6 @@ xmlXPathObjectPtr XPathEvaluateExpression(TixiDocument* doc, const char* xPathEx
     return NULL;
   }
 
-  if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
-    xmlXPathFreeObject(xpathObject);
-    return NULL;
-  }
-
   XPathCacheInsert(doc->xpathCache, (const xmlChar*) xPathExpression, xpathObject);
 
   return xpathObject;
@@ -66,6 +61,10 @@ int XPathGetNodeNumber(TixiDocument* tixiDocument, const char* xPathExpression)
   xpathObject = XPathEvaluateExpression(tixiDocument, xPathExpression);
   if (xpathObject == NULL) {
     return -1;
+  }
+
+  if (xmlXPathNodeSetIsEmpty(xpathObject->nodesetval)) {
+      return 0;
   }
 
   nodes = xpathObject->nodesetval;
