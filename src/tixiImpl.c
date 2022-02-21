@@ -970,6 +970,25 @@ DLL_EXPORT ReturnCode tixiUpdateTextElement (const TixiDocumentHandle handle, co
   error = checkElement(document->xpathContext, elementPath, &element);
 
   if (!error) {
+    // from the documentation:
+    //   elementPath must refer to exactly one element which has only a text node and zero or more attributes but no further children with text nodes.
+
+    // we explicitly check for these errors as the operation has an undesired effect otherwise (e.g. only replacing the first part of the text)
+
+    if (element->type != XML_ELEMENT_NODE)
+      return NOT_AN_ELEMENT;
+
+    int nChilds = getChildNodeCount(element);
+    if (nChilds > 1) {
+      printMsg(MESSAGETYPE_ERROR, "Error: cannot update text of an element with multiple child nodes.\n");
+      return FAILED;
+    }
+
+    if (nChilds == 1 && (!xmlNodeIsText(element->children)) ) {
+      printMsg(MESSAGETYPE_ERROR, "Error: cannot update text of an element with a non-text child node.\n");
+      return FAILED;
+    }
+
     newElement = xmlNewText((xmlChar*) text);
     if(element->children) {
       xmlNodePtr nodeToReplace = element->children;
