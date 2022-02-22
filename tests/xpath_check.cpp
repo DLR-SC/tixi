@@ -276,3 +276,54 @@ TEST_F(XPathChecks, tixiXPathGetXPath_ugly_elem)
   tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/node()", 6, &path);
   ASSERT_STREQ("/root/ugly_elem/text()[3]", path);
 }
+
+// get text node text
+TEST_F(XPathChecks, tixiXPathExpressionGetTextByIndex_textNode)
+{
+  int number = 0;
+  char* path = NULL;
+  char* text = NULL;
+
+  tixiXPathEvaluateNodeNumber(documentHandle, "/root/ugly_elem/text()", &number);
+  ASSERT_EQ(3, number);
+
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/text()", 1, &text);
+  ASSERT_STREQ("\n    some text\n    ", text);
+
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/text()", 2, &text);
+  ASSERT_STREQ("\n    ", text);
+
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/text()", 3, &text);
+  ASSERT_STREQ("\n    even further text\n  ", text);
+}
+
+// get comment node text
+TEST_F(XPathChecks, tixiXPathExpressionGetTextByIndex_commentNode)
+{
+  int number = 0;
+  char* path = NULL;
+  char* text = NULL;
+
+  tixiXPathEvaluateNodeNumber(documentHandle, "/root/ugly_elem/comment()", &number);
+  ASSERT_EQ(2, number);
+
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/comment()", 1, &text);
+  ASSERT_STREQ(" some comment ", text);
+
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/comment()", 2, &text);
+  ASSERT_STREQ(" more comments ", text);
+}
+
+// get non-text element text
+TEST_F(XPathChecks, tixiXPathExpressionGetTextByIndex_nontext_element)
+{
+  int number = 0;
+  char* path = NULL;
+  char* text = NULL;
+
+  tixiXPathEvaluateNodeNumber(documentHandle, "/root/ugly_elem/another_element", &number);
+  ASSERT_EQ(1, number);
+
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/another_element", 1, &text);
+  ASSERT_EQ(NULL, text);
+}

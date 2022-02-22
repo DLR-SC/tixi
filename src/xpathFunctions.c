@@ -121,6 +121,9 @@ char* XPathExpressionGetText(TixiDocument* tixiDocument, const char* xPathExpres
       return NULL;
     }
   }
+  else if (cur->type == XML_TEXT_NODE || cur->type == XML_COMMENT_NODE) {
+    text = (char*) cur->content;
+  }
 
   return text;
 }
