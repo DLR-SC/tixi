@@ -228,3 +228,51 @@ TEST_F(XPathChecks, tixiXPathExpressionGetXPath)
   ASSERT_EQ(INVALID_HANDLE, tixiXPathExpressionGetXPath(-1, "//a", 1, &xpath));
 }
 
+// get attribute text
+TEST_F(XPathChecks, tixiXPathExpressionGetTextByIndex_attributes)
+{
+  int number = 0;
+  char* text = NULL;
+  char* path = NULL;
+
+  tixiXPathEvaluateNodeNumber(documentHandle, "/root/ugly_elem/@*", &number);
+  ASSERT_EQ(2, number);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/@*", 1, &path);
+  ASSERT_STREQ("/root/ugly_elem/@some_attr", path);
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/@*", 1, &text);
+  ASSERT_STREQ("x", text);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/@*", 2, &path);
+  ASSERT_STREQ("/root/ugly_elem/@some_other_attr", path);
+  tixiXPathExpressionGetTextByIndex(documentHandle, "/root/ugly_elem/@*", 2, &text);
+  ASSERT_STREQ("y", text);
+}
+
+// get child nodes
+TEST_F(XPathChecks, tixiXPathGetXPath_ugly_elem)
+{
+  int number = 0;
+  char* path = NULL;
+
+  tixiXPathEvaluateNodeNumber(documentHandle, "/root/ugly_elem/node()", &number);
+  ASSERT_EQ(6, number);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/node()", 1, &path);
+  ASSERT_STREQ("/root/ugly_elem/comment()[1]", path);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/node()", 2, &path);
+  ASSERT_STREQ("/root/ugly_elem/text()[1]", path);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/node()", 3, &path);
+  ASSERT_STREQ("/root/ugly_elem/another_element", path);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/node()", 4, &path);
+  ASSERT_STREQ("/root/ugly_elem/text()[2]", path);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/node()", 5, &path);
+  ASSERT_STREQ("/root/ugly_elem/comment()[2]", path);
+
+  tixiXPathExpressionGetXPath(documentHandle, "/root/ugly_elem/node()", 6, &path);
+  ASSERT_STREQ("/root/ugly_elem/text()[3]", path);
+}
