@@ -1961,6 +1961,37 @@ DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, con
  */
 DLL_EXPORT ReturnCode tixiSwapElements(const TixiDocumentHandle handle, const char* element1Path, const char* element2Path);
 
+
+/**
+  @brief Returns the element as one XML text.
+
+  Returns the XML text of the element specified by elementPath in the document specified by handle.
+  If an error occurs text is set to NULL. On successful return the memory used for text is allocated
+  internally and must not be released by the user. The deallocation
+  is handle when the document referred to by handle is closed.
+  If OpenMode=OPENMODE_RECURSIVE, text will be one big string with all external
+  xml files included.
+
+  <b>Fortran syntax:</b>
+
+  tixi_export_element_as_string( integer handle, character*n element_path, character*n text, integer error )
+
+  @param[in]  handle handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[in]  elementPath an XPath compliant path to an element in the document
+                          specified by handle (see section \ref XPathExamples above).
+  @param[out] text text content of the document
+
+  @return
+    - SUCCESS if successfully retrieve the text content of a single element
+    - INVALID_HANDLE if the handle is not valid, i.e.  does not or no longer exist
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document
+    - ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but
+                              to a list of elements
+ */
+DLL_EXPORT ReturnCode tixiExportElementAsString (const TixiDocumentHandle handle, const char* elementPath, char **text);
+
+
 /*@}*/
 
 /**

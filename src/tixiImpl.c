@@ -3111,6 +3111,52 @@ ReturnCode tixiSwapElements(const TixiDocumentHandle handle, const char* element
     return SUCCESS;
 }
 
+DLL_EXPORT ReturnCode tixiExportElementAsString(const TixiDocumentHandle handle, const char* elementPath, char **text)
+{
+  TixiDocument *document = getDocument(handle);
+  xmlDocPtr xmlDocument = NULL;
+  xmlNodePtr element = NULL;
+  ReturnCode error = SUCCESS;
+  xmlBufferPtr buffer;
+  int textLen;
+
+  *text = NULL;
+
+  if (!document) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+  xmlDocument = document->docPtr;
+
+  if (!text) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Null Pointer in tixiExportDocumentAsString.\n");
+    return FAILED;
+  }
+
+  error = checkElement(document->xpathContext, elementPath, &element);
+
+  if (!error) {
+    buffer = xmlBufferCreate();
+
+    textLen = xmlNodeDump(buffer, xmlDocument, element, 0, document->usePrettyPrint);
+    
+    if (textLen >= 0) {
+      *text = (char *) malloc((textLen+1) * sizeof(char));
+      strncpy(*text, (const char*) xmlBufferContent(buffer), textLen);
+      (*text)[textLen] = '\0';
+      error = addToMemoryList(document, (void *) *text);
+    }
+    else {
+      error = FAILED;
+    }
+
+    xmlBufferFree(buffer);
+  }
+
+  return error;
+}
+
+
 DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds)
 {
   TixiDocument *document = getDocument(handle);
