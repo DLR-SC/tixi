@@ -8,4 +8,11 @@
     <b uID="a">Bla</b>
     <b uID="empty_element"/>
   </a>
+  <ugly_elem some_attr="x" some_other_attr="y">
+    <!-- some comment -->
+    some text
+    <another_element my_attr="hello"/>
+    <!-- more comments -->
+    even further text
+  </ugly_elem>
 </root>
