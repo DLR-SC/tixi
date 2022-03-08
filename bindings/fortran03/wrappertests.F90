@@ -458,7 +458,7 @@ elementFormDefault="qualified" attributeFormDefault="unqualified">&
     VERIFY( SUCCESS .eq. tixiAddTextElementAtIndex(th,r,'myNewTextElement','myText',2) )
     VERIFY( SUCCESS .eq. tixiCreateElementAtIndex(th,r,'array',0) )
     VERIFY( SUCCESS .eq. tixiAddFloatVector(th,r,'myFloatVector',(/0.0_8,1.1_8,2.2_8/),3, '%g') )
-    VERIFY( SUCCESS .eq. tixiAddExternalLink(th,r,'/externalLink','.xml') )
+    VERIFY( SUCCESS .eq. tixiAddExternalLink(th,r,'/externalLink','.xml',ADDLINK_CREATE) )
     VERIFY( SUCCESS .eq. tixiAddHeader(th,'tool','version','author') )
     VERIFY( SUCCESS .eq. tixiAddCpacsHeader(th,cp_n,cp_c,cp_v,cp_d,cp_cv) )
     VERIFY( SUCCESS .eq. tixiUsePrettyPrint(th,1) )
