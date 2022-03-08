@@ -3176,6 +3176,43 @@ DLL_EXPORT ReturnCode tixiExportElementAsString(const TixiDocumentHandle handle,
   return error;
 }
 
+DLL_EXPORT ReturnCode tixiImportElementFromString (const TixiDocumentHandle handle, const char *parentPath, const char *xmlImportString)
+{
+  TixiDocument *document = getDocument(handle);
+  xmlDocPtr xmlDocument = NULL;
+  xmlNodePtr parentElement = NULL;
+  xmlNodePtr newElement = NULL;
+  ReturnCode error = SUCCESS;
+  xmlBufferPtr buffer;
+  int textLen;
+  xmlParserErrors parseErrors = 0;
+
+  if (!document) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
+    return INVALID_HANDLE;
+  }
+  xmlDocument = document->docPtr;
+
+  if (!xmlImportString) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Null Pointer in tixiImportElementFromString.\n");
+    return FAILED;
+  }
+
+  error = checkElement(document->xpathContext, parentPath, &parentElement);
+
+  if (!error) {
+    parseErrors = xmlParseInNodeContext(parentElement, xmlImportString, strlen(xmlImportString), 0, &newElement);
+
+    if (!parseErrors) {
+      xmlAddChild(parentElement, newElement);
+    }
+    else {
+      printMsg(MESSAGETYPE_ERROR, "Error: XML-string to import is not wellformed!\n");
+      error = NOT_WELL_FORMED;
+    }
+  }
+  return error;
+}
 
 DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds)
 {
