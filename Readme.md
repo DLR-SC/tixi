@@ -3,7 +3,7 @@
 [![CI](https://github.com/DLR-SC/tixi/actions/workflows/main.yml/badge.svg)](https://github.com/DLR-SC/tixi/actions/workflows/main.yml)
 
  - Binary Downloads:  https://github.com/DLR-SC/tixi/wiki/Downloads
- - API Documentation: http://tixi.sourceforge.net/Doc/index.html
+ - API Documentation: http://dlr-sc.github.io/tixi/
  - Issue Tracker:     https://github.com/DLR-SC/tixi/issues
  - Wiki:              https://github.com/DLR-SC/tixi/wiki
 
