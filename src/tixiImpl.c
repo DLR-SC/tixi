@@ -3129,7 +3129,8 @@ DLL_EXPORT ReturnCode tixiExportElementAsString(const TixiDocumentHandle handle,
   xmlDocument = document->docPtr;
 
   if (!text) {
-    printMsg(MESSAGETYPE_ERROR, "Error: Null Pointer in tixiExportDocumentAsString.\n");
+    printMsg(MESSAGETYPE_ERROR, "Error: Null Pointer in tixiExportElementAsString.\n");
+
     return FAILED;
   }
 
