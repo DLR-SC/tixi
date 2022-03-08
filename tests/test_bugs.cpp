@@ -65,6 +65,101 @@ TEST(Bugs, empty_textelement)
   ASSERT_STREQ("mytext2", text);
 }
 
+// tests, if updating a text element that contains comments (ignored by GetText) does not prepend to existing text
+TEST(Bugs, textelement_with_comment_in_the_middle)
+{
+  const char* s = "<?xml version=\"1.0\"?><root><elem>text_before <!-- comment_text --> text_after</elem></root>";
+  TixiDocumentHandle handle;
+  ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
+
+  char* text = NULL;
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem", &text));
+  ASSERT_STREQ("text_before  text_after", text);
+
+  ASSERT_EQ(FAILED, tixiUpdateTextElement(handle, "/root/elem", "new text"));
+
+  /*
+  // this could also be desirable behavior but the documentation currently states that this should not work!
+  ASSERT_EQ(SUCCESS, tixiUpdateTextElement(handle, "/root/elem", "new text"));
+
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem", &text));
+  ASSERT_STREQ("new text", text);
+  */
+
+  tixiCloseDocument(handle);
+}
+
+TEST(Bugs, textelement_before_comment)
+{
+  const char* s = "<?xml version=\"1.0\"?><root><elem>some_text <!-- comment_text --></elem></root>";
+  TixiDocumentHandle handle;
+  ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
+
+  char* text = NULL;
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem", &text));
+  ASSERT_STREQ("some_text ", text);
+
+  ASSERT_EQ(FAILED, tixiUpdateTextElement(handle, "/root/elem", "new text"));
+
+  /*
+  // this could also be desirable behavior but the documentation currently states that this should not work!
+  ASSERT_EQ(SUCCESS, tixiUpdateTextElement(handle, "/root/elem", "new text"));
+
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem", &text));
+  ASSERT_STREQ("new text", text);
+  */
+
+  tixiCloseDocument(handle);
+}
+
+TEST(Bugs, textelement_after_comment)
+{
+  const char* s = "<?xml version=\"1.0\"?><root><elem><!-- comment_text --> text_after</elem></root>";
+  TixiDocumentHandle handle;
+  ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
+
+  char* text = NULL;
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem", &text));
+  ASSERT_STREQ(" text_after", text);
+
+  ASSERT_EQ(FAILED, tixiUpdateTextElement(handle, "/root/elem", "new text"));
+
+  /*
+  // this could also be desirable behavior but the documentation currently states that this should not work!
+  ASSERT_EQ(SUCCESS, tixiUpdateTextElement(handle, "/root/elem", "new text"));
+
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem", &text));
+  ASSERT_STREQ("new text", text);
+  */
+
+  tixiCloseDocument(handle);
+}
+
+// directly access the 'text()' of an element (should behave the same for GetText and UpdateText)
+TEST(Bugs, textelement_directly_access_text)
+{
+  const char* s = "<?xml version=\"1.0\"?><root><elem>some text</elem></root>";
+  TixiDocumentHandle handle;
+  ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
+
+  char* text = NULL;
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem/text()", &text));
+  ASSERT_STREQ("some text", text);
+
+  ASSERT_EQ(NOT_AN_ELEMENT, tixiUpdateTextElement(handle, "/root/elem/text()", "new text"));
+
+  /*
+  // this could also be desirable behavior but the documentation currently states that this should not work!
+  ASSERT_EQ(SUCCESS, tixiUpdateTextElement(handle, "/root/elem/text()", "new text"));
+
+  ASSERT_EQ(SUCCESS, tixiGetTextElement(handle, "/root/elem/text()", &text));
+  ASSERT_STREQ("new text", text);
+  */
+
+  tixiCloseDocument(handle);
+}
+
+
 extern "C" void printMsg(MessageType type, const char* message, ...);
 
 TEST(Bugs, printMessageCrash)
