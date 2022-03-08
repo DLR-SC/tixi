@@ -56,10 +56,11 @@ TEST_F(XPathChecks, tixiXPathEvaluateNodeNumber)
   ASSERT_TRUE( num == 6 );
 }
 
-TEST_F(XPathChecks, tixiXPathEvaluateNodeNumber_fail)
+TEST_F(XPathChecks, tixiXPathEvaluateNodeNumber_noNodes)
 {
   int num = 0;
-  ASSERT_TRUE( tixiXPathEvaluateNodeNumber( documentHandle, "//@kruzifix", &num) == FAILED );
+  ASSERT_TRUE( tixiXPathEvaluateNodeNumber( documentHandle, "//@kruzifix", &num) == SUCCESS);
+  EXPECT_EQ(0, num);
 }
 
 
