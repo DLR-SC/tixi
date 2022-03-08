@@ -1,6 +1,26 @@
 Changelog
 =========
 
+Version 3.3.0
+-------------
+
+API Changes:
+
+ - ``::tixiXPathEvaluateNodeNumber`` will not throw an error anymore when an xml node does
+   not exist. Rather, the function will succeed and return zero. (issue #198)
+ - Fixed inconsistent behavior of the function ``::tixiUpdateTextElement``: This function should 
+   only work, when the element path refers to a single element with no XML child nodes or at most 
+   one text child node. This is now explicitly checked and an error is thrown, if these
+   prerequisites are not met. Without this, it is not clear how the function behaves e.g. at the 
+   presence of comment child nodes.
+ - ``::tixiXPathExpressionGetTextByIndex`` now retrieves the complete content of an element
+   including text and comments.
+
+New Functions:
+
+ - ``::tixiExportElementAsString`` retrieves the xml string of a given element (issue #202)
+ - ``::tixiImportElementFromString`` imports a char-string as a child element into an existing 
+   tixi-document (issue #202).
 
 Version 3.2.0
 -------------
