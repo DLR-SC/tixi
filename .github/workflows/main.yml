@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["windows-2019", "windows-2016"]
+        os: ["windows-2019", "windows-latest"]
     runs-on: ${{ matrix.os }}
     steps:
 # On the Github-hosted runner, git checks out text files with \r\n (I think)
@@ -75,23 +75,19 @@ jobs:
           }
       - name: Setup msys2/gfortran
         uses: msys2/setup-msys2@v2
+        
+      - name: Set up Visual Studio shell
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
+        
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
           gfortran --version
-          if windows-2016==${{ matrix.os }} (
-            call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
-            set GENERATOR="Visual Studio 15 2017 Win64"
-            set CMAKE_ARCH_FLAG=""
-          ) else (
-            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
-            set GENERATOR="Visual Studio 16 2019"
-            set CMAKE_ARCH_FLAG="-A x64"
-          )
           mkdir build
           cd build
-          cmake  -G %GENERATOR% %CMAKE_ARCH_FLAG% ^
-                 -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
+          cmake  -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
                  -DTIXI_ENABLE_FORTRAN=ON ^
                  -DBUILD_SHARED_LIBS=ON ^
                  -DTIXI_BUILD_TESTS=ON ^
@@ -131,7 +127,7 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["windows-2019", "windows-2016"]
+        os: ["windows-2019", "windows-latest"]
     runs-on: ${{ matrix.os }}
     needs: build-win64
     steps:
