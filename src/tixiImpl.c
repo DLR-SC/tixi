@@ -3204,6 +3204,10 @@ DLL_EXPORT ReturnCode tixiImportElementFromString (const TixiDocumentHandle hand
     parseErrors = xmlParseInNodeContext(parentElement, xmlImportString, strlen(xmlImportString), 0, &newElement);
 
     if (!parseErrors) {
+
+      // structure change!, we have to empty the xpath cache
+      XPathClearCache(document->xpathCache);
+
       xmlAddChild(parentElement, newElement);
     }
     else {

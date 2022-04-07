@@ -83,3 +83,20 @@ TEST_F(ImportElementsCheck, notWellFormed)
     ASSERT_EQ(NOT_WELL_FORMED, tixiImportElementFromString(handle, "/root/a", "sdaf<||/sdfasf>"));
 }
 
+TEST_F(ImportElementsCheck, invalidateXPathCache)
+{
+    char* text = NULL;
+    int num = 0;
+    char* path = NULL;
+
+    ASSERT_TRUE( tixiSetCacheEnabled(handle, true) == SUCCESS );
+
+    ASSERT_TRUE( tixiXPathEvaluateNodeNumber(handle, "//*", &num) == SUCCESS );
+    ASSERT_EQ(3, num);
+
+    ASSERT_EQ(SUCCESS, tixiImportElementFromString(handle, "/root", "<a attr=\"hello\"><x/></a>"));
+
+    ASSERT_TRUE( tixiXPathEvaluateNodeNumber(handle, "//*", &num) == SUCCESS );
+    ASSERT_EQ(5, num);
+}
+
