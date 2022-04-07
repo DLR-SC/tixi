@@ -3178,6 +3178,11 @@ DLL_EXPORT ReturnCode tixiExportElementAsString(const TixiDocumentHandle handle,
 
 DLL_EXPORT ReturnCode tixiImportElementFromString (const TixiDocumentHandle handle, const char *parentPath, const char *xmlImportString)
 {
+  return tixiImportElementFromStringAtIndex(handle, parentPath, -1, xmlImportString);
+}
+
+DLL_EXPORT ReturnCode tixiImportElementFromStringAtIndex (const TixiDocumentHandle handle, const char *parentPath, int index, const char *xmlImportString)
+{
   TixiDocument *document = getDocument(handle);
   xmlDocPtr xmlDocument = NULL;
   xmlNodePtr parentElement = NULL;
@@ -3186,6 +3191,8 @@ DLL_EXPORT ReturnCode tixiImportElementFromString (const TixiDocumentHandle hand
   xmlBufferPtr buffer;
   int textLen;
   xmlParserErrors parseErrors = 0;
+  int i = 1;
+  xmlNodePtr targetNode = NULL;
 
   if (!document) {
     printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle.\n");
@@ -3199,23 +3206,35 @@ DLL_EXPORT ReturnCode tixiImportElementFromString (const TixiDocumentHandle hand
   }
 
   error = checkElement(document->xpathContext, parentPath, &parentElement);
-
-  if (!error) {
-    parseErrors = xmlParseInNodeContext(parentElement, xmlImportString, strlen(xmlImportString), 0, &newElement);
-
-    if (!parseErrors) {
-
-      // structure change!, we have to empty the xpath cache
-      XPathClearCache(document->xpathCache);
-
-      xmlAddChild(parentElement, newElement);
-    }
-    else {
-      printMsg(MESSAGETYPE_ERROR, "Error: XML-string to import is not wellformed!\n");
-      error = NOT_WELL_FORMED;
-    }
+  if (error) {
+    return error;
   }
-  return error;
+
+  parseErrors = xmlParseInNodeContext(parentElement, xmlImportString, strlen(xmlImportString), 0, &newElement);
+  if (parseErrors) {
+    printMsg(MESSAGETYPE_ERROR, "Error: XML-string to import is not wellformed!\n");
+    return NOT_WELL_FORMED;
+  }
+
+
+  /* find node where new node should be inserted before */
+  targetNode =  parentElement->children;
+  while(targetNode != NULL && i++ < index)
+    targetNode = targetNode->next;
+
+  // structure change!, we have to empty the xpath cache
+  XPathClearCache(document->xpathCache);
+
+  if (targetNode != NULL && index > 0) {
+    /* insert at position index */
+    xmlAddPrevSibling(targetNode, newElement);
+  }
+  else {
+    /* insert at the end of the list */
+    xmlAddChild(parentElement, newElement);
+  }
+
+  return SUCCESS;
 }
 
 DLL_EXPORT ReturnCode tixiGetNumberOfChilds(const TixiDocumentHandle handle, const char *elementPath, int* nChilds)
