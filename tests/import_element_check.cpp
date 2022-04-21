@@ -58,6 +58,33 @@ TEST_F(ImportElementsCheck, importElem2)
     EXPECT_STREQ("<?xml version=\"1.0\"?>\n<root><a/><b><x attr=\"hello\"><c/></x></b></root>\n", text);
 }
 
+TEST_F(ImportElementsCheck, importElemAtIndex1)
+{
+    char* text = NULL;
+
+    ASSERT_EQ(SUCCESS, tixiImportElementFromStringAtIndex(handle, "/root", 1, "<x>text</x>"));
+    ASSERT_EQ(SUCCESS, tixiExportDocumentAsString(handle, &text));
+    EXPECT_STREQ("<?xml version=\"1.0\"?>\n<root><x>text</x><a/><b/></root>\n", text);
+}
+
+TEST_F(ImportElementsCheck, importElemAtIndex2)
+{
+    char* text = NULL;
+
+    ASSERT_EQ(SUCCESS, tixiImportElementFromStringAtIndex(handle, "/root", 2, "<x>text</x>"));
+    ASSERT_EQ(SUCCESS, tixiExportDocumentAsString(handle, &text));
+    EXPECT_STREQ("<?xml version=\"1.0\"?>\n<root><a/><x>text</x><b/></root>\n", text);
+}
+
+TEST_F(ImportElementsCheck, importElemAtIndex3)
+{
+    char* text = NULL;
+
+    ASSERT_EQ(SUCCESS, tixiImportElementFromStringAtIndex(handle, "/root", 3, "<x>text</x>"));
+    ASSERT_EQ(SUCCESS, tixiExportDocumentAsString(handle, &text));
+    EXPECT_STREQ("<?xml version=\"1.0\"?>\n<root><a/><b/><x>text</x></root>\n", text);
+}
+
 TEST_F(ImportElementsCheck, invalidHandle)
 {
     ASSERT_EQ(INVALID_HANDLE, tixiImportElementFromString(-999, "/root/b", "<x attr=\"hello\"><c/></x>"));

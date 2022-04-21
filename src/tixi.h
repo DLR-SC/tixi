@@ -2024,6 +2024,40 @@ DLL_EXPORT ReturnCode tixiExportElementAsString (const TixiDocumentHandle handle
 DLL_EXPORT ReturnCode tixiImportElementFromString (const TixiDocumentHandle handle, const char *parentPath, const char *xmlImportString);
 
 
+/**
+  @brief Imports a char-string as a child element into an existing tixi-document
+
+  Creates a new element with the content of the string and checks if it is well formed.
+  The element name is defined through the root element in the imported string.
+  Elements with the same name can be added multiple times.
+
+  <b>Fortran syntax:</b>
+
+  tixi_import_element_from_string( integer  handle, character*n parent_path, character*n xmlImportString, integer error )
+
+  @param[in]  handle file handle as returned by ::tixiCreateDocument
+
+  @param[in]  parentPath an XPath compliant path to an element in the document
+                         specified by handle (see section \ref XPathExamples above)
+                         into which the new element is to be inserted. The parent
+                         element has to exist already.
+
+  @param[in]  index the position index where the new node should be created.
+
+  @param[in]  xmlImportString the string with the xml-content
+
+  @return
+    - SUCCESS if successfully added the text element
+    - NOT_WELL_FORMED if importing of the string succeeds but test for well-formedness fails
+    - INVALID_HANDLE if the handle is not valid
+    - INVALID_XPATH if elementPath is not a well-formed XPath-expression
+    - ELEMENT_PATH_NOT_UNIQUE if parentPath resolves not to a single element but to a list of elements
+    - ELEMENT_NOT_FOUND if parentPath points to a non-existing element
+    - ALREADY_SAVED if element should be added to an already saved document
+ */
+DLL_EXPORT ReturnCode tixiImportElementFromStringAtIndex (const TixiDocumentHandle handle, const char *parentPath, int index, const char *xmlImportString);
+
+
 /*@}*/
 
 /**
