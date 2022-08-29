@@ -23,8 +23,10 @@ if __name__ == '__main__':
     #ann =   CP.Annotation('#annotate out: 3, 4A(3)')  
 
     # copy handwritten *.m files into current directory
-    for mfile in glob.glob(filepath + r'/*.m'):
-        shutil.copy(mfile, '.')
+    # only if source directory != binary directory
+    if os.path.abspath(filepath) != os.path.abspath("."):
+        for mfile in glob.glob(filepath + r'/*.m'):
+            shutil.copy(mfile, '.')
     
     parser = CP.CHeaderFileParser()
     
