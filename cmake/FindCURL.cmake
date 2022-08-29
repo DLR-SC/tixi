@@ -5,6 +5,8 @@
 #  CURL_LIBRARIES      - List of libraries when using curl.
 #  CURL_FOUND          - True if curl found.
 #  CURL_VERSION_STRING - the version of curl found (since CMake 2.8.8)
+#
+# Creates the CMake target CURL::libcurl for the curl library
 
 #=============================================================================
 # Copyright 2006-2009 Kitware, Inc.
@@ -57,8 +59,8 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(CURL
                                   VERSION_VAR CURL_VERSION_STRING)
 
 if(CURL_FOUND)
-  add_library(curllib UNKNOWN IMPORTED)
-  set_target_properties(curllib PROPERTIES
+  add_library(CURL::libcurl UNKNOWN IMPORTED)
+  set_target_properties(CURL::libcurl PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES ${CURL_INCLUDE_DIR}
       IMPORTED_LOCATION ${CURL_LIBRARY}
       IMPORTED_IMPLIB ${CURL_LIBRARY}
@@ -66,7 +68,7 @@ if(CURL_FOUND)
   if (WIN32)
     string(REGEX MATCH "_a.lib$" CURL_STATICLIB ${CURL_LIBRARY})
     if (CURL_STATICLIB)
-      set_target_properties(curllib
+      set_target_properties(CURL::libcurl
           PROPERTIES INTERFACE_COMPILE_DEFINITIONS "CURL_STATICLIB"
       )
     endif(CURL_STATICLIB)

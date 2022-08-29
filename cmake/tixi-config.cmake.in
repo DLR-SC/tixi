@@ -31,9 +31,9 @@ if(NOT "$<TARGET_PROPERTY:tixi3,TYPE>" STREQUAL "SHARED_LIBRARY")
     set_property(TARGET LibXslt::LibXslt APPEND PROPERTY IMPORTED_LOCATION "${LIBXSLT_LIBRARIES}")
   endif()
   
-  if(CURL_FOUND AND NOT TARGET curllib)
-    add_library(curllib UNKNOWN IMPORTED)
-    set_target_properties(curllib PROPERTIES
+  if(CURL_FOUND AND NOT TARGET CURL::libcurl)
+    add_library(CURL::libcurl UNKNOWN IMPORTED)
+    set_target_properties(CURL::libcurl PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES ${CURL_INCLUDE_DIR}
       IMPORTED_LOCATION ${CURL_LIBRARY}
       IMPORTED_IMPLIB ${CURL_LIBRARY}
@@ -41,7 +41,7 @@ if(NOT "$<TARGET_PROPERTY:tixi3,TYPE>" STREQUAL "SHARED_LIBRARY")
     if (WIN32)
       string(REGEX MATCH "_a.lib$" CURL_STATICLIB ${CURL_LIBRARY})
       if (CURL_STATICLIB)
-        set_target_properties(curllib
+        set_target_properties(CURL::libcurl
           PROPERTIES INTERFACE_COMPILE_DEFINITIONS "CURL_STATICLIB"
       )
       endif(CURL_STATICLIB)
