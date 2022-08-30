@@ -22,7 +22,8 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y cmake cmake-data gfortran libcurl4-openssl-dev libxslt1-dev
+          sudo apt-get install -y cmake cmake-data gfortran libcurl4-openssl-dev libxslt1-dev python3-setuptools
+          sudo python3 -m pip install conan
       - name: Build TiXI
         run: |
           mkdir build
@@ -39,6 +40,9 @@ jobs:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
           retention-days: 1
+      - name: Build conan package
+        run: |
+          conan create . -o tixi3:shared=True
 
   build-win64:
     strategy:
