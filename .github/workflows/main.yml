@@ -42,7 +42,7 @@ jobs:
           retention-days: 1
       - name: Build conan package
         run: |
-          conan create . -o tixi3:shared=True
+          conan create . -o tixi3:shared=True -s build_type=${{ matrix.config }}
 
   build-win64:
     strategy:
