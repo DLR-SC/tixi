@@ -20,7 +20,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fmessage-length=0")
 endif()
 
-set(TIXI_LIBS curllib LibXslt::LibXslt LibXml2::LibXml2)
+set(TIXI_LIBS CURL::libcurl LibXslt::LibXslt LibXml2::LibXml2)
 if(WIN32)
     set(TIXI_LIBS ${TIXI_LIBS} Shlwapi)
 endif(WIN32)

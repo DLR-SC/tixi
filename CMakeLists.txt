@@ -1,5 +1,10 @@
 cmake_minimum_required (VERSION 3.1)
 
+if (EXISTS ${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
+    cmake_policy(SET CMP0091 NEW)
+    include(${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
+endif()
+
 # Set a default build type if none was specified
 if(NOT DEFINED CMAKE_BUILD_TYPE)
     message(STATUS "Setting build type to 'Release' as none was specified.")
