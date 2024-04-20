@@ -25,6 +25,8 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
 
+#include <stdlib.h>
+
 extern void printMsg(MessageType type, const char* message, ...);
 
 void* myrealloc(void* ptr, size_t size)

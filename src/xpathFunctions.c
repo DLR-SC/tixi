@@ -21,6 +21,7 @@
 #include "libxml/xpathInternals.h"
 
 #include <assert.h>
+#include <stdlib.h>
 
 extern void printMsg(MessageType type, const char* message, ...);
 

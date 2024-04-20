@@ -17,6 +17,7 @@
 */
 #include "uidHelper.h"
 #include "tixiInternal.h"
+#include <stdlib.h>
 
 extern void printMsg(MessageType type, const char* message, ...);
 
