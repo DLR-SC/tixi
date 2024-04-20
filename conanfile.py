@@ -9,11 +9,11 @@ required_conan_version = ">=1.45.0"
 def get_version_from_cmakelists():
     if not os.path.exists("CMakeLists.txt"):
         return None
-    
+
     major_ver = "0"
     minor_ver = "0"
     patch_ver = "0"
-    
+
     with open("CMakeLists.txt","r") as file_one:
         major_re = re.compile('set\(TIXI_VERSION_MAJOR ([0-9]+)\)')
         minor_re = re.compile('set\(TIXI_VERSION_MINOR ([0-9]+)\)')
@@ -57,9 +57,9 @@ class Tixi3Conan(ConanFile):
         deps.generate()
 
     def requirements(self):
-        self.requires("libxml2/2.9.14")
-        self.requires("libxslt/1.1.34")
-        self.requires("libcurl/7.84.0")
+        self.requires("libxml2/[>=2.12.5 <3]")
+        self.requires("libxslt/1.1.39")
+        self.requires("libcurl/[>=7.78.0 <9]")
 
     def layout(self):
         cmake_layout(self)
@@ -70,24 +70,14 @@ class Tixi3Conan(ConanFile):
 
     def configure(self):
         if self.options.shared:
-            try:
-                del self.options.fPIC
-            except Exception:
-                pass
-
+            self.options.rm_safe("fPIC")
         # tixi is a c library
-        try:
-            del self.settings.compiler.libcxx
-        except Exception:
-            pass
-        try:
-            del self.settings.compiler.cppstd
-        except Exception:
-            pass
+        self.settings.rm_safe("compiler.cppstd")
+        self.settings.rm_safe("compiler.libcxx")
 
     def export_sources(self):
         self.output.info("Executing export_sources() method")
-        self.copy("*", dst=self.export_sources_folder)
+        files.copy(self, "*", src=self.recipe_folder, dst=self.export_sources_folder)
 
     def build(self):
         cmake = CMake(self)
@@ -126,7 +116,7 @@ class Tixi3Conan(ConanFile):
 
     def package_info(self):
         self.cpp_info.includedirs.append(os.path.join("include", "tixi3"))
-        
+
         if self.settings.build_type != "Debug":
             self.cpp_info.libs = ['tixi3']
         else:
