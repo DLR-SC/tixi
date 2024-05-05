@@ -13,10 +13,10 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["ubuntu-latest", "ubuntu-18.04"]
+        os: ["ubuntu-latest", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Install dependencies
@@ -35,14 +35,15 @@ jobs:
                 ..
           make -j
       - name: Upload build directory
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
           retention-days: 1
       - name: Build conan package
         run: |
-          conan create . -o tixi3:shared=True -s build_type=${{ matrix.config }}
+          conan profile detect
+          conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type=${{ matrix.config }}
 
   build-win64:
     strategy:
@@ -59,7 +60,7 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Install dependencies
@@ -79,12 +80,12 @@ jobs:
           }
       - name: Setup msys2/gfortran
         uses: msys2/setup-msys2@v2
-        
+
       - name: Set up Visual Studio shell
         uses: egor-tensin/vs-shell@v2
         with:
           arch: x64
-        
+
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
@@ -101,7 +102,7 @@ jobs:
                  ..
           cmake --build . --target install --config ${{ matrix.config }}
       - name: Upload build directory
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -112,12 +113,12 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["ubuntu-latest", "ubuntu-18.04"]
+        os: ["ubuntu-latest", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     needs: build-linux
     steps:
       - name: Download build directory
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -136,7 +137,7 @@ jobs:
     needs: build-win64
     steps:
       - name: Download build directory
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -151,11 +152,11 @@ jobs:
     runs-on: "windows-2019"
     needs: test-win64
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: Download build directory
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-windows-2019-Release
           path: build
@@ -166,17 +167,17 @@ jobs:
           & 'C:\Program Files\CMake\bin\cpack.exe' -G ZIP
           & 'C:\Program Files\CMake\bin\cpack.exe' -G NSIS
       - name: Upload installer as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: win64-installer
           path: build/*.exe
       - name: Upload package as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: win64-package
           path: build/*.zip
       - name: Upload documentation as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
          name: html-documentation
          path: build/doc/html/*
