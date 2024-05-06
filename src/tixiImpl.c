@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "libxml/parser.h"
 #include "libxml/xpath.h"

@@ -46,7 +46,7 @@
 
 extern void printMsg(MessageType type, const char* message, ...);
 
-void xmlStructuredErrorHandler(void * userData, xmlErrorPtr error) {
+void xmlStructuredErrorHandler(void * userData, xmlError const* error) {
   printMsg(MESSAGETYPE_ERROR, "%s:%i: %s", error->file, error->line, error->message);
 }
 

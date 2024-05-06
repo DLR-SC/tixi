@@ -32,6 +32,7 @@
   #include <sys/stat.h>
   #include <unistd.h>
 #endif
+#include <stdlib.h>
 
 extern void printMsg(MessageType type, const char* message, ...);
 
