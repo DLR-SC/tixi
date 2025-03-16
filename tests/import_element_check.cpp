@@ -128,6 +128,7 @@ TEST_F(ImportElementsCheck, invalidateXPathCache)
 }
 
 
+// Segfaults with tixi <= 3.3.0 and libxml2 >= 2.10
 TEST_F(ImportElementsCheck, saveDocumentAfterwards)
 {
     char* text = NULL;
