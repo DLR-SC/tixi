@@ -75,7 +75,7 @@ jobs:
           }
           If (!(Test-Path -Path "c:\tixi-3rdparty\matlab-libs-win")) {
             Write-Output "Downloading matlab libraries"
-            (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/matlab-libs-win.zip", "c:\matlab-libs-win.zip")
+            Invoke-WebRequest -Uri "https://sourceforge.net/projects/tixi/files/dev-tools/matlab-libs-win.zip" -OutFile "c:\matlab-libs-win.zip"
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
