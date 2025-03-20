@@ -69,7 +69,7 @@ jobs:
           md c:\tixi-3rdparty -Force | Out-Null
           If (!(Test-Path -Path "c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64")) {
             Write-Output "Downloading tixi 3rdparty libraries"
-            (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/tixi-3rdparty-vc2015-win64.zip", "c:\tixi-3rdparty-vc2015-win64.zip")
+            Invoke-WebRequest -Uri "https://sourceforge.net/projects/tixi/files/dev-tools/tixi-3rdparty-vc2015-win64.zip" -OutFile "c:\tixi-3rdparty-vc2015-win64.zip"
             Write-Output "Extract tixi 3rdparty libraries"
             & 7z x -y "c:\tixi-3rdparty-vc2015-win64.zip" -oC:\tixi-3rdparty\ > null
           }
