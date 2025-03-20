@@ -23,7 +23,8 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y cmake cmake-data gfortran libcurl4-openssl-dev libxslt1-dev python3-setuptools
-          sudo python3 -m pip install conan
+          pip3 install --user conan
+          source ~/.profile
       - name: Build TiXI
         run: |
           mkdir build
@@ -68,13 +69,13 @@ jobs:
           md c:\tixi-3rdparty -Force | Out-Null
           If (!(Test-Path -Path "c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64")) {
             Write-Output "Downloading tixi 3rdparty libraries"
-            (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/tixi-3rdparty-vc2015-win64.zip", "c:\tixi-3rdparty-vc2015-win64.zip")
+            Invoke-WebRequest -UserAgent "Wget" -Uri "https://sourceforge.net/projects/tixi/files/dev-tools/tixi-3rdparty-vc2015-win64.zip" -OutFile "c:\tixi-3rdparty-vc2015-win64.zip"
             Write-Output "Extract tixi 3rdparty libraries"
             & 7z x -y "c:\tixi-3rdparty-vc2015-win64.zip" -oC:\tixi-3rdparty\ > null
           }
           If (!(Test-Path -Path "c:\tixi-3rdparty\matlab-libs-win")) {
             Write-Output "Downloading matlab libraries"
-            (new-object System.Net.WebClient).Downloadfile("https://sourceforge.net/projects/tixi/files/dev-tools/matlab-libs-win.zip", "c:\matlab-libs-win.zip")
+            Invoke-WebRequest -UserAgent "Wget" -Uri "https://sourceforge.net/projects/tixi/files/dev-tools/matlab-libs-win.zip" -OutFile "c:\matlab-libs-win.zip"
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
