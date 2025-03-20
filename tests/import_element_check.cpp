@@ -127,3 +127,25 @@ TEST_F(ImportElementsCheck, invalidateXPathCache)
     ASSERT_EQ(5, num);
 }
 
+
+// Segfaults with tixi <= 3.3.0 and libxml2 >= 2.10
+TEST_F(ImportElementsCheck, saveDocumentAfterwards)
+{
+    char* text = NULL;
+    int num = 0;
+    char* path = NULL;
+
+    const char* xmlString = "<?xml version=\"1.0\"?>\n<root><a/><b/></root>\n";
+    ASSERT_EQ(SUCCESS, tixiImportFromString(xmlString, &handle));
+
+    const char* importStr = 
+      R"#(<subElem>
+              <VariationParameter parameterName="testParam" start_parameter_value="0.0;" end_parameter_value="10.0;" num_parameter_value="11"/>
+              </subElem>
+              )#";
+
+    ASSERT_EQ(SUCCESS, tixiImportElementFromString(handle, "/*/a", importStr));
+
+    ASSERT_EQ(SUCCESS, tixiSaveDocument(handle, "testData_copy.xml"));
+}
+
