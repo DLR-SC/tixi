@@ -3188,6 +3188,7 @@ DLL_EXPORT ReturnCode tixiImportElementFromStringAtIndex (const TixiDocumentHand
   xmlDocPtr xmlDocument = NULL;
   xmlNodePtr parentElement = NULL;
   xmlNodePtr newElement = NULL;
+  xmlNodePtr tmp = NULL;
   ReturnCode error = SUCCESS;
   xmlBufferPtr buffer;
   int textLen;
@@ -3217,6 +3218,8 @@ DLL_EXPORT ReturnCode tixiImportElementFromStringAtIndex (const TixiDocumentHand
     return NOT_WELL_FORMED;
   }
 
+  // copy the node to prevent later segfaults with libxml2 >= 2.10, inspiration by: https://gitlab.gnome.org/GNOME/libxml2/-/issues/680
+  tmp = xmlCopyNode(newElement, 1);
 
   /* find node where new node should be inserted before */
   targetNode =  parentElement->children;
@@ -3228,11 +3231,11 @@ DLL_EXPORT ReturnCode tixiImportElementFromStringAtIndex (const TixiDocumentHand
 
   if (targetNode != NULL && index > 0) {
     /* insert at position index */
-    xmlAddPrevSibling(targetNode, newElement);
+    xmlAddPrevSibling(targetNode, tmp);
   }
   else {
     /* insert at the end of the list */
-    xmlAddChild(parentElement, newElement);
+    xmlAddChild(parentElement, tmp);
   }
 
   return SUCCESS;
