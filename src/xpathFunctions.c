@@ -221,7 +221,7 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
 
 
   /* Get all unique namespace declarations */
-  xpathObj = xmlXPathEvalExpression((xmlChar*) "//*/namespace::*[not(. = ../../namespace::*|preceding::*/namespace::*)]", xpathContext);
+  xpathObj = xmlXPathEvalExpression((xmlChar *)"//*/namespace::*", xpathContext);
   if (xpathObj == NULL) {
     printMsg(MESSAGETYPE_ERROR, "Error: unable to retrieve all namespaces \n");
     return -1;
@@ -229,6 +229,8 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
 
   nodes = xpathObj->nodesetval;
   nodeCount = (nodes) ? nodes->nodeNr : 0;
+
+  xmlHashTablePtr ns_registry = xmlHashCreate(10);
 
   for (inode = 0; inode < nodeCount; ++inode) {
 
@@ -240,7 +242,8 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
       }
 
       /* ignore default xml prefix */
-      if (ns->prefix && strcmp((char*)ns->prefix, "xml") != 0 ) {
+      if (ns->prefix && strcmp((char*)ns->prefix, "xml") != 0 && !xmlHashLookup(ns_registry, (const char*)ns->prefix)) {
+        xmlHashAddEntry(ns_registry, (const char*)ns->prefix, (const char*)ns->href);
         if (XPathRegisterNamespace(xpathContext, (char*)ns->href, (char*) ns->prefix) != 0) {
           printMsg(MESSAGETYPE_ERROR, "Error: unable to register NS with prefix=\"%s\" and href=\"%s\"\n", ns->prefix, ns->href);
           error = -1;
@@ -253,6 +256,7 @@ int XPathRegisterDocumentNamespaces(xmlXPathContextPtr xpathContext)
     } /* is namespace */
   } /* for */
 
+  xmlHashFree(ns_registry, NULL);
   xmlXPathFreeObject(xpathObj);
 
   return error;
