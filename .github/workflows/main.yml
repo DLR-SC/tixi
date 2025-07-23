@@ -3,8 +3,13 @@ name: CI
 on:
   schedule:
     - cron: "20 3 * * 2"
-  push:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  push:
+    branches:
+      - 'master'
+    tags:
+      - v*
   workflow_dispatch:
 
 jobs:
