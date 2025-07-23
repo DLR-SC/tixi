@@ -3,8 +3,13 @@ name: CI
 on:
   schedule:
     - cron: "20 3 * * 2"
-  push:
   pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  push:
+    branches:
+      - 'master'
+    tags:
+      - v*
   workflow_dispatch:
 
 jobs:
@@ -13,7 +18,7 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["ubuntu-latest", "ubuntu-20.04"]
+        os: ["ubuntu-latest", "ubuntu-22.04"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +55,7 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["windows-2019", "windows-latest"]
+        os: ["windows-2022", "windows-latest"]
     runs-on: ${{ matrix.os }}
     steps:
 # On the Github-hosted runner, git checks out text files with \r\n (I think)
@@ -102,6 +107,7 @@ jobs:
                  -DCMAKE_INSTALL_PREFIX=install ^
                  ..
           cmake --build . --target install --config ${{ matrix.config }}
+          cmake --build . --config Release --target doc
       - name: Upload build directory
         uses: actions/upload-artifact@v4
         with:
@@ -114,7 +120,7 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["ubuntu-latest", "ubuntu-20.04"]
+        os: ["ubuntu-latest", "ubuntu-22.04"]
     runs-on: ${{ matrix.os }}
     needs: build-linux
     steps:
@@ -133,7 +139,7 @@ jobs:
     strategy:
       matrix:
         config: ["Debug", "Release"]
-        os: ["windows-2019", "windows-latest"]
+        os: ["windows-2022", "windows-latest"]
     runs-on: ${{ matrix.os }}
     needs: build-win64
     steps:
@@ -150,7 +156,7 @@ jobs:
           .\${{ matrix.config }}\TIXI-unittests.exe --gtest_output=xml:test_results.xml
 
   deploy-win64:
-    runs-on: "windows-2019"
+    runs-on: "windows-2022"
     needs: test-win64
     steps:
       - uses: actions/checkout@v4
@@ -159,7 +165,7 @@ jobs:
       - name: Download build directory
         uses: actions/download-artifact@v4
         with:
-          name: build-windows-2019-Release
+          name: build-windows-2022-Release
           path: build
       - name: Artifact installer and zip
         run: |
