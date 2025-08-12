@@ -21,7 +21,7 @@ jobs:
         os: ["ubuntu-latest", "ubuntu-22.04"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Install dependencies
@@ -66,7 +66,7 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Install dependencies
@@ -159,7 +159,7 @@ jobs:
     runs-on: "windows-2022"
     needs: test-win64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Download build directory
