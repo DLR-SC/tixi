@@ -125,7 +125,7 @@ jobs:
     needs: build-linux
     steps:
       - name: Download build directory
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -144,7 +144,7 @@ jobs:
     needs: build-win64
     steps:
       - name: Download build directory
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -163,7 +163,7 @@ jobs:
         with:
           submodules: recursive
       - name: Download build directory
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: build-windows-2022-Release
           path: build
