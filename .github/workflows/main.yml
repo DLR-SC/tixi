@@ -9,6 +9,8 @@ on:
 
 jobs:
 
+
+
   build-linux:
     strategy:
       matrix:
@@ -16,15 +18,27 @@ jobs:
         os: ["ubuntu-latest", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Setup miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          activate-environment: tixi-bld
+          environment-file: environment.yml
+          auto-activate-base: false
+      - name: Conda info
+        shell: bash -el {0}
+        run: |
+          conda info
+          conda list
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y cmake cmake-data gfortran libcurl4-openssl-dev libxslt1-dev python3-setuptools
+          sudo apt-get install -y cmake cmake-data gfortran libcurl4-openssl-dev python3-setuptools
           pip3 install --user conan
-          source ~/.profile
+
       - name: Build TiXI
         run: |
           mkdir build
@@ -35,6 +49,7 @@ jobs:
                 -DTIXI_ENABLE_FORTRAN=ON \
                 ..
           make -j
+          cmake --build . --target doc
       - name: Upload build directory
         uses: actions/upload-artifact@v4
         with:
@@ -61,24 +76,30 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Install dependencies
         run: |
           md c:\tixi-3rdparty -Force | Out-Null
-          If (!(Test-Path -Path "c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64")) {
-            Write-Output "Downloading tixi 3rdparty libraries"
-            Invoke-WebRequest -UserAgent "Wget" -Uri "https://sourceforge.net/projects/tixi/files/dev-tools/tixi-3rdparty-vc2015-win64.zip" -OutFile "c:\tixi-3rdparty-vc2015-win64.zip"
-            Write-Output "Extract tixi 3rdparty libraries"
-            & 7z x -y "c:\tixi-3rdparty-vc2015-win64.zip" -oC:\tixi-3rdparty\ > null
-          }
           If (!(Test-Path -Path "c:\tixi-3rdparty\matlab-libs-win")) {
             Write-Output "Downloading matlab libraries"
             Invoke-WebRequest -UserAgent "Wget" -Uri "https://sourceforge.net/projects/tixi/files/dev-tools/matlab-libs-win.zip" -OutFile "c:\matlab-libs-win.zip"
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
+      - name: Setup miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          activate-environment: tixi-bld
+          environment-file: environment.yml
+          auto-activate-base: false
+      - name: Conda info
+        shell: bash -el {0}
+        run: |
+          conda info
+          conda list
       - name: Setup msys2/gfortran
         uses: msys2/setup-msys2@v2
 
@@ -98,7 +119,6 @@ jobs:
                  -DBUILD_SHARED_LIBS=ON ^
                  -DTIXI_BUILD_TESTS=ON ^
                  -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win ^
-                 -DCMAKE_PREFIX_PATH='c:\tixi-3rdparty\tixi-3rdparty-vc2015-win64' ^
                  -DCMAKE_INSTALL_PREFIX=install ^
                  ..
           cmake --build . --target install --config ${{ matrix.config }}
@@ -153,7 +173,7 @@ jobs:
     runs-on: "windows-2019"
     needs: test-win64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Download build directory

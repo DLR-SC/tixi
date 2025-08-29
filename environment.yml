@@ -1,0 +1,11 @@
+name: tixi-bld
+# This is the recommended environment for building tigl from source
+channels:
+ - dlr-sc
+ - dlr-sc/label/tigl-dev
+dependencies:
+ - pip
+ - doxygen
+ - python
+ - libxml2-static
+ - libxslt-static
