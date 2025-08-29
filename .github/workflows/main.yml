@@ -18,6 +18,9 @@ jobs:
         os: ["ubuntu-latest", "ubuntu-20.04"]
     runs-on: ${{ matrix.os }}
     steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
       - name: Setup miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
@@ -30,9 +33,6 @@ jobs:
         run: |
           conda info
           conda list
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
