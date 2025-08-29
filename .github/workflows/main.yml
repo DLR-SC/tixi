@@ -41,6 +41,8 @@ jobs:
 
       - name: Build TiXI
         run: |
+          export CMAKE_PREFIX_PATH=$CONDA_PREFIX
+          export PATH=$CONDA_PREFIX/bin:$PATH
           mkdir build
           cd build
           cmake -DCMAKE_BUILD_TYPE=${{ matrix.config }} \
@@ -111,6 +113,8 @@ jobs:
       - name: Build TiXI
         shell: cmd /C call {0}
         run: |
+          set PATH=%CONDA_PREFIX%\Library\bin;%CONDA_PREFIX%\Scripts;%CONDA_PREFIX%\bin;%PATH%
+          set CMAKE_PREFIX_PATH=%CONDA_PREFIX%\Library;%CONDA_PREFIX%\Scripts
           gfortran --version
           mkdir build
           cd build
