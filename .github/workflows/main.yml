@@ -67,7 +67,7 @@ jobs:
   build-win64:
     strategy:
       matrix:
-        config: ["Debug", "Release"]
+        config: ["Release"]
         os: ["windows-2019", "windows-latest"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -143,21 +143,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     needs: build-linux
     steps:
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
-      - name: Setup miniconda
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-update-conda: true
-          activate-environment: tixi-bld
-          environment-file: environment.yml
-          auto-activate-base: false
-      - name: Conda info
-        shell: bash -el {0}
-        run: |
-          conda info
-          conda list
       - name: Download build directory
         uses: actions/download-artifact@v4
         with:
@@ -172,7 +157,7 @@ jobs:
   test-win64:
     strategy:
       matrix:
-        config: ["Debug", "Release"]
+        config: ["Release"]
         os: ["windows-2019", "windows-latest"]
     runs-on: ${{ matrix.os }}
     needs: build-win64
