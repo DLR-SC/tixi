@@ -68,7 +68,7 @@ jobs:
     strategy:
       matrix:
         config: ["Release"]
-        os: ["windows-2019", "windows-latest"]
+        os: ["windows-2022", "windows-latest"]
     runs-on: ${{ matrix.os }}
     steps:
 # On the Github-hosted runner, git checks out text files with \r\n (I think)
@@ -158,7 +158,7 @@ jobs:
     strategy:
       matrix:
         config: ["Release"]
-        os: ["windows-2019", "windows-latest"]
+        os: ["windows-2022", "windows-latest"]
     runs-on: ${{ matrix.os }}
     needs: build-win64
     steps:
@@ -190,7 +190,7 @@ jobs:
           .\${{ matrix.config }}\TIXI-unittests.exe --gtest_output=xml:test_results.xml
 
   deploy-win64:
-    runs-on: "windows-2019"
+    runs-on: "windows-2022"
     needs: test-win64
     steps:
       - uses: actions/checkout@v5
@@ -199,7 +199,7 @@ jobs:
       - name: Download build directory
         uses: actions/download-artifact@v4
         with:
-          name: build-windows-2019-Release
+          name: build-windows-2022-Release
           path: build
       - name: Artifact installer and zip
         run: |
