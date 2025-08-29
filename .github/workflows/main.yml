@@ -200,6 +200,7 @@ jobs:
       - name: Run unit tests
         shell: cmd /C call {0}
         run: |
+          set PATH=%cd%\build\install\bin;%cd%\build\lib\${{ matrix.config }};%cd%\build\bin\${{ matrix.config }};%PATH%
           cd build\tests
           .\${{ matrix.config }}\TIXI-unittests.exe --gtest_output=xml:test_results.xml
 
