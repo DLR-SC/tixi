@@ -5,6 +5,14 @@ find_package(CURL REQUIRED)
 find_package(LibXml2 REQUIRED)
 find_package(LibXslt REQUIRED)
 
+# Add an option to enable XML_PARSE_HUGE
+option(TIXI_ENABLE_XML_PARSE_HUGE "Enable XML_PARSE_HUGE macro" ON)
+
+# Conditionally define the macro based on the option
+if(TIXI_ENABLE_XML_PARSE_HUGE)
+    target_compile_definitions(${TIXI_LIB_NAME} PRIVATE XML_PARSE_HUGE=1)
+endif()
+
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/tixi_version.h.in"
   "${CMAKE_CURRENT_BINARY_DIR}/tixi_version.h"
