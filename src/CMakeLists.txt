@@ -43,7 +43,7 @@ target_compile_definitions(${TIXI_LIB_NAME} PRIVATE $<$<CONFIG:DEBUG>:DEBUG>)
 
 # Conditionally define the macro based on the option
 if(TIXI_ENABLE_XML_PARSE_HUGE)
-    target_compile_definitions(${TIXI_LIB_NAME} PRIVATE XML_PARSE_HUGE=1)
+    target_compile_definitions(${TIXI_LIB_NAME} PRIVATE XML_PARSE_HUGE)
 endif()
 
 if(WIN32)
