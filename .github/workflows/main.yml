@@ -166,6 +166,7 @@ jobs:
           path: build
       - name: Run unit tests
         run: |
+          conda install libstdcxx-ng
           cd build/tests
           chmod a+x TIXI-unittests
           ./TIXI-unittests
