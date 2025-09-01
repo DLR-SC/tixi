@@ -122,7 +122,7 @@ endif(TIXI_ENABLE_FORTRAN)
 # create the doc
 include(createDoc)
 
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Martin Siggel") #required for debian/ubuntu
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Jan Kleinert") #required for debian/ubuntu
 set(CPACK_PACKAGE_VENDOR "www.dlr.de/sc")
 set(CPACK_PACKAGE_VERSION ${TIXI_VERSION})
 set(CPACK_PACKAGE_VERSION_MAJOR ${TIXI_VERSION_MAJOR})
