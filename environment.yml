@@ -9,4 +9,4 @@ dependencies:
  - python
  - libxml2-static
  - libxslt-static
- - curl-static
+ - libcurl 
