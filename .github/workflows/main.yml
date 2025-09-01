@@ -167,7 +167,8 @@ jobs:
       - name: Run unit tests
         run: |
           cd build/tests
-          strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBCXX
+          rm /usr/share/miniconda/envs/tixi-bld/lib/libstdc++.so.6
+          ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/share/miniconda/envs/tixi-bld/lib/libstdc++.so.6
           chmod a+x TIXI-unittests
           ./TIXI-unittests
 
