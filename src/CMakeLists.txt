@@ -37,6 +37,10 @@ if(APPLE)
     set(TIXI_LIBS ${TIXI_LIBS} m "-framework Foundation" iconv z "-framework Security")
 endif(APPLE)
 
+if (UNIX AND NOT APPLE)
+    set(TIXI_LIBS ${TIXI_LIBS} m)
+endif()
+
 add_library(${TIXI_LIB_NAME} ${TIXI_SRC} ${TIXI_HDR})
 set_property(TARGET ${TIXI_LIB_NAME} PROPERTY C_STANDARD 99)
 

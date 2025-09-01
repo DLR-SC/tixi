@@ -1,4 +1,5 @@
 # units tests makefile
+include(AddGoogleTest)
 
 FILE (GLOB_RECURSE test_SRCS *.cpp *.cxx *.cc *.C *.c *.h *.hpp)
 SET (test_BIN ${PROJECT_NAME}-unittests)
