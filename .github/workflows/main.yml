@@ -167,6 +167,7 @@ jobs:
       - name: Run unit tests
         run: |
           cd build/tests
+          strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBCXX
           chmod a+x TIXI-unittests
           ./TIXI-unittests
 
