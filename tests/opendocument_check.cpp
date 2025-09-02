@@ -115,3 +115,14 @@ TEST(opendocument_checks, external_data_noextnodes)
   ASSERT_EQ(SUCCESS,  tixiOpenDocumentRecursive( file, &documentHandle, OPENMODE_RECURSIVE));
   tixiCloseDocument(documentHandle);
 }
+
+
+TEST(opendocument_checks, huge_node)
+{
+  TixiDocumentHandle documentHandle = -1;
+  const char* xmlFilename = "TestData/huge.xml";
+
+  ASSERT_TRUE( tixiOpenDocument( xmlFilename, &documentHandle ) == SUCCESS );
+  ASSERT_TRUE( documentHandle != -1 );
+  tixiCloseDocument( documentHandle );
+}
