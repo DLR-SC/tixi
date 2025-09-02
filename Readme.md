@@ -1,4 +1,5 @@
-# TIXI #
+![](doc/images/TiXI_Logo_Wortmarke_300px.png)
+## TiXI ##
 
 [![CI](https://github.com/DLR-SC/tixi/actions/workflows/main.yml/badge.svg)](https://github.com/DLR-SC/tixi/actions/workflows/main.yml)
 
