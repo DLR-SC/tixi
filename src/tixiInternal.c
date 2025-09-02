@@ -679,7 +679,7 @@ ReturnCode loadExternalDataNode(TixiDocument* aTixiDocument, xmlNodePtr external
       }
 
       /* now parse the file to DOM */
-      xmlDocument = xmlReadMemory(newDocumentString, (int) strlen(newDocumentString), "urlResource", NULL, 0);
+      xmlDocument = xmlReadMemory(newDocumentString, (int) strlen(newDocumentString), "urlResource", NULL, XML_PARSE_HUGE);
       free(newDocumentString);
 
       if (xmlDocument) {

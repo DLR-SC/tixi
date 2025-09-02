@@ -290,7 +290,7 @@ DLL_EXPORT ReturnCode tixiOpenDocumentRecursive(const char *xmlFilename, TixiDoc
     fclose(file);
   }
 
-  xmlDocument = xmlReadFile(xmlFilename, NULL, 0);
+  xmlDocument = xmlReadFile(xmlFilename, NULL, XML_PARSE_HUGE);
 
   if (xmlDocument) {
 
@@ -573,7 +573,7 @@ DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDoc
   relativDirPath[0] = '\0';
   strcat(relativDirPath, "./");
 
-  xmlDocument = xmlReadMemory(xmlImportString, (int) strlen(xmlImportString), tixiFileName, NULL, 0);
+  xmlDocument = xmlReadMemory(xmlImportString, (int) strlen(xmlImportString), tixiFileName, NULL, XML_PARSE_HUGE);
 
   if (xmlDocument) {
 
