@@ -5,6 +5,8 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = TiXI
+PROJECT_LOGO           = @PROJECT_SOURCE_DIR@/doc/images/TiXI_Logo_Wortmarke_150px.png
+PROJECT_ICON           = @PROJECT_SOURCE_DIR@/doc/images/favicon.ico
 PROJECT_NUMBER         = @TIXI_VERSION@ 
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
