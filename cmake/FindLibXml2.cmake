@@ -64,7 +64,7 @@ if(DEFINED LIBXML2_LIBRARIES AND NOT DEFINED LIBXML2_LIBRARY)
   set(LIBXML2_LIBRARY ${LIBXML2_LIBRARIES})
 endif()
 
-find_library(LIBXML2_LIBRARY NAMES xml2 libxml2 libxml2_a
+find_library(LIBXML2_LIBRARY NAMES xml2 libxml2 libxml2_a libxml2s
    HINTS
    ${PC_LIBXML_LIBDIR}
    ${PC_LIBXML_LIBRARY_DIRS}
@@ -101,7 +101,7 @@ if(LibXml2_FOUND AND NOT TARGET LibXml2::LibXml2)
    set_property(TARGET LibXml2::LibXml2 APPEND PROPERTY IMPORTED_LOCATION "${LIBXML2_LIBRARY}")
 
    if (WIN32)
-     string(REGEX MATCH "_a.lib$" LibXml2_STATICLIB ${LIBXML2_LIBRARY})
+     string(REGEX MATCH "(_a\\.lib|s\\.lib)$" LibXml2_STATICLIB ${LIBXML2_LIBRARY})
      if (LibXml2_STATICLIB)
        set_target_properties(LibXml2::LibXml2
            PROPERTIES INTERFACE_COMPILE_DEFINITIONS "LIBXML_STATIC"

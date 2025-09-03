@@ -129,9 +129,11 @@ jobs:
                  -DMATLAB_DIR=c:\tixi-3rdparty\matlab-libs-win ^
                  -DCMAKE_INSTALL_PREFIX=install ^
                  ..
-          cmake --build . --config ${{ matrix.config }} --target doc
+          if errorlevel 1 exit 1
+          cmake --build . --target doc --config ${{ matrix.config }}
+          if errorlevel 1 exit 1
           cmake --build . --target install --config ${{ matrix.config }}
-          cmake --build . --config Release --target doc
+          if errorlevel 1 exit 1
       - name: Upload build directory
         uses: actions/upload-artifact@v4
         with:

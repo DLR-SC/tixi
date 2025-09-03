@@ -22,7 +22,7 @@ endif()
 
 set(TIXI_LIBS CURL::libcurl LibXslt::LibXslt LibXml2::LibXml2)
 if(WIN32)
-    set(TIXI_LIBS ${TIXI_LIBS} Shlwapi)
+    set(TIXI_LIBS ${TIXI_LIBS} Shlwapi bcrypt)
 endif(WIN32)
 
 if(APPLE)
