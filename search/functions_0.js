@@ -65,6 +65,7 @@ var searchData=
   ['tixigetvectorsize',['tixiGetVectorSize',['../group__HighLevelFunctions.html#gaed7b507b63a0fdc26f807c31df0cc466',1,'tixi.h']]],
   ['tixigetversion',['tixiGetVersion',['../tixi_8h.html#ad154c6a7ecddb6fb701850f26a7592c4',1,'tixi.h']]],
   ['tixiimportelementfromstring',['tixiImportElementFromString',['../group__Elements.html#ga9c0694bd342ceb5ffc9937a5fe3b767f',1,'tixi.h']]],
+  ['tixiimportelementfromstringatindex',['tixiImportElementFromStringAtIndex',['../group__Elements.html#ga9d9564e887df4410da83bb99b8d7c2e1',1,'tixi.h']]],
   ['tixiimportfromstring',['tixiImportFromString',['../group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25',1,'tixi.h']]],
   ['tixiopendocument',['tixiOpenDocument',['../group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672',1,'tixi.h']]],
   ['tixiopendocumentfromhttp',['tixiOpenDocumentFromHTTP',['../group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8',1,'tixi.h']]],

@@ -25,6 +25,7 @@ var group__Elements =
     [ "tixiGetNumberOfChilds", "group__Elements.html#gad70506b361fea599672e43aaf2d8f23c", null ],
     [ "tixiGetTextElement", "group__Elements.html#ga1e3c8b91af6913dff90f55c5d957726a", null ],
     [ "tixiImportElementFromString", "group__Elements.html#ga9c0694bd342ceb5ffc9937a5fe3b767f", null ],
+    [ "tixiImportElementFromStringAtIndex", "group__Elements.html#ga9d9564e887df4410da83bb99b8d7c2e1", null ],
     [ "tixiRemoveElement", "group__Elements.html#gacf52cd0e48be23151108800c3e20731d", null ],
     [ "tixiRenameElement", "group__Elements.html#ga574988afaacc5d75e998a04eb4c7b1e4", null ],
     [ "tixiSwapElements", "group__Elements.html#ga8985346773d7f40c26683f3e66d0300e", null ],
