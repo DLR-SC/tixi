@@ -1,6 +1,22 @@
 Changelog
 =========
 
+Version 3.3.1
+-------------
+
+New Functions:
+
+ - ``::tixiImportElementFromStringAtIndex `` Creates a new element with the content of the string and checks if it is well formed. (PR #211)
+
+Fixes:
+
+- ``::tixiImportElementFromString ``: XPath cache was not cleared in function that modifies the xml tree. (PR #210).
+- Fix missing stdlib.h includes (PR #225)
+- fix segfault with libxml2 >= 2.10 after using ``::tixiImportElementFromStringAtIndex `` (PR #234)
+- Fix performance issue in ``::XPathRegisterDocumentNamespaces `` my manually filtering duplicate namespaces (PR #238)
+- Enable large text nodes using the libxml2 option ENABLE_XML_PARSE_HUGE (PR #243)
+
+
 Version 3.3.0
 -------------
 
