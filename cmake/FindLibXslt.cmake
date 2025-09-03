@@ -38,13 +38,13 @@ find_path(LIBXSLT_INCLUDE_DIR NAMES libxslt/xslt.h
    ${PC_LIBXSLT_INCLUDE_DIRS}
   )
 
-find_library(LIBXSLT_LIBRARIES NAMES xslt libxslt libxslt_a
+find_library(LIBXSLT_LIBRARIES NAMES xslt libxslt libxslt_a libxslts
     HINTS
    ${PC_LIBXSLT_LIBDIR}
    ${PC_LIBXSLT_LIBRARY_DIRS}
   )
 
-find_library(LIBXSLT_EXSLT_LIBRARY NAMES exslt libexslt libexslt_a
+find_library(LIBXSLT_EXSLT_LIBRARY NAMES exslt libexslt libexslt_a libexslts
     HINTS
     ${PC_LIBXSLT_LIBDIR}
     ${PC_LIBXSLT_LIBRARY_DIRS}
@@ -79,4 +79,13 @@ if(LibXslt_FOUND AND NOT TARGET LibXslt::LibXslt)
    add_library(LibXslt::LibXslt UNKNOWN IMPORTED)
    set_target_properties(LibXslt::LibXslt PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${LIBXSLT_INCLUDE_DIR}")
    set_property(TARGET LibXslt::LibXslt APPEND PROPERTY IMPORTED_LOCATION "${LIBXSLT_LIBRARIES}")
+
+   if (WIN32)
+     string(REGEX MATCH "(_a\\.lib|s\\.lib)$" LibXslt_STATICLIB ${LIBXSLT_LIBRARIES})
+     if (LibXslt_STATICLIB)
+       set_target_properties(LibXslt::LibXslt
+           PROPERTIES INTERFACE_COMPILE_DEFINITIONS "LIBXSLT_STATIC"
+       )
+     endif(LibXslt_STATICLIB)
+   endif (WIN32)
 endif()
