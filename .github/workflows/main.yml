@@ -67,6 +67,7 @@ jobs:
           retention-days: 1
       - name: Build conan package
         run: |
+          pixi shell
           conan profile detect
           pixi r conan
 
