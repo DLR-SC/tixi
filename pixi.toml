@@ -33,5 +33,5 @@ configure = { cmd = [
 ]}
 install = { cmd = "cmake --build . --target install {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
 conan = { cmd = "conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type={{ config }}", args = [{"arg" = "config", "default" = "Release"}]}
-docs = { cmd = "cmake --build . --target doc {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
+doc = { cmd = "cmake --build . --target doc {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
 test = { cmd = "./TIXI-unittests --gtest_output=xml:test_results.xml", cwd = "build/tests/" }
