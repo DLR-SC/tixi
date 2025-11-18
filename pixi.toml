@@ -24,8 +24,6 @@ configure = { cmd = [
     "-D", "BUILD_SHARED_LIBS=ON",
     "-D", "TIXI_BUILD_TESTS=ON",
     "-D", "TIXI_ENABLE_FORTRAN=ON",
-    "-D", "LIBXML2_LIBRARY=$CONDA_PREFIX/lib/libxml2.a",
-    "-D", "LIBXML2_INCLUDE_DIR=$CONDA_PREFIX/include/libxml2",
     "{{extra_args}}"
 ], args = [
         { "arg" = "config", "default"="Release"},
@@ -35,3 +33,12 @@ install = { cmd = "cmake --build . --target install {{ extra_args }}", cwd = "bu
 conan = { cmd = "conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type={{ config }}", args = [{"arg" = "config", "default" = "Release"}]}
 doc = { cmd = "cmake --build . --target doc {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
 test = { cmd = "./TIXI-unittests --gtest_output=xml:test_results.xml", cwd = "build/tests/" }
+
+[target.linux-64.activation.env]
+CMAKE_PREFIX_PATH = "$CONDA_PREFIX"
+
+[target.osx-64.activation.env]
+CMAKE_PREFIX_PATH = "$CONDA_PREFIX"
+
+[target.win-64.activation.env]
+CMAKE_PREFIX_PATH = "%CONDA_PREFIX%/Library"
