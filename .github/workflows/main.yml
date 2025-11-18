@@ -39,6 +39,9 @@ jobs:
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
+      - name: Setup msys2/gfortran
+        if: startsWith(matrix.os, 'windows')
+        uses: msys2/setup-msys2@v2
       - name: Set up Visual Studio shell
         if: startsWith(matrix.os, 'windows')
         uses: egor-tensin/vs-shell@v2
@@ -63,10 +66,7 @@ jobs:
           path: build
           retention-days: 1
       - name: Build conan package
-        run: |
-          pixi shell
-          conan profile detect
-          pixi r conan
+        run: pixi r conan
 
 
   test:

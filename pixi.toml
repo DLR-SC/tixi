@@ -25,14 +25,14 @@ configure = { cmd = [
     "-D", "CMAKE_BUILD_TYPE={{ config }}",
     "-D", "BUILD_SHARED_LIBS=ON",
     "-D", "TIXI_BUILD_TESTS=ON",
-    "-D", "TIXI_ENABLE_FORTRAN=OFF",
+    "-D", "TIXI_ENABLE_FORTRAN=ON",
     "{{extra_args}}"
 ], args = [
         { "arg" = "config", "default"="Release"},
         { "arg" = "extra_args", "default"=""},
 ]}
 install = { cmd = "cmake --build . --target install {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
-conan = { cmd = "conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type={{ config }}", args = [{"arg" = "config", "default" = "Release"}]}
+conan = { cmd = "conan profile detect; conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type={{ config }}", args = [{"arg" = "config", "default" = "Release"}]}
 doc = { cmd = "cmake --build . --target doc {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
 test = { cmd = "./TIXI-unittests --gtest_output=xml:test_results.xml", cwd = "build/tests/" }
 
