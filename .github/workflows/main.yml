@@ -26,6 +26,15 @@ jobs:
            config: Debug
     runs-on: ${{ matrix.os }}
     steps:
+      # On the Github-hosted runner, git checks out text files with \r\n (I think)
+# which messes up some unit tests, specifically UtilsTest.loadFileToString,
+# which expects TestData/minimal.xml not to have any carriage returns \r.
+# So we have to overwrite this checkout policy here:
+      - name: Set git to use LF instead of CRLF
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - uses: actions/checkout@v5
         with:
           submodules: recursive
