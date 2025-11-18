@@ -19,6 +19,11 @@ jobs:
       matrix:
         config: ["Debug", "Release"]
         os: ["ubuntu-latest", "ubuntu-22.04", "windows-2022", "windows-latest"]
+        exclude:
+         - os: windows-2022
+           config: Debug
+         - os: windows-latest
+           config: Debug
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
