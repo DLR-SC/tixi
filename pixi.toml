@@ -24,10 +24,12 @@ configure = { cmd = [
     "-D", "BUILD_SHARED_LIBS=ON",
     "-D", "TIXI_BUILD_TESTS=ON",
     "-D", "TIXI_ENABLE_FORTRAN=ON",
+    "-D", "LIBXML2_LIBRARY=$CONDA_PREFIX/lib/libxml2.a",
+    "-D", "LIBXML2_INCLUDE_DIR=$CONDA_PREFIX/include/libxml2",
     "{{extra_args}}"
 ], args = [
         { "arg" = "config", "default"="Release"},
-        { "arg" = "extra_args", "default"=""}
+        { "arg" = "extra_args", "default"=""},
 ]}
 install = { cmd = "cmake --build . --target install {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
 conan = { cmd = "conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type={{ config }}", args = [{"arg" = "config", "default" = "Release"}]}
