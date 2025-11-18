@@ -44,13 +44,6 @@ jobs:
             Write-Output "Extract matlab libraries"
             & 7z x -y "c:\matlab-libs-win.zip" -oC:\tixi-3rdparty\ > null
           }
-      - name: Setup Fortran
-        if: startsWith(matrix.os, 'windows')
-        uses: fortran-lang/setup-fortran@v1
-        with:
-          compiler: 'intel-classic'
-          version: '2021.10'
-          update-environment: false
       - name: Set up Visual Studio shell
         if: startsWith(matrix.os, 'windows')
         uses: egor-tensin/vs-shell@v2
