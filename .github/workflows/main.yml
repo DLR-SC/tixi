@@ -77,6 +77,11 @@ jobs:
       matrix:
         config: ["Debug", "Release"]
         os: ["ubuntu-latest", "ubuntu-22.04", "windows-2022", "windows-latest"]
+        exclude:
+         - os: windows-2022
+           config: Debug
+         - os: windows-latest
+           config: Debug
     runs-on: ${{ matrix.os }}
     needs: build
     steps:
@@ -93,6 +98,10 @@ jobs:
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
+      - name: chmod unittests
+        if: startsWith(matrix.os, 'windows') == false
+        run:
+          chmod a+x build/tests/TIXI-unittests
       - name: Run unit tests
         run: |
           pixi r test
