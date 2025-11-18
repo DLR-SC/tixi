@@ -1,0 +1,35 @@
+[workspace]
+authors = ["Jan Kleinert <jan.kleinert@dlr.de>"]
+channels = ["dlr-sc", "dlr-sc/label/tigl-dev", "conda-forge"]
+name = "tixi3"
+platforms = ["win-64", "linux-64", "osx-64"]
+version = "3.3.1"
+channel-priority = "disabled"
+
+[dependencies]
+doxygen = ">=1.8.10"
+cmake = ">=3.5.0"
+curl-static = "7.50.3.*"
+libxml2-static = "2.14.5.*"
+libxslt-static = "1.1.43.*"
+conan = "*"
+
+[tasks]
+configure = { cmd = [
+    "cmake", 
+    "-S", ".", 
+    "-B", "build", 
+    "-D", "CMAKE_INSTALL_PREFIX=build/install", 
+    "-D", "CMAKE_BUILD_TYPE={{ config }}",
+    "-D", "BUILD_SHARED_LIBS=ON",
+    "-D", "TIXI_BUILD_TESTS=ON",
+    "-D", "TIXI_ENABLE_FORTRAN=ON",
+    "{{extra_args}}"
+], args = [
+        { "arg" = "config", "default"="Release"},
+        { "arg" = "extra_args", "default"=""}
+]}
+install = { cmd = "cmake --build . --target install {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
+conan = { cmd = "conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type={{ config }}", args = [{"arg" = "config", "default" = "Release"}]}
+docs = { cmd = "cmake --build . --target doc {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
+test = { cmd = "./TIXI-unittests --gtest_output=xml:test_results.xml", cwd = "build/tests/" }
