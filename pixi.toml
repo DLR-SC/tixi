@@ -35,6 +35,7 @@ install = { cmd = "cmake --build . --target install {{ extra_args }}", cwd = "bu
 conan = { cmd = "conan profile detect; conan create . --build=missing -o 'tixi3/*:shared=True' -s build_type={{ config }}", args = [{"arg" = "config", "default" = "Release"}]}
 doc = { cmd = "cmake --build . --target doc {{ extra_args }}", cwd = "build", args= [ { "arg" = "extra_args", "default" = "-j"}] }
 test = { cmd = "./TIXI-unittests", cwd = "build/tests/" }
+cpack = { cmd = "cpack -G ZIP; cpack -G NSIS", cwd = "build" }
 
 [target.linux-64.activation.env]
 CMAKE_PREFIX_PATH = "$CONDA_PREFIX"

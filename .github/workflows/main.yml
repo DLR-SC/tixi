@@ -134,9 +134,7 @@ jobs:
           path: build
       - name: Artifact installer and zip
         run: |
-          cd build
-          'C:\Program Files\CMake\bin\cpack.exe' -G ZIP
-          & 'C:\Program Files\CMake\bin\cpack.exe' -G NSIS
+          pixi r cpack
       - name: Upload installer as artifact
         uses: actions/upload-artifact@v4
         with:
