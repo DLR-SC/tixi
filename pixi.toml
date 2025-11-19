@@ -44,3 +44,4 @@ CMAKE_PREFIX_PATH = "$CONDA_PREFIX"
 
 [target.win-64.activation.env]
 CMAKE_PREFIX_PATH = "%CONDA_PREFIX%/Library"
+PATH = "%PIXI_PROJECT_ROOT%\\build\\install\\bin;%PIXI_PROJECT_ROOT%\\build\\bin;%PATH%"
