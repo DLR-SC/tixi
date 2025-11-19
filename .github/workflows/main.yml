@@ -77,7 +77,7 @@ jobs:
           path: build
           retention-days: 1
       - name: Build conan package
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ github.event_name == 'schedule' && matrix.os == 'ubuntu-latest' && matrix.config == 'Release' }}
         run: pixi r conan
 
 
