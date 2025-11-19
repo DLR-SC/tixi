@@ -71,7 +71,7 @@ jobs:
           pixi r doc
           pixi r install
       - name: Upload build directory
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -103,7 +103,7 @@ jobs:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - name: Download build directory
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -128,7 +128,7 @@ jobs:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - name: Download build directory
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build-windows-2022-Release
           path: build
@@ -136,17 +136,17 @@ jobs:
         run: |
           pixi r cpack
       - name: Upload installer as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: win64-installer
           path: build/*.exe
       - name: Upload package as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: win64-package
           path: build/*.zip
       - name: Upload documentation as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
          name: html-documentation
          path: build/doc/html/*
