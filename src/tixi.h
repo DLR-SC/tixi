@@ -591,6 +591,20 @@ DLL_EXPORT ReturnCode tixiCreateDocument (const char *rootElementName, TixiDocum
 DLL_EXPORT ReturnCode tixiGetDocumentPath (TixiDocumentHandle handle, char** documentPath);
 
 /**
+  @brief Sets the intended file path for the document. Note: The file needs to be saved seperately.
+
+  @param[in]  handle document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
+  @param[out] documentPath  Path to the file, opened by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP
+                            The path is a null pointer, if the document was created by ::tixiCreateDocument or ::tixiImportFromString
+
+  @return
+    - SUCCESS in case of no errors.
+    - FAILED if documentPath is a null pointer.
+    - INVALID_HANDLE if the document handle is invalid.
+ */
+DLL_EXPORT ReturnCode tixiSetDocumentPath (TixiDocumentHandle handle, const char* xmlFilename);
+
+/**
   @brief Write XML-document to disk.
 
   The document is written into a file specified by xmlFilename. The
