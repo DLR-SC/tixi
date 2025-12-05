@@ -595,11 +595,11 @@ DLL_EXPORT ReturnCode tixiGetDocumentPath (TixiDocumentHandle handle, char** doc
   useful if the document is not saved to disk yet, and an associated filepath is required.
 
   @param[in] handle Document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param[in] documentPath New path to the file, which is also set by: ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP
-
+  @param[in] documentPath New path to the file.
+  
   @return
     - SUCCESS in case of no errors.
-    - FAILED if documentPath is invalid.
+    - FAILED if documentPath is a null pointer.
     - INVALID_HANDLE if the document handle is invalid.
  */
 DLL_EXPORT ReturnCode tixiSetDocumentPath (TixiDocumentHandle handle, const char* xmlFilename);
