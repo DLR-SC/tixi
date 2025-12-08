@@ -246,6 +246,21 @@ TEST(OtherTests2, getDocumentPathNoPath)
   tixiCloseDocument(handle2);
 }
 
+TEST(OtherTests2,setDocumentPath)
+{
+  const char* s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root/>";
+  const char* filename = "checkThisString";
+  TixiDocumentHandle handle;
+  char* path = NULL;
+  ASSERT_EQ(SUCCESS, tixiImportFromString(s, &handle));
+  ASSERT_EQ(SUCCESS, tixiGetDocumentPath(handle, &path));
+  ASSERT_EQ(NULL, path);
+  ASSERT_EQ(SUCCESS, tixiSetDocumentPath(handle, filename));
+  ASSERT_EQ(SUCCESS, tixiGetDocumentPath(handle, &path));
+  EXPECT_STREQ(filename, path);
+  tixiCloseDocument(handle);
+}
+
 TEST(OtherTests2, importFromString_invalidxml)
 {
   const char* s = "<?xml version=\"1.0\" encoding=\"utf-8\"?><root></notmatch>";

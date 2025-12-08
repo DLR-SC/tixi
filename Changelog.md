@@ -1,6 +1,10 @@
 Changelog
 =========
 
+New Functions:
+
+ - ``::tixiSetDocumentPath ``: Provides an option to set a path for a document independently of the saving or opening process.
+
 Version 3.3.1
 -------------
 
