@@ -103,7 +103,7 @@ jobs:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - name: Download build directory
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -128,7 +128,7 @@ jobs:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - name: Download build directory
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: build-windows-2022-Release
           path: build
