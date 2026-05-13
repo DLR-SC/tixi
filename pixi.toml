@@ -3,7 +3,7 @@ authors = ["Jan Kleinert <jan.kleinert@dlr.de>"]
 channels = ["dlr-sc", "dlr-sc/label/tigl-dev", "conda-forge"]
 name = "tixi3"
 platforms = ["win-64", "linux-64", "osx-64"]
-version = "3.3.1"
+version = "3.3.2"
 channel-priority = "disabled"
 
 [dependencies]
