@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['xpath_20utility_20functions',['XPath Utility Functions',['../group__XPATH.html',1,'']]],
-  ['xslt_20functions',['XSLT Functions',['../group__XSL.html',1,'']]]
+  ['uid_20helper_20functions_0',['UID Helper Functions',['../group__UID.html',1,'']]],
+  ['utility_20functions_1',['XPath Utility Functions',['../group__XPATH.html',1,'']]]
 ];

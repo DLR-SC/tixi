@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xpath_20examples',['XPath Examples',['../XPathExamples.html',1,'']]]
+  ['interface_0',['Using the TiXI MATLAB interface',['../Matlab.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['uid_20helper_20functions',['UID Helper Functions',['../group__UID.html',1,'']]]
+  ['namespace_20support_20functions_0',['Namespace Support Functions',['../group__Namespaces.html',1,'']]]
 ];

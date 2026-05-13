@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['index_5fout_5fof_5frange',['INDEX_OUT_OF_RANGE',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca199d29168b9a04a4005e2c7f8a8fb7d7',1,'tixi.h']]],
-  ['invalid_5fhandle',['INVALID_HANDLE',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144ecace4b167698d430bf6e04bd137e028f46',1,'tixi.h']]],
-  ['invalid_5fnamespace_5fprefix',['INVALID_NAMESPACE_PREFIX',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca9b7f0c504d5f64b8163cc2391267b8b2',1,'tixi.h']]],
-  ['invalid_5fnamespace_5furi',['INVALID_NAMESPACE_URI',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca66221358e682eb6fe1f3a66c7d30a6fe',1,'tixi.h']]],
-  ['invalid_5fxml_5fname',['INVALID_XML_NAME',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca1c45469c4d72a0943e2488ef64855275',1,'tixi.h']]],
-  ['invalid_5fxpath',['INVALID_XPATH',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca0cd846ee4e35a720f0c17b9f5857bb0c',1,'tixi.h']]]
+  ['changelog_0',['Changelog',['../md_D_1_2a_2tixi_2tixi_2Changelog.html',1,'']]],
+  ['changelog_2emd_1',['Changelog.md',['../Changelog_8md.html',1,'']]],
+  ['child_5fnot_5ffound_2',['CHILD_NOT_FOUND',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144ecaf412c79d3dd52aead74641c66a66e1c4',1,'tixi.h']]],
+  ['close_5ffailed_3',['CLOSE_FAILED',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca3bcb05abb93829393cf6180f65d589a2',1,'tixi.h']]],
+  ['column_5fwise_4',['COLUMN_WISE',['../group__Enums.html#ggad4024603048397cb3b04c21de805fe89a35da04706c431a464b8d78a0ce3e2cba',1,'tixi.h']]],
+  ['coordinate_5fnot_5ffound_5',['COORDINATE_NOT_FOUND',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144ecac9f29be47e2fd6e8a69a0e8de375558b',1,'tixi.h']]]
 ];

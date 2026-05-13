@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['matrix_5fdimension_5ferror',['MATRIX_DIMENSION_ERROR',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca1c97f0aa75f3fdfe89d2173179d29cb9',1,'tixi.h']]],
-  ['messagetype',['MessageType',['../group__Enums.html#gac6606ebe91c8ac66a2c314c79f5ab013',1,'MessageType():&#160;tixi.h'],['../tixi_8h.html#a551dec83c55825ee5e7bfa1ad5609551',1,'MessageType():&#160;tixi.h']]],
-  ['messagetype_5ferror',['MESSAGETYPE_ERROR',['../group__Enums.html#ggac6606ebe91c8ac66a2c314c79f5ab013afe208c3df6c931b27db5bc5efd4070f2',1,'tixi.h']]],
-  ['messagetype_5fstatus',['MESSAGETYPE_STATUS',['../group__Enums.html#ggac6606ebe91c8ac66a2c314c79f5ab013ab524093442bc2102b573ec3188555bd7',1,'tixi.h']]],
-  ['messagetype_5fwarning',['MESSAGETYPE_WARNING',['../group__Enums.html#ggac6606ebe91c8ac66a2c314c79f5ab013ac8684f343c511a6ca600f5ad6d6d9cd9',1,'tixi.h']]],
-  ['miscellaneous_20functions',['Miscellaneous Functions',['../group__MiscFunctions.html',1,'']]]
+  ['deallocation_5ffailed_0',['DEALLOCATION_FAILED',['../group__Enums.html#gga5a2236a3693e3930b2c9fbe1fe7144eca12747e503f9a1b4aeebd7221cb19fad6',1,'tixi.h']]],
+  ['deprecated_1',['DEPRECATED',['../tixi_8h.html#ac1e8a42306d8e67cb94ca31c3956ee78',1,'tixi.h']]],
+  ['dll_5fexport_2',['DLL_EXPORT',['../tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b',1,'tixi.h']]]
 ];

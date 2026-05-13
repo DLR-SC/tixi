@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['glossary',['Glossary',['../Glossary.html',1,'']]]
+  ['examples_0',['XPath Examples',['../XPathExamples.html',1,'']]]
 ];

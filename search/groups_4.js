@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['miscellaneous_20functions',['Miscellaneous Functions',['../group__MiscFunctions.html',1,'']]]
+  ['level_20functions_0',['High Level Functions',['../group__HighLevelFunctions.html',1,'']]]
 ];

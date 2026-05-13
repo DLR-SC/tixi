@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['namespace_20support_20functions',['Namespace Support Functions',['../group__Namespaces.html',1,'']]]
+  ['miscellaneous_20functions_0',['Miscellaneous Functions',['../group__MiscFunctions.html',1,'']]]
 ];
