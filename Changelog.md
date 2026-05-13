@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Version 3.3.2
+-------------
+
+New Functions:
+
+ - ``::tixiSetDocumentPath`` sets a file path for the document. The function sets the path independently 
+   of the saving/creating functions. This is useful if the document is not saved to disk yet, and an 
+   associated filepath is required. (PR #258)
+
+General Changes:
+
+ - Added a pixi.toml to manage dependencies and build jobs. 
+
 Version 3.3.1
 -------------
 
