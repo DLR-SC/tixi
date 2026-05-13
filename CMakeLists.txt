@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.16)
 
 if (EXISTS ${CMAKE_BINARY_DIR}/conan_toolchain.cmake)
     cmake_policy(SET CMP0091 NEW)
@@ -23,7 +23,7 @@ endif()
 
 set(TIXI_VERSION_MAJOR 3)
 set(TIXI_VERSION_MINOR 3)
-set(TIXI_VERSION_PATCH 1)
+set(TIXI_VERSION_PATCH 2)
 set(TIXI_VERSION "${TIXI_VERSION_MAJOR}.${TIXI_VERSION_MINOR}.${TIXI_VERSION_PATCH}")
 
 # set name of the tixi library
