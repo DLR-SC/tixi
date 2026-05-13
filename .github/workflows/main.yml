@@ -39,7 +39,7 @@ jobs:
         with:
           submodules: recursive
       - name: Setup pixi
-        uses: prefix-dev/setup-pixi@v0.9.3
+        uses: prefix-dev/setup-pixi@v0.9.5
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
@@ -71,7 +71,7 @@ jobs:
           pixi r doc
           pixi r install
       - name: Upload build directory
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -98,12 +98,12 @@ jobs:
         with:
           submodules: recursive
       - name: Setup pixi
-        uses: prefix-dev/setup-pixi@v0.9.3
+        uses: prefix-dev/setup-pixi@v0.9.5
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - name: Download build directory
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: build-${{ matrix.os }}-${{ matrix.config }}
           path: build
@@ -123,12 +123,12 @@ jobs:
         with:
           submodules: recursive
       - name: Setup pixi
-        uses: prefix-dev/setup-pixi@v0.9.3
+        uses: prefix-dev/setup-pixi@v0.9.5
         with:
           cache: true
           cache-write: ${{ github.event_name == 'push' && github.ref_name == 'main' }}
       - name: Download build directory
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: build-windows-2022-Release
           path: build
@@ -136,17 +136,17 @@ jobs:
         run: |
           pixi r cpack
       - name: Upload installer as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: win64-installer
           path: build/*.exe
       - name: Upload package as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: win64-package
           path: build/*.zip
       - name: Upload documentation as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
          name: html-documentation
          path: build/doc/html/*

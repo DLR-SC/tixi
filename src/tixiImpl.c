@@ -444,6 +444,29 @@ DLL_EXPORT ReturnCode tixiGetDocumentPath(TixiDocumentHandle handle, char** docu
   return SUCCESS;
 }
 
+DLL_EXPORT ReturnCode tixiSetDocumentPath(TixiDocumentHandle handle, const char* xmlFilename)
+{
+  TixiDocument *document = NULL;
+
+  if (!xmlFilename) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Null Pointer in tixiSetDocumentPath.\n");
+    return FAILED;
+  }
+
+  document = getDocument(handle);
+  if (!document) {
+    printMsg(MESSAGETYPE_ERROR, "Error: Invalid document handle in tixiSetDocumentPath.\n");
+    return INVALID_HANDLE;
+  }
+  if(document->xmlFilename){
+    free(document->xmlFilename);
+  }
+  document->xmlFilename = (char*) malloc(sizeof(char) * (strlen(xmlFilename) + 1));
+  strcpy(document->xmlFilename, xmlFilename);
+
+  return SUCCESS;
+}
+
 /*
 Distinguish internal/user/fatal errors!!!
 */
