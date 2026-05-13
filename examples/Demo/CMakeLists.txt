@@ -5,7 +5,7 @@
 # Second, it allows us to scan for 3rd party library dependencies and install
 # them with tixi (cmake doesn't allow scanning dlls only).
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
 project(Tixi-Demos)
 
