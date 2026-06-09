@@ -98,9 +98,28 @@ $(function(){initNavTree('group__Namespaces.html',''); initResizable(true); });
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Namespace Support Functions</div></div>
 </div><!--header-->
 <div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gae7c92e9739e2e71378e166dfd5bfb722" id="r_gae7c92e9739e2e71378e166dfd5bfb722"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gae7c92e9739e2e71378e166dfd5bfb722">tixiRegisterNamespace</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *namespaceURI, const char *prefix)</td></tr>
+<tr class="memdesc:gae7c92e9739e2e71378e166dfd5bfb722"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the given namespace and its prefix.  <br /></td></tr>
+<tr class="separator:gae7c92e9739e2e71378e166dfd5bfb722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7fe9e33e946645f0950e2784010b37b7" id="r_ga7fe9e33e946645f0950e2784010b37b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga7fe9e33e946645f0950e2784010b37b7">tixiRegisterNamespacesFromDocument</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle)</td></tr>
+<tr class="memdesc:ga7fe9e33e946645f0950e2784010b37b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers all prefixed namespaces of the xml document to the parser.  <br /></td></tr>
+<tr class="separator:ga7fe9e33e946645f0950e2784010b37b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabf51a48a1c2bc8887bbddf8c18b0f0f7" id="r_gabf51a48a1c2bc8887bbddf8c18b0f0f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gabf51a48a1c2bc8887bbddf8c18b0f0f7">tixiSetElementNamespace</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *elementPath, const char *namespaceURI, const char *prefix)</td></tr>
+<tr class="memdesc:gabf51a48a1c2bc8887bbddf8c18b0f0f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function sets the namespace for the specified element.  <br /></td></tr>
+<tr class="separator:gabf51a48a1c2bc8887bbddf8c18b0f0f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6b4b4e8ab0cc73751b66634711f10b24" id="r_ga6b4b4e8ab0cc73751b66634711f10b24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga6b4b4e8ab0cc73751b66634711f10b24">tixiDeclareNamespace</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *elementPath, const char *namespaceURI, const char *prefix)</td></tr>
+<tr class="memdesc:ga6b4b4e8ab0cc73751b66634711f10b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function adds a namespace declaration inside the tag of specified element.  <br /></td></tr>
+<tr class="separator:ga6b4b4e8ab0cc73751b66634711f10b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>These functions are used, to register xml namespaces to the parser or add namespaces to existing elements. For the following explanations, consider the following xml file</p>
 <pre class="fragment">&lt;root&gt;
   &lt;h:table xmlns:h="http://www.w3.org/TR/html4/"&gt;
@@ -114,17 +133,17 @@ $(function(){initNavTree('group__Namespaces.html',''); initResizable(true); });
   &lt;/aircraft&gt;
 &lt;/root&gt;
 </pre><h2>Reading elements with namespaces</h2>
-<p>This file defines two namespaces - "http://www.w3.org/TR/html4/" and "http://www.dlr.de/cpacs". A query for "/root/h:table" or "/root/aircraft" will result in an error, as no prefix was defined for both namespaces. The prefix inside the xml file exists only in the file, but not in the parser. To successfully query these paths, the namespaces must be registered with some (arbitrary) prefix using <a class="el" href="tixi_8h.html#ae7c92e9739e2e71378e166dfd5bfb722" title="Registers the given namespace and its prefix.">tixiRegisterNamespace</a> or <a class="el" href="tixi_8h.html#a7fe9e33e946645f0950e2784010b37b7" title="Registers all prefixed namespaces of the xml document to the parser.">tixiRegisterNamespacesFromDocument</a>.</p>
-<p>After calling <a class="el" href="tixi_8h.html#ae7c92e9739e2e71378e166dfd5bfb722" title="Registers the given namespace and its prefix.">tixiRegisterNamespace</a>(handle, "http://www.w3.org/TR/html4/", "html") the query for "/root/html:table" is now valid. After calling <a class="el" href="tixi_8h.html#ae7c92e9739e2e71378e166dfd5bfb722" title="Registers the given namespace and its prefix.">tixiRegisterNamespace</a>(handle, "http://www.dlr.de/cpacs", "cpacs") the query for "/root/cpacs:aircraft" becomes valid.</p>
+<p>This file defines two namespaces - "http://www.w3.org/TR/html4/" and "http://www.dlr.de/cpacs". A query for "/root/h:table" or "/root/aircraft" will result in an error, as no prefix was defined for both namespaces. The prefix inside the xml file exists only in the file, but not in the parser. To successfully query these paths, the namespaces must be registered with some (arbitrary) prefix using <a class="el" href="#gae7c92e9739e2e71378e166dfd5bfb722" title="Registers the given namespace and its prefix.">tixiRegisterNamespace</a> or <a class="el" href="#ga7fe9e33e946645f0950e2784010b37b7" title="Registers all prefixed namespaces of the xml document to the parser.">tixiRegisterNamespacesFromDocument</a>.</p>
+<p>After calling <a class="el" href="#gae7c92e9739e2e71378e166dfd5bfb722" title="Registers the given namespace and its prefix.">tixiRegisterNamespace</a>(handle, "http://www.w3.org/TR/html4/", "html") the query for "/root/html:table" is now valid. After calling <a class="el" href="#gae7c92e9739e2e71378e166dfd5bfb722" title="Registers the given namespace and its prefix.">tixiRegisterNamespace</a>(handle, "http://www.dlr.de/cpacs", "cpacs") the query for "/root/cpacs:aircraft" becomes valid.</p>
 <h2>Writing elements with namespaces</h2>
 <p>To write elements with namespaces, the following functions are available:</p><ul>
-<li><a class="el" href="tixi_8h.html#a36a52e8b011117479db5ad6fed6da120" title="Creates an empty element in the specified namespace.">tixiCreateElementNS</a></li>
-<li><a class="el" href="tixi_8h.html#a4dbcd40f518d6300c64b91d449ee0465" title="Creates an empty element at a given index in the specified namespace.">tixiCreateElementNSAtIndex</a></li>
-<li><a class="el" href="tixi_8h.html#ab5792b751474cca3aa1a056b956a0059" title="Creates an element in the given namesoace and sets the value to &quot;true&quot; or &quot;false&quot;.">tixiAddBooleanElementNS</a></li>
-<li><a class="el" href="tixi_8h.html#af4581e676964a02486ab6e0682bdaa74" title="Creates an element which holds a floating point number in the given namespace.">tixiAddDoubleElementNS</a></li>
-<li><a class="el" href="tixi_8h.html#a7a9f02139adf76af553dff4014da27b9" title="Creates an element which holds an integer in the given namespace.">tixiAddIntegerElementNS</a></li>
-<li><a class="el" href="tixi_8h.html#a2a5760329167607ffd6894f6a15e0efd" title="Creates an element holding text within the given namespace.">tixiAddTextElementNS</a></li>
-<li><a class="el" href="tixi_8h.html#a75c7b3f45a19ee226cce7b1a737523aa" title="Creates an element holding text at a given index in the specified namespace.">tixiAddTextElementNSAtIndex</a></li>
+<li><a class="el" href="group__Elements.html#ga36a52e8b011117479db5ad6fed6da120" title="Creates an empty element in the specified namespace.">tixiCreateElementNS</a></li>
+<li><a class="el" href="group__Elements.html#ga4dbcd40f518d6300c64b91d449ee0465" title="Creates an empty element at a given index in the specified namespace.">tixiCreateElementNSAtIndex</a></li>
+<li><a class="el" href="group__Elements.html#gab5792b751474cca3aa1a056b956a0059" title="Creates an element in the given namesoace and sets the value to &quot;true&quot; or &quot;false&quot;.">tixiAddBooleanElementNS</a></li>
+<li><a class="el" href="group__Elements.html#gaf4581e676964a02486ab6e0682bdaa74" title="Creates an element which holds a floating point number in the given namespace.">tixiAddDoubleElementNS</a></li>
+<li><a class="el" href="group__Elements.html#ga7a9f02139adf76af553dff4014da27b9" title="Creates an element which holds an integer in the given namespace.">tixiAddIntegerElementNS</a></li>
+<li><a class="el" href="group__Elements.html#ga2a5760329167607ffd6894f6a15e0efd" title="Creates an element holding text within the given namespace.">tixiAddTextElementNS</a></li>
+<li><a class="el" href="group__Elements.html#ga75c7b3f45a19ee226cce7b1a737523aa" title="Creates an element holding text at a given index in the specified namespace.">tixiAddTextElementNSAtIndex</a></li>
 </ul>
 <p>To reproduce the upper xml file, use the following tixi code:</p>
 <pre class="fragment">tixiCreateDocument("root", &amp;handle);
@@ -141,12 +160,204 @@ tixiAddTextElementNS(handle, "/root/h:table/h:tr", "td", "http://www.w3.org/TR/h
 tixiCreateElementNS(handle, "/root", "aircraft", "http://www.dlr.de/cpacs");
 tixiRegisterNamespace(handle, "http://www.dlr.de/cpacs", "c");
 tixiAddTextElementNS(handle, "/root/c:aircraft", "modelname", "http://www.dlr.de/cpacs", "D150");
-</pre> </div><!-- contents -->
+</pre> <h2 class="groupheader">Function Documentation</h2>
+<a id="ga6b4b4e8ab0cc73751b66634711f10b24" name="ga6b4b4e8ab0cc73751b66634711f10b24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6b4b4e8ab0cc73751b66634711f10b24">&#9670;&#160;</a></span>tixiDeclareNamespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiDeclareNamespace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>elementPath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>namespaceURI</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>prefix</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>This function adds a namespace declaration inside the tag of specified element. </p>
+<p>This function can be used, after an element was created or read from file to set the namespace of the element.</p>
+<p>The namespace is not applied to the element, but can be used from child nodes.</p>
+<p>Different to <a class="el" href="#gabf51a48a1c2bc8887bbddf8c18b0f0f7" title="This function sets the namespace for the specified element.">tixiSetElementNamespace</a> the namespace prefix may not be empty!</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_add_namespace_attribute( integer handle, character*n element_path, character*n namespace_uri, character*n prefix, integer error )</p>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the namespace could be set successfully</li>
+<li>INVALID_HANDLE if the handle is not valid, i.e. does not or no longer exist</li>
+<li>INVALID_NAMESPACE_URI if the namespace URI is invalid</li>
+<li>ELEMENT_NOT_FOUND if the element at elementPath does not exist</li>
+<li>INVALID_XPATH if elementPath is not a well-formed XPath-expression</li>
+<li>ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements</li>
+<li>FAILED If the prefix is empty or the namespace could not be set due to another error. </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gae7c92e9739e2e71378e166dfd5bfb722" name="gae7c92e9739e2e71378e166dfd5bfb722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae7c92e9739e2e71378e166dfd5bfb722">&#9670;&#160;</a></span>tixiRegisterNamespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiRegisterNamespace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>namespaceURI</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>prefix</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Registers the given namespace and its prefix. </p>
+<p>When dealing with xml namespaces, elements can only be accessed via xPath when their namespace was registered with a prefix.</p>
+<p>To automatically register all namespaces and prefixes in the current document, use <a class="el" href="#ga7fe9e33e946645f0950e2784010b37b7" title="Registers all prefixed namespaces of the xml document to the parser.">tixiRegisterNamespacesFromDocument</a>.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_register_namespace( integer handle, character*n namespace_uri, character*n prefix, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a> or <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">namespaceURI</td><td>The URI for the namespace (e.g. "http://www.w3.org/TR/html4/") </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>The desired prefix of the namespace (e.g. "html")</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the namespace could be registered successfully</li>
+<li>INVALID_HANDLE if the handle is not valid, i.e. does not or no longer exist</li>
+<li>FAILED In case of an error </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="ga7fe9e33e946645f0950e2784010b37b7" name="ga7fe9e33e946645f0950e2784010b37b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7fe9e33e946645f0950e2784010b37b7">&#9670;&#160;</a></span>tixiRegisterNamespacesFromDocument()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiRegisterNamespacesFromDocument </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Registers all prefixed namespaces of the xml document to the parser. </p>
+<p>Default (non-prefixed) namespaces must be still registered using <a class="el" href="#gae7c92e9739e2e71378e166dfd5bfb722" title="Registers the given namespace and its prefix.">tixiRegisterNamespace</a> manually to be accessible via xPath.</p>
+<p>In the example above, the namespace "http://www.w3.org/TR/html4/" would be registered with the prefix "h" and a query to "/root/h:table" becomes successful.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_register_namespaces_from_document( integer handle, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a> or <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the namespace could be registered successfully</li>
+<li>INVALID_HANDLE if the handle is not valid, i.e. does not or no longer exist</li>
+<li>FAILED In case of an error. </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gabf51a48a1c2bc8887bbddf8c18b0f0f7" name="gabf51a48a1c2bc8887bbddf8c18b0f0f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabf51a48a1c2bc8887bbddf8c18b0f0f7">&#9670;&#160;</a></span>tixiSetElementNamespace()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiSetElementNamespace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>elementPath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>namespaceURI</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>prefix</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>This function sets the namespace for the specified element. </p>
+<p>This function can be used, after an element was created or read from file to set the namespace of the element. To set a default namespace for this element, add NULL as the prefix.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_set_element_namespace( integer handle, character*n element_path, character*n namespace_uri, character*n prefix, integer error )</p>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the namespace could be set successfully</li>
+<li>INVALID_HANDLE if the handle is not valid, i.e. does not or no longer exist</li>
+<li>INVALID_NAMESPACE_URI if the namespace URI is invalid</li>
+<li>ELEMENT_NOT_FOUND if the element at elementPath does not exist</li>
+<li>INVALID_XPATH if elementPath is not a well-formed XPath-expression</li>
+<li>ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements</li>
+<li>FAILED If the namespace could not be set due to another error. </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <hr size="1">
     <address style="align: right;">
       <small>
-	Generated  Wed May 13 2026 09:03:42, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
+	Generated  Tue Jun 9 2026 12:19:09, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
       </small>
 </address>
   </body>

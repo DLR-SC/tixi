@@ -98,16 +98,215 @@ $(function(){initNavTree('group__Validation.html',''); initResizable(true); });
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Validation Functions</div></div>
 </div><!--header-->
 <div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gacdd3338ad8d7c0a1b8bbd50ec465b93e" id="r_gacdd3338ad8d7c0a1b8bbd50ec465b93e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gacdd3338ad8d7c0a1b8bbd50ec465b93e">tixiSchemaValidateFromFile</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xsdFilename)</td></tr>
+<tr class="memdesc:gacdd3338ad8d7c0a1b8bbd50ec465b93e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate XML-document against an XML-schema.  <br /></td></tr>
+<tr class="separator:gacdd3338ad8d7c0a1b8bbd50ec465b93e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4857f7ade43d8b582e1f4dddaf4fe2ce" id="r_ga4857f7ade43d8b582e1f4dddaf4fe2ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga4857f7ade43d8b582e1f4dddaf4fe2ce">tixiSchemaValidateWithDefaultsFromFile</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xsdFilename)</td></tr>
+<tr class="memdesc:ga4857f7ade43d8b582e1f4dddaf4fe2ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate XML-document against an XML-schema and insert missing default elements and attributes.  <br /></td></tr>
+<tr class="separator:ga4857f7ade43d8b582e1f4dddaf4fe2ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8b97a3d2f9491662485c85e8fb5d8263" id="r_ga8b97a3d2f9491662485c85e8fb5d8263"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga8b97a3d2f9491662485c85e8fb5d8263">tixiSchemaValidateFromString</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xsdString)</td></tr>
+<tr class="memdesc:ga8b97a3d2f9491662485c85e8fb5d8263"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate XML-document against an XML-schema.  <br /></td></tr>
+<tr class="separator:ga8b97a3d2f9491662485c85e8fb5d8263"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0211ecc34bdc1ddc58dca66273be864d" id="r_ga0211ecc34bdc1ddc58dca66273be864d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga0211ecc34bdc1ddc58dca66273be864d">tixiDTDValidate</a> (const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *DTDFilename)</td></tr>
+<tr class="memdesc:ga0211ecc34bdc1ddc58dca66273be864d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate XML-document against a DTD.  <br /></td></tr>
+<tr class="separator:ga0211ecc34bdc1ddc58dca66273be864d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Functions to validate document with respect to DTD or Schemas. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ga0211ecc34bdc1ddc58dca66273be864d" name="ga0211ecc34bdc1ddc58dca66273be864d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga0211ecc34bdc1ddc58dca66273be864d">&#9670;&#160;</a></span>tixiDTDValidate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiDTDValidate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>DTDFilename</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Validate XML-document against a DTD. </p>
+<p>Validates an XML-document against a DTD specified by DTDFilename. This routine is to be called after opening a document by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a> and before <a class="el" href="group__FileHandling.html#gaf1bedd335ae49ba7dc69836720b00372" title="Write XML-document to disk.">tixiSaveDocument</a> if the validation against a DTD is desired for the input file and the output file, respectively.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_dtd_validate( integer  handle, character*n dtd_filename, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">DTDFilename</td><td>name of the DTD-file to be used</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle to the XML-document to be validated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the document is successfully validated</li>
+<li>NOT_WELL_FORMED if the XML-document is not well formed</li>
+<li>NOT_DTD_COMPLIANT if the XML-document is well-formed but validating against the given DTD fails</li>
+<li>OPEN_DTD_FAILED if opening of the DTD-file failed </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gacdd3338ad8d7c0a1b8bbd50ec465b93e" name="gacdd3338ad8d7c0a1b8bbd50ec465b93e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacdd3338ad8d7c0a1b8bbd50ec465b93e">&#9670;&#160;</a></span>tixiSchemaValidateFromFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiSchemaValidateFromFile </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xsdFilename</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Validate XML-document against an XML-schema. </p>
+<p>Validates an XML-document against an XML-schema specified by xsdFilename. This routine should be called after opening a document by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a> and before <a class="el" href="group__FileHandling.html#gaf1bedd335ae49ba7dc69836720b00372" title="Write XML-document to disk.">tixiSaveDocument</a> if the validation against an XML-schema is desired for the input file and the output file, respectively.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_schema_validate_from_file( integer  handle, character*n xsd_filename, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xsdFilename</td><td>name of the XML-schema-file to be used.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle to the XML-document.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the document is successfully validated</li>
+<li>NOT_WELL_FORMED if the XML-document is not well formed</li>
+<li>NOT_SCHEMA_COMPLIANT if the XML-document is well-formed but validating against the given XML-schema fails</li>
+<li>OPEN_SCHEMA_FAILED if opening of the XML-schema-file failed</li>
+<li>FAILED for all internal errors </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="ga8b97a3d2f9491662485c85e8fb5d8263" name="ga8b97a3d2f9491662485c85e8fb5d8263"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8b97a3d2f9491662485c85e8fb5d8263">&#9670;&#160;</a></span>tixiSchemaValidateFromString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiSchemaValidateFromString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xsdString</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Validate XML-document against an XML-schema. </p>
+<p>Validates an XML-document against an XML-schema specified by xsdString. This routine should be called after opening a document by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a> and before <a class="el" href="group__FileHandling.html#gaf1bedd335ae49ba7dc69836720b00372" title="Write XML-document to disk.">tixiSaveDocument</a> if the validation against an XML-schema is desired for the input file and the output file, respectively. The complete schema has to be in the string xsdString before running this function.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_schema_validate_from_string( integer  handle, character*n xsd_string, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xsdString</td><td>char array witch is holding a schema.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle to the XML-document.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the document is successfully validated</li>
+<li>NOT_WELL_FORMED if the XML-document is not well formed</li>
+<li>NOT_SCHEMA_COMPLIANT if the XML-document is well-formed but validating against the given XML-schema fails</li>
+<li>OPEN_SCHEMA_FAILED if opening of the XML-schema-file failed</li>
+<li>FAILED for all internal errors </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="ga4857f7ade43d8b582e1f4dddaf4fe2ce" name="ga4857f7ade43d8b582e1f4dddaf4fe2ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4857f7ade43d8b582e1f4dddaf4fe2ce">&#9670;&#160;</a></span>tixiSchemaValidateWithDefaultsFromFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiSchemaValidateWithDefaultsFromFile </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xsdFilename</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Validate XML-document against an XML-schema and insert missing default elements and attributes. </p>
+<p>Validates an XML-document against an XML-schema specified by xsdFilename. This routine should be called after opening a document by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a> and before <a class="el" href="group__FileHandling.html#gaf1bedd335ae49ba7dc69836720b00372" title="Write XML-document to disk.">tixiSaveDocument</a> if the validation against an XML-schema is desired for the input file and the output file, respectively. If the schema contains default values, these are added to the XML-document (which is not the case for tixiSchemaValidateFromFile).</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_schema_validate_with_defaults_from_file( integer  handle, character*n xsd_filename, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xsdFilename</td><td>name of the XML-schema-file to be used.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle to the XML-document.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if the document is successfully validated</li>
+<li>NOT_WELL_FORMED if the XML-document is not well formed</li>
+<li>NOT_SCHEMA_COMPLIANT if the XML-document is well-formed but validating against the given XML-schema fails</li>
+<li>OPEN_SCHEMA_FAILED if opening of the XML-schema-file failed</li>
+<li>FAILED for all internal errors </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <hr size="1">
     <address style="align: right;">
       <small>
-	Generated  Wed May 13 2026 09:03:42, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
+	Generated  Tue Jun 9 2026 12:19:09, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
       </small>
 </address>
   </body>

@@ -98,16 +98,260 @@ $(function(){initNavTree('group__UID.html',''); initResizable(true); });
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">UID Helper Functions</div></div>
 </div><!--header-->
 <div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gaf56086961c8d1dbb5f3b459bfd4b3001" id="r_gaf56086961c8d1dbb5f3b459bfd4b3001"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaf56086961c8d1dbb5f3b459bfd4b3001">tixiUIDCheckDuplicates</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle)</td></tr>
+<tr class="memdesc:gaf56086961c8d1dbb5f3b459bfd4b3001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a check over all UIDs and checks for duplicates.  <br /></td></tr>
+<tr class="separator:gaf56086961c8d1dbb5f3b459bfd4b3001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga64e5535199f90b43085e6647e1d1ce00" id="r_ga64e5535199f90b43085e6647e1d1ce00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga64e5535199f90b43085e6647e1d1ce00">tixiUIDCheckLinks</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle)</td></tr>
+<tr class="memdesc:ga64e5535199f90b43085e6647e1d1ce00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a check over all nodes with the uID "isLink" and check if the corresponding uid exists in that data set.  <br /></td></tr>
+<tr class="separator:ga64e5535199f90b43085e6647e1d1ce00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac46c0dadf73536a9ccd8015234d19a5e" id="r_gac46c0dadf73536a9ccd8015234d19a5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gac46c0dadf73536a9ccd8015234d19a5e">tixiUIDGetXPath</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *uID, char **xPath)</td></tr>
+<tr class="memdesc:gac46c0dadf73536a9ccd8015234d19a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the XPath to given uID.  <br /></td></tr>
+<tr class="separator:gac46c0dadf73536a9ccd8015234d19a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa8ea97458355d8043923c5a649e8d011" id="r_gaa8ea97458355d8043923c5a649e8d011"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gaa8ea97458355d8043923c5a649e8d011">tixiUIDCheckExists</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *uID)</td></tr>
+<tr class="memdesc:gaa8ea97458355d8043923c5a649e8d011"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a uID exists.  <br /></td></tr>
+<tr class="separator:gaa8ea97458355d8043923c5a649e8d011"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae6affe7a9a4daebd4803822bbdb7ad31" id="r_gae6affe7a9a4daebd4803822bbdb7ad31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gae6affe7a9a4daebd4803822bbdb7ad31">tixiUIDSetToXPath</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xPath, const char *uID)</td></tr>
+<tr class="memdesc:gae6affe7a9a4daebd4803822bbdb7ad31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a uID attribute to a node, specified via its XPath.  <br /></td></tr>
+<tr class="separator:gae6affe7a9a4daebd4803822bbdb7ad31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Function for UID management. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="gaf56086961c8d1dbb5f3b459bfd4b3001" name="gaf56086961c8d1dbb5f3b459bfd4b3001"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf56086961c8d1dbb5f3b459bfd4b3001">&#9670;&#160;</a></span>tixiUIDCheckDuplicates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiUIDCheckDuplicates </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Performs a check over all UIDs and checks for duplicates. </p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_uid_check_duplicates( integer  handle, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if all UIDs are unique</li>
+<li>FAILED if reading of uids does not work</li>
+<li>UID_NOT_UNIQUE is there is a not unique UID </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gaa8ea97458355d8043923c5a649e8d011" name="gaa8ea97458355d8043923c5a649e8d011"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa8ea97458355d8043923c5a649e8d011">&#9670;&#160;</a></span>tixiUIDCheckExists()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiUIDCheckExists </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>uID</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Checks if a uID exists. </p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_uid_check_exists( integer  handle, character*n uid, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">uID</td><td>The uid which should be checked</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if all UIDs are unique</li>
+<li>UID_DONT_EXISTS if the UID do not exist in the document</li>
+<li>UID_NOT_UNIQUE is there is a not unique UID</li>
+<li>FAILED for internal error </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="ga64e5535199f90b43085e6647e1d1ce00" name="ga64e5535199f90b43085e6647e1d1ce00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga64e5535199f90b43085e6647e1d1ce00">&#9670;&#160;</a></span>tixiUIDCheckLinks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiUIDCheckLinks </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Performs a check over all nodes with the uID "isLink" and check if the corresponding uid exists in that data set. </p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_uid_check_links( integer  handle, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if all links are valid</li>
+<li>FAILED if reading of links or uids does not work</li>
+<li>UID_NOT_UNIQUE is there is a not unique UID</li>
+<li>UID_LINK_BROKEN if there is a broken link. </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gac46c0dadf73536a9ccd8015234d19a5e" name="gac46c0dadf73536a9ccd8015234d19a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac46c0dadf73536a9ccd8015234d19a5e">&#9670;&#160;</a></span>tixiUIDGetXPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiUIDGetXPath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>uID</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>xPath</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Returns the XPath to given uID. </p>
+<p>On successful return the memory used for text is allocated internally and must not be released by the user. The deallocation is handle when the document referred to by handle is closed.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_uid_get_xpath( integer  handle, character*n uid, character*n text, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">uID</td><td>The uid of which the xpath should be returned </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xPath</td><td>The XPath of the element with the right uid. Empty string if uid does not exist.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if all UIDs are unique</li>
+<li>UID_NOT_UNIQUE is there is a not unique UID</li>
+<li>FAILED for internal error </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gae6affe7a9a4daebd4803822bbdb7ad31" name="gae6affe7a9a4daebd4803822bbdb7ad31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae6affe7a9a4daebd4803822bbdb7ad31">&#9670;&#160;</a></span>tixiUIDSetToXPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiUIDSetToXPath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xPath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>uID</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Sets a uID attribute to a node, specified via its XPath. </p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_uid_set_to_xpath( integer  handle, character*n xpath, character*n uid, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xPath</td><td>The XPath to the node which should become the uid-attribute </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">uID</td><td>The uid which should be checked</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if all UIDs are unique</li>
+<li>UID_DONT_EXISTS if the UID do not exist in the document</li>
+<li>UID_NOT_UNIQUE is there is a not unique UID</li>
+<li>INVALID_HANDLE if the handle is not valid, i.e. does not or no longer exist</li>
+<li>INVALID_XPATH if elementPath is not a well-formed XPath-expression</li>
+<li>ELEMENT_NOT_FOUND if elementPath does not point to a node in the XML-document</li>
+<li>NO_ATTRIBUTE_NAME if attributeName is NULL</li>
+<li>ELEMENT_PATH_NOT_UNIQUE if elementPath resolves not to a single element but to a list of elements</li>
+<li>FAILED for internal error </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <hr size="1">
     <address style="align: right;">
       <small>
-	Generated  Wed May 13 2026 09:03:42, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
+	Generated  Tue Jun 9 2026 12:19:09, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
       </small>
 </address>
   </body>

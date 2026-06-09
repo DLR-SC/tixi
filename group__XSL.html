@@ -98,16 +98,124 @@ $(function(){initNavTree('group__XSL.html',''); initResizable(true); });
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">XSLT Functions</div></div>
 </div><!--header-->
 <div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gabc76c4b64265e330cac23e323afb6618" id="r_gabc76c4b64265e330cac23e323afb6618"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gabc76c4b64265e330cac23e323afb6618">tixiXSLTransformationToString</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xslFilename, char **resultText)</td></tr>
+<tr class="memdesc:gabc76c4b64265e330cac23e323afb6618"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a XML transformation .  <br /></td></tr>
+<tr class="separator:gabc76c4b64265e330cac23e323afb6618"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gace4fe29a2063ae8ba92d093d28b30614" id="r_gace4fe29a2063ae8ba92d093d28b30614"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gace4fe29a2063ae8ba92d093d28b30614">tixiXSLTransformationToFile</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xslFilename, const char *resultFilename)</td></tr>
+<tr class="memdesc:gace4fe29a2063ae8ba92d093d28b30614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a XML transformation and saves the result to resultFilename.  <br /></td></tr>
+<tr class="separator:gace4fe29a2063ae8ba92d093d28b30614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Function to perform XSL transformations. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="gace4fe29a2063ae8ba92d093d28b30614" name="gace4fe29a2063ae8ba92d093d28b30614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gace4fe29a2063ae8ba92d093d28b30614">&#9670;&#160;</a></span>tixiXSLTransformationToFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiXSLTransformationToFile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xslFilename</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>resultFilename</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Performs a XML transformation and saves the result to resultFilename. </p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_xsl_transformation_to_file( integer  handle, character*n xslFilename, character*n resultFilename, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xslFilename</td><td>The name of a local file with XSL mapping informations. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">resultFilename</td><td>The name of a local file to store the resulting XML document in. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if successful</li>
+<li>FAILED is something went wrong, i.e. opening of files </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gabc76c4b64265e330cac23e323afb6618" name="gabc76c4b64265e330cac23e323afb6618"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabc76c4b64265e330cac23e323afb6618">&#9670;&#160;</a></span>tixiXSLTransformationToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiXSLTransformationToString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xslFilename</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>resultText</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Performs a XML transformation . </p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_xsl_transformation_to_string( integer  handle, character*n xslFilename, character*n resultFilename, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xslFilename</td><td>The name of a local file with XSL mapping informations. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">resultText</td><td>The resulting document of the transformation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if successful</li>
+<li>FAILED is something went wrong, i.e. opening of files </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <hr size="1">
     <address style="align: right;">
       <small>
-	Generated  Wed May 13 2026 09:03:42, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
+	Generated  Tue Jun 9 2026 12:19:09, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
       </small>
 </address>
   </body>

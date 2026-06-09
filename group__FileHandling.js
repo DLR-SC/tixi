@@ -12,5 +12,6 @@ var group__FileHandling =
     [ "tixiOpenDocumentRecursive", "group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6", null ],
     [ "tixiSaveAndRemoveDocument", "group__FileHandling.html#ga869f7bad014db756e1b374910c3848e3", null ],
     [ "tixiSaveCompleteDocument", "group__FileHandling.html#ga2964fd364ff9af2e81e92f790f7c2b9c", null ],
-    [ "tixiSaveDocument", "group__FileHandling.html#gaf1bedd335ae49ba7dc69836720b00372", null ]
+    [ "tixiSaveDocument", "group__FileHandling.html#gaf1bedd335ae49ba7dc69836720b00372", null ],
+    [ "tixiSetDocumentPath", "group__FileHandling.html#gaf2f4fa6692644c0e689cd10978578505", null ]
 ];

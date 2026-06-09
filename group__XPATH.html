@@ -98,16 +98,187 @@ $(function(){initNavTree('group__XPATH.html',''); initResizable(true); });
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">XPath Utility Functions</div></div>
 </div><!--header-->
 <div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:gad6e9a9f39036d1f9c6186217e431f722" id="r_gad6e9a9f39036d1f9c6186217e431f722"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gad6e9a9f39036d1f9c6186217e431f722">tixiXPathEvaluateNodeNumber</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xPathExpression, int *number)</td></tr>
+<tr class="memdesc:gad6e9a9f39036d1f9c6186217e431f722"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates a XPath expression and returns the number of result nodes matching this xpath expression.  <br /></td></tr>
+<tr class="separator:gad6e9a9f39036d1f9c6186217e431f722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac6c7d294f26f2b47897a2f01dc83f315" id="r_gac6c7d294f26f2b47897a2f01dc83f315"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#gac6c7d294f26f2b47897a2f01dc83f315">tixiXPathExpressionGetXPath</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xPathExpression, int index, char **xPath)</td></tr>
+<tr class="memdesc:gac6c7d294f26f2b47897a2f01dc83f315"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates a XPath expression and the xPath for the i-th result.  <br /></td></tr>
+<tr class="separator:gac6c7d294f26f2b47897a2f01dc83f315"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga56b446f464e55f379654cf2110d38b60" id="r_ga56b446f464e55f379654cf2110d38b60"><td class="memItemLeft" align="right" valign="top"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ga56b446f464e55f379654cf2110d38b60">tixiXPathExpressionGetTextByIndex</a> (<a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a> handle, const char *xPathExpression, int elementNumber, char **text)</td></tr>
+<tr class="memdesc:ga56b446f464e55f379654cf2110d38b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates a XPath expression and returns the text content of the resultnode matching this xpath expression.  <br /></td></tr>
+<tr class="separator:ga56b446f464e55f379654cf2110d38b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Function for evaluating XPath expressions. </p>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="gad6e9a9f39036d1f9c6186217e431f722" name="gad6e9a9f39036d1f9c6186217e431f722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad6e9a9f39036d1f9c6186217e431f722">&#9670;&#160;</a></span>tixiXPathEvaluateNodeNumber()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiXPathEvaluateNodeNumber </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xPathExpression</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *</td>          <td class="paramname"><span class="paramname"><em>number</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Evaluates a XPath expression and returns the number of result nodes matching this xpath expression. </p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_xpath_evaluate_node_number( integer handle, character*n xpathExpression, integer number, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xPathExpression</td><td>The XPath Expression to evaluate. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">number</td><td>The number of nodes matching this xpath expression.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if successfully retrieved the number of the xPath search.</li>
+<li>FAILED if an internal error occured. </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="ga56b446f464e55f379654cf2110d38b60" name="ga56b446f464e55f379654cf2110d38b60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga56b446f464e55f379654cf2110d38b60">&#9670;&#160;</a></span>tixiXPathExpressionGetTextByIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiXPathExpressionGetTextByIndex </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xPathExpression</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>elementNumber</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>text</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Evaluates a XPath expression and returns the text content of the resultnode matching this xpath expression. </p>
+<p>The element to get is selected by an index number, which should be between 1 and '<a class="el" href="#gad6e9a9f39036d1f9c6186217e431f722" title="Evaluates a XPath expression and returns the number of result nodes matching this xpath expression.">tixiXPathEvaluateNodeNumber()</a> (inclusively)'. On successful return the memory used for text is allocated internally and must not be released by the user. The deallocation is handle when the document referred to by handle is closed.</p>
+<p><b>Fortran syntax:</b></p>
+<p>tixi_xpath_expression_get_text_by_index( integer handle, character*n xpathERxpression, integer index, character*n text, integer error )</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xPathExpression</td><td>The XPath Expression to evaluate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">elementNumber</td><td>The (index)-number to get. Needed if the XPath expression catches more than one node. Index must be between 1 and '<a class="el" href="#gad6e9a9f39036d1f9c6186217e431f722" title="Evaluates a XPath expression and returns the number of result nodes matching this xpath expression.">tixiXPathEvaluateNodeNumber()</a>', inclusively. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">text</td><td>the text content of the node-value. Works for xml-elements and attributes. NULL if an error occured.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if successfully retrieve the text content of a single element.</li>
+<li>INVALID_XPATH If something goes wrong on evaluating the xpath expression.</li>
+<li>FAILED is an internal error occured. </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
+<a id="gac6c7d294f26f2b47897a2f01dc83f315" name="gac6c7d294f26f2b47897a2f01dc83f315"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac6c7d294f26f2b47897a2f01dc83f315">&#9670;&#160;</a></span>tixiXPathExpressionGetXPath()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="tixi_8h.html#a1ca888bd091694c05472e1b91df1a97b">DLL_EXPORT</a> <a class="el" href="group__Enums.html#ga5a2236a3693e3930b2c9fbe1fe7144ec">ReturnCode</a> tixiXPathExpressionGetXPath </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="tixi_8h.html#aae8c8b41fa11eb91d183b2702eadfcda">TixiDocumentHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>xPathExpression</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>xPath</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><code>#include &lt;<a class="el" href="tixi_8h.html">C:/data/code/tixi/src/tixi.h</a>&gt;</code></p>
+
+<p>Evaluates a XPath expression and the xPath for the i-th result. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">handle</td><td>handle as returned by <a class="el" href="group__FileHandling.html#ga748c1c28c6d9ef0c80b9633ecc379672" title="Open an XML-file for reading.">tixiOpenDocument</a>, <a class="el" href="group__FileHandling.html#ga93d9774ed85a605c229fcb9dbaab97e6" title="Open an XML-file for reading. It acts like tixiOpenDocument.">tixiOpenDocumentRecursive</a>, <a class="el" href="group__FileHandling.html#gadd2219bce0e6405dc5abc9ca79adbfb8" title="Open an XML-file for reading from a http web resource.">tixiOpenDocumentFromHTTP</a>, <a class="el" href="group__FileHandling.html#ga519f5d1666b70d368c976938a1dd7d39" title="Create an XML-document.">tixiCreateDocument</a> or <a class="el" href="group__FileHandling.html#ga74ab98379c6852f6f255ec810b12ec25" title="Imports a char-string into a new tixi-document.">tixiImportFromString</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xPathExpression</td><td>The XPath Expression to evaluate. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">index</td><td>The index of the result to query, with 1 &lt;= index &lt;= number, and number queried with <a class="el" href="#gad6e9a9f39036d1f9c6186217e431f722" title="Evaluates a XPath expression and returns the number of result nodes matching this xpath expression.">tixiXPathEvaluateNodeNumber</a> </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">xPath</td><td>The xPath of the search result.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>SUCCESS if successfully retrieve the xPath of the search.</li>
+<li>INVALID_HANDLE if the handle is not valid, i.e. does not or no longer exist.</li>
+<li>FAILED if an internal error occured. </li>
+</ul>
+</dd></dl>
+
+<p class="reference">References <a class="el" href="tixi_8h_source.html#l00029">DLL_EXPORT</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <hr size="1">
     <address style="align: right;">
       <small>
-	Generated  Wed May 13 2026 09:03:42, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
+	Generated  Tue Jun 9 2026 12:19:09, by Martin Siggel <A HREF="http://www.dlr.de/sc">DLR</A>
       </small>
 </address>
   </body>
