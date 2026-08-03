@@ -450,7 +450,7 @@ DLL_EXPORT char* tixiGetVersion();
   \defgroup FileHandling File Handling Functions
     Function to open, create, close, and save XML-files.
  */
-/*@{*/
+/**@{*/
 /**
   @brief Open an XML-file for reading.
 
@@ -595,7 +595,7 @@ DLL_EXPORT ReturnCode tixiGetDocumentPath (TixiDocumentHandle handle, char** doc
   useful if the document is not saved to disk yet, and an associated filepath is required.
 
   @param[in] handle Document handle as returned by ::tixiOpenDocument, ::tixiOpenDocumentRecursive, ::tixiOpenDocumentFromHTTP, ::tixiCreateDocument or ::tixiImportFromString
-  @param[in] documentPath New path to the file.
+  @param[in] xmlFilename New path to the file.
   
   @return
     - SUCCESS in case of no errors.
@@ -782,13 +782,13 @@ DLL_EXPORT ReturnCode tixiExportDocumentAsString (const TixiDocumentHandle handl
  */
 DLL_EXPORT ReturnCode tixiImportFromString (const char *xmlImportString, TixiDocumentHandle * handle);
 
-/*@}*/
+/**@}*/
 /**
   \defgroup Validation Validation Functions
 
    Functions to validate document with respect to DTD or Schemas.
  */
-/*@{*/
+/**@{*/
 
 
 /**
@@ -902,7 +902,7 @@ DLL_EXPORT ReturnCode tixiSchemaValidateFromString (const TixiDocumentHandle han
     - OPEN_DTD_FAILED      if opening of the DTD-file failed
  */
 DLL_EXPORT ReturnCode tixiDTDValidate (const TixiDocumentHandle handle, const char *DTDFilename);
-/*@}*/
+/**@}*/
 
 
 
@@ -913,7 +913,7 @@ DLL_EXPORT ReturnCode tixiDTDValidate (const TixiDocumentHandle handle, const ch
   in this section.
  */
 
-/*@{*/
+/**@{*/
 /**
   @brief Retrieve text content of an element.
 
@@ -2072,7 +2072,7 @@ DLL_EXPORT ReturnCode tixiImportElementFromString (const TixiDocumentHandle hand
 DLL_EXPORT ReturnCode tixiImportElementFromStringAtIndex (const TixiDocumentHandle handle, const char *parentPath, int index, const char *xmlImportString);
 
 
-/*@}*/
+/**@}*/
 
 /**
   \defgroup Attributes Attribute Handling Functions
@@ -2081,7 +2081,7 @@ DLL_EXPORT ReturnCode tixiImportElementFromStringAtIndex (const TixiDocumentHand
   functions to create and manipulate attributes, and a function to remove attributes
   are described in this section.
  */
-/*@{*/
+/**@{*/
 
 /**
   @brief Retrieves value of an element's attribute as a string.
@@ -2440,7 +2440,7 @@ DLL_EXPORT ReturnCode tixiGetNumberOfAttributes(const TixiDocumentHandle handle,
  */
 DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, const char *elementPath, int attrIndex, char** attrName);
 
-/*@}*/
+/**@}*/
 
 /**
   \defgroup Namespaces Namespace Support Functions
@@ -2504,7 +2504,7 @@ DLL_EXPORT ReturnCode tixiGetAttributeName(const TixiDocumentHandle handle, cons
   tixiAddTextElementNS(handle, "/root/c:aircraft", "modelname", "http://www.dlr.de/cpacs", "D150");
   @endverbatim
  */
-/*@{*/
+/**@{*/
 
 
 /**
@@ -2605,13 +2605,13 @@ DLL_EXPORT ReturnCode tixiSetElementNamespace(const TixiDocumentHandle handle, c
 DLL_EXPORT ReturnCode tixiDeclareNamespace(const TixiDocumentHandle handle, const char* elementPath,
                                            const char* namespaceURI, const char* prefix);
 
-/*@}*/
+/**@}*/
 /**
   \defgroup MiscFunctions Miscellaneous Functions
 
   These function simply do not fit into one of the other categories.
  */
-/*@{*/
+/**@{*/
 
 
 /**
@@ -2905,14 +2905,14 @@ DLL_EXPORT TixiPrintMsgFnc tixiGetPrintMsgFunc();
  */
 DLL_EXPORT ReturnCode tixiSetCacheEnabled(TixiDocumentHandle handle, int enabled);
 
-/*@}*/
+/**@}*/
 
 /**
   \defgroup HighLevelFunctions High Level Functions
 
   These functions operate on more complex data structures than the elementary get/add function so.
  */
-/*@{*/
+/**@{*/
 
 /**
   @brief High level routine to write a list of elements with attributes.
@@ -3461,12 +3461,12 @@ DLL_EXPORT ReturnCode tixiGetPoint (const TixiDocumentHandle handle,
 DLL_EXPORT ReturnCode tixiCheckAttribute(TixiDocumentHandle handle, const char *elementPath, const char *attributeName);
 
 
-/*@}*/
+/**@}*/
 /**
     \defgroup XSL XSLT Functions
       Function to perform XSL transformations.
    */
-/*@{*/
+/**@{*/
 
 /**
   @brief Performs a XML transformation .
@@ -3503,13 +3503,13 @@ DLL_EXPORT ReturnCode tixiXSLTransformationToString(TixiDocumentHandle handle, c
 DLL_EXPORT ReturnCode tixiXSLTransformationToFile(TixiDocumentHandle handle, const char *xslFilename, const char *resultFilename);
 
 
-/*@}*/
+/**@}*/
 /**
   \defgroup XPATH XPath Utility Functions
 
   Function for evaluating XPath expressions.
      */
-/*@{*/
+/**@{*/
 
 /**
   @brief Evaluates a XPath expression and returns the number of result nodes matching this xpath expression.
@@ -3569,13 +3569,13 @@ DLL_EXPORT ReturnCode tixiXPathExpressionGetXPath(TixiDocumentHandle handle, con
 DLL_EXPORT ReturnCode tixiXPathExpressionGetTextByIndex(TixiDocumentHandle handle, const char *xPathExpression, int elementNumber, char **text);
 
 
-/*@}*/
+/**@}*/
 /**
   \defgroup UID UID Helper Functions
 
   Function for UID management.
  */
-/*@{*/
+/**@{*/
 
 /**
   @brief Performs a check over all UIDs and checks for duplicates.
@@ -3678,7 +3678,7 @@ DLL_EXPORT ReturnCode tixiUIDCheckExists(TixiDocumentHandle handle, const char *
 DLL_EXPORT ReturnCode tixiUIDSetToXPath(TixiDocumentHandle handle, const char *xPath, const char *uID);
 
 
-/*@}*/
+/**@}*/
 
 
 #endif  /* TIXI_H */
