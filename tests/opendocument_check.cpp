@@ -59,7 +59,11 @@ TEST(opendocument_checks, check_handle)
 TEST(opendocument_checks, open_http_url)
 {
   TixiDocumentHandle documentHandle = -1;
-  const char* xmlUrl = "https://www.w3schools.com/XML/note.xml";
+  // fetched from our own repo instead of a third-party site: third-party sites
+  // (e.g. w3schools.com) can start blocking TIXI's fixed User-Agent via bot
+  // detection at any time, without any change on our side (see CI failures
+  // starting 2026-08-18), and are outside our control in the first place.
+  const char* xmlUrl = "https://raw.githubusercontent.com/dlr-sc/tixi/master/tests/TestData/http_note.xml";
 
   ASSERT_TRUE( tixiOpenDocumentFromHTTP( xmlUrl, &documentHandle ) == SUCCESS );
   ASSERT_TRUE( documentHandle != -1 );
